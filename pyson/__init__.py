@@ -670,7 +670,9 @@ class Actions:
                 converted_args = [_convert(spec, arg) for spec, arg in zip(arg_specs, term.args)]
                 result = f(*converted_args)
 
-                if isinstance(result, bool):
+                if result is None:
+                    return
+                elif isinstance(result, bool):
                     result_term = Term.make_boolean(result)
                 elif is_numeric(result):
                     result_term = Term.make_numeric(result)
