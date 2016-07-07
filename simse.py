@@ -32,6 +32,13 @@ def add_file():
     return filename
 
 
+@actions.add_function(".should_add", ())
+def should_add():
+    print("should add?")
+    global files
+    return random.random() > len(files) / 500
+
+
 @actions.add_function(".delete_file", ())
 def delete_file():
     global files
@@ -67,7 +74,7 @@ def run():
 result_file = open("result.csv", "w")
 
 
-for day in range(1200):
+for day in range(2000):
     term = pyson.Term.make_belief("day", (pyson.Term.make_numeric(day), ))
     print(term)
 
