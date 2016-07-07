@@ -4,8 +4,11 @@ import pyson
 import pyson.runtime
 import pyson.stdlib
 import math
+import random
 
 # Actions
+
+files = set()
 
 actions = pyson.Actions(pyson.stdlib.actions)
 
@@ -19,6 +22,22 @@ actions.add_function(".sin", float, math.sin)
 @actions.add_function(".f", float)
 def f(val):
     return val * 3
+
+
+@actions.add_function(".add_file", ())
+def add_file():
+    global files
+    filename = "".join(random.choice("abcdefghij") for _ in range(10))
+    files.add(filename)
+    return filename
+
+
+@actions.add_function(".delete_file", ())
+def delete_file():
+    global files
+    for filename in files:
+        files.remove(filename)
+        return filename
 
 
 # Agents
@@ -45,7 +64,10 @@ def run():
             more_work |= agent.step()
 
 
-for day in range(14):
+result_file = open("result.csv", "w")
+
+
+for day in range(1200):
     term = pyson.Term.make_belief("day", (pyson.Term.make_numeric(day), ))
     print(term)
 
@@ -54,6 +76,13 @@ for day in range(14):
                         term, {}, delayed=True)
 
     run()
+
+    print(len(files))
+
+    print(day, len(files), sep=",", file=result_file)
+
+
+result_file.close()
 
 
 # Debug

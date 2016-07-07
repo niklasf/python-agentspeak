@@ -18,6 +18,7 @@
 
 import pyson
 import colorama
+import random
 
 
 actions = pyson.Actions()
@@ -50,6 +51,9 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
         print(color[0], color[1], hex(id(agent)), colorama.Fore.RESET, colorama.Back.RESET, " ", " ".join(builder), sep="")
 
     yield
+
+
+actions.add_function(".random", (), random.random)
 
 
 @actions.add(".fail", 0)
