@@ -1281,6 +1281,9 @@ def validate(ast_agent, log):
         for op in plan.head.accept(FindOpVisitor()):
             log.error("plan head is supposed to be unifiable, but contains non-const expression", loc=op.loc, extra_locs=[plan.loc])
 
+        for annotation in plan.annotations:
+            log.warning("plan annotations are ignored as of yet", loc=annotation.loc, extra_locs=[plan.loc])
+
     return ast_agent
 
 
