@@ -888,6 +888,7 @@ def parse(tokens, log, included_files, directive=None):
                 tok, sub_directive = parse_belief_atom(tok, tokens, log)
                 if tok.lexeme != "}":
                     raise log.error("expected '}' after begin, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[begin_loc])
+                log.warning("directives are ignored as of yet", loc=sub_directive.loc)
                 sub_agent = parse(tokens, log, included_files, sub_directive)
                 agent.beliefs += sub_agent.beliefs
                 agent.rules += sub_agent.rules
