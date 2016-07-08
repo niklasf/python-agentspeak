@@ -215,7 +215,7 @@ class AstBinaryOp(AstNode):
 class AstPlan(AstNode):
     def __init__(self):
         super().__init__()
-        self.annotation = None
+        self.annotations = []
         self.trigger = None
         self.goal_type = None
         self.head = None
@@ -228,9 +228,9 @@ class AstPlan(AstNode):
     def __str__(self):
         builder = []
 
-        if self.annotation:
+        for annotation in self.annotations:
             builder.append("@")
-            builder.append(str(self.annotation))
+            builder.append(str(annotation))
             builder.append("\n")
 
         builder.append(self.trigger.value)
@@ -806,9 +806,10 @@ def parse_plan_body(tok, tokens, log):
 def parse_plan(tok, tokens, log):
     plan = AstPlan()
 
-    if tok.lexeme == "@":
+    while tok.lexeme == "@":
         tok = next(tokens)
-        tok, plan.annotation = parse_belief_atom(tok, tokens, log)
+        tok, annotation = parse_belief_atom(tok, tokens, log)
+        plan.annotations.append(annotation)
 
     if not tok.token.trigger:
         raise log.error("expected plan trigger, got '%s'", tok.lexeme, loc=tok.loc)
@@ -1213,7 +1214,7 @@ class ConstFoldVisitor:
         return ast_body
 
     def visit_plan(self, ast_plan):
-        ast_plan.annotation = ast_plan.annotation.accept(TermFoldVisitor(self.log)) if ast_plan.annotation else None
+        ast_plan.annotations = [annotation.accept(TermFoldVisitor(self.log)) for annotation in ast_plan.annotations]
         ast_plan.head = ast_plan.head.accept(TermFoldVisitor(self.log))
         ast_plan.context = ast_plan.context.accept(LogicalFoldVisitor(self.log)) if ast_plan.context else None
         ast_plan.body = ast_plan.body.accept(self) if ast_plan.body else None
