@@ -39,14 +39,14 @@ class BuildTermVisitor:
 
     def visit_literal(self, ast_literal):
         return pyson.Literal(ast_literal.functor,
-            [t.accept(self) for t in ast_literal.terms],
-            [t.accept(self) for t in ast_literal.annotations])
+            (t.accept(self) for t in ast_literal.terms),
+            (t.accept(self) for t in ast_literal.annotations))
 
     def visit_const(self, ast_const):
         return ast_const.value
 
     def visit_list(self, ast_list):
-        return [t.accept(self) for t in ast_list.terms]
+        return tuple(t.accept(self) for t in ast_list.terms)
 
     def visit_unary_op(self, ast_unary_op):
         return pyson.UnaryExpr(
@@ -373,6 +373,7 @@ class Agent:
         if term.functor is None:
             raise PysonError("expected belief literal")
 
+        print(term)
         self.beliefs[(term.functor, len(term.args))].add(term)
 
     def test_belief(self, term, scope):

@@ -22,6 +22,8 @@ import time
 import random
 import sys
 
+from pyson import pyson_str
+
 
 # TODO:
 # * Communication
@@ -94,7 +96,7 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
         _color_map[agent] = color
 
     memo = {}
-    text = " ".join(str(pyson.freeze(t, scope, memo)) for t in term.args)
+    text = " ".join(pyson_str(pyson.freeze(t, scope, memo)) for t in term.args)
 
     with colorama.colorama_text():
         print(color[0], color[1], hex(id(agent)), colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
@@ -120,7 +122,7 @@ def _concat(agent, term, scope):
     args = [pyson.grounded(arg, scope) for arg in term.args[:-1]]
 
     if all(isinstance(arg, (tuple, list)) for arg in args):
-        result = [el for arg in args for el in arg]
+        result = tuple(el for arg in args for el in arg)
     else:
         result = "".join(str(arg) for arg in args)
 

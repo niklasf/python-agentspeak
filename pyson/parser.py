@@ -163,14 +163,7 @@ class AstConst(AstNode):
         return visitor.visit_const(self)
 
     def __str__(self):
-        if self.value is True:
-            return "true"
-        elif self.value is False:
-            return "false"
-        elif isinstance(self.value, str):
-            return pyson.stringify_string(self.value)
-        else:
-            return str(self.value)
+        return pyson_repr(self.value)
 
 
 class AstVariable(AstNode):

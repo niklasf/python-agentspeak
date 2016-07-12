@@ -253,8 +253,32 @@ def parse_string(s):
     return bytes(s[1:-1], "utf-8").decode("unicode_escape")
 
 
-def stringify_string(s):
-    return "\"%s\"" % (s.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""), )
+def pyson_str(term):
+    if term is True:
+        return "true"
+    elif term is False:
+        return "false"
+    elif isinstance(term, tuple):
+        return "[%s]" % (", ".join(pyson_str(t) for t in term))
+    elif isinstance(term, float) and term.is_integer():
+        return str(int(term))
+    else:
+        return str(term)
+
+
+def pyson_repr(term):
+    if term is True:
+        return "true"
+    elif term is False:
+        return "false"
+    elif isinstance(term, str):
+        return "\"%s\"" % (term.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""), )
+    elif isinstance(term, tuple):
+        return "[%s]" % (", ".join(pyson_repr(t) for t in term))
+    elif isinstance(term, float) and term.is_integer():
+        return repr(int(term))
+    else:
+        return repr(term)
 
 
 def reroll(scope, stack, choicepoint):
@@ -431,8 +455,8 @@ class BinaryExpr:
 class Literal:
     def __init__(self, functor, args=(), annots=()):
         self.functor = functor
-        self.args = args
-        self.annots = annots
+        self.args = tuple(args)
+        self.annots = tuple(annots)
 
     def literal_group(self):
         return (self.functor, len(self.args))
@@ -471,14 +495,14 @@ class Literal:
     def grounded(self, scope):
         return Literal(
             self.functor,
-            [grounded(arg, scope) for arg in self.args],
-            [grounded(annot, scope) for annot in self.annots])
+            (grounded(arg, scope) for arg in self.args),
+            (grounded(annot, scope) for annot in self.annots))
 
     def freeze(self, scope, memo):
         return Literal(
             self.functor,
-            [freeze(arg, scope, memo) for arg in self.args],
-            [freeze(annot, scope, memo) for annot in self.annots])
+            (freeze(arg, scope, memo) for arg in self.args),
+            (freeze(annot, scope, memo) for annot in self.annots))
 
     def __bool__(self):
         return True
@@ -503,10 +527,13 @@ class Literal:
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
 
     def __eq__(self, other):
-        return self.functor == other.functor and self.args == other.args and self.annots == other.annots
+        return not self.__ne__(other)
+
+    def __ne__(self, other):
+        return self.functor != other.functor or self.args != other.args or self.annots != other.annots
 
     def __hash__(self):
-        return hash((self.functor, tuple(self.args), tuple(self.annots)))
+        return hash((self.functor, self.args, self.annots))
 
 
 def deref(term, scope):
@@ -540,7 +567,7 @@ def unify(left, right, scope, stack):
         return right.right_unify(left, scope, stack)
     elif isinstance(left, bool) or isinstance(right, bool):
         return left is right
-    elif isinstance(left, (tuple, list)) and isinstance(right, (tuple, list)):
+    elif isinstance(left, tuple) and isinstance(right, tuple):
         if len(left) != len(right):
             return False
 
@@ -559,7 +586,7 @@ def unifies(left, right):
 def is_ground(term, scope):
     if hasattr(term, "is_ground"):
         return term.is_ground(scope)
-    elif isinstance(term, (tuple, list)):
+    elif isinstance(term, tuple):
         return all(is_ground(t, scope) for t in term)
     else:
         return True
@@ -568,8 +595,8 @@ def is_ground(term, scope):
 def grounded(term, scope):
     if hasattr(term, "grounded"):
         return term.grounded(scope)
-    elif isinstance(term, (tuple, list)):
-        return [grounded(t, scope) for t in term]
+    elif isinstance(term, tuple):
+        return tuple(grounded(t, scope) for t in term)
     else:
         return term
 
@@ -577,8 +604,8 @@ def grounded(term, scope):
 def freeze(term, scope, memo):
     if hasattr(term, "freeze"):
         return term.freeze(scope, memo)
-    elif isinstance(term, (tuple, list)):
-        return [freeze(t, scope, memo) for t in term]
+    elif isinstance(term, tuple):
+        return tuple(freeze(t, scope, memo) for t in term)
     else:
         return term
 
