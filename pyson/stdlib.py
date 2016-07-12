@@ -18,7 +18,9 @@
 
 import pyson
 import colorama
+import time
 import random
+import sys
 
 
 actions = pyson.Actions()
@@ -81,6 +83,14 @@ def _concat(agent, term, scope):
         yield
 
 
+@actions.add(".stopMAS")
+def _stopMAS(agent, term, scope):
+    sys.exit(0)
+
+
+actions.add_function(".random", (), random.random)
+
+
 @actions.add(".range", 2)
 def _range_2(agent, term, scope):
     choicepoint = object()
@@ -104,6 +114,3 @@ def _dump(agent, term, scope):
 def _unbind_all(agent, term, scope):
     scope.clear()
     yield
-
-
-actions.add_function(".random", (), random.random)
