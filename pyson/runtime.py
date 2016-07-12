@@ -243,7 +243,7 @@ class UnifyQuery:
     def execute(self, agent, scope, stack):
         choicepoint = object()
         stack.append(choicepoint)
-        if self.left.unify(self.right, scope, stack):
+        if pyson.unify(self.left, self.right, scope, stack):
             yield
         pyson.reroll(scope, stack, choicepoint)
 
