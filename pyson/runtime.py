@@ -165,7 +165,7 @@ class TermQuery:
         try:
             group = term.literal_group()
         except AttributeError:
-            raise PysonError("expected boolean or literal in query context, got: '%s'", term)
+            raise PysonError("expected boolean or literal in query context, got: '%s'" % term)
 
         choicepoint = object()
 
