@@ -93,14 +93,11 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
         _current_color[0] += 1
         _color_map[agent] = color
 
-    builder = []
     memo = {}
-    for arg in term.args:
-        folded = arg.fold(scope).freeze(scope, memo)
-        builder.append(str(folded) if folded.string is None else folded.string)
+    text = " ".join(str(pyson.freeze(t, scope, memo)) for t in term.args)
 
     with colorama.colorama_text():
-        print(color[0], color[1], hex(id(agent)), colorama.Fore.RESET, colorama.Back.RESET, " ", " ".join(builder), sep="")
+        print(color[0], color[1], hex(id(agent)), colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
 
     yield
 
