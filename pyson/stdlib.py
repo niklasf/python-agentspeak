@@ -53,9 +53,6 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
     yield
 
 
-actions.add_function(".random", (), random.random)
-
-
 @actions.add(".fail", 0)
 def _fail(agent, term, scope):
     yield from []
@@ -66,13 +63,22 @@ def _my_name(agent, term, scope):
     name = hex(id(agent))
     name_term = pyson.Term.make_string(name)
 
-    choicepoint = object()
-    agent.stack.append(choicepoint)
-
     if term.args[0].unify(name_term, scope, agent.stack):
         yield
 
-    pyson.reroll(scope, agent.stack, choicepoint)
+
+@actions.add(".concat")
+def _concat(agent, term, scope):
+    args = [arg.grounded(scope) for arg in term.args[:-1]]
+
+    if any(arg.list is None for arg in args):
+        result = pyson.Term.make_string(
+            "".join((str(arg) if arg.string is None else arg.string) for arg in args))
+    else:
+        result = pyson.Term.make_list([el for arg in args for el in arg.list])
+
+    if term.args[-1].unify(result, scope, agent.stack):
+        yield
 
 
 @actions.add(".range", 2)
@@ -87,12 +93,17 @@ def _range_2(agent, term, scope):
 
         pyson.reroll(scope, agent.stack, choicepoint)
 
+
 @actions.add(".dump", 0)
 def _dump(agent, term, scope):
     agent.dump()
     yield
 
+
 @actions.add(".unbind_all", 0)
 def _unbind_all(agent, term, scope):
     scope.clear()
     yield
+
+
+actions.add_function(".random", (), random.random)

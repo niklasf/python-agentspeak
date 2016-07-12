@@ -9,7 +9,6 @@ import pyson.parser
 
 class ParserTest(unittest.TestCase):
 
-
     def test_formula_type(self):
         src = pyson.StringSource("<test>", "+!plan <- ?true.")
         log = pyson.Log(pyson.get_logger(__name__), 3)

@@ -473,7 +473,7 @@ class Term:
                 return folded.grounded(scope)
         elif self.list is not None:
             term = Term()
-            term = [t.grounded(scope) for t in self.list]
+            term.list = [t.grounded(scope) for t in self.list]
             return term
         elif self.functor is not None:
             term = Term()
