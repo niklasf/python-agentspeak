@@ -492,12 +492,19 @@ class Literal:
 
 
 def deref(term, scope):
+    """
+    Dereferences a variable.
+    """
     while term in scope:
         term = scope[term]
     return term
 
 
 def evaluate(term, scope):
+    """
+    Evaluates expressions and dereferences variables. Does not recursively
+    evaluate structures.
+    """
     if hasattr(term, "evaluate"):
         return term.evaluate(scope)
     else:
