@@ -110,23 +110,21 @@ def _fail(agent, term, scope):
 @actions.add(".my_name", 1)
 def _my_name(agent, term, scope):
     name = hex(id(agent))
-    name_term = pyson.Term.make_string(name)
 
-    if term.args[0].unify(name_term, scope, agent.stack):
+    if pyson.unify(term.args[0], name, scope, agent.stack):
         yield
 
 
 @actions.add(".concat")
 def _concat(agent, term, scope):
-    args = [arg.grounded(scope) for arg in term.args[:-1]]
+    args = [pyson.grounded(arg, scope) for arg in term.args[:-1]]
 
-    if any(arg.list is None for arg in args):
-        result = pyson.Term.make_string(
-            "".join((str(arg) if arg.string is None else arg.string) for arg in args))
+    if all(isinstance(arg, (tuple, list)) for arg in args):
+        result = [el for arg in args for el in arg]
     else:
-        result = pyson.Term.make_list([el for arg in args for el in arg.list])
+        result = "".join(str(arg) for arg in args)
 
-    if term.args[-1].unify(result, scope, agent.stack):
+    if pyson.unify(term.args[-1], result, scope, agent.stack):
         yield
 
 
@@ -142,10 +140,10 @@ actions.add_function(".random", (), random.random)
 def _range_2(agent, term, scope):
     choicepoint = object()
 
-    for i in range(int(term.args[1].numeric)):
+    for i in range(int(pyson.grounded(term.args[1], scope))):
         agent.stack.append(choicepoint)
 
-        if term.args[0].unify(pyson.Term.make_numeric(i), scope, agent.stack):
+        if pyson.unify(term.args[0], i, scope, agent.stack):
             yield
 
         pyson.reroll(scope, agent.stack, choicepoint)
