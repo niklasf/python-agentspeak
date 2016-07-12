@@ -156,21 +156,23 @@ class TermQuery:
 
     def execute(self, agent, scope, stack):
         # Boolean constants.
-        derefed = self.term.fold(scope)
-        if derefed.boolean is True:
+        term = pyson.evaluate(self.term, scope)
+        if term is True:
             yield
             return
-        elif derefed.boolean is False:
+        elif term is False:
             yield from []
             return
 
-        if derefed.variable:
-            raise PysonError("unbound variable in query context")
+        try:
+            group = term.literal_group()
+        except AttributeError:
+            raise PysonError("expected boolean or literal in query context, got: '%s'", term)
 
         choicepoint = object()
 
         # Query on the belief base.
-        for belief in agent.beliefs[(derefed.functor, len(derefed.args))]:
+        for belief in agent.beliefs[group]:
             stack.append(choicepoint)
 
             if self.term.unify(belief, scope, stack):
@@ -179,7 +181,7 @@ class TermQuery:
             pyson.reroll(scope, stack, choicepoint)
 
         # Follow rules.
-        for rule in agent.rules[(derefed.functor, len(derefed.args))]:
+        for rule in agent.rules[group]:
             rule = copy.deepcopy(rule)
 
             stack.append(choicepoint)

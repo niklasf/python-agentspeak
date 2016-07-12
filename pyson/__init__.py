@@ -267,29 +267,6 @@ def reroll(scope, stack, choicepoint):
             t.unbind(scope)
 
 
-class Wildcard:
-    def left_unify(self, right, scope, stack):
-        return True
-
-    def right_unify(self, right, scope, stack):
-        return True
-
-    def is_ground(self, scope):
-        return False
-
-    def grounded(self, scope):
-        raise PysonError("wildcard is never ground")
-
-    def freeze(self, scope, memo):
-        return self
-
-    def __str__(self):
-        return "_"
-
-    def __repr__(self):
-        return "<Wildcard at %s>" % hex(id(self))
-
-
 class Var:
     def left_unify(self, right, scope, stack):
         if self in scope:
@@ -350,6 +327,35 @@ class Var:
 
     def __repr__(self):
         return "<Var (%s)>" % str(self)
+
+
+class Wildcard(Var):
+    def left_unify(self, right, scope, stack):
+        return True
+
+    def right_unify(self, right, scope, stack):
+        return True
+
+    def is_ground(self, scope):
+        return False
+
+    def grounded(self, scope):
+        raise PysonError("wildcard is never ground")
+
+    def freeze(self, scope, memo):
+        return self
+
+    def evaluate(self, scope):
+        return self
+
+    def bind(self, term, scope, stack):
+        pass
+
+    def __str__(self):
+        return "_"
+
+    def __repr__(self):
+        return "<Wildcard at %s>" % hex(id(self))
 
 
 class UnaryExpr:
@@ -427,6 +433,9 @@ class Literal:
         self.functor = functor
         self.args = args
         self.annots = annots
+
+    def literal_group(self):
+        return (self.functor, len(self.args))
 
     def left_unify(self, right, scope, stack):
         right = evaluate(right, scope)
