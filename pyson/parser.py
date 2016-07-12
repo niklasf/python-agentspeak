@@ -1285,6 +1285,9 @@ def validate(ast_agent, log):
         for annotation in plan.annotations:
             log.warning("plan annotations are ignored as of yet", loc=annotation.loc, extra_locs=[plan.loc])
 
+        if plan.goal_type != GoalType.belief and plan.trigger == Trigger.removal:
+            log.warning("recovery plans are ignored as of yet", loc=plan.loc)
+
     return ast_agent
 
 
