@@ -274,6 +274,15 @@ class Wildcard:
     def right_unify(self, right, scope, stack):
         return True
 
+    def is_ground(self, scope):
+        return False
+
+    def grounded(self, scope):
+        raise PysonError("wildcard is never ground")
+
+    def freeze(self, scope, memo):
+        return self
+
     def __str__(self):
         return "_"
 
@@ -297,6 +306,28 @@ class Var:
             return unify(left, deref(self), scope, stack)
 
         return self.left_unify(left, scope, stack)
+
+    def is_ground(self, scope):
+        if self in scope:
+            return is_ground(deref(self, scope), scope)
+
+        return False
+
+    def grounded(self, scope):
+        if self in scope:
+            return grounded(deref(self, scope), scope)
+
+        raise PysonError("variable not ground")
+
+    def freeze(self, scope, memo):
+        if self in memo:
+            return memo[self]
+
+        if self in scope:
+            return freeze(deref(self, scope), scope, memo)
+
+        memo[self] = frozen = Var()
+        return frozen
 
     def evaluate(self, scope):
         if self in scope:
@@ -336,11 +367,20 @@ class UnaryExpr:
         operand = evaluate(self.operand, scope)
 
         if self.unary_op.boolean_op and not isinstance(operand, bool):
-            raise TypeError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise PysonError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
         elif self.unary_op.numeric_op and not is_numeric(operand):
-            raise TypeError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise PysonError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
 
         return operand.func(evaluate(self.operand, scope))
+
+    def is_ground(self, scope):
+        return is_ground(self.operand, scope)
+
+    def grounded(self, scope):
+        return grounded(self.evaluate(scope), scope)
+
+    def freeze(self, scope, memo):
+        return freeze(self.evaluate(scope), scope, memo)
 
     def __str__(self):
         return "(%s %s)" % (self.unary_op.lexeme, self.operand)
@@ -366,11 +406,20 @@ class BinaryExpr:
         right = evaluate(self.right, scope)
 
         if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
-            raise TypeError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.numeric_op and (not is_numeric(left) or not is_numeric(right)):
-            raise TypeError("bad operand types for binary op: %r %s %r" % (type(left), type(right)))
+            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), type(right)))
 
         return self.binary_op.func(left, right)
+
+    def is_ground(self, scope):
+        return is_ground(self.left, scope) and is_ground(self.right, scope)
+
+    def grounded(self, scope):
+        return grounded(self.evaluate(scope), scope)
+
+    def freeze(self, scope, memo):
+        return freeze(self.evaluate(scope), scope, memo)
 
 
 class Literal:
@@ -402,6 +451,22 @@ class Literal:
 
     def is_structure(self):
         return True
+
+    def is_ground(self, scope):
+        return (all(is_ground(arg, scope) for arg in self.args) and
+                all(is_ground(annot, scope) for annot in self.annots))
+
+    def grounded(self, scope):
+        return Literal(
+            self.functor,
+            [grounded(arg, scope) for arg in self.args],
+            [grounded(annot, scope) for annot in self.annots])
+
+    def freeze(self, scope, memo):
+        return Literal(
+            self.functor,
+            [freeze(arg, scope, memo) for arg in self.args],
+            [freeze(annot, scope, memo) for annot in self.annots])
 
     def __bool__(self):
         return True
@@ -466,370 +531,30 @@ def unifies(left, right):
     return unify(left, right, scope, stack)
 
 
-class Term:
-    def __init__(self):
-        self.variable = False
-        self.wildcard = False
+def is_ground(term, scope):
+    if hasattr(term, "is_ground"):
+        return term.is_ground(scope)
+    elif isinstance(term, (tuple, list)):
+        return all(is_ground(t, scope) for t in term)
+    else:
+        return True
 
-        self.unary_op = None
-        self.operand = None
 
-        self.binary_op = None
-        self.left = None
-        self.right = None
-
-        self.functor = None
-        self.args = []
-        self.annotations = []
-
-        self.numeric = None
-        self.string = None
-        self.list = None
-        self.boolean = None
-
-    def deref(self, scope):
-        if self.variable and not self.wildcard and self in scope:
-            return scope[self]
-        else:
-            return self
-
-    def fold(self, scope):
-        if self.unary_op:
-            operand = self.operand.fold(scope)
-            if self.unary_op.boolean_op:
-                if operand.boolean is None:
-                    raise PysonError("expected boolean for %s" % self.unary_op)
-
-                term = Term()
-                term.boolean = operand.func(operand.boolean)
-                return term
-            elif self.unary_op.numeric_op:
-                if operand.numeric is None:
-                    raise PysonError("expected number for %s" % self.unary_op)
-
-                term = Term()
-                term.numeric = operand.func(operand.numeric)
-                return term
-        elif self.binary_op:
-            left = self.left.fold(scope)
-            right = self.right.fold(scope)
-            if self.binary_op.boolean_op:
-                if left.boolean is None or right.boolean is None:
-                    raise PysonError("expected booleans for %s", self.binary_op)
-
-                term = Term()
-                term.boolean = self.binary_op.func(left.boolean, right.boolean)
-                return term
-            elif self.binary_op.numeric_op:
-                if left.numeric is None or right.numeric is None:
-                    raise PysonError("expected numbers for %s", self.binary_op)
-
-                term = Term()
-                term.numeric = self.binary_op.func(left.numeric, right.numeric)
-                return term
-            else:
-                term = Term()
-                if self.binary_op.lexeme == "<":
-                    term.boolean = left.lt(right)
-                elif self.binary_op.lexeme == "<=":
-                    term.boolean = left.lt(right) or left.eq(right)
-                elif self.binary_op.lexeme == "==":
-                    term.boolean = left.eq(right)
-                elif self.binary_op.lexeme == "\\==":
-                    term.boolean = not left.eq(right)
-                elif self.binary_op.lexeme == ">=":
-                    term.boolean = not left.lt(right)
-                elif self.binary_op.lexeme == ">":
-                    term.boolean = not left.lt(right) and not left.eq(right)
-                return term
-        elif self.variable and not self.wildcard and self in scope:
-            return scope[self].fold(scope)
-        else:
-            return self
-
-    def unify(self, term, scope, stack):
-        if self.wildcard or term.wildcard:
-            return True
-
-        if self.variable and self in scope:
-            return scope[self].unify(term, scope, stack)
-
-        if term.variable and term in scope:
-            return self.unify(scope[term], scope, stack)
-
-        if self.unary_op or self.binary_op:
-            return self.fold(scope).unify(term, scope, stack)
-
-        if term.unary_op or term.binary_op:
-            return self.unify(term.fold(scope), scope, stack)
-
-        if self.variable:
-            self.bind(term, scope)
-            stack.append(self)
-            return True
-
-        if term.variable:
-            term.bind(self, scope)
-            stack.append(term)
-            return True
-
-        if self.numeric is not None:
-            return self.numeric == term.numeric
-
-        if self.string is not None:
-            return self.string == term.string
-
-        if self.boolean is not None:
-            return self.boolean == term.boolean
-
-        if self.list is not None:
-            if term.list is None:
-                return False
-
-            if len(self.list) != len(term.list):
-                return False
-
-            return all(left.unify(right, scope, stack) for left, right in zip(self.list, term.list))
-
-        if self.functor is not None:
-            if self.functor != term.functor:
-                return False
-
-            if len(self.args) != len(term.args):
-                return False
-
-            if any(not left.unify(right, scope, stack) for left, right in zip(self.args, term.args)):
-                return False
-
-            # TODO: Check annotations.
-
-            return True
-
-        return False
-
-    def bind(self, term, scope):
-        if self is term:
-            return
-
-        if self in scope:
-            raise RuntimeError("already bound")
-
-        scope[self] = term
-
-    def unbind(self, scope):
-        try:
-            del scope[self]
-        except KeyError:
-            pass
-
-    def freeze(self, scope, memo):
-        if self in memo:
-            return memo[self]
-
-        if self.variable and self in scope:
-            return scope[self].freeze(scope, memo).fold(scope)
-
-        if self.variable and not self.wildcard:
-            memo[self] = term = Term()
-            term.variable = True
-            return term
-        elif self.list is not None:
-            memo[self] = term = Term()
-            term.list = [t.freeze(scope, memo) for t in self.list]
-            return term
-        elif self.functor is not None:
-            memo[self] = term = Term()
-            term.functor = self.functor
-            term.args = [t.freeze(scope, memo) for t in self.args]
-            term.annotations = [t.freeze(scope, memo) for t in self.annotations]
-            return term
-        else:
-            return self
-
-    def grounded(self, scope):
-        if self.variable:
-            if not self.wildcard and self in scope:
-                return scope[self].grounded(scope)
-            else:
-                raise PysonError("term not grounded")
-        elif self.unary_op or self.binary_op:
-            folded = self.fold(scope)
-            if folded.unary_op or folded.binary_op:
-                raise PysonError("term not grounded")
-            else:
-                return folded.grounded(scope)
-        elif self.list is not None:
-            term = Term()
-            term.list = [t.grounded(scope) for t in self.list]
-            return term
-        elif self.functor is not None:
-            term = Term()
-            term.functor = self.functor
-            term.args = [t.grounded(scope) for t in self.args]
-            term.annotations = [t.grounded(scope) for t in self.annotations]
-            return term
-        else:
-            return self
-
-    def __str__(self):
-        if self.variable and self.wildcard:
-            return "_"
-        elif self.variable:
-            return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:2], id(self))
-        elif self.functor is not None:
-            b = []
-            b.append(self.functor)
-            if self.args:
-                b.append("(")
-                b.append(", ".join(str(t) for t in self.args))
-                b.append(")")
-            if self.annotations:
-                b.append("[")
-                b.append(", ".join(str(t) for t in self.annotations))
-                b.append("]")
-            return "".join(b)
-        elif self.numeric is not None:
-            return str(self.numeric)
-        elif self.string is not None:
-            return stringify_string(self.string)
-        elif self.boolean is not None:
-            return "true" if self.boolean else "false"
-        elif self.list is not None:
-            return "[%s]" % (", ".join(str(t) for t in self.list))
-        elif self.unary_op is not None:
-            return "(%s %s)" % (self.unary_op.lexeme, self.operand)
-        elif self.binary_op is not None:
-            return "(%s %s %s)" % (self.left, self.binary_op.lexeme, self.right)
-
-    def __eq__(self, other):
-        if self.wildcard:
-            return other.wildcard
-        elif self.variable:
-            return self is other
-        else:
-            return (self.functor == other.functor and
-                    self.args == other.args and
-                    self.annotations == other.annotations and
-                    self.numeric == other.numeric and
-                    self.string == other.string and
-                    self.boolean == other.boolean and
-                    self.list == other.list and
-                    self.unary_op == other.unary_op and
-                    self.operand == other.operand and
-                    self.binary_op == other.binary_op and
-                    self.left == other.left and
-                    self.right == other.right)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        if self.wildcard:
-            return hash("_")
-        elif self.variable:
-            return hash(id(self))
-        elif self.functor:
-            return hash((self.functor, tuple(self.args), tuple(self.annotations)))
-        elif self.list is not None:
-            return hash(tuple(self.list))
-        elif self.numeric is not None:
-            return hash(self.numeric)
-        elif self.string is not None:
-            return hash(self.string)
-        elif self.boolean is not None:
-            return hash(self.boolean)
-        elif self.unary_op:
-            return hash((self.unary_op, self.operand))
-        elif self.binary_op:
-            return hash((self.left, self.binary_op, self.right))
-        else:
-            assert False
-
-    def eq(self, other):
-        if self.numeric is not None and other.numeric is not None:
-            return self.numeric == other.numeric
-        elif self.boolean is not None and other.boolean is not None:
-            return self.boolean == other.boolean
-        elif self.string is not None and other.string is not None:
-            return self.string == other.string
-        elif self.list is not None and other.list is not None:
-            return self.list == other.list
-        elif self.functor is not None and other.functor is not None:
-            return self.functor == other.functor and self.args == other.args
-        else:
-            raise PysonError("not comparable: %s == %s" % (self, other))
-
-    def lt(self, other):
-        if self.numeric is not None and other.numeric is not None:
-            return self.numeric < other.numeric
-        elif self.boolean is not None and other.boolean is not None:
-            return self.boolean < other.boolean
-        elif self.string is not None and other.string is not None:
-            return self.string < other.string
-        elif self.list is not None and other.list is not None:
-            return self.list < other.list
-        elif self.functor is not None and other.functor is not None:
-            return (self.functor, self.args) < (other.functor, other.args)
-        else:
-            raise PysonError("not comparable: %s < %s" % (self, other))
-
-    @classmethod
-    def make_variable(cls):
-        term = cls()
-        term.variable = True
-        return term
-
-    @classmethod
-    def make_numeric(cls, numeric):
-        term = cls()
-        term.numeric = numeric
-        return term
-
-    @classmethod
-    def make_string(cls, string):
-        term = cls()
-        term.string = string
-        return term
-
-    @classmethod
-    def make_boolean(cls, boolean):
-        term = cls()
-        term.boolean = boolean
-        return term
-
-    @classmethod
-    def make_belief(cls, functor, args=(), annotations=()):
-        term = cls()
-        term.functor = functor
-        term.args = list(args)
-        term.annotations = list(annotations)
-        return term
-
-    @classmethod
-    def make_list(cls, args):
-        term = cls()
-        term.list = list(args)
+def grounded(term, scope):
+    if hasattr(term, "grounded"):
+        return term.grounded(scope)
+    elif isinstance(term, (tuple, list)):
+        return [grounded(t, scope) for t in term]
+    else:
         return term
 
 
-def _convert(spec, term):
-    if spec is bool:
-        if term.boolean is None:
-            raise PysonError("boolean required")
-        return term.boolean
-    elif spec is str:
-        if term.string is None:
-            raise PysonError("string required")
-        return term.string
-    elif spec is int:
-        if term.numeric is None:
-            raise PysonError("integer required")
-        return int(term.numeric)
-    elif spec is float:
-        if term.numeric is None:
-            raise PysonError("float required")
-        return float(term.numeric)
-    elif spec is Term:
+def freeze(term, scope, memo):
+    if hasattr(term, "freeze"):
+        return term.freeze(scope, memo)
+    elif isinstance(term, (tuple, list)):
+        return [freeze(t, scope, memo) for t in term]
+    else:
         return term
 
 
