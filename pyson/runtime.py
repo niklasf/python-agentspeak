@@ -723,7 +723,7 @@ def run_agent(agent):
         more_work = agent.step()
 
 
-if __name__ == "__main__":
+def main():
     try:
         args = sys.argv[1:]
         if args:
@@ -744,3 +744,7 @@ if __name__ == "__main__":
     except pyson.PysonError as error:
         LOGGER.error("%s", error)
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
