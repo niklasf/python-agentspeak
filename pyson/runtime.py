@@ -432,7 +432,7 @@ class Agent:
             if intention.last_result:
                 if intention.calling_term:
                     frozen = intention.head_term.freeze(intention.scope, {})
-                    if not intention.calling_term.unify(frozen, self.intentions[0][-1].scope, self.stack):
+                    if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
                         raise RuntimeError("back unification failed")
                 return True
             else:
