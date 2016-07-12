@@ -147,7 +147,7 @@ class ActionQuery:
         self.impl = impl
 
     def execute(self, agent, scope, stack):
-        yield from self.impl(agent, self.term.fold(scope), scope)
+        yield from self.impl(agent, pyson.evaluate(self.term, scope), scope)
 
 
 class TermQuery:
