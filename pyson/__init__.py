@@ -298,6 +298,12 @@ class Var:
 
         return self.left_unify(left, scope, stack)
 
+    def evaluate(self, scope):
+        if self in scope:
+            return evaluate(deref(self, scope))
+
+        return self
+
     def bind(self, term, scope, stack):
         if self is term:
             return
@@ -312,7 +318,59 @@ class Var:
         return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3], id(self))
 
     def __repr__(self):
-        return "<Var %s>" % str(self)
+        return "<Var (%s)>" % str(self)
+
+
+class UnaryExpr:
+    def __init__(self, unary_op, operator):
+        self.unary_op = unary_op
+        self.operand = operand
+
+    def left_unify(self, right, scope, stack):
+        return unify(self.evaluate(scope), right, scope, stack)
+
+    def right_unify(self, left, scope, stack):
+        return unify(left, self.evaluate(scope), scope, stack)
+
+    def evaluate(self, scope):
+        operand = evaluate(self.operand, scope)
+
+        if self.unary_op.boolean_op and not isinstance(operand, bool):
+            raise TypeError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
+        elif self.unary_op.numeric_op and not is_numeric(operand):
+            raise TypeError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
+
+        return operand.func(evaluate(self.operand, scope))
+
+    def __str__(self):
+        return "(%s %s)" % (self.unary_op.lexeme, self.operand)
+
+    def __repr__(self):
+        return "<UnaryExpr %s>" % str(self)
+
+
+class BinaryExpr:
+    def __init__(self, binary_op, left, right):
+        self.binary_op = binary_op
+        self.left = left
+        self.right = right
+
+    def left_unify(self, right, scope, stack):
+        return unify(self.evaluate(scope), right, scope, stack)
+
+    def right_unify(self, left, scope, stack):
+        return unify(left, self.evaluate(scope), scope, stack)
+
+    def evaluate(self, scope):
+        left = evaluate(self.left, scope)
+        right = evaluate(self.right, scope)
+
+        if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
+            raise TypeError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+        elif self.binary_op.numeric_op and (not is_numeric(left) or not is_numeric(right)):
+            raise TypeError("bad operand types for binary op: %r %s %r" % (type(left), type(right)))
+
+        return self.binary_op.func(left, right)
 
 
 class Literal:
@@ -382,6 +440,10 @@ def evaluate(term, scope):
 
 
 def unify(left, right, scope, stack):
+    """
+    Unifies the two given terms. Variable bindings are done in *scope* and
+    appended to *stack*.
+    """
     if hasattr(left, "left_unify"):
         return left.left_unify(right, scope, stack)
     elif hasattr(right, "right_unify"):
@@ -398,6 +460,7 @@ def unify(left, right, scope, stack):
 
 
 def unifies(left, right):
+    """Tests if the two given terms are unifiable."""
     scope = {}
     stack = collections.deque()
     return unify(left, right, scope, stack)
