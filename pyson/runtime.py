@@ -614,7 +614,7 @@ def dump_variables(variables, scope):
 
     for name, variable in sorted(variables.items()):
         if variable in scope:
-            print("%s = %s" % (name, variable.deref(scope)))
+            print("%s = %s" % (name, pyson.deref(variable, scope)))
         else:
             not_in_scope.append("%s = %s" % (name, variable))
 
