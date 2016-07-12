@@ -337,7 +337,7 @@ class Agent:
         for plan in applicable_plans:
             self.stack.append(choicepoint)
 
-            if not plan.head.unify(frozen, intention.scope, self.stack):
+            if not pyson.unify(plan.head, frozen, intention.scope, self.stack):
                 pyson.reroll(intention.scope, self.stack, choicepoint)
                 continue
 
