@@ -169,6 +169,8 @@ class TermQuery:
 
         choicepoint = object()
 
+        print("trying belief base ...")
+
         # Query on the belief base.
         for belief in agent.beliefs[group]:
             stack.append(choicepoint)
@@ -178,16 +180,23 @@ class TermQuery:
 
             pyson.reroll(scope, stack, choicepoint)
 
+        print("trying rules ...")
+
         # Follow rules.
         for rule in agent.rules[group]:
             rule = copy.deepcopy(rule)
 
             stack.append(choicepoint)
 
-            if pyson.unify(term, rule.head, scope, stack):
+            if pyson.unify(self.term, rule.head, scope, stack):
+                print(term, rule.head, "YEP")
                 yield from rule.query.execute(agent, scope, stack)
+            else:
+                print(term, rule.head, "NOP")
 
             pyson.reroll(scope, stack, choicepoint)
+
+        print("that's it")
 
     def __str__(self):
         return str(self.term)
@@ -199,6 +208,7 @@ class AndQuery:
         self.right = right
 
     def execute(self, agent, scope, stack):
+        print(self)
         for _ in self.left.execute(agent, scope, stack):
             yield from self.right.execute(agent, scope, stack)
 
@@ -419,6 +429,7 @@ class Agent:
         intention = self.intentions[0][-1]
 
         if intention.instr:
+            print(intention.instr)
             intention.last_result = intention.instr.f(self, intention.scope)
             if intention.last_result:
                 intention.instr = intention.instr.success

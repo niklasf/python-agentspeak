@@ -260,6 +260,7 @@ def stringify_string(s):
 def reroll(scope, stack, choicepoint):
     while stack:
         t = stack.pop()
+        print("unbind: ", t)
         if t is choicepoint:
             return
         else:
@@ -313,6 +314,7 @@ class Var:
         return self
 
     def bind(self, term, scope, stack):
+        print("bind: ", self, term)
         if self is term:
             return
 
@@ -499,6 +501,12 @@ class Literal:
     def __repr__(self):
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
 
+    def __eq__(self, other):
+        return self.functor == other.functor and self.args == other.args and self.annots == other.annots
+
+    def __hash__(self):
+        return hash((self.functor, tuple(self.args), tuple(self.annots)))
+
 
 def deref(term, scope):
     """
@@ -537,6 +545,7 @@ def unify(left, right, scope, stack):
 
         return all(unify(l, r, scope, stack) for l, r in zip(left, right))
     else:
+        print("relaxed unify: ", left, right)
         return left == right
 
 
