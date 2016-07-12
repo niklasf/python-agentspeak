@@ -175,7 +175,7 @@ class TermQuery:
         for belief in agent.beliefs[group]:
             stack.append(choicepoint)
 
-            if self.term.unify(belief, scope, stack):
+            if pyson.unify(term, belief, scope, stack):
                 yield
 
             pyson.reroll(scope, stack, choicepoint)
@@ -186,7 +186,7 @@ class TermQuery:
 
             stack.append(choicepoint)
 
-            if self.term.unify(rule.head, scope, stack):
+            if pyson.unify(term, rule.head, scope, stack):
                 yield from rule.query.execute(agent, scope, stack)
 
             pyson.reroll(scope, stack, choicepoint)
