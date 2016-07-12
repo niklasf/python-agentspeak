@@ -183,12 +183,6 @@ def main(source, lineno=1):
 
 
 def repl():
-    try:
-        import readline
-        readline.parse_and_bind("")
-    except ImportError:
-        pass
-
     lineno = 1
     while True:
         try:

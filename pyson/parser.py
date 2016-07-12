@@ -1300,12 +1300,6 @@ def main(source, hook):
 
 
 def repl(hook):
-    try:
-        import readline
-        readline.parse_and_bind("")
-    except ImportError:
-        pass
-
     lineno = 0
     tokens = []
 

@@ -176,9 +176,15 @@ class Log:
 
 
 def prompt(text):
+    prefix = colorama.Fore.CYAN + text + colorama.Fore.RESET
+
     with colorama.colorama_text():
-        print(colorama.Fore.CYAN + text + colorama.Fore.RESET, end="")
-        return input()
+        try:
+            import readline
+            return input(prefix)
+        except ImportError:
+            print(prefix, end="")
+            return input()
 
 
 @enum.unique

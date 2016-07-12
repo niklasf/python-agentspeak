@@ -617,12 +617,6 @@ def dump_variables(variables, scope):
 
 
 def repl(agent, actions=pyson.stdlib.actions):
-    try:
-        import readline
-        readline.parse_and_bind("")
-    except ImportError:
-        pass
-
     lineno = 0
     tokens = []
 
