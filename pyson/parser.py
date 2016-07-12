@@ -1308,9 +1308,9 @@ def repl(hook):
             log = pyson.Log(pyson.get_logger(__name__), 3)
 
             if not tokens:
-                line = pyson.prompt("pyson.parser >>> ")
+                line = pyson.util.prompt("pyson.parser >>> ")
             else:
-                line = pyson.prompt("pyson.parser ... ")
+                line = pyson.util.prompt("pyson.parser ... ")
 
             lineno += 1
 

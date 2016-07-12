@@ -629,9 +629,9 @@ def repl(agent, actions=pyson.stdlib.actions):
 
             try:
                 if not tokens:
-                    line = pyson.prompt("%s >>> " % hex(id(agent)))
+                    line = pyson.util.prompt("%s >>> " % hex(id(agent)))
                 else:
-                    line = pyson.prompt("%s ... " % hex(id(agent)))
+                    line = pyson.util.prompt("%s ... " % hex(id(agent)))
             except KeyboardInterrupt:
                 print()
                 sys.exit(0)

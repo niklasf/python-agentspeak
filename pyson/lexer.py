@@ -23,6 +23,7 @@ import re
 import sys
 
 import pyson
+import pyson.util
 
 from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
                    UnaryOp, BinaryOp)
@@ -186,7 +187,7 @@ def repl():
     lineno = 1
     while True:
         try:
-            line = pyson.prompt("pyson.lexer >>> ")
+            line = pyson.util.prompt("pyson.lexer >>> ")
             main(pyson.StringSource("<stdin>", line), lineno)
             lineno += 1
         except pyson.AggregatedError as error:

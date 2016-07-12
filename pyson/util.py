@@ -22,3 +22,15 @@ import sys
 
 def indent(s, spaces=2):
     return "\n".join((" " * spaces + line) for line in s.splitlines())
+
+
+def prompt(text):
+    prefix = colorama.Fore.CYAN + text + colorama.Fore.RESET
+
+    with colorama.colorama_text():
+        try:
+            import readline
+            return input(prefix)
+        except ImportError:
+            print(prefix, end="")
+            return input()

@@ -175,18 +175,6 @@ class Log:
             raise AggregatedError(self.num_errors, self.num_warnings)
 
 
-def prompt(text):
-    prefix = colorama.Fore.CYAN + text + colorama.Fore.RESET
-
-    with colorama.colorama_text():
-        try:
-            import readline
-            return input(prefix)
-        except ImportError:
-            print(prefix, end="")
-            return input()
-
-
 @enum.unique
 class Trigger(enum.Enum):
     addition = "+"
