@@ -25,6 +25,9 @@ even(Number) :- not odd(Number).
 +!hello(W) <-
   .print("Hello", W).
 
++!ungrounded(X, 8) <-
+  .print("ungrounded:", X, 8).
+
 +!always_successful.
 
 +!with_context(X) : weight(X, Weight) <-
