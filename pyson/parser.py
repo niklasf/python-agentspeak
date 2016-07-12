@@ -29,7 +29,7 @@ from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
 
 
 class AstBaseVisitor:
-    def visit_belief_atom(self, ast_belief_atom):
+    def visit_literal(self, ast_literal):
         pass
 
     def visit_list(self, ast_list):
@@ -80,7 +80,7 @@ class AstNode:
         self.loc = None
 
 
-class AstBeliefAtom(AstNode):
+class AstLiteral(AstNode):
     def __init__(self):
         super().__init__()
         self.functor = None
@@ -88,7 +88,7 @@ class AstBeliefAtom(AstNode):
         self.annotations = []
 
     def accept(self, visitor):
-        return visitor.visit_belief_atom(self)
+        return visitor.visit_literal(self)
 
     def __str__(self):
         builder = []
@@ -384,13 +384,13 @@ class AstAgent(AstNode):
         return "".join(builder)
 
 
-def parse_belief_atom(tok, tokens, log):
+def parse_literal(tok, tokens, log):
     if not tok.token.functor:
         raise log.error("expected functor, got '%s'", tok.lexeme, loc=tok.loc)
 
-    belief_atom = AstBeliefAtom()
-    belief_atom.functor = tok.lexeme
-    belief_atom.loc = tok.loc
+    literal = AstLiteral()
+    literal.functor = tok.lexeme
+    literal.loc = tok.loc
 
     tok = next(tokens)
 
@@ -398,7 +398,7 @@ def parse_belief_atom(tok, tokens, log):
         while True:
             tok = next(tokens)
             tok, term = parse_term(tok, tokens, log)
-            belief_atom.terms.append(term)
+            literal.terms.append(term)
 
             if tok.lexeme == ")":
                 tok = next(tokens)
@@ -406,13 +406,13 @@ def parse_belief_atom(tok, tokens, log):
             elif tok.lexeme == ",":
                 continue
             else:
-                raise log.error("expected ')' or another term for belief atom, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[belief_atom.loc])
+                raise log.error("expected ')' or another argument for the literal, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[literal.loc])
 
     if tok.lexeme == "[":
         while True:
             tok = next(tokens)
             tok, term = parse_term(tok, tokens, log)
-            belief_atom.annotations.append(term)
+            literal.annotations.append(term)
 
             if tok.lexeme == "]":
                 tok = next(tokens)
@@ -420,9 +420,9 @@ def parse_belief_atom(tok, tokens, log):
             elif tok.lexeme == ",":
                 continue
             else:
-                raise log.error("expected ']' or another annotation for belief atom, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[belief_atom.loc])
+                raise log.error("expected ']' or another annotation, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[literal.loc])
 
-    return tok, belief_atom
+    return tok, literal
 
 
 def parse_list(tok, tokens, log):
@@ -452,7 +452,7 @@ def parse_atom(tok, tokens, log):
         variable.loc = tok.loc
         return next(tokens), variable
     elif tok.token.functor:
-        return parse_belief_atom(tok, tokens, log)
+        return parse_literal(tok, tokens, log)
     elif tok.lexeme == "[":
         return parse_list(tok, tokens, log)
     elif tok.lexeme == "(":
@@ -602,7 +602,7 @@ def parse_term(tok, tokens, log):
 
 
 def parse_rule_or_belief(tok, tokens, log):
-    tok, belief_atom = parse_belief_atom(tok, tokens, log)
+    tok, belief_atom = parse_literal(tok, tokens, log)
 
     if tok.lexeme == ":-":
         # A rule with head and body.
@@ -626,7 +626,7 @@ def parse_initial_goal(tok, tokens, log):
     goal.loc = tok.loc
 
     tok = next(tokens)
-    tok, goal.atom = parse_belief_atom(tok, tokens, log)
+    tok, goal.atom = parse_literal(tok, tokens, log)
     return tok, goal
 
 
@@ -808,7 +808,7 @@ def parse_plan(tok, tokens, log):
 
     while tok.lexeme == "@":
         tok = next(tokens)
-        tok, annotation = parse_belief_atom(tok, tokens, log)
+        tok, annotation = parse_literal(tok, tokens, log)
         plan.annotations.append(annotation)
 
     if not tok.token.trigger:
@@ -823,7 +823,7 @@ def parse_plan(tok, tokens, log):
         plan.goal_type = GoalType.belief
 
     plan.loc = tok.loc
-    tok, plan.head = parse_belief_atom(tok, tokens, log)
+    tok, plan.head = parse_literal(tok, tokens, log)
 
     if tok.lexeme == ":":
         tok = next(tokens)
@@ -885,7 +885,7 @@ def parse(tokens, log, included_files, directive=None):
             elif tok.lexeme == "begin":
                 begin_loc = tok.loc
                 tok = next(tokens)
-                tok, sub_directive = parse_belief_atom(tok, tokens, log)
+                tok, sub_directive = parse_literal(tok, tokens, log)
                 if tok.lexeme != "}":
                     raise log.error("expected '}' after begin, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[begin_loc])
                 log.warning("directives are ignored as of yet", loc=sub_directive.loc)
@@ -934,11 +934,11 @@ def parse(tokens, log, included_files, directive=None):
 
 
 class FindVariablesVisitor:
-    def visit_belief_atom(self, ast_belief_atom):
-        for term in ast_belief_atom.terms:
+    def visit_literal(self, ast_literal):
+        for term in ast_literal.terms:
             yield from term.accept(self)
 
-        for annotation in ast_belief_atom.annotations:
+        for annotation in ast_literal.annotations:
             yield from annotation.accept(self)
 
     def visit_list(self, ast_list):
@@ -960,11 +960,11 @@ class FindVariablesVisitor:
 
 
 class FindOpVisitor:
-    def visit_belief_atom(self, ast_belief_atom):
-        for term in ast_belief_atom.terms:
+    def visit_literal(self, ast_literal):
+        for term in ast_literal.terms:
             yield from term.accept(self)
 
-        for annotation in ast_belief_atom.annotations:
+        for annotation in ast_literal.annotations:
             yield from annotation.accept(self)
 
     def visit_list(self, ast_list):
@@ -1041,9 +1041,9 @@ class NumericFoldVisitor:
 
         return ast_const
 
-    def visit_belief_atom(self, ast_belief_atom):
-        self.log.error("did not expect belief atom in numeric context", loc=ast_belief_atom.loc)
-        return ast_belief_atom
+    def visit_literal(self, ast_literal):
+        self.log.error("did not expect literal in numeric context", loc=ast_literal.loc)
+        return ast_literal
 
     def visit_list(self, ast_list):
         self.log.error("did not expect list in numeric context", loc=ast_list.loc)
@@ -1123,9 +1123,9 @@ class BooleanFoldVisitor:
 
         return ast_const
 
-    def visit_belief_atom(self, ast_belief_atom):
-        self.log.error("belief atom in boolean context", loc=ast_belief_atom.loc)
-        return ast_belief_atom
+    def visit_literal(self, ast_literal):
+        self.log.error("literal in boolean context", loc=ast_literal.loc)
+        return ast_literal
 
     def visit_list(self, ast_list):
         self.log.error("did not expect list in boolean context", loc=ast_list.loc)
@@ -1153,10 +1153,10 @@ class TermFoldVisitor:
     def visit_const(self, ast_const):
         return ast_const
 
-    def visit_belief_atom(self, ast_belief_atom):
-        ast_belief_atom.terms = [term.accept(self) for term in ast_belief_atom.terms]
-        ast_belief_atom.annotations = [annotation.accept(self) for annotation in ast_belief_atom.annotations]
-        return ast_belief_atom
+    def visit_literal(self, ast_literal):
+        ast_literal.terms = [term.accept(self) for term in ast_literal.terms]
+        ast_literal.annotations = [annotation.accept(self) for annotation in ast_literal.annotations]
+        return ast_literal
 
     def visit_list(self, ast_list):
         ast_list.terms = [term.accept(self) for term in ast_list.terms]
@@ -1173,8 +1173,8 @@ class LogicalFoldVisitor(BooleanFoldVisitor):
         else:
             return super().visit_binary_op(ast_binary_op)
 
-    def visit_belief_atom(self, ast_belief_atom):
-        return ast_belief_atom.accept(TermFoldVisitor(self.log))
+    def visit_literal(self, ast_literal):
+        return ast_literal.accept(TermFoldVisitor(self.log))
 
 
 class ConstFoldVisitor:
@@ -1231,10 +1231,10 @@ class ConstFoldVisitor:
         if ast_formula.formula_type == FormulaType.term:
             ast_formula.term = ast_formula.term.accept(LogicalFoldVisitor(self.log))
         else:
-            if isinstance(ast_formula.term, (AstBeliefAtom, AstVariable)):
+            if isinstance(ast_formula.term, (AstLiteral, AstVariable)):
                 ast_formula.term = ast_formula.term.accept(TermFoldVisitor(self.log))
             else:
-                self.log.error("expected belief atom or variable after '%s'", ast_formula.formula_type, loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
+                self.log.error("expected literal or variable after '%s'", ast_formula.formula_type, loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
 
         return ast_formula
 
@@ -1252,11 +1252,11 @@ class ConstFoldVisitor:
         ast_list.terms = [term.accept(term_visitor) for term in ast_list.terms]
         return ast_list
 
-    def visit_belief_atom(self, ast_belief_atom):
+    def visit_literal(self, ast_literal):
         term_visitor = TermFoldVisitor(self.log)
-        ast_belief_atom.terms = [term.accept(term_visitor) for term in ast_belief_atom.terms]
-        ast_belief_atom.annotations = [annotation.accept(term_visitor) for annotation in ast_belief_atom.annotations]
-        return ast_belief_atom
+        ast_literal.terms = [term.accept(term_visitor) for term in ast_literal.terms]
+        ast_literal.annotations = [annotation.accept(term_visitor) for annotation in ast_literal.annotations]
+        return ast_literal
 
 
 def validate(ast_agent, log):

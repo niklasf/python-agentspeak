@@ -37,10 +37,10 @@ class BuildTermVisitor:
     def __init__(self, variables):
         self.variables = variables
 
-    def visit_belief_atom(self, ast_belief_atom):
-        return pyson.Term.make_belief(ast_belief_atom.functor,
-            (t.accept(self) for t in ast_belief_atom.terms),
-            (t.accept(self) for t in ast_belief_atom.annotations))
+    def visit_literal(self, ast_literal):
+        return pyson.Literal(ast_literal.functor,
+            [t.accept(self) for t in ast_literal.terms],
+            [t.accept(self) for t in ast_literal.annotations])
 
     def visit_const(self, ast_const):
         if ast_const.value is True or ast_const.value is False:
@@ -81,17 +81,17 @@ class BuildQueryVisitor:
         self.actions = actions
         self.log = log
 
-    def visit_belief_atom(self, ast_belief_atom):
-        term = ast_belief_atom.accept(BuildTermVisitor(self.variables))
+    def visit_literal(self, ast_literal):
+        term = ast_literal.accept(BuildTermVisitor(self.variables))
         try:
-            arity = len(ast_belief_atom.terms)
-            action_impl = self.actions.lookup(ast_belief_atom.functor, arity)
+            arity = len(ast_literal.terms)
+            action_impl = self.actions.lookup(ast_literal.functor, arity)
             return ActionQuery(term, action_impl)
         except KeyError:
-            if "." in ast_belief_atom.functor:
-                self.log.warning("no such action '%s/%d'", ast_belief_atom.functor, arity,
-                                 loc=ast_belief_atom.loc,
-                                 extra_locs=[t.loc for t in ast_belief_atom.terms])
+            if "." in ast_literal.functor:
+                self.log.warning("no such action '%s/%d'", ast_literal.functor, arity,
+                                 loc=ast_literal.loc,
+                                 extra_locs=[t.loc for t in ast_literal.terms])
             return TermQuery(term)
 
     def visit_const(self, ast_const):
