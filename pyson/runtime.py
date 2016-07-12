@@ -46,20 +46,18 @@ class BuildTermVisitor:
         return ast_const.value
 
     def visit_list(self, ast_list):
-        return pyson.Term.make_list(t.accept(self) for t in ast_list.terms)
+        return [t.accept(self) for t in ast_list.terms]
 
     def visit_unary_op(self, ast_unary_op):
-        term = pyson.Term()
-        term.unary_op = ast_unary_op.operator.value
-        term.operand = ast_unary_op.operand.accept(self)
-        return term
+        return pyson.UnaryExpr(
+            ast_unary_op.operator.value,
+            ast_unary_op.operand.accept(self))
 
     def visit_binary_op(self, ast_binary_op):
-        term = pyson.Term()
-        term.binary_op = ast_binary_op.operator.value
-        term.left = ast_binary_op.left.accept(self)
-        term.right = ast_binary_op.right.accept(self)
-        return term
+        return pyson.BinaryExpr(
+            ast_binary_op.operator.value,
+            ast_binary_op.left.accept(self),
+            ast_binary_op.right.accept(self))
 
     def visit_variable(self, ast_variable):
         try:
