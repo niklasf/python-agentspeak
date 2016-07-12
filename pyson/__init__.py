@@ -260,12 +260,11 @@ def stringify_string(s):
 def reroll(scope, stack, choicepoint):
     while stack:
         t = stack.pop()
-        print("unbind: ", t)
         if t is choicepoint:
             return
         else:
             # Ignores other choicepoints.
-            scope.pop(t)
+            scope.pop(t, None)
 
 
 class Var:
@@ -309,12 +308,11 @@ class Var:
 
     def evaluate(self, scope):
         if self in scope:
-            return evaluate(deref(self, scope))
+            return evaluate(deref(self, scope), scope)
 
         return self
 
     def bind(self, term, scope, stack):
-        print("bind: ", self, term)
         if self is term:
             return
 
@@ -548,7 +546,6 @@ def unify(left, right, scope, stack):
 
         return all(unify(l, r, scope, stack) for l, r in zip(left, right))
     else:
-        print("relaxed unify: ", left, right)
         return left == right
 
 

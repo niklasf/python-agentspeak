@@ -11,8 +11,6 @@ sibling(X, Y)      :- parent_child(Z, X) & parent_child(Z, Y) & not X = Y.
 parent_child(X, Y) :- father_child(X, Y).
 parent_child(X, Y) :- mother_child(X, Y).
 
-!debug.
-
 !p1.
 !p2.
 !p3.
@@ -33,8 +31,3 @@ parent_child(X, Y) :- mother_child(X, Y).
   .print("3. Siblings:");
   ?sibling(A, B);
   .print(A, B).
-
-+!debug <-
-  .print("Debug:");
-  parent_child(Z, X) & parent_child(Z, X);
-  .print("Done debugging.").
