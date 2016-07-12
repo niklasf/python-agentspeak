@@ -390,20 +390,22 @@ class Agent:
             return False
 
     def remove_belief(self, term, scope):
-        term = term.fold(scope)
+        term = pyson.evaluate(term, scope)
 
-        if term.functor is None:
-            raise PysonError("expected belief literal")
-
-        group = self.beliefs[(term.functor, len(term.args))]
+        try:
+            group = term.literal_group()
+        except AttributeError:
+            raise PysonError("expected belief literal, got: '%s'" % term)
 
         choicepoint = object()
 
-        for belief in group:
+        relevant_beliefs = self.beliefs[group]
+
+        for belief in relevant_beliefs:
             self.stack.append(choicepoint)
 
-            if term.unify(belief, scope, self.stack):
-                group.remove(belief)
+            if pyson.unify(term, belief, scope, self.stack):
+                relevant_beliefs.remove(belief)
                 return
 
             pyson.reroll(scope, self.stack, choicepoint)
