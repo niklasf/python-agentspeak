@@ -284,7 +284,7 @@ class Wildcard:
 class Var:
     def left_unify(self, right, scope, stack):
         if self in scope:
-            return unify(deref(self), right, scope, stack)
+            return unify(deref(self, scope), right, scope, stack)
 
         if isinstance(right, Wildcard):
             return True
@@ -322,7 +322,7 @@ class Literal:
         self.annots = annots
 
     def left_unify(self, right, scope, stack):
-        right = evaluate(right)
+        right = evaluate(right, scope)
 
         try:
             if self.functor != right.functor:
@@ -333,7 +333,7 @@ class Literal:
         except AttributeError:
             return False
 
-        return all(l.unify(r) for l, r in zip(self.args, right.args))
+        return all(unify(l, r, scope, stack) for l, r in zip(self.args, right.args))
 
     def right_unify(self, left, scope, stack):
         # TODO: Check annotations
@@ -341,6 +341,9 @@ class Literal:
 
     def is_atom(self):
         return not self.args and not self.annots
+
+    def is_structure(self):
+        return True
 
     def __bool__(self):
         return True
