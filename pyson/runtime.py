@@ -378,10 +378,10 @@ class Agent:
         self.beliefs[(term.functor, len(term.args))].add(term)
 
     def test_belief(self, term, scope):
-        term = term.fold(scope)
+        term = pyson.evaluate(term, scope)
 
-        if term.functor is None:
-            raise PysonError("expected belief literal")
+        if not isinstance(term, pyson.Literal):
+            raise PysonError("expected belief literal, got: '%s'" % term)
 
         query = TermQuery(term)
 
