@@ -260,11 +260,11 @@ def stringify_string(s):
 def reroll(scope, stack, choicepoint):
     while stack:
         t = stack.pop()
-        # DEBUG: print("unbind:", t)
         if t is choicepoint:
             return
-        elif isinstance(t, Term):
-            t.unbind(scope)
+        else:
+            # Ignores other choicepoints.
+            scope.pop(t)
 
 
 class Var:
