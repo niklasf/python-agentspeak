@@ -70,8 +70,12 @@ class BuildTermVisitor:
         try:
             return self.variables[ast_variable.name]
         except KeyError:
-            var = self.variables[ast_variable.name] = pyson.Term.make_variable()
-            var.wildcard = ast_variable.name == "_"
+            if ast_variable.name == "_":
+                var = pyson.Wildcard()
+            else:
+                var = pyson.Var()
+
+            self.variables[ast_variable.name] = var
             return var
 
 
