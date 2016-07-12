@@ -442,6 +442,9 @@ class Literal:
     def left_unify(self, right, scope, stack):
         right = evaluate(right, scope)
 
+        if isinstance(right, Var):
+            return right.right_unify(self, scope, stack)
+
         try:
             if self.functor != right.functor:
                 return False

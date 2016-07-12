@@ -180,23 +180,18 @@ class TermQuery:
 
             pyson.reroll(scope, stack, choicepoint)
 
-        print("trying rules ...")
-
         # Follow rules.
         for rule in agent.rules[group]:
             rule = copy.deepcopy(rule)
 
             stack.append(choicepoint)
 
-            if pyson.unify(self.term, rule.head, scope, stack):
-                print(term, rule.head, "YEP")
-                yield from rule.query.execute(agent, scope, stack)
-            else:
-                print(term, rule.head, "NOP")
+            if pyson.unify(term, rule.head, scope, stack):
+                for _ in rule.query.execute(agent, scope, stack):
+                    print("yield from rule", term)
+                    yield
 
             pyson.reroll(scope, stack, choicepoint)
-
-        print("that's it")
 
     def __str__(self):
         return str(self.term)
