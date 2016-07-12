@@ -610,29 +610,18 @@ class Actions:
 
         def _add_function(f):
             def wrapper(agent, term, scope):
-                converted_args = [_convert(spec, arg) for spec, arg in zip(arg_specs, term.args)]
-                result = f(*converted_args)
+                args = []
+                for spec, arg in zip(arg_specs, term.args):
+                    if spec is int:
+                        arg = int(arg)
+                    elif not isinstance(arg, spec):
+                        raise PysonError("%s/%d wanted argument type '%s', got '%s'" % (spec, type(arg)))
+                    args.append(arg)
 
-                if result is None:
-                    return
-                elif isinstance(result, bool):
-                    result_term = Term.make_boolean(result)
-                elif is_numeric(result):
-                    result_term = Term.make_numeric(result)
-                elif isinstance(result, str):
-                    result_term = Term.make_string(result)
-                elif isinstance(result, Term):
-                    result_term = result
-                else:
-                    raise PysonError("function result '%s' has unsupported type" % result)
+                result = f(*term.args[:-1])
 
-                choicepoint = object()
-                agent.stack.append(choicepoint)
-
-                if term.args[-1].unify(result_term, scope, agent.stack):
+                if unify(term.args[-1], result, scope, agent.stack):
                     yield
-
-                reroll(scope, agent.stack, choicepoint)
 
             return self.add(functor, len(arg_specs) + 1, wrapper)
 

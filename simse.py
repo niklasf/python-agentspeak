@@ -12,11 +12,6 @@ files = set()
 
 actions = pyson.Actions(pyson.stdlib.actions)
 
-@actions.add(".my_action")
-def my_action(agent, term, scope):
-    print("hello world!")
-    yield
-
 actions.add_function(".sin", float, math.sin)
 
 @actions.add_function(".f", float)
@@ -75,7 +70,7 @@ result_file = open("result.csv", "w")
 
 
 for day in range(2000):
-    term = pyson.Term.make_belief("day", (pyson.Term.make_numeric(day), ))
+    term = pyson.Literal("day", (day, ))
     print(term)
 
     for agent in agents:
