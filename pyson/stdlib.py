@@ -23,6 +23,56 @@ import random
 import sys
 
 
+# TODO:
+# * Communication
+#   - .broadcast
+#   - .send
+# * List and String Manipulation
+#   - .length
+#   - .max
+#   - .member
+#   - .min
+#   - .nth
+#   - .sort
+#   - .substring
+# * Plan Library Manipulation
+#   - .add_plan
+#   - .plan_label
+#   - .relevant_plans
+#   - .remove_plan
+# * BDI
+#   - .current_intention
+#   - .desire
+#   - .drop_all_desires
+#   - .drop_all_events
+#   - .drop_all_intentions
+#   - .drop_desire
+#   - .drop_event
+#   - .drop_intention
+#   - .fail_goal
+#   - .intend
+#   - .succeed_goal
+# * Term Type Identification
+#   - .atom
+#   - .ground
+#   - .literal
+#   - .list
+#   - .number
+#   - .string
+#   - .structure
+# * Misc
+#   - .abolish
+#   - .add_anot
+#   - .at
+#   - .count
+#   - .create_agent
+#   - .date
+#   - .findall
+#   - .kill_agent
+#   - .perceive
+#   - .time
+
+
 actions = pyson.Actions()
 
 
