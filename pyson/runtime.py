@@ -498,6 +498,11 @@ class Instruction:
         self.success = None
         self.failure = None
 
+    def __repr__(self):
+        success = hex(id(self.success)) if self.success is not None else "0"
+        failure = hex(id(self.failure)) if self.failure is not None else "0"
+        return "<Instruction %s: %r %s %s>" % (hex(id(self)), self.f, success, failure)
+
 
 class BuildInstructionsVisitor:
     def __init__(self, variables, actions, tail, log):
