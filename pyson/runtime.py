@@ -43,12 +43,7 @@ class BuildTermVisitor:
             [t.accept(self) for t in ast_literal.annotations])
 
     def visit_const(self, ast_const):
-        if ast_const.value is True or ast_const.value is False:
-            return pyson.Term.make_boolean(ast_const.value)
-        elif isinstance(ast_const.value, str):
-            return pyson.Term.make_string(ast_const.value)
-        else:
-            return pyson.Term.make_numeric(ast_const.value)
+        return ast_const.value
 
     def visit_list(self, ast_list):
         return pyson.Term.make_list(t.accept(self) for t in ast_list.terms)
