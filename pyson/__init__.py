@@ -244,16 +244,14 @@ class BinaryOp(enum.Enum):
     op_or        = Operator("|", operator.__or__, boolean=True, query=True)
 
 
-def is_number(value):
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
-
-
 def parse_string(s):
+    """Parses a double quoted string."""
     assert s.startswith("\"") and s.endswith("\"")
     return bytes(s[1:-1], "utf-8").decode("unicode_escape")
 
 
 def pyson_str(term):
+    """Converts the term to a string (similar to Python :func:`str`)."""
     if term is True:
         return "true"
     elif term is False:
@@ -267,6 +265,10 @@ def pyson_str(term):
 
 
 def pyson_repr(term):
+    """
+    Converts the term to its string representation
+    (similar to Python :func:`repr`).
+    """
     if term is True:
         return "true"
     elif term is False:
@@ -279,6 +281,50 @@ def pyson_repr(term):
         return repr(int(term))
     else:
         return repr(term)
+
+
+def is_number(term):
+    """Checks if the given term is numeric."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def is_atom(term):
+    """
+    Checks if the given term is an atom
+    (a literal without arity 0 and no annotations).
+    """
+    try:
+        return term.is_atom()
+    except AttributeError:
+        return False
+
+
+def is_string(term):
+    """
+    Checks if the given term is a string.
+    """
+    return isinstance(term, str)
+
+
+def is_list(term):
+    """
+    Checks if the given term is a list (represented by a Python tuple).
+    """
+    return isinstance(term, tuple)
+
+
+def is_literal(term):
+    """
+    Checks if the given term is a literal.
+    """
+    return isinstance(term, Literal)
+
+
+def is_structure(term):
+    """
+    Checks if the given term is a structure.
+    """
+    return is_literal(term) or is_list(term)
 
 
 def reroll(scope, stack, choicepoint):
@@ -485,9 +531,6 @@ class Literal:
     def is_atom(self):
         return not self.args and not self.annots
 
-    def is_structure(self):
-        return True
-
     def is_ground(self, scope):
         return (all(is_ground(arg, scope) for arg in self.args) and
                 all(is_ground(annot, scope) for annot in self.annots))
@@ -610,6 +653,24 @@ def freeze(term, scope, memo):
         return term
 
 
+def _zip_specs(specs, args, scope):
+    result = []
+
+    for spec, arg in zip(specs, args):
+        arg = evaluate(arg, scope)
+
+        if spec is None:
+            pass
+        elif spec is int:
+            arg = int(arg)
+        elif not isinstance(arg, spec):
+            raise PysonError("spec '%' does not match '%s'" % (spec, type(arg)))
+
+        result.append(arg)
+
+    return result
+
+
 class Actions:
     def __init__(self, parent=None):
         self.parent = parent
@@ -637,15 +698,7 @@ class Actions:
 
         def _add_function(f):
             def wrapper(agent, term, scope):
-                args = []
-                for spec, arg in zip(arg_specs, term.args):
-                    if spec is int:
-                        arg = int(arg)
-                    elif not isinstance(arg, spec):
-                        raise PysonError("%s/%d wanted argument type '%s', got '%s'" % (spec, type(arg)))
-                    args.append(arg)
-
-                result = f(*term.args[:-1])
+                result = f(*_zip_specs(arg_specs, term.args, scope))
 
                 if unify(term.args[-1], result, scope, agent.stack):
                     yield
@@ -656,6 +709,22 @@ class Actions:
             return _add_function
         else:
             return _add_function(f)
+
+    def add_procedure(self, functor, arg_specs, f=None):
+        if not isinstance(arg_specs, (tuple, list)):
+            arg_specs = (arg_specs, )
+
+        def _add_procedure(f):
+            def wrapper(agent, term, scope):
+                if f(*_zip_specs(arg_specs, term.args, scope)):
+                    yield
+
+            return self.add(functor, len(arg_specs), wrapper)
+
+        if f is None:
+            return _add_procedure
+        else:
+            return _add_procedure(f)
 
     def lookup(self, functor, arity):
         group = (functor, arity)

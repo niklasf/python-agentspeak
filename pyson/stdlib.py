@@ -54,14 +54,6 @@ from pyson import pyson_str
 #   - .fail_goal
 #   - .intend
 #   - .succeed_goal
-# * Term Type Identification
-#   - .atom
-#   - .ground
-#   - .literal
-#   - .list
-#   - .number
-#   - .string
-#   - .structure
 # * Misc
 #   - .abolish
 #   - .add_anot
@@ -136,6 +128,20 @@ def _stopMAS(agent, term, scope):
 
 
 actions.add_function(".random", (), random.random)
+
+
+actions.add_procedure(".atom", (None, ), pyson.is_atom)
+actions.add_procedure(".literal", (None, ), pyson.is_literal)
+actions.add_procedure(".list", (None, ), pyson.is_list)
+actions.add_procedure(".number", (None, ), pyson.is_number)
+actions.add_procedure(".string", (None, ), pyson.is_string)
+actions.add_procedure(".structure", (None, ), pyson.is_structure)
+
+
+@actions.add(".ground", 1)
+def _ground(agent, term, scope):
+    if pyson.is_ground(term, scope):
+        yield
 
 
 @actions.add(".range", 2)
