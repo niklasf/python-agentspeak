@@ -209,7 +209,7 @@ class AstBinaryOp(AstNode):
         return visitor.visit_binary_op(self)
 
     def __str__(self):
-        return "(%s %s %s)" % (self.left, self.operator.value.lexme, self.right)
+        return "(%s %s %s)" % (self.left, self.operator.value.lexeme, self.right)
 
 
 class AstPlan(AstNode):
