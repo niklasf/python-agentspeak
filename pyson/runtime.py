@@ -325,9 +325,9 @@ class Agent:
             else:
                 self.remove_belief(term, scope)
 
-        frozen = term.fold(scope).freeze(scope, {})
+        frozen = pyson.freeze(term, scope, {})
 
-        if frozen.functor is None:
+        if not isinstance(frozen, pyson.Literal):
             raise PysonError("expected literal")
 
         applicable_plans = self.plans[(trigger, goal_type, frozen.functor, len(frozen.args))]
