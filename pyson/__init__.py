@@ -267,6 +267,139 @@ def reroll(scope, stack, choicepoint):
             t.unbind(scope)
 
 
+class Wildcard:
+    def left_unify(self, right, scope, stack):
+        return True
+
+    def right_unify(self, right, scope, stack):
+        return True
+
+    def __str__(self):
+        return "_"
+
+    def __repr__(self):
+        return "<Wildcard at %s>" % hex(id(self))
+
+
+class Var:
+    def left_unify(self, right, scope, stack):
+        if self in scope:
+            return unify(deref(self), right, scope, stack)
+
+        if isinstance(right, Wildcard):
+            return True
+
+        self.bind(evaluate(right, scope), scope, stack)
+        return True
+
+    def right_unify(self, left, scope, stack):
+        if self in scope:
+            return unify(left, deref(self), scope, stack)
+
+        return self.left_unify(left, scope, stack)
+
+    def bind(self, term, scope, stack):
+        if self is term:
+            return
+
+        if self in scope:
+            raise RuntimeError("already bound")
+
+        scope[self] = term
+        stack.append(self)
+
+    def __str__(self):
+        return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3], id(self))
+
+    def __repr__(self):
+        return "<Var %s>" % str(self)
+
+
+class Literal:
+    def __init__(self, functor, args=(), annots=()):
+        self.functor = functor
+        self.args = args
+        self.annots = annots
+
+    def left_unify(self, right, scope, stack):
+        right = evaluate(right)
+
+        try:
+            if self.functor != right.functor:
+                return False
+
+            if len(self.args) != len(right.args):
+                return False
+        except AttributeError:
+            return False
+
+        return all(l.unify(r) for l, r in zip(self.args, right.args))
+
+    def right_unify(self, left, scope, stack):
+        # TODO: Check annotations
+        return self.left_unify(left, scope, stack)
+
+    def is_atom(self):
+        return not self.args and not self.annots
+
+    def __bool__(self):
+        return True
+
+    def __len__(self):
+        return len(self.args)
+
+    def __str__(self):
+        builder = []
+        builder.append(self.functor)
+        if self.args:
+            builder.append("(")
+            builder.append(", ".join(str(arg) for arg in self.args))
+            builder.append(")")
+        if self.annots:
+            builder.append("[")
+            builder.append(", ".join(str(annot) for annot in self.annots))
+            builder.append("]")
+        return "".join(builder)
+
+    def __repr__(self):
+        return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
+
+
+def deref(term, scope):
+    while term in scope:
+        term = scope[term]
+    return term
+
+
+def evaluate(term, scope):
+    if hasattr(term, "evaluate"):
+        return term.evaluate(scope)
+    else:
+        return term
+
+
+def unify(left, right, scope, stack):
+    if hasattr(left, "left_unify"):
+        return left.left_unify(right, scope, stack)
+    elif hasattr(right, "right_unify"):
+        return right.right_unify(left, scope, stack)
+    elif isinstance(left, bool) or isinstance(right, bool):
+        return left is right
+    elif isinstance(left, (tuple, list)) and isinstance(right, (tuple, list)):
+        if len(left) != len(right):
+            return False
+
+        return all(unify(l, r, scope, stack) for l, r in zip(left, right))
+    else:
+        return left == right
+
+
+def unifies(left, right):
+    scope = {}
+    stack = collections.deque()
+    return unify(left, right, scope, stack)
+
+
 class Term:
     def __init__(self):
         self.variable = False
