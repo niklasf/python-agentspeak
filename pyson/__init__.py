@@ -244,7 +244,7 @@ class BinaryOp(enum.Enum):
     op_or        = Operator("|", operator.__or__, boolean=True, query=True)
 
 
-def is_numeric(value):
+def is_number(value):
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
@@ -398,7 +398,7 @@ class UnaryExpr:
 
         if self.unary_op.boolean_op and not isinstance(operand, bool):
             raise PysonError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
-        elif self.unary_op.numeric_op and not is_numeric(operand):
+        elif self.unary_op.numeric_op and not is_number(operand):
             raise PysonError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
 
         return operand.func(evaluate(self.operand, scope))
@@ -437,7 +437,7 @@ class BinaryExpr:
 
         if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
             raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
-        elif self.binary_op.numeric_op and (not is_numeric(left) or not is_numeric(right)):
+        elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
             raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), type(right)))
 
         return self.binary_op.func(left, right)

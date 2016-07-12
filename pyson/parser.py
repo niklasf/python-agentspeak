@@ -985,8 +985,8 @@ class NumericFoldVisitor:
         if ast_binary_op.operator.value.numeric_op:
             left = ast_binary_op.left.accept(self)
             right = ast_binary_op.right.accept(self)
-            if (isinstance(left, AstConst) and pyson.is_numeric(left.value) and
-                    isinstance(right, AstConst) and pyson.is_numeric(right.value)):
+            if (isinstance(left, AstConst) and pyson.is_number(left.value) and
+                    isinstance(right, AstConst) and pyson.is_number(right.value)):
                 try:
                     const = AstConst()
                     const.loc = ast_binary_op.loc
@@ -1008,7 +1008,7 @@ class NumericFoldVisitor:
     def visit_unary_op(self, ast_unary_op):
         if ast_unary_op.operator.value.numeric_op:
             folded = ast_unary_op.operand.accept(self)
-            if isinstance(folded, AstConst) and pyson.is_numeric(folded.value):
+            if isinstance(folded, AstConst) and pyson.is_number(folded.value):
                 const = AstConst()
                 const.loc = ast_unary_op.loc
                 const.value = ast_unary_op.operator.value.func(folded.value)
@@ -1066,7 +1066,7 @@ class BooleanFoldVisitor:
             if isinstance(left, AstConst) and isinstance(right, AstConst):
                 const = AstConst()
                 const.loc = ast_binary_op.loc
-                if pyson.is_numeric(left.value) and pyson.is_numeric(right.value):
+                if pyson.is_number(left.value) and pyson.is_number(right.value):
                     const.value = ast_binary_op.operator.value.func(left.value, right.value)
                     return const
                 elif isinstance(left.value, bool) and isinstance(right.value, bool):
@@ -1111,7 +1111,7 @@ class BooleanFoldVisitor:
     def visit_const(self, ast_const):
         if isinstance(ast_const.value, str):
             self.log.error("string in boolean context", loc=ast_const.loc)
-        elif pyson.is_numeric(ast_const.value):
+        elif pyson.is_number(ast_const.value):
             self.log.error("number '%s' in boolean context", ast_const.value, loc=ast_const.loc)
 
         return ast_const
