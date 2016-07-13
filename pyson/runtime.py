@@ -381,7 +381,6 @@ class Agent:
         if term.functor is None:
             raise PysonError("expected belief literal")
 
-        print(term)
         self.beliefs[(term.functor, len(term.args))].add(term)
 
     def test_belief(self, term, scope):
