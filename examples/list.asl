@@ -1,6 +1,6 @@
 list_a([3, 1, 2]).
 list_b([4, 5]).
-/* TODO: empty([]). */
+list_c([]).
 
 !test_unification.
 !test_concat.

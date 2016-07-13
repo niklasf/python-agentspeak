@@ -424,20 +424,23 @@ def parse_list(tok, tokens, log):
     if tok.lexeme != "[":
         raise log.error("expected '[' for list, got '%s'", tok.lexeme, loc=tok.loc)
 
-    list_atom = AstList()
-    list_atom.loc = tok.loc
+    ast_list = AstList()
+    ast_list.loc = tok.loc
 
-    while True:
-        tok = next(tokens)
+    tok = next(tokens)
+
+    while tok.lexeme != "]":
         tok, term = parse_term(tok, tokens, log)
-        list_atom.terms.append(term)
+        ast_list.terms.append(term)
 
-        if tok.lexeme == "]":
-            return next(tokens), list_atom
-        elif tok.lexeme == ",":
+        if tok.lexeme == ",":
+            tok = next(tokens)
             continue
-        else:
-            raise log.error("expected ']' or another term for list, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[list_atom.loc])
+        elif tok.lexeme != "]":
+            raise log.error("expected ']' or another term for list, got '%s'",
+                            tok.lexeme, loc=tok.loc, extra_locs=[ast_list.loc])
+
+    return next(tokens), ast_list
 
 
 def parse_atom(tok, tokens, log):
