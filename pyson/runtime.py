@@ -429,6 +429,7 @@ class Agent:
         intention = self.intentions[0][-1]
 
         if intention.instr:
+            print(intention.instr)
             intention.last_result = intention.instr.f(self, intention.scope)
             if intention.last_result:
                 intention.instr = intention.instr.success
@@ -586,6 +587,8 @@ class BuildInstructionsVisitor:
             self.tail = else_head
             ast_if_then_else.else_body.accept(self)
             self.tail.success = tail
+        else:
+            test_instr.failure = tail
 
         self.tail = tail
         return self.tail
