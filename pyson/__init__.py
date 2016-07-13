@@ -285,7 +285,7 @@ def pyson_repr(term):
 
 def is_number(term):
     """Checks if the given term is numeric."""
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    return isinstance(term, (int, float)) and not isinstance(term, bool)
 
 
 def is_atom(term):
