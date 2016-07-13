@@ -6,6 +6,9 @@ import pyson.stdlib
 import math
 import random
 
+import matplotlib.pyplot as plt
+import sys
+
 # Actions
 
 files = set()
@@ -68,18 +71,30 @@ def run():
 
 result_file = open("result.csv", "w")
 
+plot = "--plot" in sys.argv
 
-for day in range(2000):
+if plot:
+    plt.ion()
+    fig = plt.figure()
+    plt.axis([0, 5 * 365, 0, 600])
+
+for day in range(5 * 365):
     term = pyson.Literal("day", (day, ))
     print(term)
 
     for agent in agents:
-        agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
-                        term, {}, delayed=True)
+        agent.call(pyson.Trigger.addition,
+                   pyson.GoalType.achievement,
+                   term, {}, delayed=True)
 
     run()
 
     print(len(files))
+
+    if plot:
+        plt.scatter(day, len(files))
+        plt.show()
+        plt.pause(0.001)
 
     print(day, len(files), sep=",", file=result_file)
 
