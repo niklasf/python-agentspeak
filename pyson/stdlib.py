@@ -31,9 +31,7 @@ from pyson import pyson_str
 #   - .send
 # * List and String Manipulation
 #   - .length
-#   - .max
 #   - .member
-#   - .min
 #   - .nth
 #   - .sort
 #   - .substring
@@ -131,6 +129,7 @@ actions.add_function(".random", (), random.random)
 
 
 actions.add_function(".min", (tuple, ), min)
+actions.add_function(".max", (tuple, ), max)
 
 
 actions.add_procedure(".atom", (None, ), pyson.is_atom)

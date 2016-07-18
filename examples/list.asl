@@ -1,12 +1,24 @@
-list_a([1,2,3]).
-list_b([3,4]).
+list_a([3, 1, 2]).
+list_b([4, 5]).
 
-!p1.
-!p2.
+!test_unification.
+!test_concat.
+!test_min.
+!test_max.
 
-+!p1 : list_a([A, B, C]) & list_b([D, E]) <-
++!test_unification : list_a([A, B, C]) & list_b([D, E]) <-
   .print(A, B, C, D, E).
 
-+!p2 : list_a(A) & list_b(B) <-
++!test_concat : list_a(A) & list_b(B) <-
   .concat(A, B, R);
   .print(R).
+
++!test_min : list_a(A) <-
+  .min(A, R);
+  .print("min = ", R);
+  R == 1.
+
++!test_max : list_a(A) <-
+  .max(A, R);
+  .print("max = ", R);
+  R == 3.
