@@ -30,7 +30,6 @@ from pyson import pyson_str
 #   - .broadcast
 #   - .send
 # * List and String Manipulation
-#   - .length
 #   - .member
 #   - .substring
 # * Plan Library Manipulation
@@ -128,6 +127,7 @@ actions.add_function(".random", (), random.random)
 
 actions.add_function(".min", (tuple, ), min)
 actions.add_function(".max", (tuple, ), max)
+actions.add_function(".length", (None, ), len)
 
 
 @actions.add_function(".nth", (int, tuple))

@@ -7,6 +7,7 @@ list_b([4, 5]).
 !test_max.
 !test_nth.
 !test_sort.
+!test_length.
 
 +!test_unification : list_a([A, B, C]) & list_b([D, E]) <-
   .print(A, B, C, D, E).
@@ -35,3 +36,8 @@ list_b([4, 5]).
   .sort(A, Sorted);
   .nth(2, Sorted, R) & R = 3;
   .print(Sorted).
+
++!test_length : list_a(A) & list_b(B) <-
+  .length(A, LengthA) & LengthA == 3;
+  .length(B, LengthB) & LengthB == 2;
+  .length("hello", 5).
