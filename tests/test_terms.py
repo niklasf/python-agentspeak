@@ -22,6 +22,10 @@ class TermTest(unittest.TestCase):
         self.assertTrue(pyson.unifies(pyson.Literal("foo", (X, X)), pyson.Literal("foo", (1, 1))))
         self.assertFalse(pyson.unifies(pyson.Literal("bar", (X, X)), pyson.Literal("bar", (1, 2))))
 
+    def test_parse_string(self):
+        self.assertEqual(pyson.parse_string('"hello"'), "hello")
+        self.assertEqual(pyson.parse_string('"line 1\nline 2"'), "line 1\nline 2")
+
 
 if __name__ == "__main__":
     unittest.main()

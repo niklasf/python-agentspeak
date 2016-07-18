@@ -260,7 +260,7 @@ class BinaryOp(enum.Enum):
 def parse_string(s):
     """Parses a double quoted string."""
     assert s.startswith("\"") and s.endswith("\"")
-    return bytes(s[1:-1], "utf-8").decode("unicode_escape")
+    return s[1:-1].encode("utf-8").decode("unicode_escape")
 
 
 def pyson_str(term):
