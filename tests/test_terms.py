@@ -11,8 +11,9 @@ class TermTest(unittest.TestCase):
 
         self.assertTrue(pyson.unifies(3, 3.0))
         self.assertTrue(pyson.unifies(True, True))
-        self.assertTrue(pyson.unifies([1, 2], [1, pyson.Wildcard()]))
-        self.assertTrue(pyson.unifies(["hello", 2], ["hello", pyson.Var()]))
+        self.assertTrue(pyson.unifies(5, pyson.Wildcard()))
+        self.assertTrue(pyson.unifies((1, 2), (1, pyson.Wildcard())))
+        self.assertTrue(pyson.unifies(("hello", 2), ("hello", pyson.Var())))
 
         self.assertTrue(pyson.unifies(pyson.Var(), pyson.Literal("beep")))
         self.assertTrue(pyson.unifies(pyson.Literal("boop"), pyson.Var()))
