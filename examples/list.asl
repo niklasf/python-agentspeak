@@ -5,6 +5,7 @@ list_b([4, 5]).
 !test_concat.
 !test_min.
 !test_max.
+!test_nth.
 
 +!test_unification : list_a([A, B, C]) & list_b([D, E]) <-
   .print(A, B, C, D, E).
@@ -22,3 +23,9 @@ list_b([4, 5]).
   .max(A, R);
   .print("max = ", R);
   R == 3.
+
++!test_nth : list_a(A) <-
+  .nth(0, A, R0) & R0 == 3;
+  .nth(1, A, R1) & R1 == 1;
+  .nth(2, A, R2) & R2 == 2;
+  .print(R0, R1, R2).

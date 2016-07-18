@@ -32,7 +32,6 @@ from pyson import pyson_str
 # * List and String Manipulation
 #   - .length
 #   - .member
-#   - .nth
 #   - .sort
 #   - .substring
 # * Plan Library Manipulation
@@ -130,6 +129,12 @@ actions.add_function(".random", (), random.random)
 
 actions.add_function(".min", (tuple, ), min)
 actions.add_function(".max", (tuple, ), max)
+
+
+@actions.add_function(".nth", (int, tuple))
+def _nth(index, l):
+    assert index >= 0
+    return l[index]
 
 
 actions.add_procedure(".atom", (None, ), pyson.is_atom)
