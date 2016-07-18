@@ -165,7 +165,7 @@ class AstConst(AstNode):
         return visitor.visit_const(self)
 
     def __str__(self):
-        return pyson_repr(self.value)
+        return pyson.pyson_repr(self.value)
 
 
 class AstVariable(AstNode):
