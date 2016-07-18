@@ -1,5 +1,4 @@
 foo(2).
-foo(3).
 
 !init.
 
@@ -9,4 +8,5 @@ foo(3).
 +!init <-
   .print("init");
   !subplan(X);
-  .print("init:", X).
+  .print("subplan returned:", X);
+  X == 2.

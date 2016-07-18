@@ -130,6 +130,9 @@ def _stopMAS(agent, term, scope):
 actions.add_function(".random", (), random.random)
 
 
+actions.add_function(".min", (tuple, ), min)
+
+
 actions.add_procedure(".atom", (None, ), pyson.is_atom)
 actions.add_procedure(".literal", (None, ), pyson.is_literal)
 actions.add_procedure(".list", (None, ), pyson.is_list)

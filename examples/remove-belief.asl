@@ -4,4 +4,5 @@ did_not_say("hello world").
 
 +!go <-
   -did_not_say(X);
+  .ground(X);
   .print(X).
