@@ -195,7 +195,7 @@ class AstUnaryOp(AstNode):
 
 class AstBinaryOp(AstNode):
     def __init__(self):
-        super(AstBinaryOp).__init__()
+        super(AstBinaryOp, self).__init__()
         self.operator = None
         self.left = None
         self.right = None
