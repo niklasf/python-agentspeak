@@ -21,6 +21,7 @@ import colorama
 import time
 import random
 import sys
+import datetime
 
 from pyson import pyson_str
 
@@ -194,6 +195,17 @@ def _findall(agent, term, scope):
         result.append(pyson.freeze(pattern, scope, memo))
 
     if pyson.unify(tuple(result), term.args[2], scope, agent.stack):
+        yield
+
+
+@actions.add(".date", 3)
+def _date(agent, term, scope):
+    date = datetime.datetime.now()
+
+    if (pyson.unify(term.args[0], date.year, scope, agent.stack) and
+        pyson.unify(term.args[1], date.month, scope, agent.stack) and
+        pyson.unify(term.args[2], date.day, scope, agent.stack)):
+
         yield
 
 
