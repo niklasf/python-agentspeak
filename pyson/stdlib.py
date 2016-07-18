@@ -183,6 +183,9 @@ def _ground(agent, term, scope):
         yield
 
 
+# Custom actions for debugging:
+
+
 @actions.add(".range", 2)
 def _range_2(agent, term, scope):
     choicepoint = object()
