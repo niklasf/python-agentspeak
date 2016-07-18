@@ -34,6 +34,7 @@ import operator
 import itertools
 import functools
 import hashlib
+import numbers
 
 try:
     from StringIO import StringIO  # Python 2
@@ -298,7 +299,7 @@ def pyson_repr(term):
 
 def is_number(term):
     """Checks if the given term is numeric."""
-    return isinstance(term, (int, float)) and not isinstance(term, bool)
+    return isinstance(term, numbers.Number) and not isinstance(term, bool)
 
 
 def is_atom(term):

@@ -26,6 +26,15 @@ class TermTest(unittest.TestCase):
         self.assertEqual(pyson.parse_string('"hello"'), "hello")
         self.assertEqual(pyson.parse_string('"line 1\nline 2"'), "line 1\nline 2")
 
+    def test_is_number(self):
+        self.assertTrue(pyson.is_number(1))
+        self.assertTrue(pyson.is_number(-3.7))
+        self.assertTrue(pyson.is_number(2 ** 128))
+
+        self.assertFalse(pyson.is_number("a string"))
+        self.assertFalse(pyson.is_number(False))
+        self.assertFalse(pyson.is_number(True))
+
 
 if __name__ == "__main__":
     unittest.main()
