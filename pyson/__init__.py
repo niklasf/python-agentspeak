@@ -563,6 +563,8 @@ class Literal(object):
     def __bool__(self):
         return True
 
+    __nonzero__ = __bool__
+
     def __len__(self):
         return len(self.args)
 
