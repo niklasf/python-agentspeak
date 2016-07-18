@@ -22,6 +22,7 @@ import time
 import random
 import sys
 import datetime
+import collections
 
 from pyson import pyson_str
 
@@ -51,7 +52,6 @@ from pyson import pyson_str
 #   - .abolish
 #   - .add_anot
 #   - .at
-#   - .count
 #   - .create_agent
 #   - .kill_agent
 #   - .perceive
@@ -193,6 +193,21 @@ def _findall(agent, term, scope):
         result.append(pyson.freeze(pattern, scope, memo))
 
     if pyson.unify(tuple(result), term.args[2], scope, agent.stack):
+        yield
+
+
+@actions.add(".count", 2)
+def _count(agent, term, scope):
+    lookup = pyson.evaluate(term.args[0], scope)
+    relevant_beliefs = agent.beliefs[lookup.literal_group()]
+
+    count = 0
+
+    for belief in relevant_beliefs:
+        if pyson.unify(lookup, belief, {}, collections.deque()):
+            count += 1
+
+    if pyson.unify(count, term.args[1], scope, agent.stack):
         yield
 
 
