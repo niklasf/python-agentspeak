@@ -53,7 +53,6 @@ from pyson import pyson_str
 #   - .count
 #   - .create_agent
 #   - .date
-#   - .findall
 #   - .kill_agent
 #   - .perceive
 #   - .time
@@ -180,6 +179,21 @@ actions.add_procedure(".structure", (None, ), pyson.is_structure)
 @actions.add(".ground", 1)
 def _ground(agent, term, scope):
     if pyson.is_ground(term, scope):
+        yield
+
+
+@actions.add(".findall", 3)
+def _findall(agent, term, scope):
+    pattern = pyson.evaluate(term.args[0], scope)
+    query = pyson.runtime.TermQuery(term.args[1])
+    result = []
+
+    memo = {}
+
+    for _ in query.execute(agent, scope, agent.stack):
+        result.append(pyson.freeze(pattern, scope, memo))
+
+    if pyson.unify(tuple(result), term.args[2], scope, agent.stack):
         yield
 
 
