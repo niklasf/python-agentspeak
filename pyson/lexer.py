@@ -64,6 +64,22 @@ TokenInfo = collections.namedtuple("TokenInfo", "lexeme token loc")
 
 
 class TokenType(enum.Enum):
+    __order__ = """
+                space comment
+                paren_open paren_close
+                bracket_open bracket_close
+                brace_open brace_close
+                functor numeric variable string
+                lit_true lit_false
+                tok_if tok_else tok_while tok_for
+                include begin end
+                arrow define colon
+                double_exclam exclam question minus_plus
+                op_not op_plus op_minus op_power op_mult op_fdiv op_div op_mod op_and op_or
+                op_le op_ge op_ne op_eq op_decompose op_unify op_lt op_gt
+                fullstop comma semicolon at
+                """
+
     space         = Token(r"\s+", space=True)
     comment       = Token(r"(//|#).*", comment=True)
 
