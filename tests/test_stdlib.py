@@ -14,7 +14,7 @@ class StdlibTest(unittest.TestCase):
         scope = {}
         X = pyson.Var()
 
-        term = pyson.Literal(".concat", ("hello", " ", "world"))
+        term = pyson.Literal(".concat", ("hello", " ", "world", X))
         next(pyson.stdlib._concat(agent, term, scope))
 
         self.assertEqual(X.grounded(scope), "hello world")
@@ -24,10 +24,10 @@ class StdlibTest(unittest.TestCase):
         scope = {}
         X = pyson.Var()
 
-        term = pyson.Literal(".concat", ([1, 2], [3]))
+        term = pyson.Literal(".concat", ((1, 2), (3, ), X))
         next(pyson.stdlib._concat(agent, term, scope))
 
-        self.assertEqual(X.grounded(scope), [1, 2, 3])
+        self.assertEqual(X.grounded(scope), (1, 2, 3))
 
 
 if __name__ == "__main__":
