@@ -30,21 +30,25 @@ import collections
 import logging
 import sys
 import colorama
-import io
 import operator
 import itertools
 import functools
 import hashlib
+
+try:
+    from StringIO import StringIO  # Python 2
+except ImportError:
+    from io import StringIO  # Python 3
 
 
 SourceLocation = collections.namedtuple("SourceLocation",
                                         "filename lineno startcol endcol line")
 
 
-class StringSource:
+class StringSource(object):
     def __init__(self, name, string):
         self.name = name
-        self.src = io.StringIO(string)
+        self.src = StringIO(string)
 
     def __iter__(self):
         return iter(self.src)
@@ -58,7 +62,7 @@ class LogHandler(logging.StreamHandler):
         if wrapper.should_wrap():
             stream = wrapper.stream
 
-        super().__init__(stream)
+        super(LogHandler, self).__init__(stream)
 
 
 class LogFormatter(logging.Formatter):
@@ -88,7 +92,7 @@ class LogFormatter(logging.Formatter):
             b.append(colorama.Fore.BLACK + "info: " + colorama.Fore.RESET)
 
         # Add log message.
-        b.append(super().format(record))
+        b.append(super(LogFormatter, self).format(record))
         b.append(colorama.Style.NORMAL)
 
         # Add source annotation.
@@ -148,14 +152,17 @@ class PysonError(Exception):
     pass
 
 
-class Log:
+class Log(object):
     def __init__(self, logger, max_errors):
         self.logger = logger
         self.max_errors = max_errors
         self.num_errors = 0
         self.num_warnings = 0
 
-    def error(self, msg, *args, loc=None, extra_locs=()):
+    def error(self, msg, *args, **kwargs):
+        loc = kwargs.get("loc", None)
+        extra_locs = kwargs.get("extra_locs", ())
+
         self.num_errors += 1
         self.logger.error(msg, *args, extra={"loc": loc, "extra_locs": extra_locs})
         if self.num_errors >= self.max_errors:
@@ -163,11 +170,17 @@ class Log:
         else:
             return AggregatedError(self.num_errors, self.num_warnings)
 
-    def warning(self, msg, *args, loc=None, extra_locs=()):
+    def warning(self, msg, *args, **kwargs):
+        loc = kwargs.get("loc", None)
+        extra_locs = kwargs.get("extra_locs", ())
+
         self.num_warnings += 1
         self.logger.warning(msg, *args, extra={"loc": loc, "extra_locs": extra_locs})
 
-    def info(self, msg, *args, loc=None, extra_locs=()):
+    def info(self, msg, *args, **kwargs):
+        loc = kwargs.get("loc", None)
+        extra_locs = kwargs.get("extra_locs", ())
+
         self.logger.info(msg, *args, extra={"loc": loc, "extra_locs": extra_locs})
 
     def throw(self):
@@ -199,7 +212,7 @@ class FormulaType(enum.Enum):
     replace       = "-+"
 
 
-class Operator:
+class Operator(object):
     def __init__(self, lexeme, func=None,
                  numeric=False, comp=False, boolean=False, query=False):
         self.lexeme = lexeme
@@ -337,7 +350,7 @@ def reroll(scope, stack, choicepoint):
             scope.pop(t, None)
 
 
-class Var:
+class Var(object):
     def left_unify(self, right, scope, stack):
         if self in scope:
             return unify(deref(self, scope), right, scope, stack)
@@ -428,7 +441,7 @@ class Wildcard(Var):
         return "<Wildcard at %s>" % hex(id(self))
 
 
-class UnaryExpr:
+class UnaryExpr(object):
     def __init__(self, unary_op, operator):
         self.unary_op = unary_op
         self.operand = operand
@@ -465,7 +478,7 @@ class UnaryExpr:
         return "<UnaryExpr %s>" % str(self)
 
 
-class BinaryExpr:
+class BinaryExpr(object):
     def __init__(self, binary_op, left, right):
         self.binary_op = binary_op
         self.left = left
@@ -498,7 +511,7 @@ class BinaryExpr:
         return freeze(self.evaluate(scope), scope, memo)
 
 
-class Literal:
+class Literal(object):
     def __init__(self, functor, args=(), annots=()):
         self.functor = functor
         self.args = tuple(args)
@@ -671,7 +684,7 @@ def _zip_specs(specs, args, scope):
     return result
 
 
-class Actions:
+class Actions(object):
     def __init__(self, parent=None):
         self.parent = parent
         self.actions = {}

@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import collections
 import colorama
 import enum
@@ -29,7 +31,7 @@ from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
                    UnaryOp, BinaryOp)
 
 
-class Token:
+class Token(object):
     def __init__(self, regex,
                  space=False, comment=False,
                  functor=False, numeric=False, variable=False, string=False,

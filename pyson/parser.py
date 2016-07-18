@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import colorama
 import sys
 import itertools
@@ -28,7 +30,7 @@ from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
                    UnaryOp, BinaryOp)
 
 
-class AstBaseVisitor:
+class AstBaseVisitor(object):
     def visit_literal(self, ast_literal):
         pass
 
@@ -75,14 +77,14 @@ class AstBaseVisitor:
         pass
 
 
-class AstNode:
+class AstNode(object):
     def __init__(self):
         self.loc = None
 
 
 class AstLiteral(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstLiteral, self).__init__()
         self.functor = None
         self.terms = []
         self.annotations = []
@@ -106,7 +108,7 @@ class AstLiteral(AstNode):
 
 class AstList(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstList, self).__init__()
         self.terms = []
 
     def accept(self, visitor):
@@ -118,7 +120,7 @@ class AstList(AstNode):
 
 class AstRule(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstRule, self).__init__()
         self.head = None
         self.consequence = None
 
@@ -131,7 +133,7 @@ class AstRule(AstNode):
 
 class AstGoal(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstGoal, self).__init__()
         self.atom = None
 
     def accept(self, visitor):
@@ -143,7 +145,7 @@ class AstGoal(AstNode):
 
 class AstFormula(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstFormula, self).__init__()
         self.formula_type = None
         self.term = None
 
@@ -156,7 +158,7 @@ class AstFormula(AstNode):
 
 class AstConst(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstConst, self).__init__()
         self.value = None
 
     def accept(self, visitor):
@@ -168,7 +170,7 @@ class AstConst(AstNode):
 
 class AstVariable(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstVariable, self).__init__()
         self.name = None
 
     def accept(self, visitor):
@@ -180,7 +182,7 @@ class AstVariable(AstNode):
 
 class AstUnaryOp(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstUnaryOp).__init__()
         self.operator = None
         self.operand = None
 
@@ -193,7 +195,7 @@ class AstUnaryOp(AstNode):
 
 class AstBinaryOp(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstBinaryOp).__init__()
         self.operator = None
         self.left = None
         self.right = None
@@ -207,7 +209,7 @@ class AstBinaryOp(AstNode):
 
 class AstPlan(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstPlan).__init__()
         self.annotations = []
         self.trigger = None
         self.goal_type = None
@@ -243,7 +245,7 @@ class AstPlan(AstNode):
 
 class AstBody(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstBody, self).__init__()
         self.formulas = []
 
     def accept(self, visitor):
@@ -265,7 +267,7 @@ class AstBody(AstNode):
 
 class AstWhile(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstWhile, self).__init__()
         self.condition = None
         self.body = None
 
@@ -286,7 +288,7 @@ class AstWhile(AstNode):
 
 class AstFor(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstFor, self).__init__()
         self.generator = None
         self.body = None
 
@@ -307,7 +309,7 @@ class AstFor(AstNode):
 
 class AstIfThenElse(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstIfThenElse, self).__init__()
         self.condition = None
         self.if_body = None
         self.else_body = None
@@ -333,7 +335,7 @@ class AstIfThenElse(AstNode):
 
 class AstAgent(AstNode):
     def __init__(self):
-        super().__init__()
+        super(AstAgent, self).__init__()
         self.rules = []
         self.beliefs = []
         self.goals = []
@@ -926,49 +928,62 @@ def parse(tokens, log, included_files, directive=None):
             log.error("unexpected token: '%s'", tok.lexeme, loc=tok.loc)
 
 
-class FindVariablesVisitor:
+class FindVariablesVisitor(object):
     def visit_literal(self, ast_literal):
         for term in ast_literal.terms:
-            yield from term.accept(self)
+            for var in term.accept(self):
+                yield var
 
         for annotation in ast_literal.annotations:
-            yield from annotation.accept(self)
+            for var in annotation.accept(self):
+                yield var
 
     def visit_list(self, ast_list):
         for term in ast_list.terms:
-            yield from term.accept(self)
+            for var in term.accept(self):
+                yield var
 
     def visit_const(self, ast_const):
-        yield from []
+        return
+        yield
 
     def visit_variable(self, ast_variable):
         yield ast_variable
 
     def visit_unary_op(self, unary_op):
-        yield from unary_op.operand.accept(self)
+        for var in unary_op.operand.accept(self):
+            yield
 
     def visit_binary_op(self, binary_op):
-        yield from binary_op.left.accept(self)
-        yield from binary_op.right.accept(self)
+        for var in binary_op.left.accept(self):
+            yield
+
+        for var in binary_op.right.accept(self):
+            yield
 
 
-class FindOpVisitor:
+class FindOpVisitor(object):
     def visit_literal(self, ast_literal):
         for term in ast_literal.terms:
-            yield from term.accept(self)
+            for op in term.accept(self):
+                yield
 
         for annotation in ast_literal.annotations:
-            yield from annotation.accept(self)
+            for op in annotation.accept(self):
+                yield
 
     def visit_list(self, ast_list):
         for term in ast_list.terms:
-            yield from term.accept(self)
+            for op in term.accept(self):
+                yield
 
     def visit_const(self, ast_const):
-        yield from []
+        return
+        yield
 
     def visit_variable(self, ast_variable):
-        yield from []
+        return
+        yield
 
     def visit_unary_op(self, unary_op):
         yield unary_op
@@ -977,7 +992,7 @@ class FindOpVisitor:
         yield binary_op
 
 
-class NumericFoldVisitor:
+class NumericFoldVisitor(object):
     def __init__(self, log):
         self.log = log
 
@@ -1043,7 +1058,7 @@ class NumericFoldVisitor:
         return ast_list
 
 
-class BooleanFoldVisitor:
+class BooleanFoldVisitor(object):
     def __init__(self, log):
         self.log = log
 
@@ -1124,7 +1139,7 @@ class BooleanFoldVisitor:
         self.log.error("did not expect list in boolean context", loc=ast_list.loc)
 
 
-class TermFoldVisitor:
+class TermFoldVisitor(object):
     def __init__(self, log):
         self.log = log
 
@@ -1170,7 +1185,7 @@ class LogicalFoldVisitor(BooleanFoldVisitor):
         return ast_literal.accept(TermFoldVisitor(self.log))
 
 
-class ConstFoldVisitor:
+class ConstFoldVisitor(object):
     def __init__(self, log):
         self.log = log
 

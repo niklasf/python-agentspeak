@@ -16,8 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import colorama
 import sys
+
+try:
+    input = raw_input  # Python 2
+except NameError:
+    pass  # Python 3
 
 
 def indent(s, spaces=2):

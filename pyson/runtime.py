@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import sys
 import pyson
 import pyson.parser
@@ -136,7 +138,8 @@ class TrueQuery:
 
 class FalseQuery:
     def execute(self, agent, scope, stack):
-        yield from []
+        return
+        yield
 
 
 class ActionQuery:
@@ -145,7 +148,8 @@ class ActionQuery:
         self.impl = impl
 
     def execute(self, agent, scope, stack):
-        yield from self.impl(agent, self.term, scope)
+        for _ in self.impl(agent, self.term, scope):
+            yield
 
 
 class TermQuery:
@@ -159,7 +163,6 @@ class TermQuery:
             yield
             return
         elif term is False:
-            yield from []
             return
 
         try:
@@ -185,7 +188,8 @@ class TermQuery:
             stack.append(choicepoint)
 
             if pyson.unify(term, rule.head, scope, stack):
-                yield from rule.query.execute(agent, scope, stack)
+                for _ in rule.query.execute(agent, scope, stack):
+                    yield
 
             pyson.reroll(scope, stack, choicepoint)
 
@@ -200,7 +204,8 @@ class AndQuery:
 
     def execute(self, agent, scope, stack):
         for _ in self.left.execute(agent, scope, stack):
-            yield from self.right.execute(agent, scope, stack)
+            for _ in self.right.execute(agent, scope, stack):
+                yield
 
     def __str__(self):
         return "(%s & %s)" % (self.left, self.right)
@@ -212,8 +217,11 @@ class OrQuery:
         self.right = right
 
     def execute(self, agent, scope, stack):
-        yield from self.left.execute(agent, scope, stack)
-        yield from self.right.execute(agent, scope, stack)
+        for _ in self.left.execute(agent, scope, stack):
+            yield
+
+        for _ in self.right.execute(agent, scope, stack):
+            yield
 
     def __str__(self):
         return "(%s | %s)" % (self.left, self.right)

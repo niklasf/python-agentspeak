@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import pyson
 import colorama
 import time
@@ -88,7 +90,8 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
 
 @actions.add(".fail", 0)
 def _fail(agent, term, scope):
-    yield from []
+    return
+    yield
 
 
 @actions.add(".my_name", 1)
