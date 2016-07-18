@@ -429,7 +429,6 @@ class Agent:
         intention = self.intentions[0][-1]
 
         if intention.instr:
-            print(intention.instr)
             intention.last_result = intention.instr.f(self, intention.scope)
             if intention.last_result:
                 intention.instr = intention.instr.success
