@@ -1,5 +1,6 @@
 list_a([3, 1, 2]).
 list_b([4, 5]).
+/* TODO: empty([]). */
 
 !test_unification.
 !test_concat.
@@ -8,6 +9,7 @@ list_b([4, 5]).
 !test_nth.
 !test_sort.
 !test_length.
+!test_member.
 
 +!test_unification : list_a([A, B, C]) & list_b([D, E]) <-
   .print(A, B, C, D, E).
@@ -41,3 +43,10 @@ list_b([4, 5]).
   .length(A, LengthA) & LengthA == 3;
   .length(B, LengthB) & LengthB == 2;
   .length("hello", 5).
+
++!test_member : list_b(B) <-
+  .member(X, B) & X \== 4;
+  .member(Y, B) & Y == 4;
+  for (.member(M, B)) {
+    .print(M)
+  }.

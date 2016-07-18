@@ -29,8 +29,6 @@ from pyson import pyson_str
 # * Communication
 #   - .broadcast
 #   - .send
-# * List and String Manipulation
-#   - .member
 # * Plan Library Manipulation
 #   - .add_plan
 #   - .plan_label
@@ -156,6 +154,19 @@ def _substring(agent, term, scope):
 
         pyson.reroll(scope, agent.stack, choicepoint)
         pos = haystack.find(needle, pos + 1)
+
+
+@actions.add(".member", 2)
+def _member(agent, term, scope):
+    choicepoint = object()
+
+    for member in pyson.evaluate(term.args[1], scope):
+        agent.stack.append(choicepoint)
+
+        if pyson.unify(term.args[0], member, scope, agent.stack):
+            yield
+
+        pyson.reroll(scope, agent.stack, choicepoint)
 
 
 actions.add_procedure(".atom", (None, ), pyson.is_atom)
