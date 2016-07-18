@@ -31,7 +31,6 @@ from pyson import pyson_str
 #   - .send
 # * List and String Manipulation
 #   - .member
-#   - .substring
 # * Plan Library Manipulation
 #   - .add_plan
 #   - .plan_label
@@ -139,6 +138,24 @@ def _nth(index, l):
 @actions.add_function(".sort", (tuple, ))
 def _sort(l):
     return tuple(sorted(l))
+
+
+@actions.add(".substring", 3)
+def _substring(agent, term, scope):
+    needle = pyson_str(pyson.grounded(term.args[0], scope))
+    haystack = pyson_str(pyson.grounded(term.args[1], scope))
+
+    choicepoint = object()
+
+    pos = haystack.find(needle)
+    while pos != -1:
+        agent.stack.append(choicepoint)
+
+        if pyson.unify(term.args[2], pos, scope, agent.stack):
+            yield
+
+        pyson.reroll(scope, agent.stack, choicepoint)
+        pos = haystack.find(needle, pos + 1)
 
 
 actions.add_procedure(".atom", (None, ), pyson.is_atom)
