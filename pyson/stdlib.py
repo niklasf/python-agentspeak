@@ -53,10 +53,8 @@ from pyson import pyson_str
 #   - .at
 #   - .count
 #   - .create_agent
-#   - .date
 #   - .kill_agent
 #   - .perceive
-#   - .time
 
 
 actions = pyson.Actions()
