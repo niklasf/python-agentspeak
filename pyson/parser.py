@@ -182,7 +182,7 @@ class AstVariable(AstNode):
 
 class AstUnaryOp(AstNode):
     def __init__(self):
-        super(AstUnaryOp).__init__()
+        super(AstUnaryOp, self).__init__()
         self.operator = None
         self.operand = None
 
@@ -209,7 +209,7 @@ class AstBinaryOp(AstNode):
 
 class AstPlan(AstNode):
     def __init__(self):
-        super(AstPlan).__init__()
+        super(AstPlan, self).__init__()
         self.annotations = []
         self.trigger = None
         self.goal_type = None
@@ -1179,7 +1179,7 @@ class LogicalFoldVisitor(BooleanFoldVisitor):
             ast_binary_op.right = ast_binary_op.right.accept(TermFoldVisitor(self.log))
             return ast_binary_op
         else:
-            return super().visit_binary_op(ast_binary_op)
+            return super(LogicalFoldVisitor, self).visit_binary_op(ast_binary_op)
 
     def visit_literal(self, ast_literal):
         return ast_literal.accept(TermFoldVisitor(self.log))

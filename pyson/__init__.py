@@ -140,7 +140,7 @@ def get_logger(name, _singleton={}):
 
 class AggregatedError(Exception):
     def __init__(self, num_errors, num_warnings):
-        super().__init__("%d %s and %d %s" % (
+        super(AggregatedError, self).__init__("%d %s and %d %s" % (
             num_errors, "errors" if num_errors != 1 else "error",
             num_warnings, "warnings" if num_warnings != 1 else "warning"))
 
