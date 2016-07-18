@@ -209,6 +209,17 @@ def _date(agent, term, scope):
         yield
 
 
+@actions.add(".time", 3)
+def _time(agent, term, scope):
+    time = datetime.datetime.now()
+
+    if (pyson.unify(term.args[0], time.hour, scope, agent.stack) and
+        pyson.unify(term.args[1], time.minute, scope, agent.stack) and
+        pyson.unify(term.args[2], time.second, scope, agent.stack)):
+
+        yield
+
+
 # Custom actions for debugging:
 
 
