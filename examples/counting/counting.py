@@ -19,12 +19,7 @@ print(N, end=" ")
 t1 = time.time()
 
 with open(os.path.join(os.path.dirname(__file__), "counting.asl")) as source:
-    prototype = pyson.runtime.build_agent(source, pyson.stdlib.actions)
-
-agents = []
-
-while len(agents) < N:
-    agents.append(copy.deepcopy(prototype))
+    agents = pyson.runtime.build_agents(source, N, pyson.stdlib.actions)
 
 t2 = time.time()
 print(t2 - t1, end=" ")

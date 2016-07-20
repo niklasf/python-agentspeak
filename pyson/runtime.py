@@ -287,10 +287,10 @@ class Intention:
 
 
 class Agent:
-    def __init__(self):
-        self.beliefs = collections.defaultdict(lambda: set())
-        self.rules = collections.defaultdict(lambda: [])
-        self.plans = collections.defaultdict(lambda: [])
+    def __init__(self, beliefs=None, rules=None, plans=None):
+        self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
+        self.rules = collections.defaultdict(lambda: []) if rules is None else rules
+        self.plans = collections.defaultdict(lambda: []) if plans is None else plans
 
         self.query_stack = collections.deque()
         self.choicepoint_stack = collections.deque()
@@ -682,22 +682,23 @@ def repl(agent, actions=pyson.stdlib.actions):
             intention.last_result = True
 
 
-def build_agent(source, actions=pyson.stdlib.actions):
+def build_agents(source, n, actions=pyson.stdlib.actions):
+    # Parse source.
     log = pyson.Log(LOGGER, 3)
     tokens = pyson.lexer.tokenize(source, log)
-
     ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
-
     log.throw()
 
-    agent = Agent()
+    prototype_agent = Agent()
 
+    # Add rules to agent prototype.
     for ast_rule in ast_agent.rules:
         variables = {}
         head = ast_rule.head.accept(BuildTermVisitor(variables))
         consequence = ast_rule.consequence.accept(BuildQueryVisitor(variables, actions, log))
-        agent.add_rule(Rule(head, consequence))
+        prototype_agent.add_rule(Rule(head, consequence))
 
+    # Add plans to agent prototype.
     for ast_plan in ast_agent.plans:
         variables = {}
 
@@ -714,19 +715,42 @@ def build_agent(source, actions=pyson.stdlib.actions):
             ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
 
         plan = Plan(ast_plan.trigger, ast_plan.goal_type, head, context, body)
-        agent.add_plan(plan)
+        prototype_agent.add_plan(plan)
 
+    # Add beliefs to agent prototype.
     for ast_belief in ast_agent.beliefs:
         belief = ast_belief.accept(BuildTermVisitor({}))
-        agent.call(pyson.Trigger.addition, pyson.GoalType.belief, belief, {}, delayed=True)
+        prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief, belief, {}, delayed=True)
 
+    # Call initial goals on agent prototype.
     for ast_goal in ast_agent.goals:
         term = ast_goal.atom.accept(BuildTermVisitor({}))
-        agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, term, {}, delayed=True)
+        prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, term, {}, delayed=True)
 
+    # Report errors.
     log.throw()
 
-    return agent
+    # Create more instances from the prototype, but with their own call stacks.
+    # This is more efficient than making complete deep copies.
+    agents = [prototype_agent] if n > 0 else []
+
+    while len(agents) < n:
+        agent = Agent(
+            copy.copy(prototype_agent.beliefs),
+            copy.copy(prototype_agent.rules),
+            copy.copy(prototype_agent.plans))
+
+        for ast_goal in ast_agent.goals:
+            term = ast_goal.atom.accept(BuildTermVisitor({}))
+            agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, term, {}, delayed=True)
+
+        agents.append(agent)
+
+    return agents
+
+
+def build_agent(source, actions=pyson.stdlib.actions):
+    return build_agents(source, 1, actions=actions)[0]
 
 
 def run_agent(agent):
