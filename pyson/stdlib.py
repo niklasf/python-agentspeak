@@ -76,7 +76,7 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
         color = _color_map[agent]
     else:
         color = COLORS[_current_color[0]]
-        _current_color[0] += 1
+        _current_color[0] = (_current_color[0] + 1) % len(COLORS)
         _color_map[agent] = color
 
     memo = {}
