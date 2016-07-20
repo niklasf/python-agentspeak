@@ -21,6 +21,7 @@ from __future__ import print_function
 import colorama
 import sys
 import itertools
+import errno
 
 import pyson
 import pyson.lexer
@@ -871,8 +872,11 @@ def parse(tokens, log, included_files, directive=None):
                 else:
                     try:
                         included_file = open(include)
-                    except FileNotFoundError:
-                        log.error("include file not found: '%s'", include, loc=include_loc)
+                    except IOError as err:
+                        if err.errno == errno.ENOENT:
+                            log.error("include file not found: '%s'", include, loc=include_loc)
+                        else:
+                            raise
                     else:
                         included_tokens = pyson.lexer.tokenize(included_file, 1)
                         included_agent = parse(included_tokens, log, included_files | frozenset(include))
