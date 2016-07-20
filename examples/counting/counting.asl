@@ -9,10 +9,10 @@ max_count(5).
 
 +!count : actual_count(X) & max_count(Y) & X < Y <-
     NewCount = X + 1;
-    .print(NewCount);
+    // .print(NewCount);
     -+actual_count(NewCount);
     !count.
 
-+!count : actual_count(X) & max_count(Y) & X >= Y <-
++!count : actual_count(X) & max_count(Y) & X >= Y. /*
     .my_name(Name);
-    .print(Name, " terminated count").
+    .print(Name, " terminated count"). */
