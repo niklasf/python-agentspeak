@@ -7,6 +7,7 @@ import pyson.runtime
 import pyson.stdlib
 import time
 import sys
+import os.path
 import copy
 
 
@@ -17,7 +18,7 @@ print(N, end=" ")
 
 t1 = time.time()
 
-with open("examples/counting.asl") as source:
+with open(os.path.join(os.path.dirname(__file__), "counting.asl")) as source:
     prototype = pyson.runtime.build_agent(source, pyson.stdlib.actions)
 
 agents = []
