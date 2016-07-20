@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import pyson
 import pyson.runtime
 import pyson.stdlib
@@ -47,16 +49,12 @@ def delete_file():
 
 # Agents
 
+with open("developer.asl") as source:
+    agents = pyson.runtime.build_agents(source, 4, actions)
+
 with open("maintainer.asl") as source:
     maintainer = pyson.runtime.build_agent(source, actions)
-
-developers = []
-for _ in range(4):
-    with open("developer.asl") as source:
-        developers.append(pyson.runtime.build_agent(source, actions))
-
-
-agents = [maintainer] + developers
+    agents.append(maintainer)
 
 
 # Run
