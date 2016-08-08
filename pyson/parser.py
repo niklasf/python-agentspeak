@@ -884,6 +884,7 @@ def parse(tokens, log, included_files, directive=None):
                         agent.rules += included_agent.rules
                         agent.goals += included_agent.goals
                         agent.plans += included_agent.plans
+                        included_file.close()
             elif tok.lexeme == "begin":
                 begin_loc = tok.loc
                 tok = next(tokens)
