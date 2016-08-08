@@ -7,9 +7,11 @@ import pyson.runtime
 import pyson.stdlib
 import math
 import random
+import sys
+import os
+import os.path
 
 import matplotlib.pyplot as plt
-import sys
 
 # Actions
 
@@ -48,6 +50,8 @@ def delete_file():
 
 
 # Agents
+
+os.chdir(os.path.dirname(__file__))
 
 with open("developer.asl") as source:
     agents = pyson.runtime.build_agents(source, 4, actions)
