@@ -101,7 +101,6 @@ def _my_name(agent, term, scope):
     if pyson.unify(term.args[0], name, scope, agent.stack):
         yield
 
-
 @actions.add(".concat")
 def _concat(agent, term, scope):
     args = [pyson.grounded(arg, scope) for arg in term.args[:-1]]
@@ -118,6 +117,7 @@ def _concat(agent, term, scope):
 @actions.add(".stopMAS")
 def _stopMAS(agent, term, scope):
     sys.exit(0)
+    yield
 
 
 actions.add_function(".random", (), random.random)
