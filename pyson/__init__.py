@@ -154,7 +154,7 @@ class PysonError(Exception):
 
 
 class Log(object):
-    def __init__(self, logger, max_errors):
+    def __init__(self, logger, max_errors=None):
         self.logger = logger
         self.max_errors = max_errors
         self.num_errors = 0
@@ -166,7 +166,7 @@ class Log(object):
 
         self.num_errors += 1
         self.logger.error(msg, *args, extra={"loc": loc, "extra_locs": extra_locs})
-        if self.num_errors >= self.max_errors:
+        if self.max_errors is not None and self.num_errors >= self.max_errors:
             raise AggregatedError(self.num_errors, self.num_warnings)
         else:
             return AggregatedError(self.num_errors, self.num_warnings)

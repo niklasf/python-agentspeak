@@ -439,7 +439,10 @@ class Agent:
                     raise RuntimeError("back unification failed")
         else:
             intention.instr = instr.failure
-            raise PysonError("plan failure @ %s" % instr.f)
+            if not intention.instr:
+                log = pyson.Log(LOGGER)
+                error = log.error("plan failure @ %s", instr,
+                                  loc=instr.loc, extra_locs=instr.extra_locs)
 
         return True
 
@@ -500,10 +503,12 @@ def pop_choicepoint(agent, scope):
 
 
 class Instruction:
-    def __init__(self, f):
+    def __init__(self, f, loc=None, extra_locs=()):
         self.f = f
         self.success = None
         self.failure = None
+        self.loc = loc
+        self.extra_locs = extra_locs
 
     def __repr__(self):
         success = hex(id(self.success)) if self.success is not None else "0"
@@ -518,15 +523,16 @@ class BuildInstructionsVisitor:
         self.tail = tail
         self.log = log
 
-    def add_instr(self, f):
-        self.tail.success = Instruction(f)
+    def add_instr(self, f, loc=None, extra_locs=()):
+        self.tail.success = Instruction(f, loc, extra_locs)
         self.tail = self.tail.success
         return self.tail
 
     def visit_formula(self, ast_formula):
         if ast_formula.formula_type == pyson.FormulaType.add:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(add_belief, term))
+            self.add_instr(functools.partial(add_belief, term),
+                           loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.remove:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
             self.add_instr(functools.partial(remove_belief, term))
@@ -548,7 +554,7 @@ class BuildInstructionsVisitor:
         elif ast_formula.formula_type == pyson.FormulaType.term:
             query = ast_formula.term.accept(BuildQueryVisitor(self.variables, self.actions, self.log))
             self.add_instr(functools.partial(push_query, query))
-            self.add_instr(next_or_fail)
+            self.add_instr(next_or_fail, loc=ast_formula.term.loc)
             self.add_instr(pop_query)
 
         return self.tail
