@@ -281,7 +281,6 @@ class Intention:
     def __init__(self):
         self.scope = {}
         self.instr = None
-        self.last_result = True
         self.head_term = None
         self.calling_term = None
 
@@ -427,26 +426,22 @@ class Agent:
             return True
 
         intention = self.intentions[0][-1]
-
-        if intention.instr:
-            intention.last_result = intention.instr.f(self, intention.scope)
-            if intention.last_result:
-                intention.instr = intention.instr.success
-            else:
-                intention.instr = intention.instr.failure
-            return True
-        else:
+        instr = intention.instr
+        if not instr:
             self.intentions[0].pop()
-            if intention.last_result:
-                if intention.calling_term:
-                    frozen = intention.head_term.freeze(intention.scope, {})
-                    if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
-                        raise RuntimeError("back unification failed")
-                return True
-            else:
-                raise PysonError("plan failure")
+            return True
 
-        return False
+        if instr.f(self, intention.scope):
+            intention.instr = instr.success
+            if not intention.instr and intention.calling_term:
+                frozen = intention.head_term.freeze(intention.scope, {})
+                if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
+                    raise RuntimeError("back unification failed")
+        else:
+            intention.instr = instr.failure
+            raise PysonError("plan failure @ %s" % instr.f)
+
+        return True
 
 
 def noop(agent, scope):
@@ -683,7 +678,6 @@ def repl(agent, actions=pyson.stdlib.actions):
             tokens = []
         except pyson.PysonError as error:
             LOGGER.error("%s", error)
-            intention.last_result = True
             tokens = []
 
 
