@@ -445,8 +445,8 @@ class Agent:
             intention.instr = instr.failure
             if not intention.instr:
                 log = pyson.Log(LOGGER)
-                error = log.error("plan failure @ %s", instr,
-                                  loc=instr.loc, extra_locs=instr.extra_locs)
+                raise log.error("plan failure in %s", instr.f,
+                                loc=instr.loc, extra_locs=instr.extra_locs)
 
         return True
 
