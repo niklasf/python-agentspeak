@@ -131,12 +131,12 @@ class BuildQueryVisitor:
 
 
 class TrueQuery:
-    def execute(self, agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
         yield
 
 
 class FalseQuery:
-    def execute(self, agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
         return
         yield
 
@@ -146,8 +146,8 @@ class ActionQuery:
         self.term = term
         self.impl = impl
 
-    def execute(self, agent, scope, stack):
-        for _ in self.impl(agent, self.term, scope):
+    def execute(self, env, agent, scope, stack):
+        for _ in self.impl(env, agent, self.term, scope):
             yield
 
 
@@ -155,7 +155,7 @@ class TermQuery:
     def __init__(self, term):
         self.term = term
 
-    def execute(self, agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
         # Boolean constants.
         term = pyson.evaluate(self.term, scope)
         if term is True:
@@ -187,7 +187,7 @@ class TermQuery:
             stack.append(choicepoint)
 
             if pyson.unify(term, rule.head, scope, stack):
-                for _ in rule.query.execute(agent, scope, stack):
+                for _ in rule.query.execute(env, agent, scope, stack):
                     yield
 
             pyson.reroll(scope, stack, choicepoint)
@@ -201,9 +201,9 @@ class AndQuery:
         self.left = left
         self.right = right
 
-    def execute(self, agent, scope, stack):
-        for _ in self.left.execute(agent, scope, stack):
-            for _ in self.right.execute(agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
+        for _ in self.left.execute(env, agent, scope, stack):
+            for _ in self.right.execute(env, agent, scope, stack):
                 yield
 
     def __str__(self):
@@ -215,11 +215,11 @@ class OrQuery:
         self.left = left
         self.right = right
 
-    def execute(self, agent, scope, stack):
-        for _ in self.left.execute(agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
+        for _ in self.left.execute(env, agent, scope, stack):
             yield
 
-        for _ in self.right.execute(agent, scope, stack):
+        for _ in self.right.execute(env, agent, scope, stack):
             yield
 
     def __str__(self):
@@ -230,11 +230,11 @@ class NotQuery:
     def __init__(self, query):
         self.query = query
 
-    def execute(self, agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
         choicepoint = object()
         stack.append(choicepoint)
 
-        success = any(True for _ in self.query.execute(agent, scope, stack))
+        success = any(True for _ in self.query.execute(env, agent, scope, stack))
 
         pyson.reroll(scope, stack, choicepoint)
 
@@ -247,7 +247,7 @@ class UnifyQuery:
         self.left = left
         self.right = right
 
-    def execute(self, agent, scope, stack):
+    def execute(self, env, agent, scope, stack):
         choicepoint = object()
         stack.append(choicepoint)
         if pyson.unify(self.left, self.right, scope, stack):
@@ -282,6 +282,11 @@ class Intention:
         self.instr = None
         self.head_term = None
         self.calling_term = None
+
+
+class Environment:
+    def shutdown(self):
+        sys.exit(1)
 
 
 class Agent:
@@ -324,7 +329,7 @@ class Agent:
     def add_plan(self, plan):
         self.plans[(plan.trigger, plan.goal_type, plan.head.functor, len(plan.head.args))].append(plan)
 
-    def call(self, trigger, goal_type, term, scope, delayed=False):
+    def call(self, trigger, goal_type, env, term, scope, delayed=False):
         if goal_type == pyson.GoalType.belief:
             if trigger == pyson.Trigger.addition:
                 self.add_belief(term, scope)
@@ -348,7 +353,7 @@ class Agent:
                 continue
 
             try:
-                next(plan.context.execute(self, intention.scope, self.stack))
+                next(plan.context.execute(env, self, intention.scope, self.stack))
             except StopIteration:
                 pyson.reroll(intention.scope, self.stack, choicepoint)
                 continue
@@ -369,7 +374,7 @@ class Agent:
             raise PysonError("no applicable plan for %s%s%s/%d" % (
                 trigger.value, goal_type.value, frozen.functor, len(frozen.args)))
         elif goal_type == pyson.GoalType.test:
-            return self.test_belief(term, scope)
+            return self.test_belief(env, term, scope)
 
         return True
 
@@ -381,7 +386,7 @@ class Agent:
 
         self.beliefs[(term.functor, len(term.args))].add(term)
 
-    def test_belief(self, term, scope):
+    def test_belief(self, env, term, scope):
         term = pyson.evaluate(term, scope)
 
         if not isinstance(term, pyson.Literal):
@@ -390,7 +395,7 @@ class Agent:
         query = TermQuery(term)
 
         try:
-            next(query.execute(self, scope, self.stack))
+            next(query.execute(env, self, scope, self.stack))
             return True
         except StopIteration:
             return False
@@ -416,7 +421,7 @@ class Agent:
 
             pyson.reroll(scope, self.stack, choicepoint)
 
-    def step(self):
+    def step(self, env):
         if not self.intentions:
             return False
 
@@ -430,7 +435,7 @@ class Agent:
             self.intentions[0].pop()
             return True
 
-        if instr.f(self, intention.scope):
+        if instr.f(env, self, intention.scope):
             intention.instr = instr.success
             if not intention.instr and intention.calling_term:
                 frozen = intention.head_term.freeze(intention.scope, {})
@@ -446,36 +451,36 @@ class Agent:
         return True
 
 
-def noop(agent, scope):
+def noop(env, agent, scope):
     return True
 
 
-def add_belief(term, agent, scope):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, term, scope)
+def add_belief(term, env, agent, scope):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, env, term, scope)
 
 
-def remove_belief(term, agent, scope):
-    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, term, scope)
+def remove_belief(term, env, agent, scope):
+    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, env, term, scope)
 
 
-def test_belief(term, agent, scope):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, term, scope)
+def test_belief(term, env, agent, scope):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, env, term, scope)
 
 
-def call(trigger, goal_type, term, agent, scope):
-    return agent.call(trigger, goal_type, term, scope, delayed=False)
+def call(trigger, goal_type, term, env, agent, scope):
+    return agent.call(trigger, goal_type, env, term, scope, delayed=False)
 
 
-def call_delayed(trigger, goal_type, term, agent, scope):
-    return agent.call(trigger, goal_type, term, scope, delayed=True)
+def call_delayed(trigger, goal_type, term, env, agent, scope):
+    return agent.call(trigger, goal_type, env, term, scope, delayed=True)
 
 
-def push_query(query, agent, scope):
-    agent.query_stack.append(query.execute(agent, scope, agent.stack))
+def push_query(query, env, agent, scope):
+    agent.query_stack.append(query.execute(env, agent, scope, agent.stack))
     return True
 
 
-def next_or_fail(agent, scope):
+def next_or_fail(env, agent, scope):
     try:
         next(agent.query_stack[-1])
         return True
@@ -483,19 +488,19 @@ def next_or_fail(agent, scope):
         return False
 
 
-def pop_query(agent, scope):
+def pop_query(env, agent, scope):
     agent.query_stack.pop()
     return True
 
 
-def push_choicepoint(agent, scope):
+def push_choicepoint(env, agent, scope):
     choicepoint = object()
     agent.choicepoint_stack.append(choicepoint)
     agent.stack.append(choicepoint)
     return True
 
 
-def pop_choicepoint(agent, scope):
+def pop_choicepoint(env, agent, scope):
     choicepoint = agent.choicepoint_stack.pop()
     pyson.reroll(scope, agent.stack, choicepoint)
     return True
@@ -513,7 +518,6 @@ class Instruction:
         success = hex(id(self.success)) if self.success is not None else "0"
         failure = hex(id(self.failure)) if self.failure is not None else "0"
         return "<Instruction %s: %r %s %s>" % (hex(id(self)), self.f, success, failure)
-
 
 class BuildInstructionsVisitor:
     def __init__(self, variables, actions, tail, log):
@@ -643,6 +647,7 @@ def repl(agent, actions=None):
     lineno = 0
     tokens = []
 
+    env = Environment()
     variables = {}
     intention = Intention()
 
@@ -679,7 +684,7 @@ def repl(agent, actions=None):
                     body.accept(BuildInstructionsVisitor(variables, actions, intention.instr, log))
                     log.throw()
                     agent.intentions.append(collections.deque([intention]))
-                    run_agent(agent)
+                    run_agent(agent, env)
                     dump_variables(variables, intention.scope)
         except pyson.AggregatedError as error:
             print(str(error), file=sys.stderr)
@@ -764,27 +769,28 @@ def build_agent(source, actions=None):
     return build_agents(source, 1, actions=actions)[0]
 
 
-def run_agent(agent):
+def run_agent(agent, env):
     more_work = True
     while more_work:
-        more_work = agent.step()
+        more_work = agent.step(env)
 
 
 def main():
+    env = Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
                     agent = build_agent(source)
-                    run_agent(agent)
+                    run_agent(agent, env)
                     repl(agent)
                     break
         elif sys.stdin.isatty():
             agent = Agent()
             repl(agent)
         else:
-            run_agent(build_agent(sys.stdin))
+            run_agent(build_agent(sys.stdin), env)
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)

@@ -72,7 +72,7 @@ COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
 
 
 @actions.add(".print")
-def _print(agent, term, scope, _color_map={}, _current_color=[0]):
+def _print(env, agent, term, scope, _color_map={}, _current_color=[0]):
     if agent in _color_map:
         color = _color_map[agent]
     else:
@@ -90,20 +90,20 @@ def _print(agent, term, scope, _color_map={}, _current_color=[0]):
 
 
 @actions.add(".fail", 0)
-def _fail(agent, term, scope):
+def _fail(env, agent, term, scope):
     return
     yield
 
 
 @actions.add(".my_name", 1)
-def _my_name(agent, term, scope):
+def _my_name(env, agent, term, scope):
     name = hex(id(agent))
 
     if pyson.unify(term.args[0], name, scope, agent.stack):
         yield
 
 @actions.add(".concat")
-def _concat(agent, term, scope):
+def _concat(env, agent, term, scope):
     args = [pyson.grounded(arg, scope) for arg in term.args[:-1]]
 
     if all(isinstance(arg, (tuple, list)) for arg in args):
@@ -116,8 +116,8 @@ def _concat(agent, term, scope):
 
 
 @actions.add(".stopMAS")
-def _stopMAS(agent, term, scope):
-    sys.exit(0)
+def _stopMAS(env, agent, term, scope):
+    env.shutdown()
     yield
 
 
@@ -141,7 +141,7 @@ def _sort(l):
 
 
 @actions.add(".substring", 3)
-def _substring(agent, term, scope):
+def _substring(env, agent, term, scope):
     needle = pyson_str(pyson.grounded(term.args[0], scope))
     haystack = pyson_str(pyson.grounded(term.args[1], scope))
 
@@ -159,7 +159,7 @@ def _substring(agent, term, scope):
 
 
 @actions.add(".member", 2)
-def _member(agent, term, scope):
+def _member(env, agent, term, scope):
     choicepoint = object()
 
     for member in pyson.evaluate(term.args[1], scope):
@@ -180,13 +180,13 @@ actions.add_procedure(".structure", (None, ), pyson.is_structure)
 
 
 @actions.add(".ground", 1)
-def _ground(agent, term, scope):
+def _ground(env, agent, term, scope):
     if pyson.is_ground(term, scope):
         yield
 
 
 @actions.add(".findall", 3)
-def _findall(agent, term, scope):
+def _findall(env, agent, term, scope):
     pattern = pyson.evaluate(term.args[0], scope)
     query = pyson.runtime.TermQuery(term.args[1])
     result = []
@@ -201,7 +201,7 @@ def _findall(agent, term, scope):
 
 
 @actions.add(".count", 2)
-def _count(agent, term, scope):
+def _count(env, agent, term, scope):
     lookup = pyson.evaluate(term.args[0], scope)
     relevant_beliefs = agent.beliefs[lookup.literal_group()]
 
@@ -216,7 +216,7 @@ def _count(agent, term, scope):
 
 
 @actions.add(".date", 3)
-def _date(agent, term, scope):
+def _date(env, agent, term, scope):
     date = datetime.datetime.now()
 
     if (pyson.unify(term.args[0], date.year, scope, agent.stack) and
@@ -227,7 +227,7 @@ def _date(agent, term, scope):
 
 
 @actions.add(".time", 3)
-def _time(agent, term, scope):
+def _time(env, agent, term, scope):
     time = datetime.datetime.now()
 
     if (pyson.unify(term.args[0], time.hour, scope, agent.stack) and
@@ -241,7 +241,7 @@ def _time(agent, term, scope):
 
 
 @actions.add(".range", 2)
-def _range_2(agent, term, scope):
+def _range_2(env, agent, term, scope):
     choicepoint = object()
 
     for i in range(int(pyson.grounded(term.args[1], scope))):
@@ -254,12 +254,12 @@ def _range_2(agent, term, scope):
 
 
 @actions.add(".dump", 0)
-def _dump(agent, term, scope):
+def _dump(env, agent, term, scope):
     agent.dump()
     yield
 
 
 @actions.add(".unbind_all", 0)
-def _unbind_all(agent, term, scope):
+def _unbind_all(env, agent, term, scope):
     scope.clear()
     yield
