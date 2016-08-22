@@ -19,15 +19,14 @@
 from __future__ import print_function
 
 import sys
-import pyson
-import pyson.parser
 import collections
 import copy
 import functools
 
+import pyson
+import pyson.parser
 import pyson.lexer
 import pyson.util
-import pyson.stdlib
 
 from pyson import UnaryOp, BinaryOp, PysonError
 
@@ -636,8 +635,11 @@ def dump_variables(variables, scope):
     if not_in_scope:
         print("%d unbound: %s" % (len(not_in_scope), ", ".join(not_in_scope)))
 
+def repl(agent, actions=None):
+    if actions is None:
+        import pyson.stdlib
+        actions = pyson.stdlib.actions
 
-def repl(agent, actions=pyson.stdlib.actions):
     lineno = 0
     tokens = []
 
@@ -687,7 +689,11 @@ def repl(agent, actions=pyson.stdlib.actions):
             tokens = []
 
 
-def build_agents(source, n, actions=pyson.stdlib.actions):
+def build_agents(source, n, actions=None):
+    if actions is None:
+        import pyson.stdlib
+        actions = pyson.stdlib.actions
+
     # Parse source.
     log = pyson.Log(LOGGER, 3)
     tokens = pyson.lexer.tokenize(source, log)
@@ -754,7 +760,7 @@ def build_agents(source, n, actions=pyson.stdlib.actions):
     return agents
 
 
-def build_agent(source, actions=pyson.stdlib.actions):
+def build_agent(source, actions=None):
     return build_agents(source, 1, actions=actions)[0]
 
 

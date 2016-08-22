@@ -19,6 +19,7 @@
 from __future__ import print_function
 
 import pyson
+import pyson.runtime
 import colorama
 import time
 import random
