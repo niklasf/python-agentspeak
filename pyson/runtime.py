@@ -465,8 +465,12 @@ def test_belief(term, agent, scope):
     return agent.call(pyson.Trigger.addition, pyson.GoalType.test, term, scope)
 
 
-def call(trigger, goal_type, term, delayed, agent, scope):
-    return agent.call(trigger, goal_type, term, scope, delayed=delayed)
+def call(trigger, goal_type, term, agent, scope):
+    return agent.call(trigger, goal_type, term, scope, delayed=False)
+
+
+def call_delayed(trigger, goal_type, term, agent, scope):
+    return agent.call(trigger, goal_type, term, scope, delayed=True)
 
 
 def push_query(query, agent, scope):
@@ -542,10 +546,10 @@ class BuildInstructionsVisitor:
             self.add_instr(functools.partial(add_belief, term))
         elif ast_formula.formula_type == pyson.FormulaType.achieve:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term, False))
+            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term))
         elif ast_formula.formula_type == pyson.FormulaType.achieve_later:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term, True))
+            self.add_instr(functools.partial(call_delayed, pyson.Trigger.addition, pyson.GoalType.achievement, term))
         elif ast_formula.formula_type == pyson.FormulaType.term:
             query = ast_formula.term.accept(BuildQueryVisitor(self.variables, self.actions, self.log))
             self.add_instr(functools.partial(push_query, query))
