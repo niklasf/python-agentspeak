@@ -684,6 +684,7 @@ def repl(agent, actions=pyson.stdlib.actions):
         except pyson.PysonError as error:
             LOGGER.error("%s", error)
             intention.last_result = True
+            tokens = []
 
 
 def build_agents(source, n, actions=pyson.stdlib.actions):
