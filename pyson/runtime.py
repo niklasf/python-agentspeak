@@ -435,18 +435,21 @@ class Agent:
             self.intentions[0].pop()
             return True
 
-        if instr.f(env, self, intention.scope):
-            intention.instr = instr.success
-            if not intention.instr and intention.calling_term:
-                frozen = intention.head_term.freeze(intention.scope, {})
-                if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
-                    raise RuntimeError("back unification failed")
-        else:
-            intention.instr = instr.failure
-            if not intention.instr:
-                log = pyson.Log(LOGGER)
-                raise log.error("plan failure in %s", instr.f,
-                                loc=instr.loc, extra_locs=instr.extra_locs)
+        try:
+            if instr.f(env, self, intention.scope):
+                intention.instr = instr.success
+                if not intention.instr and intention.calling_term:
+                    frozen = intention.head_term.freeze(intention.scope, {})
+                    if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
+                        raise RuntimeError("back unification failed")
+            else:
+                intention.instr = instr.failure
+                if not intention.instr:
+                    raise PysonError("plan failure")
+        except PysonError as err:
+            log = pyson.Log(LOGGER)
+            raise log.error("%s @ %s", err, instr.f,
+                            loc=instr.loc, extra_locs=instr.extra_locs)
 
         return True
 
