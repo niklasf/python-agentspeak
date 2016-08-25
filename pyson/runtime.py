@@ -352,7 +352,7 @@ class Environment:
         return agents
 
     def build_agent(self, source, actions=None):
-        return self.build_agents(source, 1, actions=actions)[0]
+        return self.build_agents(source, 1, actions)[0]
 
     def run_agent(self, agent):
         more_work = True
@@ -775,7 +775,7 @@ def main():
         if args:
             for arg in args:
                 with open(arg) as source:
-                    agent = env.build_agent(source)
+                    agent = env.build_agent(source, pyson.stdlib.actions)
                     env.run_agent(agent)
                     repl(agent, env, pyson.stdlib.actions)
                     break
@@ -783,7 +783,7 @@ def main():
             agent = Agent()
             repl(agent, env, pyson.stdlib.actions)
         else:
-            env.run_agent(build_agent(sys.stdin))
+            env.run_agent(build_agent(sys.stdin, pyson.stdlib.actions))
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
