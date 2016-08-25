@@ -639,11 +639,7 @@ def dump_variables(variables, scope):
     if not_in_scope:
         print("%d unbound: %s" % (len(not_in_scope), ", ".join(not_in_scope)))
 
-def repl(agent, actions=None):
-    if actions is None:
-        import pyson.stdlib
-        actions = pyson.stdlib.actions
-
+def repl(agent, actions):
     lineno = 0
     tokens = []
 
@@ -694,11 +690,7 @@ def repl(agent, actions=None):
             tokens = []
 
 
-def build_agents(source, n, actions=None):
-    if actions is None:
-        import pyson.stdlib
-        actions = pyson.stdlib.actions
-
+def build_agents(source, n, actions):
     # Parse source.
     log = pyson.Log(LOGGER, 3)
     tokens = pyson.lexer.tokenize(source, log)
@@ -776,6 +768,7 @@ def run_agent(agent, env):
 
 
 def main():
+    import pyson.stdlib
     env = Environment()
     try:
         args = sys.argv[1:]
@@ -788,7 +781,7 @@ def main():
                     break
         elif sys.stdin.isatty():
             agent = Agent()
-            repl(agent)
+            repl(agent, pyson.stdlib.actions)
         else:
             run_agent(build_agent(sys.stdin), env)
     except pyson.AggregatedError as error:

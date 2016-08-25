@@ -49,6 +49,8 @@ def delete_file():
 
 # Agents
 
+env = pyson.runtime.Environment()
+
 os.chdir(os.path.dirname(__file__))
 
 with open("developer.asl") as source:
@@ -66,7 +68,7 @@ def run():
     while more_work:
         more_work = False
         for agent in agents:
-            more_work |= agent.step()
+            more_work |= agent.step(env)
 
 
 result_file = open("result.csv", "w")
@@ -85,7 +87,7 @@ for day in range(5 * 365):
     for agent in agents:
         agent.call(pyson.Trigger.addition,
                    pyson.GoalType.achievement,
-                   term, {}, delayed=True)
+                   env, term, {}, delayed=True)
 
     run()
 
