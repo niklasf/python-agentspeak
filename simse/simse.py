@@ -11,8 +11,6 @@ import sys
 import os
 import os.path
 
-import matplotlib.pyplot as plt
-
 # Actions
 
 files = set()
@@ -94,6 +92,7 @@ for day in range(5 * 365):
     print(len(files))
 
     if plot:
+        import matplotlib.pyplot as plt
         plt.scatter(day, len(files))
         plt.show()
         plt.pause(0.001)
