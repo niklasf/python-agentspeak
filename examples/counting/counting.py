@@ -18,8 +18,10 @@ print(N, end=" ")
 
 t1 = time.time()
 
+env = pyson.runtime.Environment()
+
 with open(os.path.join(os.path.dirname(__file__), "counting.asl")) as source:
-    agents = pyson.runtime.build_agents(source, N, pyson.stdlib.actions)
+    agents = env.build_agents(source, N, pyson.stdlib.actions)
 
 t2 = time.time()
 print(t2 - t1, end=" ")
@@ -32,7 +34,7 @@ def run():
     while more_work:
         more_work = False
         for agent in agents:
-            more_work |= agent.step()
+            more_work |= agent.step(env)
 
 run()
 
