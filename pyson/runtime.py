@@ -278,11 +278,15 @@ class Plan:
 
 class Intention:
     def __init__(self):
-        self.scope = {}
-        self.query_stack = collections.deque()
         self.instr = None
         self.head_term = None
         self.calling_term = None
+
+        self.scope = {}
+        self.stack = collections.deque()
+
+        self.query_stack = collections.deque()
+        self.choicepoint_stack = collections.deque()
 
 
 class Environment:
@@ -324,12 +328,12 @@ class Environment:
         # Add beliefs to agent prototype.
         for ast_belief in ast_agent.beliefs:
             belief = ast_belief.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief, self, belief, {}, delayed=True)
+            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief, self, belief, Intention(), delayed=True)
 
         # Call initial goals on agent prototype.
         for ast_goal in ast_agent.goals:
             term = ast_goal.atom.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, self, term, {}, delayed=True)
+            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, self, term, Intention(), delayed=True)
 
         # Report errors.
         log.throw()
@@ -370,9 +374,6 @@ class Agent:
         self.rules = collections.defaultdict(lambda: []) if rules is None else rules
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
 
-        self.choicepoint_stack = collections.deque()
-
-        self.stack = collections.deque()
 
         self.intentions = collections.deque()
 
@@ -403,14 +404,14 @@ class Agent:
     def add_plan(self, plan):
         self.plans[(plan.trigger, plan.goal_type, plan.head.functor, len(plan.head.args))].append(plan)
 
-    def call(self, trigger, goal_type, env, term, scope, delayed=False):
+    def call(self, trigger, goal_type, env, term, calling_intention, delayed=False):
         if goal_type == pyson.GoalType.belief:
             if trigger == pyson.Trigger.addition:
-                self.add_belief(term, scope)
+                self.add_belief(term, calling_intention.scope)
             else:
-                self.remove_belief(term, scope)
+                self.remove_belief(term, calling_intention.scope)
 
-        frozen = pyson.freeze(term, scope, {})
+        frozen = pyson.freeze(term, calling_intention.scope, {})
 
         if not isinstance(frozen, pyson.Literal):
             raise PysonError("expected literal")
@@ -420,16 +421,16 @@ class Agent:
         intention = Intention()
 
         for plan in applicable_plans:
-            self.stack.append(choicepoint)
+            intention.stack.append(choicepoint)
 
-            if not pyson.unify(plan.head, frozen, intention.scope, self.stack):
-                pyson.reroll(intention.scope, self.stack, choicepoint)
+            if not pyson.unify(plan.head, frozen, intention.scope, intention.stack):
+                pyson.reroll(intention.scope, intention.stack, choicepoint)
                 continue
 
             try:
-                next(plan.context.execute(env, self, intention.scope, self.stack))
+                next(plan.context.execute(env, self, intention.scope, intention.stack))
             except StopIteration:
-                pyson.reroll(intention.scope, self.stack, choicepoint)
+                pyson.reroll(intention.scope, intention.stack, choicepoint)
                 continue
 
             intention.head_term = frozen
@@ -448,7 +449,7 @@ class Agent:
             raise PysonError("no applicable plan for %s%s%s/%d" % (
                 trigger.value, goal_type.value, frozen.functor, len(frozen.args)))
         elif goal_type == pyson.GoalType.test:
-            return self.test_belief(env, term, scope)
+            return self.test_belief(env, term, calling_intention)
 
         return True
 
@@ -460,8 +461,8 @@ class Agent:
 
         self.beliefs[(term.functor, len(term.args))].add(term)
 
-    def test_belief(self, env, term, scope):
-        term = pyson.evaluate(term, scope)
+    def test_belief(self, env, term, intention):
+        term = pyson.evaluate(term, intention.scope)
 
         if not isinstance(term, pyson.Literal):
             raise PysonError("expected belief literal, got: '%s'" % term)
@@ -469,7 +470,7 @@ class Agent:
         query = TermQuery(term)
 
         try:
-            next(query.execute(env, self, scope, self.stack))
+            next(query.execute(env, self, intention.scope, intention.stack))
             return True
         except StopIteration:
             return False
@@ -510,12 +511,13 @@ class Agent:
             return True
 
         try:
-            if instr.f(env, self, intention.scope):
+            if instr.f(env, self, intention):
                 intention.instr = instr.success
                 if not intention.instr and intention.calling_term:
                     frozen = intention.head_term.freeze(intention.scope, {})
                     self.intentions[0].pop()
-                    if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
+                    calling_intention = self.intentions[0][-1]
+                    if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
                         raise RuntimeError("back unification failed")
             else:
                 intention.instr = instr.failure
@@ -529,38 +531,36 @@ class Agent:
         return True
 
 
-def noop(env, agent, scope):
+def noop(env, agent, intention):
     return True
 
 
-def add_belief(term, env, agent, scope):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, env, term, scope)
+def add_belief(term, env, agent, intention):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, env, term, intention)
 
 
-def remove_belief(term, env, agent, scope):
-    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, env, term, scope)
+def remove_belief(term, env, agent, intention):
+    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, env, term, intention)
 
 
-def test_belief(term, env, agent, scope):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, env, term, scope)
+def test_belief(term, env, agent, intention):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, env, term, intention)
 
 
-def call(trigger, goal_type, term, env, agent, scope):
-    return agent.call(trigger, goal_type, env, term, scope, delayed=False)
+def call(trigger, goal_type, term, env, agent, intention):
+    return agent.call(trigger, goal_type, env, term, intention, delayed=False)
 
 
-def call_delayed(trigger, goal_type, term, env, agent, scope):
-    return agent.call(trigger, goal_type, env, term, scope, delayed=True)
+def call_delayed(trigger, goal_type, term, env, agent, intention):
+    return agent.call(trigger, goal_type, env, term, intention, delayed=True)
 
 
-def push_query(query, env, agent, scope):
-    intention = agent.intentions[0][-1] # XXX
-    intention.query_stack.append(query.execute(env, agent, scope, agent.stack))
+def push_query(query, env, agent, intention):
+    intention.query_stack.append(query.execute(env, agent, intention.scope, intention.stack))
     return True
 
 
-def next_or_fail(env, agent, scope):
-    intention = agent.intentions[0][-1] # XXX
+def next_or_fail(env, agent, intention):
     try:
         next(intention.query_stack[-1])
         return True
@@ -568,22 +568,21 @@ def next_or_fail(env, agent, scope):
         return False
 
 
-def pop_query(env, agent, scope):
-    intention = agent.intentions[0][-1] # XXX
+def pop_query(env, agent, intention):
     intention.query_stack.pop()
     return True
 
 
-def push_choicepoint(env, agent, scope):
+def push_choicepoint(env, agent, intention):
     choicepoint = object()
-    agent.choicepoint_stack.append(choicepoint)
-    agent.stack.append(choicepoint)
+    intention.choicepoint_stack.append(choicepoint)
+    intention.stack.append(choicepoint)
     return True
 
 
-def pop_choicepoint(env, agent, scope):
-    choicepoint = agent.choicepoint_stack.pop()
-    pyson.reroll(scope, agent.stack, choicepoint)
+def pop_choicepoint(env, agent, intention):
+    choicepoint = intention.choicepoint_stack.pop()
+    pyson.reroll(scope, intention.stack, choicepoint)
     return True
 
 
