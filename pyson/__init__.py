@@ -498,7 +498,7 @@ class BinaryExpr(object):
         if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
             raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
-            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), type(right)))
+            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
 
         return self.binary_op.func(left, right)
 
