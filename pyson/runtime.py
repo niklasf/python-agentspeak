@@ -497,28 +497,30 @@ class Agent:
             pyson.reroll(scope, self.stack, choicepoint)
 
     def step(self, env):
-        if not self.intentions:
+        while self.intentions and not self.intentions[0]:
+            self.intentions.popleft()
+
+        for intention_stack in self.intentions:
+            intention = intention_stack[-1]
+            break
+        else:
             return False
 
-        if not self.intentions[0]:
-            self.intentions.popleft()
-            return True
-
-        intention = self.intentions[0][-1]
         instr = intention.instr
-        if not instr:
-            self.intentions[0].pop()
-            return True
 
         try:
             if instr.f(env, self, intention):
                 intention.instr = instr.success
-                if not intention.instr and intention.calling_term:
-                    frozen = intention.head_term.freeze(intention.scope, {})
-                    self.intentions[0].pop()
-                    calling_intention = self.intentions[0][-1]
-                    if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
-                        raise RuntimeError("back unification failed")
+                if not intention.instr:
+                    intention_stack.pop()
+                    if not intention_stack:
+                        self.intentions.remove(intention_stack)
+                    elif intention.calling_term:
+                        frozen = intention.head_term.freeze(intention.scope, {})
+                        self.intentions[0].pop()
+                        calling_intention = self.intentions[0][-1]
+                        if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
+                            raise RuntimeError("back unification failed")
             else:
                 intention.instr = instr.failure
                 if not intention.instr:
