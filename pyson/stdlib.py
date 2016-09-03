@@ -17,6 +17,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import print_function
+from __future__ import division
 
 import pyson
 import pyson.runtime
@@ -240,7 +241,7 @@ def _time(env, agent, term, intention):
 
 @actions.add(".wait", 1)
 def _wait(env, agent, term, intention):
-    intention.wait_until = time.time() + term.args[0]
+    intention.wait_until = time.time() + term.args[0] / 1000
     yield
 
 
