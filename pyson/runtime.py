@@ -524,19 +524,21 @@ class Agent:
 
         instr = intention.instr
 
+        if not instr:
+            intention_stack.pop()
+            if not intention_stack:
+                self.intentions.remove(intention_stack)
+            elif calling_term:
+                frozen = intention.head_term.freeze(intention.scope, {})
+                self.intentions[0].pop()
+                calling_intention = self.intentions[0][-1]
+                if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
+                    raise RuntimeError("back unification failed")
+            return True
+
         try:
             if instr.f(env, self, intention):
                 intention.instr = instr.success
-                if not intention.instr:
-                    intention_stack.pop()
-                    if not intention_stack:
-                        self.intentions.remove(intention_stack)
-                    elif intention.calling_term:
-                        frozen = intention.head_term.freeze(intention.scope, {})
-                        self.intentions[0].pop()
-                        calling_intention = self.intentions[0][-1]
-                        if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
-                            raise RuntimeError("back unification failed")
             else:
                 intention.instr = instr.failure
                 if not intention.instr:
