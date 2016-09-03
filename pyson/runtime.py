@@ -618,19 +618,23 @@ class BuildInstructionsVisitor:
             self.add_instr(functools.partial(remove_belief, term))
         elif ast_formula.formula_type == pyson.FormulaType.test:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(test_belief, term))
+            self.add_instr(functools.partial(test_belief, term),
+                           loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.replace:
             removal_term = ast_formula.term.accept(BuildTermVisitor({}))
             self.add_instr(functools.partial(remove_belief, removal_term))
 
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(add_belief, term))
+            self.add_instr(functools.partial(add_belief, term),
+                           loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.achieve:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term))
+            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term),
+                           loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.achieve_later:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call_delayed, pyson.Trigger.addition, pyson.GoalType.achievement, term))
+            self.add_instr(functools.partial(call_delayed, pyson.Trigger.addition, pyson.GoalType.achievement, term),
+                           loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.term:
             query = ast_formula.term.accept(BuildQueryVisitor(self.variables, self.actions, self.log))
             self.add_instr(functools.partial(push_query, query))
