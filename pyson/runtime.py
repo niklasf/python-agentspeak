@@ -28,7 +28,7 @@ import pyson.parser
 import pyson.lexer
 import pyson.util
 
-from pyson import UnaryOp, BinaryOp, PysonError, pyson_repr
+from pyson import UnaryOp, BinaryOp, PysonError, pyson_str
 
 
 LOGGER = pyson.get_logger(__name__)
@@ -718,7 +718,7 @@ def dump_variables(variables, scope):
 
     for name, variable in sorted(variables.items()):
         if variable in scope:
-            print("%s = %s" % (name, pyson_repr(pyson.deref(variable, scope))))
+            print("%s = %s" % (name, pyson_str(pyson.deref(variable, scope))))
         else:
             not_in_scope.append("%s = %s" % (name, variable))
 
