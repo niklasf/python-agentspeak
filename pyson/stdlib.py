@@ -72,7 +72,7 @@ COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
 
 
 @actions.add(".print")
-def _print(env, agent, term, scope, _color_map={}, _current_color=[0]):
+def _print(env, agent, term, intention, _color_map={}, _current_color=[0]):
     if agent in _color_map:
         color = _color_map[agent]
     else:
@@ -81,7 +81,7 @@ def _print(env, agent, term, scope, _color_map={}, _current_color=[0]):
         _color_map[agent] = color
 
     memo = {}
-    text = " ".join(pyson_str(pyson.freeze(t, scope, memo)) for t in term.args)
+    text = " ".join(pyson_str(pyson.freeze(t, intention.scope, memo)) for t in term.args)
 
     with colorama.colorama_text():
         print(color[0], color[1], hex(id(agent)), colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
@@ -90,33 +90,33 @@ def _print(env, agent, term, scope, _color_map={}, _current_color=[0]):
 
 
 @actions.add(".fail", 0)
-def _fail(env, agent, term, scope):
+def _fail(env, agent, term, intention):
     return
     yield
 
 
 @actions.add(".my_name", 1)
-def _my_name(env, agent, term, scope):
+def _my_name(env, agent, term, intention):
     name = hex(id(agent))
 
-    if pyson.unify(term.args[0], name, scope, agent.stack):
+    if pyson.unify(term.args[0], name, intention.scope, intention.stack):
         yield
 
 @actions.add(".concat")
-def _concat(env, agent, term, scope):
-    args = [pyson.grounded(arg, scope) for arg in term.args[:-1]]
+def _concat(env, agent, term, intention):
+    args = [pyson.grounded(arg, intention.scope) for arg in term.args[:-1]]
 
     if all(isinstance(arg, (tuple, list)) for arg in args):
         result = tuple(el for arg in args for el in arg)
     else:
         result = "".join(str(arg) for arg in args)
 
-    if pyson.unify(term.args[-1], result, scope, agent.stack):
+    if pyson.unify(term.args[-1], result, intention.scope, intention.stack):
         yield
 
 
 @actions.add(".stopMAS")
-def _stopMAS(env, agent, term, scope):
+def _stopMAS(env, agent, term, intention):
     env.shutdown()
     yield
 
@@ -141,9 +141,9 @@ def _sort(l):
 
 
 @actions.add(".substring", 3)
-def _substring(env, agent, term, scope):
-    needle = pyson_str(pyson.grounded(term.args[0], scope))
-    haystack = pyson_str(pyson.grounded(term.args[1], scope))
+def _substring(env, agent, term, intention):
+    needle = pyson_str(pyson.grounded(term.args[0], intention.scope))
+    haystack = pyson_str(pyson.grounded(term.args[1], intention.scope))
 
     choicepoint = object()
 
@@ -151,24 +151,24 @@ def _substring(env, agent, term, scope):
     while pos != -1:
         agent.stack.append(choicepoint)
 
-        if pyson.unify(term.args[2], pos, scope, agent.stack):
+        if pyson.unify(term.args[2], pos, intention.scope, intention.stack):
             yield
 
-        pyson.reroll(scope, agent.stack, choicepoint)
+        pyson.reroll(intention.scope, intention.stack, choicepoint)
         pos = haystack.find(needle, pos + 1)
 
 
 @actions.add(".member", 2)
-def _member(env, agent, term, scope):
+def _member(env, agent, term, intention):
     choicepoint = object()
 
-    for member in pyson.evaluate(term.args[1], scope):
+    for member in pyson.evaluate(term.args[1], intention.scope):
         agent.stack.append(choicepoint)
 
-        if pyson.unify(term.args[0], member, scope, agent.stack):
+        if pyson.unify(term.args[0], member, intention.scope, intention.stack):
             yield
 
-        pyson.reroll(scope, agent.stack, choicepoint)
+        pyson.reroll(intention.scope, intention.stack, choicepoint)
 
 
 actions.add_procedure(".atom", (None, ), pyson.is_atom)
@@ -180,29 +180,29 @@ actions.add_procedure(".structure", (None, ), pyson.is_structure)
 
 
 @actions.add(".ground", 1)
-def _ground(env, agent, term, scope):
-    if pyson.is_ground(term, scope):
+def _ground(env, agent, term, intention):
+    if pyson.is_ground(term, intention.scope):
         yield
 
 
 @actions.add(".findall", 3)
-def _findall(env, agent, term, scope):
-    pattern = pyson.evaluate(term.args[0], scope)
+def _findall(env, agent, term, intention):
+    pattern = pyson.evaluate(term.args[0], intention.scope)
     query = pyson.runtime.TermQuery(term.args[1])
     result = []
 
     memo = {}
 
-    for _ in query.execute(env, agent, scope, agent.stack):
-        result.append(pyson.freeze(pattern, scope, memo))
+    for _ in query.execute(env, agent, intention.scope, intention.stack):
+        result.append(pyson.freeze(pattern, intention.scope, memo))
 
-    if pyson.unify(tuple(result), term.args[2], scope, agent.stack):
+    if pyson.unify(tuple(result), term.args[2], intention.scope, intention.stack):
         yield
 
 
 @actions.add(".count", 2)
-def _count(env, agent, term, scope):
-    lookup = pyson.evaluate(term.args[0], scope)
+def _count(env, agent, term, intention):
+    lookup = pyson.evaluate(term.args[0], intention.scope)
     relevant_beliefs = agent.beliefs[lookup.literal_group()]
 
     count = 0
@@ -211,28 +211,28 @@ def _count(env, agent, term, scope):
         if pyson.unify(lookup, belief, {}, collections.deque()):
             count += 1
 
-    if pyson.unify(count, term.args[1], scope, agent.stack):
+    if pyson.unify(count, term.args[1], intetion.scope, intention.stack):
         yield
 
 
 @actions.add(".date", 3)
-def _date(env, agent, term, scope):
+def _date(env, agent, term, intention):
     date = datetime.datetime.now()
 
-    if (pyson.unify(term.args[0], date.year, scope, agent.stack) and
-        pyson.unify(term.args[1], date.month, scope, agent.stack) and
-        pyson.unify(term.args[2], date.day, scope, agent.stack)):
+    if (pyson.unify(term.args[0], date.year, intention.scope, intention.stack) and
+        pyson.unify(term.args[1], date.month, intention.scope, intention.stack) and
+        pyson.unify(term.args[2], date.day, intention.scope, intention.stack)):
 
         yield
 
 
 @actions.add(".time", 3)
-def _time(env, agent, term, scope):
+def _time(env, agent, term, intention):
     time = datetime.datetime.now()
 
-    if (pyson.unify(term.args[0], time.hour, scope, agent.stack) and
-        pyson.unify(term.args[1], time.minute, scope, agent.stack) and
-        pyson.unify(term.args[2], time.second, scope, agent.stack)):
+    if (pyson.unify(term.args[0], time.hour, intention.scope, intention.stack) and
+        pyson.unify(term.args[1], time.minute, intention.scope, intention.stack) and
+        pyson.unify(term.args[2], time.second, intention.scope, intention.stack)):
 
         yield
 
@@ -241,25 +241,25 @@ def _time(env, agent, term, scope):
 
 
 @actions.add(".range", 2)
-def _range_2(env, agent, term, scope):
+def _range_2(env, agent, term, intention):
     choicepoint = object()
 
-    for i in range(int(pyson.grounded(term.args[1], scope))):
+    for i in range(int(pyson.grounded(term.args[1], intention.scope))):
         agent.stack.append(choicepoint)
 
-        if pyson.unify(term.args[0], i, scope, agent.stack):
+        if pyson.unify(term.args[0], i, intention.scope, intention.stack):
             yield
 
-        pyson.reroll(scope, agent.stack, choicepoint)
+        pyson.reroll(intention.scope, intention.stack, choicepoint)
 
 
 @actions.add(".dump", 0)
-def _dump(env, agent, term, scope):
+def _dump(env, agent, term, intention):
     agent.dump()
     yield
 
 
 @actions.add(".unbind_all", 0)
-def _unbind_all(env, agent, term, scope):
-    scope.clear()
+def _unbind_all(env, agent, term, intention):
+    intention.scope.clear()
     yield

@@ -131,12 +131,12 @@ class BuildQueryVisitor:
 
 
 class TrueQuery:
-    def execute(self, env, agent, scope, stack):
+    def execute(self, env, agent, intention):
         yield
 
 
 class FalseQuery:
-    def execute(self, env, agent, scope, stack):
+    def execute(self, env, agent, intention):
         return
         yield
 
@@ -146,8 +146,8 @@ class ActionQuery:
         self.term = term
         self.impl = impl
 
-    def execute(self, env, agent, scope, stack):
-        for _ in self.impl(env, agent, self.term, scope):
+    def execute(self, env, agent, intention):
+        for _ in self.impl(env, agent, self.term, intention):
             yield
 
 
@@ -155,9 +155,9 @@ class TermQuery:
     def __init__(self, term):
         self.term = term
 
-    def execute(self, env, agent, scope, stack):
+    def execute(self, env, agent, intention):
         # Boolean constants.
-        term = pyson.evaluate(self.term, scope)
+        term = pyson.evaluate(self.term, intention.scope)
         if term is True:
             yield
             return
@@ -175,10 +175,10 @@ class TermQuery:
         for belief in agent.beliefs[group]:
             stack.append(choicepoint)
 
-            if pyson.unify(term, belief, scope, stack):
+            if pyson.unify(term, belief, intention.scope, intention.stack):
                 yield
 
-            pyson.reroll(scope, stack, choicepoint)
+            pyson.reroll(intention.scope, intention.stack, choicepoint)
 
         # Follow rules.
         for rule in agent.rules[group]:
@@ -186,11 +186,11 @@ class TermQuery:
 
             stack.append(choicepoint)
 
-            if pyson.unify(term, rule.head, scope, stack):
-                for _ in rule.query.execute(env, agent, scope, stack):
+            if pyson.unify(term, rule.head, intention.scope, intention.stack):
+                for _ in rule.query.execute(env, agent, intention):
                     yield
 
-            pyson.reroll(scope, stack, choicepoint)
+            pyson.reroll(intention.scope, intention.stack, choicepoint)
 
     def __str__(self):
         return str(self.term)
@@ -201,9 +201,9 @@ class AndQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, scope, stack):
-        for _ in self.left.execute(env, agent, scope, stack):
-            for _ in self.right.execute(env, agent, scope, stack):
+    def execute(self, env, agent, intention):
+        for _ in self.left.execute(env, agent, intention):
+            for _ in self.right.execute(env, agent, intention):
                 yield
 
     def __str__(self):
@@ -215,11 +215,11 @@ class OrQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, scope, stack):
-        for _ in self.left.execute(env, agent, scope, stack):
+    def execute(self, env, agent, intention):
+        for _ in self.left.execute(env, agent, intention):
             yield
 
-        for _ in self.right.execute(env, agent, scope, stack):
+        for _ in self.right.execute(env, agent, intention):
             yield
 
     def __str__(self):
@@ -230,13 +230,13 @@ class NotQuery:
     def __init__(self, query):
         self.query = query
 
-    def execute(self, env, agent, scope, stack):
+    def execute(self, env, agent, intention):
         choicepoint = object()
-        stack.append(choicepoint)
+        intention.stack.append(choicepoint)
 
-        success = any(True for _ in self.query.execute(env, agent, scope, stack))
+        success = any(True for _ in self.query.execute(env, agent, intention))
 
-        pyson.reroll(scope, stack, choicepoint)
+        pyson.reroll(intention.scope, intention.stack, choicepoint)
 
         if not success:
             yield
@@ -247,12 +247,12 @@ class UnifyQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, scope, stack):
+    def execute(self, env, agent, intention):
         choicepoint = object()
-        stack.append(choicepoint)
-        if pyson.unify(self.left, self.right, scope, stack):
+        intention.stack.append(choicepoint)
+        if pyson.unify(self.left, self.right, intention.scope, intention.stack):
             yield
-        pyson.reroll(scope, stack, choicepoint)
+        pyson.reroll(intention.scope, intention.stack, choicepoint)
 
     def __str__(self):
         return "(%s = %s)" % (self.left, self.right)
@@ -556,7 +556,7 @@ def call_delayed(trigger, goal_type, term, env, agent, intention):
 
 
 def push_query(query, env, agent, intention):
-    intention.query_stack.append(query.execute(env, agent, intention.scope, intention.stack))
+    intention.query_stack.append(query.execute(env, agent, intention))
     return True
 
 
