@@ -241,7 +241,8 @@ def _time(env, agent, term, intention):
 
 @actions.add(".wait", 1)
 def _wait(env, agent, term, intention):
-    intention.wait_until = time.time() + term.args[0] / 1000
+    millis = pyson.grounded(term.args[0], intention.scope)
+    intention.wait_until = time.time() + millis / 1000
     yield
 
 
