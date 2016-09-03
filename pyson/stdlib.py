@@ -24,6 +24,7 @@ import colorama
 import time
 import random
 import sys
+import time
 import datetime
 import collections
 
@@ -235,6 +236,12 @@ def _time(env, agent, term, intention):
         pyson.unify(term.args[2], time.second, intention.scope, intention.stack)):
 
         yield
+
+
+@actions.add(".wait", 1)
+def _wait(env, agent, term, intention):
+    intention.wait_until = time.time() + term.args[0]
+    yield
 
 
 # Custom actions for debugging:

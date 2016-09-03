@@ -22,6 +22,7 @@ import sys
 import collections
 import copy
 import functools
+import time
 
 import pyson
 import pyson.parser
@@ -288,6 +289,8 @@ class Intention:
         self.query_stack = collections.deque()
         self.choicepoint_stack = collections.deque()
 
+        self.wait_until = None
+
 
 class Environment:
     def build_agents(self, source, n, actions):
@@ -363,6 +366,11 @@ class Environment:
         more_work = True
         while more_work:
             more_work = agent.step(self)
+
+            # Wait.
+            if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
+                time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - time.time())
+                more_work = True
 
     def shutdown(self):
         sys.exit(1)
@@ -502,6 +510,14 @@ class Agent:
 
         for intention_stack in self.intentions:
             intention = intention_stack[-1]
+
+            # Wait until.
+            if intention.wait_until:
+                if intention.wait_until < time.time():
+                    intention.wait_until = None
+                else:
+                    continue
+
             break
         else:
             return False
