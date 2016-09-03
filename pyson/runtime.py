@@ -279,6 +279,7 @@ class Plan:
 class Intention:
     def __init__(self):
         self.scope = {}
+        self.query_stack = collections.deque()
         self.instr = None
         self.head_term = None
         self.calling_term = None
@@ -369,7 +370,6 @@ class Agent:
         self.rules = collections.defaultdict(lambda: []) if rules is None else rules
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
 
-        self.query_stack = collections.deque()
         self.choicepoint_stack = collections.deque()
 
         self.stack = collections.deque()
@@ -554,20 +554,23 @@ def call_delayed(trigger, goal_type, term, env, agent, scope):
 
 
 def push_query(query, env, agent, scope):
-    agent.query_stack.append(query.execute(env, agent, scope, agent.stack))
+    intention = agent.intentions[0][-1] # XXX
+    intention.query_stack.append(query.execute(env, agent, scope, agent.stack))
     return True
 
 
 def next_or_fail(env, agent, scope):
+    intention = agent.intentions[0][-1] # XXX
     try:
-        next(agent.query_stack[-1])
+        next(intention.query_stack[-1])
         return True
     except StopIteration:
         return False
 
 
 def pop_query(env, agent, scope):
-    agent.query_stack.pop()
+    intention = agent.intentions[0][-1] # XXX
+    intention.query_stack.pop()
     return True
 
 
