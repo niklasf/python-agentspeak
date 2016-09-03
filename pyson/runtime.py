@@ -173,7 +173,7 @@ class TermQuery:
 
         # Query on the belief base.
         for belief in agent.beliefs[group]:
-            stack.append(choicepoint)
+            intention.stack.append(choicepoint)
 
             if pyson.unify(term, belief, intention.scope, intention.stack):
                 yield
@@ -184,7 +184,7 @@ class TermQuery:
         for rule in agent.rules[group]:
             rule = copy.deepcopy(rule)
 
-            stack.append(choicepoint)
+            intention.stack.append(choicepoint)
 
             if pyson.unify(term, rule.head, intention.scope, intention.stack):
                 for _ in rule.query.execute(env, agent, intention):
@@ -470,7 +470,7 @@ class Agent:
         query = TermQuery(term)
 
         try:
-            next(query.execute(env, self, intention.scope, intention.stack))
+            next(query.execute(env, self, intention))
             return True
         except StopIteration:
             return False
