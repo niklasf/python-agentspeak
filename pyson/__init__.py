@@ -378,7 +378,7 @@ class Var(object):
         if self in scope:
             return grounded(deref(self, scope), scope)
 
-        raise PysonError("variable not ground")
+        raise PysonError("term not ground")
 
     def freeze(self, scope, memo):
         if self in memo:
