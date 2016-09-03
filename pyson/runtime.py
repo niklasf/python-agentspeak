@@ -428,7 +428,7 @@ class Agent:
                 continue
 
             try:
-                next(plan.context.execute(env, self, intention.scope, intention.stack))
+                next(plan.context.execute(env, self, intention))
             except StopIteration:
                 pyson.reroll(intention.scope, intention.stack, choicepoint)
                 continue
