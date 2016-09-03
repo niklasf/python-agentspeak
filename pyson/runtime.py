@@ -514,6 +514,7 @@ class Agent:
                 intention.instr = instr.success
                 if not intention.instr and intention.calling_term:
                     frozen = intention.head_term.freeze(intention.scope, {})
+                    self.intentions[0].pop()
                     if not pyson.unify(intention.calling_term, frozen, self.intentions[0][-1].scope, self.stack):
                         raise RuntimeError("back unification failed")
             else:
