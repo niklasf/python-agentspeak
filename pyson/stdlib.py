@@ -213,7 +213,7 @@ def _count(env, agent, term, intention):
         if pyson.unify(lookup, belief, {}, collections.deque()):
             count += 1
 
-    if pyson.unify(count, term.args[1], intetion.scope, intention.stack):
+    if pyson.unify(count, term.args[1], intention.scope, intention.stack):
         yield
 
 
