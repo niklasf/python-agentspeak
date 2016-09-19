@@ -22,7 +22,6 @@ from __future__ import division
 import pyson
 import pyson.runtime
 import colorama
-import time
 import random
 import time
 import datetime
