@@ -814,7 +814,7 @@ def main(post_repl=True):
             agent = Agent()
             repl(agent, env, pyson.stdlib.actions)
         else:
-            env.run_agent(build_agent(sys.stdin, pyson.stdlib.actions))
+            env.run_agent(env.build_agent(sys.stdin, pyson.stdlib.actions))
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
