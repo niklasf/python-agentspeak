@@ -1,5 +1,0 @@
-cffi==1.7.0
-colorama==0.3.7
-enum34==1.1.6
-greenlet==0.4.9
-readline==6.2.4.1

@@ -19,11 +19,21 @@
 
 import setuptools
 import os
+import sys
 
 
 def read_description():
     description = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
     return description
+
+
+def dependencies():
+    deps = ["colorama"]
+
+    if sys.version_info < (3, 4):
+        deps.append("enum34")
+
+    return deps
 
 
 setuptools.setup(
@@ -37,7 +47,7 @@ setuptools.setup(
     keywords="jason multi agent simulation agent-speak",
     url="https://github.com/niklasf/pyson",
     packages=["pyson"],
-    install_requires=["colorama"],
+    install_requires=dependencies(),
     classifiers=[
         "Development Status :: 2- Pre-Alpha",
         "Environment :: Console",
@@ -46,10 +56,12 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python 3",
-        "Programming Language :: Python 3.4",
-        "Programming Language :: Python 3.5",
-        "Programming Language :: Python 3 :: Only",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Other",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
