@@ -18,6 +18,15 @@ class ParserTest(unittest.TestCase):
         with self.assertRaises(pyson.AggregatedError):
             log.throw()
 
+    def test_rule_head_not_unifiable(self):
+        src = pyson.StringSource("<test>", "rule(X + 1) :- true.")
+        log = pyson.Log(pyson.get_logger(__name__), 3)
+        tokens = pyson.lexer.tokenize(src, log)
+        pyson.parser.parse(tokens, log, frozenset())
+
+        with self.assertRaises(pyson.AggregatedError):
+            log.throw()
+
 
 if __name__ == "__main__":
     unittest.main()

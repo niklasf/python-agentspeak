@@ -976,16 +976,16 @@ class FindOpVisitor(object):
     def visit_literal(self, ast_literal):
         for term in ast_literal.terms:
             for op in term.accept(self):
-                yield
+                yield op
 
         for annotation in ast_literal.annotations:
             for op in annotation.accept(self):
-                yield
+                yield op
 
     def visit_list(self, ast_list):
         for term in ast_list.terms:
             for op in term.accept(self):
-                yield
+                yield op
 
     def visit_const(self, ast_const):
         return
