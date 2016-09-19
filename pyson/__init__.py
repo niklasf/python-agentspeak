@@ -714,7 +714,7 @@ class Actions(object):
 
         def _add_function(f):
             def wrapper(env, agent, term, intention):
-                result = f(*_zip_specs(arg_specs, term.args, intention))
+                result = f(*_zip_specs(arg_specs, term.args, intention.scope))
 
                 if unify(term.args[-1], result, intention.scope, intention.stack):
                     yield
