@@ -165,7 +165,7 @@ def _member(env, agent, term, intention):
     choicepoint = object()
 
     for member in pyson.evaluate(term.args[1], intention.scope):
-        agent.stack.append(choicepoint)
+        intention.stack.append(choicepoint)
 
         if pyson.unify(term.args[0], member, intention.scope, intention.stack):
             yield
