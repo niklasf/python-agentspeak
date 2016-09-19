@@ -195,7 +195,7 @@ def _findall(env, agent, term, intention):
 
     memo = {}
 
-    for _ in query.execute(env, agent, intention.scope, intention.stack):
+    for _ in query.execute(env, agent, intention):
         result.append(pyson.freeze(pattern, intention.scope, memo))
 
     if pyson.unify(tuple(result), term.args[2], intention.scope, intention.stack):
