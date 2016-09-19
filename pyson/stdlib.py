@@ -254,7 +254,7 @@ def _range_2(env, agent, term, intention):
     choicepoint = object()
 
     for i in range(int(pyson.grounded(term.args[1], intention.scope))):
-        agent.stack.append(choicepoint)
+        intention.stack.append(choicepoint)
 
         if pyson.unify(term.args[0], i, intention.scope, intention.stack):
             yield
