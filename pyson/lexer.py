@@ -74,7 +74,7 @@ class TokenType(enum.Enum):
                 tok_if tok_else tok_while tok_for
                 include begin end
                 arrow define colon
-                fork_join_and for_join_xor
+                fork_join_and fork_join_xor
                 double_exclam exclam question minus_plus
                 op_not op_plus op_minus op_power op_mult op_fdiv op_div op_mod op_and op_or
                 op_le op_ge op_ne op_eq op_decompose op_unify op_lt op_gt
