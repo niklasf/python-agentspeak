@@ -151,7 +151,7 @@ def _substring(env, agent, term, intention):
 
     pos = haystack.find(needle)
     while pos != -1:
-        agent.stack.append(choicepoint)
+        intention.stack.append(choicepoint)
 
         if pyson.unify(term.args[2], pos, intention.scope, intention.stack):
             yield
