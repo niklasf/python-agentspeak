@@ -441,7 +441,7 @@ class Wildcard(Var):
 
 
 class UnaryExpr(object):
-    def __init__(self, unary_op, operator):
+    def __init__(self, unary_op, operand):
         self.unary_op = unary_op
         self.operand = operand
 
@@ -459,7 +459,7 @@ class UnaryExpr(object):
         elif self.unary_op.numeric_op and not is_number(operand):
             raise PysonError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
 
-        return operand.func(evaluate(self.operand, scope))
+        return self.unary_op.func(operand)
 
     def is_ground(self, scope):
         return is_ground(self.operand, scope)
