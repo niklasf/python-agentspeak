@@ -10,24 +10,26 @@ import pyson.runtime
 class StdlibTest(unittest.TestCase):
 
     def test_concat_strings(self):
+        env = pyson.runtime.Environment()
         agent = pyson.runtime.Agent()
-        scope = {}
+        intention = pyson.runtime.Intention()
         X = pyson.Var()
 
         term = pyson.Literal(".concat", ("hello", " ", "world", X))
-        next(pyson.stdlib._concat(agent, term, scope))
+        next(pyson.stdlib._concat(env, agent, term, intention))
 
-        self.assertEqual(X.grounded(scope), "hello world")
+        self.assertEqual(X.grounded(intention.scope), "hello world")
 
     def test_concat_lists(self):
+        env = pyson.runtime.Environment()
         agent = pyson.runtime.Agent()
-        scope = {}
+        intention = pyson.runtime.Intention()
         X = pyson.Var()
 
         term = pyson.Literal(".concat", ((1, 2), (3, ), X))
-        next(pyson.stdlib._concat(agent, term, scope))
+        next(pyson.stdlib._concat(env, agent, term, intention))
 
-        self.assertEqual(X.grounded(scope), (1, 2, 3))
+        self.assertEqual(X.grounded(intention.scope), (1, 2, 3))
 
 
 if __name__ == "__main__":
