@@ -528,7 +528,7 @@ class Agent:
             intention_stack.pop()
             if not intention_stack:
                 self.intentions.remove(intention_stack)
-            elif calling_term:
+            elif intention.calling_term:
                 frozen = intention.head_term.freeze(intention.scope, {})
                 self.intentions[0].pop()
                 calling_intention = self.intentions[0][-1]
