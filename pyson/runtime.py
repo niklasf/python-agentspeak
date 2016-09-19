@@ -530,8 +530,7 @@ class Agent:
                 self.intentions.remove(intention_stack)
             elif intention.calling_term:
                 frozen = intention.head_term.freeze(intention.scope, {})
-                self.intentions[0].pop()
-                calling_intention = self.intentions[0][-1]
+                calling_intention = intention_stack[-1]
                 if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
                     raise RuntimeError("back unification failed")
             return True
