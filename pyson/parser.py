@@ -173,6 +173,8 @@ class AstVariable(AstNode):
     def __init__(self):
         super(AstVariable, self).__init__()
         self.name = None
+        self.proven_bound = False
+        self.proven_unbound = False
 
     def accept(self, visitor):
         return visitor.visit_variable(self)
