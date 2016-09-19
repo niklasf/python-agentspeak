@@ -603,7 +603,7 @@ def push_choicepoint(env, agent, intention):
 
 def pop_choicepoint(env, agent, intention):
     choicepoint = intention.choicepoint_stack.pop()
-    pyson.reroll(scope, intention.stack, choicepoint)
+    pyson.reroll(intention.scope, intention.stack, choicepoint)
     return True
 
 
