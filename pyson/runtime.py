@@ -417,7 +417,7 @@ class Agent:
             if trigger == pyson.Trigger.addition:
                 self.add_belief(term, calling_intention.scope)
             else:
-                self.remove_belief(term, calling_intention.scope)
+                self.remove_belief(term, calling_intention)
 
         frozen = pyson.freeze(term, calling_intention.scope, {})
 
@@ -483,8 +483,8 @@ class Agent:
         except StopIteration:
             return False
 
-    def remove_belief(self, term, scope):
-        term = pyson.evaluate(term, scope)
+    def remove_belief(self, term, intention):
+        term = pyson.evaluate(term, intention.scope)
 
         try:
             group = term.literal_group()
@@ -496,13 +496,13 @@ class Agent:
         relevant_beliefs = self.beliefs[group]
 
         for belief in relevant_beliefs:
-            self.stack.append(choicepoint)
+            intention.stack.append(choicepoint)
 
-            if pyson.unify(term, belief, scope, self.stack):
+            if pyson.unify(term, belief, intention.scope, intention.stack):
                 relevant_beliefs.remove(belief)
                 return
 
-            pyson.reroll(scope, self.stack, choicepoint)
+            pyson.reroll(intention.scope, intention.stack, choicepoint)
 
     def step(self, env):
         while self.intentions and not self.intentions[0]:
