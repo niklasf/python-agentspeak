@@ -17,4 +17,4 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import pyson.runtime
-pyson.runtime.main()
+pyson.runtime.main(post_repl=False)

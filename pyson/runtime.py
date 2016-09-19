@@ -793,7 +793,7 @@ def repl(agent, env, actions):
             tokens = []
 
 
-def main():
+def main(post_repl=True):
     import pyson.stdlib
     env = Environment()
     try:
@@ -803,7 +803,8 @@ def main():
                 with open(arg) as source:
                     agent = env.build_agent(source, pyson.stdlib.actions)
                     env.run_agent(agent)
-                    repl(agent, env, pyson.stdlib.actions)
+                    if post_repl:
+                        repl(agent, env, pyson.stdlib.actions)
                     break
         elif sys.stdin.isatty():
             agent = Agent()
