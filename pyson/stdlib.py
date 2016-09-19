@@ -24,7 +24,6 @@ import pyson.runtime
 import colorama
 import time
 import random
-import sys
 import time
 import datetime
 import collections
@@ -103,6 +102,7 @@ def _my_name(env, agent, term, intention):
 
     if pyson.unify(term.args[0], name, intention.scope, intention.stack):
         yield
+
 
 @actions.add(".concat")
 def _concat(env, agent, term, intention):

@@ -19,7 +19,7 @@
 from __future__ import print_function
 
 import colorama
-import sys
+
 
 try:
     input = raw_input  # Python 2

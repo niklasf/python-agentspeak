@@ -313,7 +313,7 @@ class Environment:
         for ast_plan in ast_agent.plans:
             variables = {}
 
-            head =  ast_plan.head.accept(BuildTermVisitor(variables))
+            head = ast_plan.head.accept(BuildTermVisitor(variables))
 
             if ast_plan.context:
                 context = ast_plan.context.accept(BuildQueryVisitor(variables, actions, log))
@@ -331,12 +331,14 @@ class Environment:
         # Add beliefs to agent prototype.
         for ast_belief in ast_agent.beliefs:
             belief = ast_belief.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief, self, belief, Intention(), delayed=True)
+            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief,
+                                 self, belief, Intention(), delayed=True)
 
         # Call initial goals on agent prototype.
         for ast_goal in ast_agent.goals:
             term = ast_goal.atom.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, self, term, Intention(), delayed=True)
+            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
+                                 self, term, Intention(), delayed=True)
 
         # Report errors.
         log.throw()
@@ -353,7 +355,8 @@ class Environment:
 
             for ast_goal in ast_agent.goals:
                 term = ast_goal.atom.accept(BuildTermVisitor({}))
-                agent.call(pyson.Trigger.addition, pyson.GoalType.achievement, self, term, {}, delayed=True)
+                agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
+                           self, term, {}, delayed=True)
 
             agents.append(agent)
 
@@ -381,7 +384,6 @@ class Agent:
         self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
         self.rules = collections.defaultdict(lambda: []) if rules is None else rules
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
-
 
         self.intentions = collections.deque()
 
@@ -618,6 +620,7 @@ class Instruction:
         failure = hex(id(self.failure)) if self.failure is not None else "0"
         return "<Instruction %s: %r %s %s>" % (hex(id(self)), self.f, success, failure)
 
+
 class BuildInstructionsVisitor:
     def __init__(self, variables, actions, tail, log):
         self.variables = variables
@@ -741,6 +744,7 @@ def dump_variables(variables, scope):
 
     if not_in_scope:
         print("%d unbound: %s" % (len(not_in_scope), ", ".join(not_in_scope)))
+
 
 def repl(agent, env, actions):
     lineno = 0

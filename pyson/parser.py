@@ -18,17 +18,14 @@
 
 from __future__ import print_function
 
-import colorama
 import sys
-import itertools
 import errno
 
 import pyson
 import pyson.lexer
 import pyson.util
 
-from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
-                   UnaryOp, BinaryOp)
+from pyson import Trigger, GoalType, FormulaType, UnaryOp, BinaryOp
 
 
 class AstBaseVisitor(object):
@@ -404,7 +401,8 @@ def parse_literal(tok, tokens, log):
             elif tok.lexeme == ",":
                 continue
             else:
-                raise log.error("expected ')' or another argument for the literal, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[literal.loc])
+                raise log.error("expected ')' or another argument for the literal, got '%s'",
+                                tok.lexeme, loc=tok.loc, extra_locs=[literal.loc])
 
     if tok.lexeme == "[":
         while True:
@@ -418,7 +416,8 @@ def parse_literal(tok, tokens, log):
             elif tok.lexeme == ",":
                 continue
             else:
-                raise log.error("expected ']' or another annotation, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[literal.loc])
+                raise log.error("expected ']' or another annotation, got '%s'", tok.lexeme,
+                                loc=tok.loc, extra_locs=[literal.loc])
 
     return tok, literal
 
@@ -440,8 +439,8 @@ def parse_list(tok, tokens, log):
             tok = next(tokens)
             continue
         elif tok.lexeme != "]":
-            raise log.error("expected ']' or another term for list, got '%s'",
-                            tok.lexeme, loc=tok.loc, extra_locs=[ast_list.loc])
+            raise log.error("expected ']' or another term for list, got '%s'", tok.lexeme,
+                            loc=tok.loc, extra_locs=[ast_list.loc])
 
     return next(tokens), ast_list
 
@@ -460,7 +459,8 @@ def parse_atom(tok, tokens, log):
         tok = next(tokens)
         tok, term = parse_term(tok, tokens, log)
         if tok.lexeme != ")":
-            raise log.error("expected ')' after term, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[term.loc])
+            raise log.error("expected ')' after term, got '%s'", tok.lexeme,
+                            loc=tok.loc, extra_locs=[term.loc])
         return next(tokens), term
     elif tok.token.numeric:
         const = AstConst()

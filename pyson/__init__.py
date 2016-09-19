@@ -31,8 +31,6 @@ import logging
 import sys
 import colorama
 import operator
-import itertools
-import functools
 import hashlib
 import numbers
 
