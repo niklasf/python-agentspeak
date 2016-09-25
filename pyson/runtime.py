@@ -293,21 +293,21 @@ class Intention:
 
 
 class Environment:
-    def build_agents(self, source, n, actions):
+    def build_agent(self, source, actions):
         # Parse source.
         log = pyson.Log(LOGGER, 3)
         tokens = pyson.lexer.tokenize(source, log)
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
-        prototype_agent = Agent()
+        agent = Agent()
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
             variables = {}
             head = ast_rule.head.accept(BuildTermVisitor(variables))
             consequence = ast_rule.consequence.accept(BuildQueryVisitor(variables, actions, log))
-            prototype_agent.add_rule(Rule(head, consequence))
+            agent.add_rule(Rule(head, consequence))
 
         # Add plans to agent prototype.
         for ast_plan in ast_agent.plans:
@@ -326,25 +326,30 @@ class Environment:
                 ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
 
             plan = Plan(ast_plan.trigger, ast_plan.goal_type, head, context, body)
-            prototype_agent.add_plan(plan)
+            agent.add_plan(plan)
 
         # Add beliefs to agent prototype.
         for ast_belief in ast_agent.beliefs:
             belief = ast_belief.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.belief,
-                                 self, belief, Intention(), delayed=True)
+            agent.call(pyson.Trigger.addition, pyson.GoalType.belief,
+                       self, belief, Intention(), delayed=True)
 
         # Call initial goals on agent prototype.
         for ast_goal in ast_agent.goals:
             term = ast_goal.atom.accept(BuildTermVisitor({}))
-            prototype_agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
-                                 self, term, Intention(), delayed=True)
+            agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
+                       self, term, Intention(), delayed=True)
 
         # Report errors.
         log.throw()
 
-        # Create more instances from the prototype, but with their own call stacks.
-        # This is more efficient than making complete deep copies.
+        return agent
+
+    def build_agents(self, source, n, actions=None):
+        prototype_agent = self.build_agent(source, actions)
+
+        # Create more instances from the prototype, but with their own
+        # callstacks. This is more efficient than making complete deep copies.
         agents = [prototype_agent] if n > 0 else []
 
         while len(agents) < n:
@@ -361,9 +366,6 @@ class Environment:
             agents.append(agent)
 
         return agents
-
-    def build_agent(self, source, actions=None):
-        return self.build_agents(source, 1, actions)[0]
 
     def run_agent(self, agent):
         more_work = True
