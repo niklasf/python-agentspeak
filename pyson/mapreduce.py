@@ -58,7 +58,7 @@ class Agent(pyson.runtime.Agent):
 
 class Environment(pyson.runtime.Environment):
     def __init__(self):
-        self.process_pool = multiprocessing.Pool(1)
+        self.process_pool = multiprocessing.Pool()
         self.rdd = collections.defaultdict(list)
 
     def create_agent(self, name, source, actions=actions):
@@ -67,7 +67,7 @@ class Environment(pyson.runtime.Environment):
     def create_counter(self, name):
         self.rdd[name] = [Counter(name)]
 
-    def step(self):
+    def mr(self):
         print("========================================================")
         rdd = collections.defaultdict(list)
         for result in self.process_pool.imap_unordered(process, self.rdd.items()):
