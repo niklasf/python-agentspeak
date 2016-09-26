@@ -31,7 +31,7 @@ env.create_counter("c")
 
 print(env.rdd)
 
-for _ in range(20):
+for _ in range(5):
     env.mr()
     print(env.rdd)
 

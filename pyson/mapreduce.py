@@ -68,7 +68,9 @@ class Agent(pyson.runtime.Agent):
         self.emitted.append((k, v))
 
     def flatmap(self):
-        self.step()
+        more_work = True
+        while more_work:
+            more_work = self.step()
 
         while self.emitted:
             yield self.emitted.pop()
