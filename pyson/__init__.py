@@ -772,7 +772,7 @@ class Actions(object):
 
         def _add_procedure(f):
             def wrapper(agent, term, intention):
-                if f(agent, *_zip_specs(arg_specs, term.args, intention)):
+                if f(agent, *_zip_specs(arg_specs, term.args, intention.scope)):
                     yield
 
             return self.add(functor, len(arg_specs), wrapper)
@@ -788,7 +788,7 @@ class Actions(object):
 
         def _add_predicate(f):
             def wrapper(agent, term, intention):
-                if f(*_zip_specs(arg_specs, term.args, intention)):
+                if f(*_zip_specs(arg_specs, term.args, intention.scope)):
                     yield
 
             return self.add(functor, len(arg_specs), wrapper)
