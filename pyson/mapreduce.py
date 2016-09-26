@@ -42,6 +42,12 @@ def _send(agent, recipient, ils, term):
     if group == ("tell", 0):
         frozen = pyson.grounded(term, {}).with_annotation(pyson.Literal("source", (agent.name, )))
         agent.emit(recipient, functools.partial(pyson.runtime.add_belief, frozen))
+    elif group == ("achieve", 0):
+        frozen = pyson.freeze(term, {}, {}).with_annotation(pyson.Literal("source", (agent.name, )))
+        agent.emit(recipient, functools.partial(pyson.runtime.call,
+                                                pyson.Trigger.addition,
+                                                pyson.GoalType.achievement,
+                                                frozen))
     else:
         raise pyson.PysonError("unsupported illocutionary force: %s/%d" % (group[0], group[1]))
 

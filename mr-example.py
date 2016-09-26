@@ -6,17 +6,23 @@ actions = pyson.Actions(pyson.mapreduce.actions)
 
 a = pyson.StringSource("a.asl",
     """
+    !go.
+
+    +!go <-
+      .print("Asking for the weather ...");
+      .send(b, achieve, tell_weather(a)).
+
     +weather(Weather)[source(Source)] <-
-        .print(Source, "says weather is", Weather).
+      .print(Source, "says weather is", Weather).
     """)
 
 b = pyson.StringSource("b.asl",
     """
-    !go.
+    weather(sunny).
 
-    +!go <-
-        .send(a, tell, weather(rainy));
-        .print("b is done").
+    +!tell_weather(To) : weather(Weather) <-
+      .print("Telling", To, "about the", Weather, "weather");
+      .send(To, tell, weather(Weather)).
     """)
 
 env.create_agent("a", a, actions)
@@ -25,7 +31,7 @@ env.create_counter("c")
 
 print(env.rdd)
 
-for _ in range(10):
+for _ in range(20):
     env.mr()
     print(env.rdd)
 
