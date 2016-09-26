@@ -7,11 +7,11 @@
 +!keep_waiting <-
   .random(R);
   .print("Gonna wait", R, "secs");
-  .wait(R * 1000);
+  .wait(R * 100);
   !!keep_waiting.
 
 +!finish <-
   .print("Gonna add done in 5 secs");
-  .wait(5000);
+  .wait(500);
   +done;
   .print("Added done").
