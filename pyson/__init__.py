@@ -500,7 +500,7 @@ class Literal(object):
     def __init__(self, functor, args=(), annots=()):
         self.functor = functor
         self.args = tuple(args)
-        self.annots = set(annots)
+        self.annots = tuple(set(annots))
 
     def literal_group(self):
         return (self.functor, len(self.args))
