@@ -132,12 +132,12 @@ class BuildQueryVisitor:
 
 
 class TrueQuery:
-    def execute(self, env, agent, intention):
+    def execute(self, agent, intention):
         yield
 
 
 class FalseQuery:
-    def execute(self, env, agent, intention):
+    def execute(self, agent, intention):
         return
         yield
 
@@ -147,8 +147,8 @@ class ActionQuery:
         self.term = term
         self.impl = impl
 
-    def execute(self, env, agent, intention):
-        for _ in self.impl(env, agent, self.term, intention):
+    def execute(self, agent, intention):
+        for _ in self.impl(agent, self.term, intention):
             yield
 
 
@@ -156,7 +156,7 @@ class TermQuery:
     def __init__(self, term):
         self.term = term
 
-    def execute(self, env, agent, intention):
+    def execute(self, agent, intention):
         # Boolean constants.
         term = pyson.evaluate(self.term, intention.scope)
         if term is True:
@@ -188,7 +188,7 @@ class TermQuery:
             intention.stack.append(choicepoint)
 
             if pyson.unify(term, rule.head, intention.scope, intention.stack):
-                for _ in rule.query.execute(env, agent, intention):
+                for _ in rule.query.execute(agent, intention):
                     yield
 
             pyson.reroll(intention.scope, intention.stack, choicepoint)
@@ -202,9 +202,9 @@ class AndQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, intention):
-        for _ in self.left.execute(env, agent, intention):
-            for _ in self.right.execute(env, agent, intention):
+    def execute(self, agent, intention):
+        for _ in self.left.execute(agent, intention):
+            for _ in self.right.execute(agent, intention):
                 yield
 
     def __str__(self):
@@ -216,11 +216,11 @@ class OrQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, intention):
-        for _ in self.left.execute(env, agent, intention):
+    def execute(self, agent, intention):
+        for _ in self.left.execute(agent, intention):
             yield
 
-        for _ in self.right.execute(env, agent, intention):
+        for _ in self.right.execute(agent, intention):
             yield
 
     def __str__(self):
@@ -231,11 +231,11 @@ class NotQuery:
     def __init__(self, query):
         self.query = query
 
-    def execute(self, env, agent, intention):
+    def execute(self, agent, intention):
         choicepoint = object()
         intention.stack.append(choicepoint)
 
-        success = any(True for _ in self.query.execute(env, agent, intention))
+        success = any(True for _ in self.query.execute(agent, intention))
 
         pyson.reroll(intention.scope, intention.stack, choicepoint)
 
@@ -248,7 +248,7 @@ class UnifyQuery:
         self.left = left
         self.right = right
 
-    def execute(self, env, agent, intention):
+    def execute(self, agent, intention):
         choicepoint = object()
         intention.stack.append(choicepoint)
         if pyson.unify(self.left, self.right, intention.scope, intention.stack):
@@ -327,7 +327,7 @@ class Agent:
     def add_plan(self, plan):
         self.plans[(plan.trigger, plan.goal_type, plan.head.functor, len(plan.head.args))].append(plan)
 
-    def call(self, trigger, goal_type, env, term, calling_intention, delayed=False):
+    def call(self, trigger, goal_type, term, calling_intention, delayed=False):
         if goal_type == pyson.GoalType.belief:
             if trigger == pyson.Trigger.addition:
                 self.add_belief(term, calling_intention.scope)
@@ -351,7 +351,7 @@ class Agent:
                 continue
 
             try:
-                next(plan.context.execute(env, self, intention))
+                next(plan.context.execute(self, intention))
             except StopIteration:
                 pyson.reroll(intention.scope, intention.stack, choicepoint)
                 continue
@@ -372,7 +372,7 @@ class Agent:
             raise PysonError("no applicable plan for %s%s%s/%d" % (
                 trigger.value, goal_type.value, frozen.functor, len(frozen.args)))
         elif goal_type == pyson.GoalType.test:
-            return self.test_belief(env, term, calling_intention)
+            return self.test_belief(term, calling_intention)
 
         return True
 
@@ -384,7 +384,7 @@ class Agent:
 
         self.beliefs[(term.functor, len(term.args))].add(term)
 
-    def test_belief(self, env, term, intention):
+    def test_belief(self, term, intention):
         term = pyson.evaluate(term, intention.scope)
 
         if not isinstance(term, pyson.Literal):
@@ -393,7 +393,7 @@ class Agent:
         query = TermQuery(term)
 
         try:
-            next(query.execute(env, self, intention))
+            next(query.execute(self, intention))
             return True
         except StopIteration:
             return False
@@ -419,7 +419,7 @@ class Agent:
 
             pyson.reroll(intention.scope, intention.stack, choicepoint)
 
-    def step(self, env):
+    def step(self):
         while self.intentions and not self.intentions[0]:
             self.intentions.popleft()
 
@@ -451,7 +451,7 @@ class Agent:
             return True
 
         try:
-            if instr.f(env, self, intention):
+            if instr.f(self, intention):
                 intention.instr = instr.success
             else:
                 intention.instr = instr.failure
@@ -505,13 +505,13 @@ class Environment:
         for ast_belief in ast_agent.beliefs:
             belief = ast_belief.accept(BuildTermVisitor({}))
             agent.call(pyson.Trigger.addition, pyson.GoalType.belief,
-                       self, belief, Intention(), delayed=True)
+                       belief, Intention(), delayed=True)
 
         # Call initial goals on agent prototype.
         for ast_goal in ast_agent.goals:
             term = ast_goal.atom.accept(BuildTermVisitor({}))
             agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
-                       self, term, Intention(), delayed=True)
+                       term, Intention(), delayed=True)
 
         # Report errors.
         log.throw()
@@ -534,7 +534,7 @@ class Environment:
             for ast_goal in ast_agent.goals:
                 term = ast_goal.atom.accept(BuildTermVisitor({}))
                 agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
-                           self, term, {}, delayed=True)
+                           term, {}, delayed=True)
 
             agents.append(agent)
 
@@ -543,7 +543,7 @@ class Environment:
     def run_agent(self, agent):
         more_work = True
         while more_work:
-            more_work = agent.step(self)
+            more_work = agent.step()
 
             # Wait.
             if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
@@ -554,36 +554,36 @@ class Environment:
         sys.exit(1)
 
 
-def noop(env, agent, intention):
+def noop(agent, intention):
     return True
 
 
-def add_belief(term, env, agent, intention):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, env, term, intention)
+def add_belief(term, agent, intention):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, term, intention)
 
 
-def remove_belief(term, env, agent, intention):
-    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, env, term, intention)
+def remove_belief(term, agent, intention):
+    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, term, intention)
 
 
-def test_belief(term, env, agent, intention):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, env, term, intention)
+def test_belief(term, agent, intention):
+    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, term, intention)
 
 
-def call(trigger, goal_type, term, env, agent, intention):
-    return agent.call(trigger, goal_type, env, term, intention, delayed=False)
+def call(trigger, goal_type, term, agent, intention):
+    return agent.call(trigger, goal_type, term, intention, delayed=False)
 
 
-def call_delayed(trigger, goal_type, term, env, agent, intention):
-    return agent.call(trigger, goal_type, env, term, intention, delayed=True)
+def call_delayed(trigger, goal_type, term, agent, intention):
+    return agent.call(trigger, goal_type, term, intention, delayed=True)
 
 
-def push_query(query, env, agent, intention):
-    intention.query_stack.append(query.execute(env, agent, intention))
+def push_query(query, agent, intention):
+    intention.query_stack.append(query.execute(agent, intention))
     return True
 
 
-def next_or_fail(env, agent, intention):
+def next_or_fail(agent, intention):
     try:
         next(intention.query_stack[-1])
         return True
@@ -591,19 +591,19 @@ def next_or_fail(env, agent, intention):
         return False
 
 
-def pop_query(env, agent, intention):
+def pop_query(agent, intention):
     intention.query_stack.pop()
     return True
 
 
-def push_choicepoint(env, agent, intention):
+def push_choicepoint(agent, intention):
     choicepoint = object()
     intention.choicepoint_stack.append(choicepoint)
     intention.stack.append(choicepoint)
     return True
 
 
-def pop_choicepoint(env, agent, intention):
+def pop_choicepoint(agent, intention):
     choicepoint = intention.choicepoint_stack.pop()
     pyson.reroll(intention.scope, intention.stack, choicepoint)
     return True

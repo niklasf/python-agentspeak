@@ -72,7 +72,7 @@ COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
 
 
 @actions.add(".print")
-def _print(env, agent, term, intention, _color_map={}, _current_color=[0]):
+def _print(agent, term, intention, _color_map={}, _current_color=[0]):
     if agent in _color_map:
         color = _color_map[agent]
     else:
@@ -90,13 +90,13 @@ def _print(env, agent, term, intention, _color_map={}, _current_color=[0]):
 
 
 @actions.add(".fail", 0)
-def _fail(env, agent, term, intention):
+def _fail(agent, term, intention):
     return
     yield
 
 
 @actions.add(".my_name", 1)
-def _my_name(env, agent, term, intention):
+def _my_name(agent, term, intention):
     name = hex(id(agent))
 
     if pyson.unify(term.args[0], name, intention.scope, intention.stack):
@@ -104,7 +104,7 @@ def _my_name(env, agent, term, intention):
 
 
 @actions.add(".concat")
-def _concat(env, agent, term, intention):
+def _concat(agent, term, intention):
     args = [pyson.grounded(arg, intention.scope) for arg in term.args[:-1]]
 
     if all(isinstance(arg, (tuple, list)) for arg in args):
@@ -114,12 +114,6 @@ def _concat(env, agent, term, intention):
 
     if pyson.unify(term.args[-1], result, intention.scope, intention.stack):
         yield
-
-
-@actions.add(".stopMAS")
-def _stopMAS(env, agent, term, intention):
-    env.shutdown()
-    yield
 
 
 actions.add_function(".random", (), random.random)
@@ -142,7 +136,7 @@ def _sort(l):
 
 
 @actions.add(".substring", 3)
-def _substring(env, agent, term, intention):
+def _substring(agent, term, intention):
     needle = pyson_str(pyson.grounded(term.args[0], intention.scope))
     haystack = pyson_str(pyson.grounded(term.args[1], intention.scope))
 
@@ -160,7 +154,7 @@ def _substring(env, agent, term, intention):
 
 
 @actions.add(".member", 2)
-def _member(env, agent, term, intention):
+def _member(agent, term, intention):
     choicepoint = object()
 
     for member in pyson.evaluate(term.args[1], intention.scope):
@@ -181,20 +175,20 @@ actions.add_procedure(".structure", (None, ), pyson.is_structure)
 
 
 @actions.add(".ground", 1)
-def _ground(env, agent, term, intention):
+def _ground(agent, term, intention):
     if pyson.is_ground(term, intention.scope):
         yield
 
 
 @actions.add(".findall", 3)
-def _findall(env, agent, term, intention):
+def _findall(agent, term, intention):
     pattern = pyson.evaluate(term.args[0], intention.scope)
     query = pyson.runtime.TermQuery(term.args[1])
     result = []
 
     memo = {}
 
-    for _ in query.execute(env, agent, intention):
+    for _ in query.execute(agent, intention):
         result.append(pyson.freeze(pattern, intention.scope, memo))
 
     if pyson.unify(tuple(result), term.args[2], intention.scope, intention.stack):
@@ -202,7 +196,7 @@ def _findall(env, agent, term, intention):
 
 
 @actions.add(".count", 2)
-def _count(env, agent, term, intention):
+def _count(agent, term, intention):
     lookup = pyson.evaluate(term.args[0], intention.scope)
     relevant_beliefs = agent.beliefs[lookup.literal_group()]
 
@@ -217,7 +211,7 @@ def _count(env, agent, term, intention):
 
 
 @actions.add(".date", 3)
-def _date(env, agent, term, intention):
+def _date(agent, term, intention):
     date = datetime.datetime.now()
 
     if (pyson.unify(term.args[0], date.year, intention.scope, intention.stack) and
@@ -228,7 +222,7 @@ def _date(env, agent, term, intention):
 
 
 @actions.add(".time", 3)
-def _time(env, agent, term, intention):
+def _time(agent, term, intention):
     time = datetime.datetime.now()
 
     if (pyson.unify(term.args[0], time.hour, intention.scope, intention.stack) and
@@ -239,7 +233,7 @@ def _time(env, agent, term, intention):
 
 
 @actions.add(".wait", 1)
-def _wait(env, agent, term, intention):
+def _wait(agent, term, intention):
     millis = pyson.grounded(term.args[0], intention.scope)
     intention.wait_until = time.time() + millis / 1000
     yield
@@ -249,7 +243,7 @@ def _wait(env, agent, term, intention):
 
 
 @actions.add(".range", 2)
-def _range_2(env, agent, term, intention):
+def _range_2(agent, term, intention):
     choicepoint = object()
 
     for i in range(int(pyson.grounded(term.args[1], intention.scope))):
@@ -262,12 +256,12 @@ def _range_2(env, agent, term, intention):
 
 
 @actions.add(".dump", 0)
-def _dump(env, agent, term, intention):
+def _dump(agent, term, intention):
     agent.dump()
     yield
 
 
 @actions.add(".unbind_all", 0)
-def _unbind_all(env, agent, term, intention):
+def _unbind_all(agent, term, intention):
     intention.scope.clear()
     yield

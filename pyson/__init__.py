@@ -711,7 +711,7 @@ class Actions(object):
             arg_specs = (arg_specs, )
 
         def _add_function(f):
-            def wrapper(env, agent, term, intention):
+            def wrapper(agent, term, intention):
                 result = f(*_zip_specs(arg_specs, term.args, intention.scope))
 
                 if unify(term.args[-1], result, intention.scope, intention.stack):
@@ -729,7 +729,7 @@ class Actions(object):
             arg_specs = (arg_specs, )
 
         def _add_procedure(f):
-            def wrapper(env, agent, term, intention):
+            def wrapper(agent, term, intention):
                 if f(*_zip_specs(arg_specs, term.args, intention)):
                     yield
 

@@ -27,7 +27,7 @@ class Counter:
 
 
 @actions.add("mr.update_counter", 2)
-def _update_counter(env, agent, term, intention):
+def _update_counter(agent, term, intention):
     name = pyson.pyson_str(pyson.grounded(term.args[0], intention.scope))
     delta = pyson.grounded(term.args[1], intention.scope)
     agent.emit(name, delta)
@@ -48,7 +48,7 @@ class Agent(pyson.runtime.Agent):
         self.emitted.append((k, v))
 
     def flatmap(self):
-        self.step(None)
+        self.step()
 
         while self.emitted:
             yield self.emitted.pop()
