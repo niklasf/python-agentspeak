@@ -40,8 +40,8 @@ def _update_counter(agent, counter, delta):
 def _send(agent, recipient, ils, term):
     group = ils.literal_group()
     if group == ("tell", 0):
-        frozen = pyson.grounded(term, {})
-        agent.emit(recipient, functools.partial(pyson.runtime.add_belief, term))
+        frozen = pyson.grounded(term, {}).with_annotation(pyson.Literal("source", (agent.name, )))
+        agent.emit(recipient, functools.partial(pyson.runtime.add_belief, frozen))
     else:
         raise pyson.PysonError("unsupported illocutionary force: %s/%d" % (group[0], group[1]))
 

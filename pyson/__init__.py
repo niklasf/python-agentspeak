@@ -497,10 +497,13 @@ class BinaryExpr(object):
 
 
 class Literal(object):
-    def __init__(self, functor, args=(), annots=()):
+    def __init__(self, functor, args=(), annots=frozenset()):
         self.functor = functor
         self.args = tuple(args)
-        self.annots = tuple(set(annots))
+        self.annots = frozenset(annots)
+
+    def with_annotation(self, annot):
+        return Literal(self.functor, self.args, self.annots | frozenset([annot]))
 
     def literal_group(self):
         return (self.functor, len(self.args))
