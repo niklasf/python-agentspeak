@@ -677,8 +677,10 @@ def _zip_specs(specs, args, scope):
             pass
         elif spec is int:
             arg = int(arg)
+        elif spec is pyson_str:
+            arg = pyson_str(arg)
         elif not isinstance(arg, spec):
-            raise PysonError("spec '%' does not match '%s'" % (spec, type(arg)))
+            raise PysonError("spec '%s' does not match '%s'" % (spec, type(arg)))
 
         result.append(arg)
 
@@ -730,7 +732,7 @@ class Actions(object):
 
         def _add_procedure(f):
             def wrapper(agent, term, intention):
-                if f(*_zip_specs(arg_specs, term.args, intention)):
+                if f(agent, *_zip_specs(arg_specs, term.args, intention)):
                     yield
 
             return self.add(functor, len(arg_specs), wrapper)
@@ -739,6 +741,22 @@ class Actions(object):
             return _add_procedure
         else:
             return _add_procedure(f)
+
+    def add_predicate(self, functor, arg_specs, f=None):
+        if not isinstance(arg_specs, (tuple, list)):
+            arg_specs = (arg_specs, )
+
+        def _add_predicate(f):
+            def wrapper(agent, term, intention):
+                if f(*_zip_specs(arg_specs, term.args, intention)):
+                    yield
+
+            return self.add(functor, len(arg_specs), wrapper)
+
+        if f is None:
+            return _add_predicate
+        else:
+            return _add_predicate(f)
 
     def lookup(self, functor, arity):
         group = (functor, arity)

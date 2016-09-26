@@ -1,9 +1,12 @@
 import collections
 import multiprocessing
+import numbers
 
 import pyson
 import pyson.runtime
 import pyson.stdlib
+
+from pyson import pyson_str
 
 
 actions = pyson.Actions(pyson.stdlib.actions)
@@ -26,12 +29,10 @@ class Counter:
         yield
 
 
-@actions.add("mr.update_counter", 2)
-def _update_counter(agent, term, intention):
-    name = pyson.pyson_str(pyson.grounded(term.args[0], intention.scope))
-    delta = pyson.grounded(term.args[1], intention.scope)
-    agent.emit(name, delta)
-    yield
+@actions.add_procedure("mr.update_counter", (pyson_str, numbers.Number))
+def _update_counter(agent, counter, delta):
+    agent.emit(counter, delta)
+    return True
 
 
 class Agent(pyson.runtime.Agent):
@@ -70,8 +71,8 @@ class Environment(pyson.runtime.Environment):
     def mr(self):
         print("========================================================")
         rdd = collections.defaultdict(list)
-        for result in self.process_pool.imap_unordered(process, self.rdd.items()):
-        #for result in map(process, self.rdd.items()):
+        #for result in self.process_pool.imap_unordered(process, self.rdd.items()):
+        for result in map(process, self.rdd.items()):
             print("result:", result)
             for key, value in result:
                 if hasattr(value, "reduce"):

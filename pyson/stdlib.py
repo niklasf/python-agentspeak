@@ -166,12 +166,12 @@ def _member(agent, term, intention):
         pyson.reroll(intention.scope, intention.stack, choicepoint)
 
 
-actions.add_procedure(".atom", (None, ), pyson.is_atom)
-actions.add_procedure(".literal", (None, ), pyson.is_literal)
-actions.add_procedure(".list", (None, ), pyson.is_list)
-actions.add_procedure(".number", (None, ), pyson.is_number)
-actions.add_procedure(".string", (None, ), pyson.is_string)
-actions.add_procedure(".structure", (None, ), pyson.is_structure)
+actions.add_predicate(".atom", (None, ), pyson.is_atom)
+actions.add_predicate(".literal", (None, ), pyson.is_literal)
+actions.add_predicate(".list", (None, ), pyson.is_list)
+actions.add_predicate(".number", (None, ), pyson.is_number)
+actions.add_predicate(".string", (None, ), pyson.is_string)
+actions.add_predicate(".structure", (None, ), pyson.is_structure)
 
 
 @actions.add(".ground", 1)
