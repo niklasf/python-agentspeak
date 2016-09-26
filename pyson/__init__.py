@@ -500,7 +500,7 @@ class Literal(object):
     def __init__(self, functor, args=(), annots=()):
         self.functor = functor
         self.args = tuple(args)
-        self.annots = tuple(annots)
+        self.annots = set(annots)
 
     def literal_group(self):
         return (self.functor, len(self.args))
@@ -522,10 +522,28 @@ class Literal(object):
 
         return all(unify(l, r, scope, stack) for l, r in zip(self.args, right.args))
 
-    def unify_annotated(self, left, scope, stack):
+    def unify_annotated(self, right, scope, stack):
+        if not isinstance(right, Literal):
+            return
+
         choicepoint = object()
         stack.append(choicepoint)
-        if self.unify(left, scope, stack):
+        if self.unify(right, scope, stack):
+            closed_right_annots = set()
+            for left_annot in self.annots:
+                for right_annot in right.annots:
+                    if right_annot in closed_right_annots:
+                        continue
+
+                    annot_choicepoint = object()
+                    stack.append(annot_choicepoint)
+                    if unify(left_annot, right_annot, scope, stack):
+                        closed_right_annots.add(right_annot)
+                        break
+                    reroll(scope, stack, annot_choicepoint)
+                else:
+                    reroll(scope, stack, choicepoint)
+                    return
             yield
         reroll(scope, stack, choicepoint)
 
@@ -630,8 +648,8 @@ def unifies(left, right):
 
 
 def unify_annotated(left, right, scope, stack):
-    if hasattr(right, "unify_annotated"):
-        for _ in right.unify_annotated(left, scope, stack):
+    if hasattr(left, "unify_annotated"):
+        for _ in left.unify_annotated(right, scope, stack):
             yield
     else:
         choicepoint = object()
@@ -639,6 +657,14 @@ def unify_annotated(left, right, scope, stack):
         if unify(left, right, scope, stack):
             yield
         reroll(scope, stack, choicepoint)
+
+
+def unifies_annotated(left, right):
+    scope = {}
+    stack = collections.deque()
+    for _ in unify_annotated(left, right, scope, stack):
+        return True
+    return False
 
 
 def is_ground(term, scope):
