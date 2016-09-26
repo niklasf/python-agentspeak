@@ -1,6 +1,7 @@
 import collections
 import multiprocessing
 import numbers
+import functools
 
 import pyson
 import pyson.runtime
@@ -35,6 +36,18 @@ def _update_counter(agent, counter, delta):
     return True
 
 
+@actions.add_procedure(".send", (pyson_str, pyson.Literal, None))
+def _send(agent, recipient, ils, term):
+    group = ils.literal_group()
+    if group == ("tell", 0):
+        frozen = pyson.grounded(term, {})
+        agent.emit(recipient, functools.partial(pyson.runtime.add_belief, term))
+    else:
+        raise pyson.PysonError("unsupported illocutionary force: %s/%d" % (group[0], group[1]))
+
+    return True
+
+
 class Agent(pyson.runtime.Agent):
     def __init__(self, name):
         self.name = name
@@ -55,6 +68,13 @@ class Agent(pyson.runtime.Agent):
             yield self.emitted.pop()
 
         yield self.name, self
+
+    def reduce(self, partial):
+        intention = pyson.runtime.Intention()
+        partial(self, intention)
+
+        return
+        yield
 
 
 class Environment(pyson.runtime.Environment):
