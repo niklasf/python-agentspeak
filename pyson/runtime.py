@@ -336,29 +336,19 @@ class Agent:
         intention = Intention()
 
         for plan in applicable_plans:
-            intention.stack.append(choicepoint)
+            for _ in pyson.unify_annotated(plan.head, frozen, intention.scope, intention.stack):
+                for _ in plan.context.execute(self, intention):
+                    intention.head_term = frozen
+                    intention.instr = plan.body
+                    if delayed or not self.intentions:
+                        new_intention_stack = collections.deque()
+                        new_intention_stack.append(intention)
+                        self.intentions.append(new_intention_stack)
+                    else:
+                        intention.calling_term = term
+                        self.intentions[0].append(intention)
 
-            if not pyson.unify(plan.head, frozen, intention.scope, intention.stack):
-                pyson.reroll(intention.scope, intention.stack, choicepoint)
-                continue
-
-            try:
-                next(plan.context.execute(self, intention))
-            except StopIteration:
-                pyson.reroll(intention.scope, intention.stack, choicepoint)
-                continue
-
-            intention.head_term = frozen
-            intention.instr = plan.body
-            if delayed or not self.intentions:
-                new_intention_stack = collections.deque()
-                new_intention_stack.append(intention)
-                self.intentions.append(new_intention_stack)
-            else:
-                intention.calling_term = term
-                self.intentions[0].append(intention)
-
-            return True
+                    return True
 
         if goal_type == pyson.GoalType.achievement:
             raise PysonError("no applicable plan for %s%s%s/%d" % (
