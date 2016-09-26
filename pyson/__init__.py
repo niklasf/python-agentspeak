@@ -350,7 +350,7 @@ def reroll(scope, stack, choicepoint):
 
 
 class Var(object):
-    def left_unify(self, right, scope, stack):
+    def unify(self, right, scope, stack):
         if self in scope:
             return unify(deref(self, scope), right, scope, stack)
 
@@ -359,12 +359,6 @@ class Var(object):
 
         self.bind(evaluate(right, scope), scope, stack)
         return True
-
-    def right_unify(self, left, scope, stack):
-        if self in scope:
-            return unify(left, deref(self), scope, stack)
-
-        return self.left_unify(left, scope, stack)
 
     def is_ground(self, scope):
         if self in scope:
@@ -412,10 +406,7 @@ class Var(object):
 
 
 class Wildcard(Var):
-    def left_unify(self, right, scope, stack):
-        return True
-
-    def right_unify(self, right, scope, stack):
+    def unify(self, right, scope, stack):
         return True
 
     def is_ground(self, scope):
@@ -445,11 +436,8 @@ class UnaryExpr(object):
         self.unary_op = unary_op
         self.operand = operand
 
-    def left_unify(self, right, scope, stack):
+    def unify(self, right, scope, stack):
         return unify(self.evaluate(scope), right, scope, stack)
-
-    def right_unify(self, left, scope, stack):
-        return unify(left, self.evaluate(scope), scope, stack)
 
     def evaluate(self, scope):
         operand = evaluate(self.operand, scope)
@@ -483,11 +471,8 @@ class BinaryExpr(object):
         self.left = left
         self.right = right
 
-    def left_unify(self, right, scope, stack):
+    def unify(self, right, scope, stack):
         return unify(self.evaluate(scope), right, scope, stack)
-
-    def right_unify(self, left, scope, stack):
-        return unify(left, self.evaluate(scope), scope, stack)
 
     def evaluate(self, scope):
         left = evaluate(self.left, scope)
@@ -519,11 +504,11 @@ class Literal(object):
     def literal_group(self):
         return (self.functor, len(self.args))
 
-    def left_unify(self, right, scope, stack):
+    def unify(self, right, scope, stack):
         right = evaluate(right, scope)
 
         if isinstance(right, Var):
-            return right.right_unify(self, scope, stack)
+            return right.unify(self, scope, stack)
 
         try:
             if self.functor != right.functor:
@@ -535,10 +520,6 @@ class Literal(object):
             return False
 
         return all(unify(l, r, scope, stack) for l, r in zip(self.args, right.args))
-
-    def right_unify(self, left, scope, stack):
-        # TODO: Check annotations
-        return self.left_unify(left, scope, stack)
 
     def is_atom(self):
         return not self.args and not self.annots
@@ -618,10 +599,10 @@ def unify(left, right, scope, stack):
     Unifies the two given terms. Variable bindings are done in *scope* and
     appended to *stack*.
     """
-    if hasattr(left, "left_unify"):
-        return left.left_unify(right, scope, stack)
-    elif hasattr(right, "right_unify"):
-        return right.right_unify(left, scope, stack)
+    if hasattr(left, "unify"):
+        return left.unify(right, scope, stack)
+    elif hasattr(right, "unify"):
+        return right.unify(left, scope, stack)
     elif isinstance(left, bool) or isinstance(right, bool):
         return left is right
     elif isinstance(left, tuple) and isinstance(right, tuple):
