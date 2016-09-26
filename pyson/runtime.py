@@ -170,16 +170,12 @@ class TermQuery:
         except AttributeError:
             raise PysonError("expected boolean or literal in query context, got: '%s'" % term)
 
-        choicepoint = object()
-
         # Query on the belief base.
         for belief in agent.beliefs[group]:
-            intention.stack.append(choicepoint)
-
-            if pyson.unify(term, belief, intention.scope, intention.stack):
+            for _ in pyson.unify_annotated(term, belief, intention.scope, intention.stack):
                 yield
 
-            pyson.reroll(intention.scope, intention.stack, choicepoint)
+        choicepoint = object()
 
         # Follow rules.
         for rule in agent.rules[group]:
