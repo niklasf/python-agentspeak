@@ -249,11 +249,7 @@ class UnifyQuery:
         self.right = right
 
     def execute(self, agent, intention):
-        choicepoint = object()
-        intention.stack.append(choicepoint)
-        if pyson.unify(self.left, self.right, intention.scope, intention.stack):
-            yield
-        pyson.reroll(intention.scope, intention.stack, choicepoint)
+        return pyson.unify_annotated(self.left, self.right, intention.scope, intention.stack)
 
     def __str__(self):
         return "(%s = %s)" % (self.left, self.right)

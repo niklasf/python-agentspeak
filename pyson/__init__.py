@@ -73,6 +73,7 @@ class LogFormatter(logging.Formatter):
     or a list of secondary locations *extra_locs* are given as extras to the
     logger.
     """
+
     def format(self, record):
         b = []
         b.append(colorama.Style.BRIGHT)
@@ -521,6 +522,13 @@ class Literal(object):
 
         return all(unify(l, r, scope, stack) for l, r in zip(self.args, right.args))
 
+    def unify_annotated(self, left, scope, stack):
+        choicepoint = object()
+        stack.append(choicepoint)
+        if self.unify(left, scope, stack):
+            yield
+        reroll(scope, stack, choicepoint)
+
     def is_atom(self):
         return not self.args and not self.annots
 
@@ -619,6 +627,18 @@ def unifies(left, right):
     scope = {}
     stack = collections.deque()
     return unify(left, right, scope, stack)
+
+
+def unify_annotated(left, right, scope, stack):
+    if hasattr(right, "unify_annotated"):
+        for _ in right.unify_annotated(left, scope, stack):
+            yield
+    else:
+        choicepoint = object()
+        stack.append(choicepoint)
+        if unify(left, right, scope, stack):
+            yield
+        reroll(scope, stack, choicepoint)
 
 
 def is_ground(term, scope):
