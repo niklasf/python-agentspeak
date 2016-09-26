@@ -43,7 +43,7 @@ def _send(agent, recipient, ils, term):
         frozen = pyson.grounded(term, {}).with_annotation(pyson.Literal("source", (agent.name, )))
         agent.emit(recipient, functools.partial(pyson.runtime.add_belief, frozen))
     elif group == ("achieve", 0):
-        frozen = pyson.freeze(term, {}, {}).with_annotation(pyson.Literal("source", (agent.name, )))
+        frozen = term.with_annotation(pyson.Literal("source", (agent.name, )))
         agent.emit(recipient, functools.partial(pyson.runtime.call,
                                                 pyson.Trigger.addition,
                                                 pyson.GoalType.achievement,

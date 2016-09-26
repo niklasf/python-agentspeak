@@ -709,9 +709,10 @@ def freeze(term, scope, memo):
 
 def _zip_specs(specs, args, scope):
     result = []
+    memo = {}
 
     for spec, arg in zip(specs, args):
-        arg = evaluate(arg, scope)
+        arg = freeze(arg, scope, memo)
 
         if spec is None:
             pass
