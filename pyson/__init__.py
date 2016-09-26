@@ -303,7 +303,7 @@ def is_number(term):
 def is_atom(term):
     """
     Checks if the given term is an atom
-    (a literal without arity 0 and no annotations).
+    (a literal with arity 0 and no annotations).
     """
     try:
         return term.is_atom()
