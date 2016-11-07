@@ -268,6 +268,9 @@ class Plan:
         self.context = context
         self.body = body
 
+    def name(self):
+        return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head)
+
 
 class Intention:
     def __init__(self):

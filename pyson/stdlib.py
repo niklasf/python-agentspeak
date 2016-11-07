@@ -265,3 +265,32 @@ def _dump(agent, term, intention):
 def _unbind_all(agent, term, intention):
     intention.scope.clear()
     yield
+
+
+@actions.add(".control_flow", 0)
+def _control_flow(agent, term, intention):
+    out = open("control_flow.dot", "w")
+    print("digraph control_flow {", file=out)
+    for plans in agent.plans.values():
+        for plan in plans:
+            print("  \"%s %s\" -> \"%s\";" % (plan.name(), plan.context, plan.body), file=out)
+            closed_instrs = set()
+            open_instrs = set([plan.body])
+            while open_instrs:
+                instr = open_instrs.pop()
+
+                if instr.success:
+                    print("  \"%s\" -> \"%s\";" % (instr, instr.success), file=out)
+
+                if instr.failure:
+                    print("  \"%s\" -> \"%s\" [label=\"failure\"];" % (instr, instr.failure), file=out)
+
+                closed_instrs.add(instr)
+                if instr.success and instr.success not in closed_instrs:
+                    open_instrs.add(instr.success)
+                if instr.failure and instr.failure not in closed_instrs:
+                    open_instrs.add(instr.failure)
+    print("}", file=out)
+    out.close()
+    print("Graph dumped to control_flow.dot")
+    yield
