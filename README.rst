@@ -11,27 +11,25 @@ Setup
 Hello world
 -----------
 
-```
-!hello_world.
+.. code::
 
-+!hello_world <-
-  .print("Hello world!").
-```
+    !hello_world.
+
+    +!hello_world <-
+      .print("Hello world!").
 
 Usage
 -----
 
 Run a standalone agent program:
 
-```
-$ python -m pyson examples/hello_world.asl
-```
+.. code::
+    $ python -m pyson examples/hello_world.asl
 
 Run an interactive console:
 
-```
-$ python -m pyson
-```
+.. code::
+    $ python -m pyson
 
 See `examples/embedded` for an an example that interfaces with custom Python
 code.
@@ -39,11 +37,13 @@ code.
 Jason compability
 -----------------
 
-pyson should be mostly equivalent to [Jason](http://jason.sourceforge.net/),
-with a couple of minor differences:
+pyson should be mostly equivalent to Jason_.
 
 * Plan annotations are ignored as of yet.
 * Standard library does not yet contain syntactic transformations with
-  `{begin ...}` and `{end}`.
+  :code:`{begin ...}` and :code:`{end}`.
 * Standard library does not yet contain introspective and plan-manipulation
   actions.
+* Jason 2.0 fork join operators not yet supported.
+
+.. _Jason: http://jason.sourceforge.net/
