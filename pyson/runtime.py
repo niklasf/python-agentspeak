@@ -458,7 +458,7 @@ class Environment:
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
-        agent = agent_cls()
+        agent = agent_cls(None, None, None)
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
