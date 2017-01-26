@@ -60,12 +60,18 @@ class Artifact:
         self.creator = creator
         self.category = category
 
+    def __str__(self):
+        return "A{0}".format(id(self))
+
 
 class Bug:
     def __init__(self, severity, created, closed=None):
         self.severity = severity
         self.created = created
         self.closed = closed
+
+    def __str__(self):
+        return "Bug{0}".format(id(self))
 
 
 class Developer:
@@ -226,6 +232,7 @@ class Maintainer(Developer):
 
         if random_day <= self.days:
             if schedule.tick >= START_TICK_LAST_STAGE:
+                print("Last stage")
                 num_deleted = numpy.random.geometric(min(1, 1 / d * 1.1))
                 num_updated = numpy.random.geometric(0.15)
                 num_created = numpy.random.geometric(1 / c * 0.95)
@@ -410,7 +417,7 @@ def create_bug():
 import matplotlib.pyplot as plt
 plt.ion()
 fig = plt.figure()
-plt.axis([0, SIM_ROUNDS, 0, 5000])
+plt.axis([0, SIM_ROUNDS, 0, 10000])
 
 @schedule.add(interval=365)
 def debug():
@@ -439,4 +446,12 @@ def do_some_work():
 
 if __name__ == "__main__":
     schedule.run(SIM_ROUNDS)
+    print("Done.")
+
+    with open("coupling.dot", "w") as f:
+        coupling.dump(f)
+
+    with open("bugs.dot", "w") as f:
+        bugs.dump(f)
+
     plt.show(block=True)

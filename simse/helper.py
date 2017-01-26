@@ -79,3 +79,10 @@ class Graph:
     def incr_edge(self, a, b, weight=1):
         self.outgoing[a][b] += weight
         self.ingoing[b][a] += weight
+
+    def dump(self, f):
+        print("digraph G {", file=f)
+        for node, arrows in self.outgoing.items():
+            for target, weight in arrows.items():
+                print("  {0} -> {1} [label=\"{2}\"];".format(node, target, weight), file=f)
+        print("}", file=f)
