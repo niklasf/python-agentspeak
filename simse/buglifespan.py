@@ -406,9 +406,21 @@ def create_bug():
         else:
             bugs.incr_edge(Bug("normal", schedule.tick), module)
 
+
+import matplotlib.pyplot as plt
+plt.ion()
+fig = plt.figure()
+plt.axis([0, SIM_ROUNDS, 0, 5000])
+
 @schedule.add(interval=365)
 def debug():
-    print("Bugs:", sum(1 for bug in bugs.outgoing if not bug.closed))
+    print("Open: {0}, closed: {1}".format(
+        sum(1 for bug in bugs.outgoing if not bug.closed),
+        sum(1 for bug in bugs.outgoing if bug.closed)))
+
+    plt.scatter(schedule.tick, sum(1 for bug in bugs.outgoing if not bug.closed))
+    plt.show()
+    plt.pause(0.001)
 
 @schedule.add(interval=1)
 def do_some_work():
@@ -425,6 +437,6 @@ def do_some_work():
             else:
                 developer.do_some_work()
 
-
 if __name__ == "__main__":
     schedule.run(SIM_ROUNDS)
+    plt.show(block=True)
