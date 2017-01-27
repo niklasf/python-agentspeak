@@ -14,7 +14,6 @@
   .do_update.
 
 +!day(Day) : Day <= 18 <-
-  // .intention_bugfix;
-  true.
+  .intention_bugfix.
 
 +!day(Day).

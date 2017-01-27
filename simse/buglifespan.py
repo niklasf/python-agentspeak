@@ -145,7 +145,6 @@ class Developer:
         return updated
 
     def delete_files(self, num_files, category):
-        # TODO
         pass
 
     def create_coupling(self, changed):
@@ -155,6 +154,11 @@ class Developer:
         for a in changed:
             for b in changed:
                 coupling.incr_edge(a, b)
+
+    @actions.add(".intention_bugfix")
+    def do_intention_bugfix(self, term, intention):
+        self.intention_bugfix()
+        yield
 
     def intention_bugfix(self):
         # TODO
