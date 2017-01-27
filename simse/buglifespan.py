@@ -145,7 +145,16 @@ class Developer:
         return updated
 
     def delete_files(self, num_files, category):
-        pass
+        for random_artifact in artifacts:
+            break
+        else:
+            return
+
+        for bug in bugs.ingoing[random_artifact]:
+            bugs.incr_edge(bug, random_artifact, -1)
+            bug.closed = schedule.tick
+
+        artifacts.remove(random_artifact)
 
     def create_coupling(self, changed):
         if len(changed) > 25:
@@ -161,8 +170,11 @@ class Developer:
         yield
 
     def intention_bugfix(self):
-        # TODO
-        pass
+        bug = self.get_random_bug()
+        if not bug:
+            return
+
+        bug.closed = schedule.tick
 
     def is_owner(self, bug):
         return any(module.creator == self.name for module in bugs.outgoing[bug])
@@ -392,7 +404,12 @@ for i in range(NUM_MINOR_DEVELOPERS):
 @schedule.add(start=20, interval=2)
 def create_bug():
     num_modules = len(artifacts)
-    num_modules_to_add_bug = random.randint(0, min(num_modules, MAX_BUGS_PER_ROUND))
+
+    if schedule.tick >= START_TICK_LAST_STAGE:
+        # Experiment with last stage.
+        num_modules_to_add_bug = random.randint(0, min(num_modules, int(round(MAX_BUGS_PER_ROUND * 0.6 + 0.4 * (MAX_BUGS_PER_ROUND * (SIM_ROUNDS - schedule.tick) / SIM_ROUNDS)))))
+    else:
+        num_modules_to_add_bug = random.randint(0, min(num_modules, MAX_BUGS_PER_ROUND))
 
     for _ in range(num_modules_to_add_bug):
         if random.random() > CATEGORY_PROBABILITY:
@@ -423,9 +440,11 @@ plt.ion()
 fig = plt.figure()
 plt.axis([0, SIM_ROUNDS, 0, 10000])
 
-@schedule.add(interval=365)
+#@schedule.add(interval=365)
+@schedule.add(interval=365//4)
 def debug():
-    print("Open: {0}, closed: {1}".format(
+    print("t = {0}, open: {1}, closed: {2}".format(
+        schedule.tick,
         sum(1 for bug in bugs.outgoing if not bug.closed),
         sum(1 for bug in bugs.outgoing if bug.closed)))
 
