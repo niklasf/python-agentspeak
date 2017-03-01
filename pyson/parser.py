@@ -1312,7 +1312,7 @@ def validate(ast_agent, log):
 def main(source, hook):
     log = pyson.Log(pyson.get_logger(__name__), 3)
 
-    tokens = pyson.lexer.tokenize(source, log, 1)
+    tokens = pyson.lexer.TokenStream(source, log, 1)
     agent = parse(tokens, log, frozenset(source.name))
 
     log.throw()
