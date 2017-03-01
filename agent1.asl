@@ -6,7 +6,7 @@
 +connected(Username) <-
   .print("Now connected as", Username).
 
--connected <-
+-connected(_) <-
   .print("No longer connected").
 
 +!message(Xml) <-

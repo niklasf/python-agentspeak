@@ -327,7 +327,9 @@ class Agent:
             if trigger == pyson.Trigger.addition:
                 self.add_belief(term, calling_intention.scope)
             else:
-                self.remove_belief(term, calling_intention)
+                found = self.remove_belief(term, calling_intention)
+                if not found:
+                    return True
 
         frozen = pyson.freeze(term, calling_intention.scope, {})
 
@@ -400,9 +402,11 @@ class Agent:
 
             if pyson.unify(term, belief, intention.scope, intention.stack):
                 relevant_beliefs.remove(belief)
-                return
+                return True
 
             pyson.reroll(intention.scope, intention.stack, choicepoint)
+
+        return False
 
     def step(self):
         while self.intentions and not self.intentions[0]:

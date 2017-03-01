@@ -62,7 +62,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.call(
             pyson.Trigger.removal,
             pyson.GoalType.belief,
-            pyson.Literal("connected"),
+            pyson.Literal("connected", (self.username, )),
             pyson.runtime.Intention())
 
         self.run()
