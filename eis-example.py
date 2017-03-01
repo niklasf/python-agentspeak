@@ -13,10 +13,7 @@ async def main():
     with open("agent1.asl") as source:
         agent1 = env.build_agent(source, pyson.eis.actions, agent_cls=pyson.eis.Agent)
 
-    await agent1.connect("hello", "there")
-
-    while env.run_agent(agent1):
-        pass
+    await agent1.connect("agentA1", "1")
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

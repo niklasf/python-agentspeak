@@ -32,6 +32,11 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.Literal("connected"),
             pyson.runtime.Intention())
 
+        self.transport.write(b"<message><authentication username=\"%s\" password=\"%s\" /></message>\0" % (self.username.encode("utf-8"), self.password.encode("utf-8")))
+
+        while self.step():
+            print("Step in connection made ...")
+
     def connection_lost(self, exc):
         print("Connection lost")
         self.call(
@@ -39,3 +44,6 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.GoalType.achievement,
             pyson.Literal("disconnected", (exc, )),
             pyson.runtime.Intention())
+
+        while self.step():
+            print("Step in connection lost ...")
