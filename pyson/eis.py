@@ -52,16 +52,18 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def connection_lost(self, exc):
         LOGGER.warning("Connection lost (reason: %s)", exc)
 
-        self.call(
-            pyson.Trigger.addition,
-            pyson.GoalType.achievement,
-            pyson.Literal("disconnected", (exc, )),
-            pyson.runtime.Intention())
-
-        self.run()
-
     def data_received(self, data):
         self.buffer += data
         while b"\0" in self.buffer:
-            message, self.buffer = self.buffer.split(b"\0", 1)
-            LOGGER.debug(message)
+            xml, self.buffer = self.buffer.split(b"\0", 1)
+            logging.debug("Received XML: %s", xml)
+            self.message_received(etree.fromstring(xml))
+
+    def message_received(self, message):
+        self.call(
+            pyson.Trigger.addition,
+            pyson.GoalType.achievement,
+            pyson.Literal("message", (message, )),
+            pyson.runtime.Intention())
+
+        self.run()
