@@ -12,7 +12,7 @@ class ParserTest(unittest.TestCase):
     def test_formula_type(self):
         src = pyson.StringSource("<test>", "+!plan <- ?true.")
         log = pyson.Log(pyson.get_logger(__name__), 3)
-        tokens = pyson.lexer.tokenize(src, log)
+        tokens = pyson.lexer.TokenStream(src, log)
         pyson.parser.parse(tokens, log, frozenset())
 
         with self.assertRaises(pyson.AggregatedError):
@@ -21,11 +21,19 @@ class ParserTest(unittest.TestCase):
     def test_rule_head_not_unifiable(self):
         src = pyson.StringSource("<test>", "rule(X + 1) :- true.")
         log = pyson.Log(pyson.get_logger(__name__), 3)
-        tokens = pyson.lexer.tokenize(src, log)
+        tokens = pyson.lexer.TokenStream(src, log)
         pyson.parser.parse(tokens, log, frozenset())
 
         with self.assertRaises(pyson.AggregatedError):
             log.throw()
+
+    def test_unexpected_eof(self):
+        src = pyson.StringSource("<test>", "a")
+        log = pyson.Log(pyson.get_logger(__name__), 3)
+        tokens = pyson.lexer.TokenStream(src, log)
+
+        with self.assertRaises(pyson.AggregatedError):
+            pyson.parser.parse(tokens, log, frozenset())
 
 
 if __name__ == "__main__":

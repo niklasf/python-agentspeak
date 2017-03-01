@@ -840,7 +840,7 @@ def parse_plan(tok, tokens, log):
     return tok, plan
 
 
-def parse(tokens, log, included_files, directive=None):
+def parse_agent(tokens, log, included_files, directive=None):
     agent = AstAgent()
 
     while True:
@@ -848,7 +848,8 @@ def parse(tokens, log, included_files, directive=None):
             tok = next(tokens)
         except StopIteration:
             if directive:
-                raise
+                # TODO: Where was the directive started?
+                raise log.error("end of file, but did not close directive '%s'", directive)
             return validate(agent, log)
 
         if tok.lexeme == "{":
@@ -880,7 +881,7 @@ def parse(tokens, log, included_files, directive=None):
                         else:
                             raise
                     else:
-                        included_tokens = pyson.lexer.tokenize(included_file, 1)
+                        included_tokens = pyson.lexer.TokenStream(included_file, 1)
                         included_agent = parse(included_tokens, log, included_files | frozenset(include))
                         agent.beliefs += included_agent.beliefs
                         agent.rules += included_agent.rules
@@ -936,6 +937,13 @@ def parse(tokens, log, included_files, directive=None):
             agent.plans.append(ast_node)
         else:
             log.error("unexpected token: '%s'", tok.lexeme, loc=tok.loc)
+
+
+def parse(tokens, log, included_files, directive=None):
+    try:
+        return parse_agent(tokens, log, included_files, directive=directive)
+    except StopIteration:
+        raise log.error("unexpected end of file '%s'", source.name, loc=tokens.peek() and tokens.peek().loc)
 
 
 class FindVariablesVisitor(object):
@@ -1309,6 +1317,13 @@ def validate(ast_agent, log):
     return ast_agent
 
 
+def parse(tokens, log, included_files, directive=None):
+    try:
+        return parse_agent(tokens, log, included_files, directive=directive)
+    except StopIteration:
+        raise log.error("unexpected end of file", loc=tokens.peek() and tokens.peek().loc)
+
+
 def main(source, hook):
     log = pyson.Log(pyson.get_logger(__name__), 3)
 
@@ -1340,7 +1355,7 @@ def repl(hook):
             while tokens:
                 token_stream = iter(tokens)
                 try:
-                    agent = parse(token_stream, log, frozenset())
+                    agent = parse_agent(token_stream, log, frozenset())
                 except StopIteration:
                     log.throw()
                     break

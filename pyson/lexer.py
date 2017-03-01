@@ -197,32 +197,17 @@ def tokenize(sourcefile, log, firstline=1):
 
 class TokenStream(object):
     def __init__(self, source, log, firstline=1):
-        self.source = source
-        self.log = log
         self.tokens = tokenize(source, log, firstline=firstline)
         self.tok = None
 
     def peek(self):
-        if self.tok is None:
-            try:
-                self.tok = next(self.tokens)
-            except StopIteration:
-                raise log.error("expected a token, but '%s' reached end of file", source.name)
-
         return self.tok
 
     def __next__(self):
-        return next(self.tokens)
+        self.tok = next(self.tokens)
+        return self.tok
 
-    def require_next(self, expected=None):
-        try:
-            self.tok = next(self.tokens)
-            return self.tok
-        except StopIteration:
-            if expected:
-                raise log.error("expected %s, but reached end of file", self.tok and self.tok.loc)
-            else:
-                raise log.error("unexpected end of file", self.tok and self.tok.loc)
+    next = __next__
 
 
 def main(source, lineno=1):
