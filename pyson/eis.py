@@ -1,8 +1,11 @@
 import asyncio
+import logging
 
 import pyson
 import pyson.runtime
 import pyson.stdlib
+
+LOGGER = logging.getLogger(__name__)
 
 actions = pyson.Actions(pyson.stdlib.actions)
 
@@ -26,6 +29,8 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def connection_made(self, transport):
         self.transport = transport
 
+        LOGGER.debug("Connection made")
+
         self.call(
             pyson.Trigger.addition,
             pyson.GoalType.achievement,
@@ -34,16 +39,16 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         self.transport.write(b"<message><authentication username=\"%s\" password=\"%s\" /></message>\0" % (self.username.encode("utf-8"), self.password.encode("utf-8")))
 
-        while self.step():
-            print("Step in connection made ...")
+        self.run()
+
 
     def connection_lost(self, exc):
-        print("Connection lost")
+        LOGGER.warning("Connection lost (reason: %s)", exc)
+
         self.call(
             pyson.Trigger.addition,
             pyson.GoalType.achievement,
             pyson.Literal("disconnected", (exc, )),
             pyson.runtime.Intention())
 
-        while self.step():
-            print("Step in connection lost ...")
+        self.run()

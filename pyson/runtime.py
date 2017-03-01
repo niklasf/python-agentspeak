@@ -449,6 +449,10 @@ class Agent:
 
         return True
 
+    def run(self):
+        while self.step():
+            pass
+
 
 class Environment:
     def build_agent(self, source, actions, agent_cls=Agent):
