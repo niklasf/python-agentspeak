@@ -1032,9 +1032,9 @@ class NumericFoldVisitor(object):
                 ast_binary_op.right = right
         else:
             self.log.error("unexpected operator '%s' in numeric context",
-                           ast_binary_op.operator.lexeme,
+                           ast_binary_op.operator.value.lexeme,
                            loc=ast_binary_op.loc,
-                           extra_locs=[left.loc, right.loc])
+                           extra_locs=[ast_binary_op.left.loc, ast_binary_op.right.loc])
 
         return ast_binary_op
 
@@ -1050,7 +1050,7 @@ class NumericFoldVisitor(object):
                 ast_unary_op.operand = folded
         else:
             self.log.error("unexpected operator '%s' in numeric context",
-                           ast_unary_op.operator.lexeme,
+                           ast_unary_op.operator.value.lexeme,
                            loc=ast_unary_op.loc,
                            extra_locs=[ast_unary_op.operand.loc])
 

@@ -35,6 +35,15 @@ class ParserTest(unittest.TestCase):
         with self.assertRaises(pyson.AggregatedError):
             pyson.parser.parse(tokens, log, frozenset())
 
+    def test_unify_return_value(self):
+        src = pyson.StringSource("<test>", "+!p <- (X = 2) + 1 > 0.")
+        log = pyson.Log(pyson.get_logger(__name__), 3)
+        tokens = pyson.lexer.TokenStream(src, log)
+
+        with self.assertRaises(pyson.AggregatedError):
+            pyson.parser.parse(tokens, log, frozenset())
+            log.throw()
+
 
 if __name__ == "__main__":
     unittest.main()
