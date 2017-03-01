@@ -28,6 +28,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
     def connection_made(self, transport):
         self.transport = transport
+        self.buffer = b""
 
         LOGGER.debug("Connection made")
 
@@ -41,7 +42,6 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         self.run()
 
-
     def connection_lost(self, exc):
         LOGGER.warning("Connection lost (reason: %s)", exc)
 
@@ -52,3 +52,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.runtime.Intention())
 
         self.run()
+
+    def data_received(self, data):
+        self.buffer += data
+        while b"\0" in self.buffer:
+            message, self.buffer = self.buffer.split(b"\0", 1)
+            LOGGER.debug(message)
