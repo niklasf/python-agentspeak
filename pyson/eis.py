@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from lxml import etree
+
 import pyson
 import pyson.runtime
 import pyson.stdlib
@@ -38,7 +40,12 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.Literal("connected"),
             pyson.runtime.Intention())
 
-        self.transport.write(b"<message><authentication username=\"%s\" password=\"%s\" /></message>\0" % (self.username.encode("utf-8"), self.password.encode("utf-8")))
+        message = etree.Element("message")
+        authentication = etree.SubElement(message, "authentication",
+                                          username=self.username,
+                                          password=self.password)
+
+        self.transport.write(etree.tostring(message) + b"\0")
 
         self.run()
 
