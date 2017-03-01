@@ -7,9 +7,12 @@ import pyson
 import pyson.runtime
 import pyson.stdlib
 
+
 LOGGER = logging.getLogger(__name__)
 
+
 actions = pyson.Actions(pyson.stdlib.actions)
+
 
 class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def __init__(self):
@@ -25,21 +28,15 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     @actions.add(".disconnect", 0)
     def _disconnect(self, term, intention):
         self.transport.close()
-        print("Closing !!!")
         yield
 
     def connection_made(self, transport):
+        LOGGER.debug("Connection made")
+
         self.transport = transport
         self.buffer = b""
 
-        LOGGER.debug("Connection made")
-
-        self.call(
-            pyson.Trigger.addition,
-            pyson.GoalType.achievement,
-            pyson.Literal("connected"),
-            pyson.runtime.Intention())
-
+        # Authenticate
         message = etree.Element("message")
         authentication = etree.SubElement(message, "authentication",
                                           username=self.username,
@@ -47,10 +44,24 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         self.transport.write(etree.tostring(message) + b"\0")
 
+        self.call(
+            pyson.Trigger.addition,
+            pyson.GoalType.belief,
+            pyson.Literal("connected"),
+            pyson.runtime.Intention())
+
         self.run()
 
     def connection_lost(self, exc):
         LOGGER.warning("Connection lost (reason: %s)", exc)
+
+        self.call(
+            pyson.Trigger.removal,
+            pyson.GoalType.belief,
+            pyson.Literal("connected"),
+            pyson.runtime.Intention())
+
+        self.run()
 
     def data_received(self, data):
         self.buffer += data

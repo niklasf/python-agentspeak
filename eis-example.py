@@ -5,7 +5,9 @@ import pyson.eis
 import pyson.runtime
 import logging
 
+
 logging.basicConfig(level=logging.DEBUG)
+
 
 async def main():
     env = pyson.runtime.Environment()
@@ -14,6 +16,7 @@ async def main():
         agent1 = env.build_agent(source, pyson.eis.actions, agent_cls=pyson.eis.Agent)
 
     await agent1.connect("agentA1", "1")
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
