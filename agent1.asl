@@ -3,8 +3,8 @@
 +!hello <-
   .print("hello world").
 
-+connected <-
-  .print("Now connected").
++connected(Username) <-
+  .print("Now connected as", Username).
 
 -connected <-
   .print("No longer connected").

@@ -30,6 +30,11 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.transport.close()
         yield
 
+    def send_message(self, message):
+        xml = etree.tostring(message)
+        LOGGER.debug("%s >> %s", self.username, xml.decode("utf-8"))
+        self.transport.write(xml + b"\0")
+
     def connection_made(self, transport):
         LOGGER.debug("Connection made")
 
@@ -41,13 +46,12 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         authentication = etree.SubElement(message, "authentication",
                                           username=self.username,
                                           password=self.password)
-
-        self.transport.write(etree.tostring(message) + b"\0")
+        self.send_message(message)
 
         self.call(
             pyson.Trigger.addition,
             pyson.GoalType.belief,
-            pyson.Literal("connected"),
+            pyson.Literal("connected", (self.username, )),
             pyson.runtime.Intention())
 
         self.run()
@@ -67,7 +71,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.buffer += data
         while b"\0" in self.buffer:
             xml, self.buffer = self.buffer.split(b"\0", 1)
-            logging.debug("Received XML: %s", xml)
+            LOGGER.debug("%s << %s", self.username, xml.decode("utf-8"))
             self.message_received(etree.fromstring(xml))
 
     def message_received(self, message):
