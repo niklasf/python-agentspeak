@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import asyncio
-import pyson.eis
+import pyson.mapc2017
 import pyson.runtime
 import logging
 
@@ -13,7 +13,7 @@ async def main():
     env = pyson.runtime.Environment()
 
     with open("agent1.asl") as source:
-        agent1 = env.build_agent(source, pyson.eis.actions, agent_cls=pyson.eis.Agent)
+        agent1 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
 
     await agent1.connect("agentA1", "1")
 
