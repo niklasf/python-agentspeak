@@ -80,18 +80,6 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         self.run()
 
-    def handle_auth_response(self, response):
-        if response.get("result") != "ok":
-            LOGGER.error("auth response for %s: %r", self.username, response.get("result"))
-        else:
-            self.call(
-                pyson.Trigger.addition,
-                pyson.GoalType.belief,
-                pyson.Literal("connected", (self.username, )),
-                pyson.runtime.Intention())
-
-            self.run()
-
     def _set_belief(self, name, *args):
         term = pyson.Literal(name, tuple(args))
         found = False
@@ -106,6 +94,13 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         if not found:
             self.call(pyson.Trigger.addition, pyson.GoalType.belief, term,
                       pyson.runtime.Intention())
+
+    def handle_auth_response(self, response):
+        if response.get("result") != "ok":
+            LOGGER.error("auth response for %s: %r", self.username, response.get("result"))
+        else:
+            self._set_belief("connected", self.username)
+
 
     def handle_sim_start(self, simulation):
         self._set_belief("id", simulation.get("id"))
