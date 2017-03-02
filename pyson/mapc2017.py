@@ -36,7 +36,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.transport.write(xml + b"\0")
 
     def connection_made(self, transport):
-        LOGGER.info("socket connected")
+        LOGGER.info("socket for %s connected", self.username)
 
         self.transport = transport
         self.buffer = b""

@@ -1,11 +1,8 @@
 +connected(Username) <-
-  .print("Now connected as", Username).
+  .print("Now authenticated as", Username).
 
 -connected(_) <-
   .print("No longer connected").
 
-+team(_) <-
-  .dump.
-
 +step(Step) <-
-  .print(Step).
+  .print("Step:", Step).
