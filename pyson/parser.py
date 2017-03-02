@@ -609,6 +609,9 @@ def parse_term(tok, tokens, log):
 
 
 def parse_rule_or_belief(tok, tokens, log):
+    if "." in tok.lexeme:
+        log.warning("found '.' in assertion. should this have been an action?", loc=tok.loc)
+
     tok, belief_atom = parse_literal(tok, tokens, log)
 
     if tok.lexeme == ":-":
