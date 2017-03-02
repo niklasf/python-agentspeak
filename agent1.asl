@@ -6,3 +6,6 @@
 
 +team(_) <-
   .dump.
+
++step(Step) <-
+  .print(Step).

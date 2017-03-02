@@ -71,6 +71,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             self.handle_auth_response(message[0])
         elif message.get("type") == "sim-start":
             self.handle_sim_start(message[0])
+        elif message.get("type") == "sim-end":
+            self.handle_sim_end(message[0])
+        elif message.get("type") == "request-action":
+            self.handle_request_action(message)
         else:
             LOGGER.warning("Unknown message type: %r", message.get("type"))
 
@@ -88,7 +92,8 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
             self.run()
 
-    def _set_belief(self, term):
+    def _set_belief(self, name, *args):
+        term = pyson.Literal(name, tuple(args))
         found = False
 
         for belief in list(self.beliefs[term.literal_group()]):
@@ -103,15 +108,45 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                       pyson.runtime.Intention())
 
     def handle_sim_start(self, simulation):
-        self._set_belief(pyson.Literal("id", (simulation.get("id"), )))
-        self._set_belief(pyson.Literal("map", (simulation.get("map"), )))
-        self._set_belief(pyson.Literal("seedCapital", (int(simulation.get("seedCapital")), )))
-        self._set_belief(pyson.Literal("steps", (int(simulation.get("steps")), )))
-        self._set_belief(pyson.Literal("team", (simulation.get("team"), )))
+        self._set_belief("id", simulation.get("id"))
+        self._set_belief("map", simulation.get("map"))
+        self._set_belief("seedCapital", int(simulation.get("seedCapital")))
+        self._set_belief("steps", int(simulation.get("steps")))
+        self._set_belief("team", simulation.get("team"))
+
 
         role = simulation.find("role")
-        self._set_belief(pyson.Literal("role", (
+        self._set_belief("role",
             pyson.Literal(role.get("name").lower()),
             int(role.get("speed")),
             int(role.get("load")),
-            int(role.get("battery")))))
+            int(role.get("battery")))
+        # TODO: Eismassim was also passing some tools?
+
+        # TODO: Add item percepts
+
+    def handle_sim_end(self, end):
+        self._set_belief("ranking", int(end.get("ranking")))
+        self._set_belief("score", int(end.get("score")))
+
+    def handle_request_action(self, message):
+        req = message[0]
+
+        self._set_belief("timestamp", int(message.get("timestamp")))
+        self._set_belief("deadline", int(req.get("deadline")))
+        self._set_belief("step", int(req.find("simulation").get("step")))
+
+        self_data = req.find("self")
+        self._set_belief("charge", int(self_data.get("charge")))
+        self._set_belief("load", int(self_data.get("load")))
+        self._set_belief("lat", float(self_data.get("lat")))
+        self._set_belief("lon", float(self_data.get("lon")))
+        self._set_belief("routeLength", int(self_data.get("routeLength", 0)))
+
+        self._set_belief("money", int(req.find("team").get("money")))
+
+        # TODO: Last action
+
+        # TODO: Carried items
+
+        # TODO: Waypoints
