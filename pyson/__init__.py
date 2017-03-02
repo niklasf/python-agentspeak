@@ -76,7 +76,9 @@ class LogFormatter(logging.Formatter):
 
     def format(self, record):
         b = []
-        b.append(colorama.Style.BRIGHT)
+
+        if record.levelno >= logging.INFO:
+            b.append(colorama.Style.BRIGHT)
 
         # Add source location.
         loc = record.__dict__.get("loc")
@@ -90,6 +92,8 @@ class LogFormatter(logging.Formatter):
             b.append(colorama.Fore.MAGENTA + "warning: " + colorama.Fore.RESET)
         elif record.levelno >= logging.INFO:
             b.append(colorama.Fore.BLACK + "info: " + colorama.Fore.RESET)
+        else:
+            b.append(colorama.Style.BRIGHT + "debug: " + colorama.Style.NORMAL)
 
         # Add log message.
         b.append(super(LogFormatter, self).format(record))

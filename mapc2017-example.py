@@ -6,7 +6,7 @@ import pyson.runtime
 import logging
 
 
-logging.basicConfig(level=logging.DEBUG)
+#pyson.get_logger("pyson.mapc2017").setLevel(logging.DEBUG)
 
 
 async def main():

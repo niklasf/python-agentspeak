@@ -8,7 +8,7 @@ import pyson.runtime
 import pyson.stdlib
 
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = pyson.get_logger(__name__)
 
 
 actions = pyson.Actions(pyson.stdlib.actions)
@@ -36,7 +36,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.transport.write(xml + b"\0")
 
     def connection_made(self, transport):
-        LOGGER.debug("Connection made")
+        LOGGER.info("socket connected")
 
         self.transport = transport
         self.buffer = b""
@@ -49,7 +49,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.send_message(message)
 
     def connection_lost(self, exc):
-        LOGGER.warning("Connection lost (reason: %s)", exc)
+        LOGGER.warning("socket connection lost (reason: %s)", exc)
 
         self.call(
             pyson.Trigger.removal,
@@ -76,13 +76,13 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         elif message.get("type") == "request-action":
             self.handle_request_action(message)
         else:
-            LOGGER.warning("Unknown message type: %r", message.get("type"))
+            LOGGER.error("unknown message type: %r", message.get("type"))
 
         self.run()
 
     def handle_auth_response(self, response):
         if response.get("result") != "ok":
-            LOGGER.warning("Auth response for %s: %r", self.username, response.get("result"))
+            LOGGER.error("auth response for %s: %r", self.username, response.get("result"))
         else:
             self.call(
                 pyson.Trigger.addition,
