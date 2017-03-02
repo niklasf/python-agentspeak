@@ -90,6 +90,9 @@ class AstLiteral(AstNode):
     def accept(self, visitor):
         return visitor.visit_literal(self)
 
+    def signature(self):
+        return "%s/%d" % (self.functor, len(self.terms))
+
     def __str__(self):
         builder = []
         builder.append(self.functor)
@@ -219,6 +222,9 @@ class AstPlan(AstNode):
 
     def accept(self, visitor):
         return visitor.visit_plan(self)
+
+    def signature(self):
+        return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head.signature())
 
     def __str__(self):
         builder = []
@@ -842,6 +848,7 @@ def parse_plan(tok, tokens, log):
 
 def parse_agent(tokens, log, included_files, directive=None):
     agent = AstAgent()
+    last_plan = None
 
     while True:
         try:
@@ -912,12 +919,15 @@ def parse_agent(tokens, log, included_files, directive=None):
             else:
                 raise log.error("expected 'include', or 'begin' or 'end' after '{', got '%s'", tok.lexeme, loc=tok.loc)
         elif tok.token.functor:
+            if last_plan is not None:
+                log.warning("assertion after plan. should this have been part of '%s'?", last_plan.signature(), loc=tok.loc)
             tok, ast_node = parse_rule_or_belief(tok, tokens, log)
             if isinstance(ast_node, AstRule):
                 if tok.lexeme != ".":
                     log.info("missing '.' after this rule", loc=ast_node.loc)
                     raise log.error("expected '.' after rule, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[ast_node.loc])
                 agent.rules.append(ast_node)
+                rules_in_file += 1
             else:
                 if tok.lexeme != ".":
                     log.info("missing '.' after this belief", loc=ast_node.loc)
@@ -930,11 +940,11 @@ def parse_agent(tokens, log, included_files, directive=None):
                 raise log.error("expected '.' after initial goal, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[ast_node.loc])
             agent.goals.append(ast_node)
         elif tok.lexeme in ["@", "+", "-"]:
-            tok, ast_node = parse_plan(tok, tokens, log)
+            tok, last_plan = parse_plan(tok, tokens, log)
             if tok.lexeme != ".":
-                log.info("missing '.' after this plan", loc=ast_node.loc)
-                raise log.error("expected '.' after plan, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[ast_node.loc])
-            agent.plans.append(ast_node)
+                log.info("missing '.' after this plan", loc=last_plan.loc)
+                raise log.error("expected '.' after plan, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[last_plan.loc])
+            agent.plans.append(last_plan)
         else:
             log.error("unexpected token: '%s'", tok.lexeme, loc=tok.loc)
 

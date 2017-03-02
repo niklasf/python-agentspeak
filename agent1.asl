@@ -3,6 +3,7 @@
 
 -connected(_) <-
   .print("No longer connected").
+  .dump.
 
 +step(Step) : not pause <-
   .print("Step:", Step);
