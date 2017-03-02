@@ -108,3 +108,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self._set_belief(pyson.Literal("seedCapital", (int(simulation.get("seedCapital")), )))
         self._set_belief(pyson.Literal("steps", (int(simulation.get("steps")), )))
         self._set_belief(pyson.Literal("team", (simulation.get("team"), )))
+
+        role = simulation.find("role")
+        self._set_belief(pyson.Literal("role", (
+            pyson.Literal(role.get("name").lower()),
+            int(role.get("speed")),
+            int(role.get("load")),
+            int(role.get("battery")))))

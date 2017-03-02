@@ -299,7 +299,7 @@ class Agent:
         LOGGER.info("Belief base")
         for beliefs in self.beliefs.values():
             for belief in beliefs:
-                print(belief)
+                print(pyson.pyson_repr(belief))
 
         LOGGER.info("Rules")
         for rules in self.rules.values():

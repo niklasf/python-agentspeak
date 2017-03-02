@@ -293,7 +293,10 @@ def pyson_repr(term):
     elif isinstance(term, float) and term.is_integer():
         return repr(int(term))
     else:
-        return repr(term)
+        try:
+            return term.pyson_repr()
+        except AttributeError:
+            return repr(term)
 
 
 def is_number(term):
@@ -399,8 +402,10 @@ class Var(object):
         scope[self] = term
         stack.append(self)
 
-    def __str__(self):
+    def pyson_repr(self):
         return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3], id(self))
+
+    __str__ = pyson_repr
 
     def __repr__(self):
         return "<Var (%s)>" % str(self)
@@ -425,8 +430,10 @@ class Wildcard(Var):
     def bind(self, term, scope, stack):
         pass
 
-    def __str__(self):
+    def pyson_repr(self):
         return "_"
+
+    __str__ = pyson_repr
 
     def __repr__(self):
         return "<Wildcard at %s>" % hex(id(self))
@@ -459,8 +466,10 @@ class UnaryExpr(object):
     def freeze(self, scope, memo):
         return freeze(self.evaluate(scope), scope, memo)
 
-    def __str__(self):
-        return "(%s %s)" % (self.unary_op.lexeme, self.operand)
+    def pyson_repr(self):
+        return "(%s %s)" % (self.unary_op.lexeme, pyson_repr(self.operand))
+
+    __str__ = pyson_repr
 
     def __repr__(self):
         return "<UnaryExpr %s>" % str(self)
@@ -494,6 +503,14 @@ class BinaryExpr(object):
 
     def freeze(self, scope, memo):
         return freeze(self.evaluate(scope), scope, memo)
+
+    def pyson_repr(self):
+        return "(%s %s %s)" % (pyson_repr(self.left), self.binary_op.lexeme, pyson_repr(self.right))
+
+    __str__ = pyson_repr
+
+    def __repr__(self):
+        return "<BinaryExpr %s>" % str(self)
 
 
 class Literal(object):
@@ -587,18 +604,20 @@ class Literal(object):
     def __len__(self):
         return len(self.args)
 
-    def __str__(self):
+    def pyson_repr(self):
         builder = []
         builder.append(self.functor)
         if self.args:
             builder.append("(")
-            builder.append(", ".join(str(arg) for arg in self.args))
+            builder.append(", ".join(pyson_repr(arg) for arg in self.args))
             builder.append(")")
         if self.annots:
             builder.append("[")
-            builder.append(", ".join(str(annot) for annot in self.annots))
+            builder.append(", ".join(pyson_repr(annot) for annot in self.annots))
             builder.append("]")
         return "".join(builder)
+
+    __str__ = pyson_repr
 
     def __repr__(self):
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
