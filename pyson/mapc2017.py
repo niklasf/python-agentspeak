@@ -97,7 +97,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.run()
 
     def _set_belief(self, name, *args):
-        term = pyson.Literal(name, tuple(args))
+        term = pyson.Literal(name, tuple(args),
+                             frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))]))
+
         found = False
 
         for belief in list(self.beliefs[term.literal_group()]):
