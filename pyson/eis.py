@@ -67,14 +67,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             self.message_received(etree.fromstring(xml))
 
     def message_received(self, message):
-        self.call(
-            pyson.Trigger.addition,
-            pyson.GoalType.achievement,
-            pyson.Literal("message", (message, )),
-            pyson.runtime.Intention())
-
         if message.get("type") == "auth-response":
             self.handle_auth_response(message[0])
+        elif message.get("type") == "sim-start":
+            self.handle_sim_start(message[0])
         else:
             LOGGER.warning("Unknown message type: %r", message.get("type"))
 
@@ -91,3 +87,24 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                 pyson.runtime.Intention())
 
             self.run()
+
+    def _set_belief(self, term):
+        found = False
+
+        for belief in list(self.beliefs[term.literal_group()]):
+            if pyson.unifies(term, belief):
+                found = True
+            else:
+                self.call(pyson.Trigger.removal, pyson.GoalType.belief, belief,
+                          pyson.runtime.Intention())
+
+        if not found:
+            self.call(pyson.Trigger.addition, pyson.GoalType.belief, term,
+                      pyson.runtime.Intention())
+
+    def handle_sim_start(self, simulation):
+        self._set_belief(pyson.Literal("id", (simulation.get("id"), )))
+        self._set_belief(pyson.Literal("map", (simulation.get("map"), )))
+        self._set_belief(pyson.Literal("seedCapital", (int(simulation.get("seedCapital")), )))
+        self._set_belief(pyson.Literal("steps", (int(simulation.get("steps")), )))
+        self._set_belief(pyson.Literal("team", (simulation.get("team"), )))
