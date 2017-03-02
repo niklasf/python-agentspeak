@@ -10,6 +10,4 @@
   .print("No longer connected").
 
 +!message(Xml) <-
-  .print("XML:", Xml);
-  .dump;
-  .disconnect.
+  .print("XML:", Xml).

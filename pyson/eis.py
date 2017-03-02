@@ -43,18 +43,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # Authenticate
         message = etree.Element("message")
-        authentication = etree.SubElement(message, "authentication",
+        authentication = etree.SubElement(message, "auth-request",
                                           username=self.username,
                                           password=self.password)
         self.send_message(message)
-
-        self.call(
-            pyson.Trigger.addition,
-            pyson.GoalType.belief,
-            pyson.Literal("connected", (self.username, )),
-            pyson.runtime.Intention())
-
-        self.run()
 
     def connection_lost(self, exc):
         LOGGER.warning("Connection lost (reason: %s)", exc)
@@ -81,4 +73,21 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.Literal("message", (message, )),
             pyson.runtime.Intention())
 
+        if message.get("type") == "auth-response":
+            self.handle_auth_response(message[0])
+        else:
+            LOGGER.warning("Unknown message type: %r", message.get("type"))
+
         self.run()
+
+    def handle_auth_response(self, response):
+        if response.get("result") != "ok":
+            LOGGER.warning("Auth response for %s: %r", self.username, response.get("result"))
+        else:
+            self.call(
+                pyson.Trigger.addition,
+                pyson.GoalType.belief,
+                pyson.Literal("connected", (self.username, )),
+                pyson.runtime.Intention())
+
+            self.run()
