@@ -74,6 +74,17 @@ class BuildTermVisitor:
             return var
 
 
+class BuildReplacePatternVisitor(BuildTermVisitor):
+    def __init__(self):
+        BuildTermVisitor.__init__(self, {})
+
+    def visit_unary_op(self, ast_unary_op):
+        return pyson.Wildcard()
+
+    def visit_binary_op(self, ast_binary_op):
+        return pyson.Wildcard()
+
+
 class BuildQueryVisitor:
     def __init__(self, variables, actions, log):
         self.variables = variables
@@ -641,7 +652,7 @@ class BuildInstructionsVisitor:
             self.add_instr(functools.partial(test_belief, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == pyson.FormulaType.replace:
-            removal_term = ast_formula.term.accept(BuildTermVisitor({}))
+            removal_term = ast_formula.term.accept(BuildReplacePatternVisitor())
             self.add_instr(functools.partial(remove_belief, removal_term))
 
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))

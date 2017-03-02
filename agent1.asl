@@ -4,5 +4,8 @@
 -connected(_) <-
   .print("No longer connected").
 
-+step(Step) <-
-  .print("Step:", Step).
++step(Step) : not pause <-
+  .print("Step:", Step);
+  +pause;
+  -+step(Step + 1);
+  -pause.
