@@ -19,6 +19,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         super(Agent, self).__init__()
 
     def connect(self, username, password, host="localhost", port=12300):
+        self.action_id = None
         self.username = username
         self.password = password
 
@@ -28,6 +29,23 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     @actions.add(".disconnect", 0)
     def _disconnect(self, term, intention):
         self.transport.close()
+        yield
+
+    @actions.add(".stopMAS", 0)
+    def _stop_mas(self, term, intention):
+        asyncio.get_event_loop().stop()
+        yield
+
+    @actions.add(".skip", 0)
+    def _skip(self, term, intention):
+        if self.action_id is None:
+            LOGGER.warning("%s already did an action in this step", self.username)
+            return
+
+        message = etree.Element("message")
+        etree.SubElement(message, "action", type="skip", id=str(self.action_id))
+        self.send_message(message)
+        self.action_id = None
         yield
 
     def send_message(self, message):
@@ -43,9 +61,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # Authenticate
         message = etree.Element("message")
-        authentication = etree.SubElement(message, "auth-request",
-                                          username=self.username,
-                                          password=self.password)
+        etree.SubElement(message, "auth-request", username=self.username, password=self.password)
         self.send_message(message)
 
     def connection_lost(self, exc):
@@ -126,6 +142,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
     def handle_request_action(self, message):
         req = message[0]
+
+        if self.action_id is not None:
+            LOGGER.warning("%s: action id %d was not used", self.username, self.action_id)
+        self.action_id = int(req.get("id"))
 
         self._set_belief("timestamp", int(message.get("timestamp")))
         self._set_belief("deadline", int(req.get("deadline")))
