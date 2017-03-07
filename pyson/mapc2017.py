@@ -156,14 +156,16 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         item_beliefs = []
 
         for item in simulation.findall("./item"):
-            item_beliefs.append(pyson.Literal("item", (
-                item.get("name"),
-                int(item.get("volume")),
-                pyson.Literal("tools", (
-                    tuple(pyson.Literal(tool.text) for tool in item.findall("./tool")),
-                )),
-                tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount"))))
-                      for part in item.findall("./item")))))
+            item_beliefs.append(pyson.Literal("item",
+                (
+                    item.get("name"),
+                    int(item.get("volume")),
+                    pyson.Literal("tools", (
+                        tuple(pyson.Literal(tool.text) for tool in item.findall("./tool")),
+                    )),
+                    tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount")))) for part in item.findall("./item"))
+                ),
+                (pyson.Literal("source", (pyson.Literal("percept"), )), ))
 
         self._replace_beliefs(("item", 4), item_beliefs)
 
@@ -193,6 +195,11 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # TODO: Last action
 
-        # TODO: Carried items
+        # Update carried items.
+        carried_items = []
+        for item in self.find("./item"):
+            carried_items.append(pyson.Literal("item", (item.get("name"), int(item.get("amount"))),
+                                               (pyson.Literal("source", (pyson.Literal("percept"), )), )))
+        self._replace_beliefs(("item", 2), carried_items)
 
         # TODO: Waypoints
