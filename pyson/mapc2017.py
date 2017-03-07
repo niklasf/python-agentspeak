@@ -14,6 +14,9 @@ LOGGER = pyson.get_logger(__name__)
 actions = pyson.Actions(pyson.stdlib.actions)
 
 
+PERCEPT_TAG = frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))])
+
+
 class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def __init__(self):
         super(Agent, self).__init__()
@@ -98,8 +101,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.run()
 
     def _set_belief(self, name, *args):
-        term = pyson.Literal(name, tuple(args),
-                             frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))]))
+        term = pyson.Literal(name, tuple(args), PERCEPT_TAG)
 
         found = False
 
@@ -161,9 +163,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             parts = tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount")))) for part in item.findall("./item"))
 
             item_beliefs.append(
-                pyson.Literal("item",
-                    (item.get("name"), int(item.get("volume")), tools, parts),
-                    (pyson.Literal("source", (pyson.Literal("percept"), )), )))
+                pyson.Literal("item", (
+                    item.get("name"), int(item.get("volume")), tools, parts),
+                    PERCEPT_TAG))
 
         self._replace_beliefs(("item", 4), item_beliefs)
 
@@ -204,9 +206,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         carried_items = []
         for item in self_data.findall("./item"):
             carried_items.append(
-                pyson.Literal("item",
-                    (item.get("name"), int(item.get("amount"))),
-                    (pyson.Literal("source", (pyson.Literal("percept"), )), )))
+                pyson.Literal("item", (
+                    item.get("name"), int(item.get("amount"))),
+                    PERCEPT_TAG))
         self._replace_beliefs(("item", 2), carried_items)
 
         # TODO: Waypoints
@@ -215,13 +217,11 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         entities = []
         for entity in req.findall("entity"):
             entities.append(
-                pyson.Literal("entity",
-                    (pyson.Literal(entity.get("name")), entity.get("team"),
-                     float(entity.get("lat")), float(entity.get("lon")),
-                     pyson.Literal(entity.get("role").lower()))))
+                pyson.Literal("entity", (
+                    pyson.Literal(entity.get("name")), entity.get("team"),
+                    float(entity.get("lat")), float(entity.get("lon")),
+                    pyson.Literal(entity.get("role").lower())), PERCEPT_TAG))
         self._replace_beliefs(("entity", 5), entities)
-
-        # TODO: Entities
 
         # TODO: Charging station pecepts
 
@@ -229,6 +229,13 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # TODO: Storage percepts
 
-        # TODO: Workshop percepts
+        # Update workshops.
+        workshops = []
+        for workshop in req.findall("workshop"):
+            workshops.append(
+                pyson.Literal("workshop", (
+                    workshop.get("name"), float(workshop.get("lat")), float(workshop.get("lon"))),
+                    PERCEPT_TAG))
+        self._replace_beliefs(("workshop", 3), workshops)
 
         # TODO: Job percepts
