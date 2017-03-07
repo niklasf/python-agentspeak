@@ -113,6 +113,23 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             self.call(pyson.Trigger.addition, pyson.GoalType.belief, term,
                       pyson.runtime.Intention())
 
+    def _replace_beliefs(self, group, beliefs):
+        for old_belief in list(self.beliefs[group]):
+            for new_belief in beliefs:
+                if pyson.unifies(old_belief, new_belief):
+                    break
+            else:
+                self.call(pyson.Trigger.removal, pyson.GoalType.belief, old_belief,
+                          pyson.runtime.Intention())
+
+        for new_belief in beliefs:
+            for old_belief in self.beliefs[group]:
+                if pyson.unifies(old_belief, new_belief):
+                    break
+            else:
+                self.call(pyson.Trigger.addition, pyson.GoalType.belief, new_belief,
+                          pyson.runtime.Intention())
+
     def handle_auth_response(self, response):
         if response.get("result") != "ok":
             LOGGER.error("auth response for %s: %r", self.name, response.get("result"))
@@ -136,22 +153,19 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             tuple(pyson.Literal(tool.text) for tool in role.findall("./tool")))
 
         # Update item beliefs.
-        for belief in list(self.beliefs[("item", 4)]):
-            self.call(pyson.Trigger.removal, pyson.GoalType.belief, belief,
-                      pyson.runtime.Intention())
+        item_beliefs = []
 
         for item in simulation.findall("./item"):
-            belief = pyson.Literal("item", (
+            item_beliefs.append(pyson.Literal("item", (
                 item.get("name"),
                 int(item.get("volume")),
                 pyson.Literal("tools", (
                     tuple(pyson.Literal(tool.text) for tool in item.findall("./tool")),
                 )),
                 tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount"))))
-                      for part in item.findall("./item"))))
+                      for part in item.findall("./item")))))
 
-            self.call(pyson.Trigger.addition, pyson.GoalType.belief, belief,
-                      pyson.runtime.Intention())
+        self._replace_beliefs(("item", 4), item_beliefs)
 
     def handle_sim_end(self, end):
         self._set_belief("ranking", int(end.get("ranking")))
