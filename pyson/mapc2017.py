@@ -261,4 +261,19 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     PERCEPT_TAG))
         self._replace_beliefs(("workshop", 3), workshops)
 
-        # TODO: Job percepts
+        # Update job percepts.
+        jobs = []
+        auctions = []
+        for job in req.findall("job"):
+            required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
+                             for item in job.findall("item"))
+
+            # TODO: Auctions
+
+            jobs.append(
+                pyson.Literal("job", (
+                    job.get("id"), job.get("storage"),
+                    int(job.get("reward")), int(job.get("end")), required),
+                    PERCEPT_TAG))
+        self._replace_beliefs(("jobs", 5), jobs)
+        self._replace_beliefs(("jobs", 9), auctions)
