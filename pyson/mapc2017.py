@@ -223,7 +223,23 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     pyson.Literal(entity.get("role").lower())), PERCEPT_TAG))
         self._replace_beliefs(("entity", 5), entities)
 
-        # TODO: Charging station pecepts
+        # Update charging station pecepts
+        charging_stations = []
+        for station in req.findall("chargingStation"):
+            charging_stations.append(
+                pyson.Literal("chargingStation", (
+                    station.get("name"), float(station.get("lat")), float(station.get("lon")),
+                    int(station.get("rate"))), PERCEPT_TAG))
+        self._replace_beliefs(("chargingStation", 4), charging_stations)
+
+        # Update dumps.
+        dumps = []
+        for dump in req.findall("dump"):
+            dumps.append(
+                pyson.Literal("dump", (
+                    dump.get("name"), float(dump.get("lat")), float(dump.get("lon"))),
+                    PERCEPT_TAG))
+        self._replace_beliefs(("dump", 4), dumps)
 
         # Update storage percepts.
         storages = []
