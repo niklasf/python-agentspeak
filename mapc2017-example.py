@@ -26,11 +26,11 @@ async def main():
         agent6 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
 
     await agent1.connect("agentA1", "1")
-    await agent2.connect("agentA2", "1")
-    await agent3.connect("agentA3", "1")
-    await agent4.connect("agentA4", "1")
-    await agent5.connect("agentA5", "1")
-    await agent6.connect("agentA6", "1")
+    #await agent2.connect("agentA2", "1")
+    #await agent3.connect("agentA3", "1")
+    #await agent4.connect("agentA4", "1")
+    #await agent5.connect("agentA5", "1")
+    #await agent6.connect("agentA6", "1")
 
 
 if __name__ == "__main__":

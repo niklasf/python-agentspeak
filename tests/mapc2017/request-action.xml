@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<message timestamp="1488891373487" type="request-action">
+    <percept deadline="1488891377484" id="0">
+        <simulation step="0"/>
+        <self charge="500" lat="51.515621167025444" load="0" lon="-0.08502341996930733" name="agentA2" role="Car" team="A">
+            <action result="successful" type="noAction"/>
+        </self>
+        <team money="50000"/>
+        <entity lat="51.515621167025444" lon="-0.08502341996930733" name="agentC1" role="Car" team="C"/>
+        <entity lat="51.515621167025444" lon="-0.08502341996930733" name="agentB3" role="Car" team="B"/>
+        <entity lat="51.515621167025444" lon="-0.08502341996930733" name="agentA2" role="Car" team="A"/>
+        <entity lat="51.51512796708431" lon="-0.15606344282707035" name="agentC4" role="Car" team="C"/>
+        <entity lat="51.51512796708431" lon="-0.15606344282707035" name="agentB4" role="Car" team="B"/>
+        <entity lat="51.51512796708431" lon="-0.15606344282707035" name="agentA3" role="Car" team="A"/>
+        <entity lat="51.52051062897723" lon="-0.10168687968060865" name="agentC5" role="Drone" team="C"/>
+        <entity lat="51.52051062897723" lon="-0.10168687968060865" name="agentB1" role="Drone" team="B"/>
+        <entity lat="51.51009484391504" lon="-0.04871651996817991" name="agentC2" role="Drone" team="C"/>
+        <entity lat="51.51009484391504" lon="-0.04871651996817991" name="agentB2" role="Drone" team="B"/>
+        <entity lat="51.52051062897723" lon="-0.10168687968060865" name="agentA1" role="Drone" team="A"/>
+        <entity lat="51.51248718183175" lon="-0.15054955349352184" name="agentC3" role="Motorcycle" team="C"/>
+        <entity lat="51.51009484391504" lon="-0.04871651996817991" name="agentA6" role="Drone" team="A"/>
+        <entity lat="51.51248718183175" lon="-0.15054955349352184" name="agentB5" role="Motorcycle" team="B"/>
+        <entity lat="51.51248718183175" lon="-0.15054955349352184" name="agentA4" role="Motorcycle" team="A"/>
+        <entity lat="51.52045511872238" lon="-0.09523369072841635" name="agentC6" role="Truck" team="C"/>
+        <entity lat="51.52045511872238" lon="-0.09523369072841635" name="agentB6" role="Truck" team="B"/>
+        <entity lat="51.52045511872238" lon="-0.09523369072841635" name="agentA5" role="Truck" team="A"/>
+        <shop lat="51.477783888730976" lon="-0.07966716537839293" name="Shop1" restock="2">
+            <item amount="20" name="item0" price="133"/>
+        </shop>
+        <workshop lat="51.47408009648113" lon="-0.09141267619059171" name="Workshop1"/>
+        <chargingStation lat="51.52022973929487" lon="-0.16067168812796787" name="ChargingStation1" rate="130"/>
+        <dump lat="51.51051845052507" lon="-0.03782510841991995" name="Dump1"/>
+        <storage lat="51.49157126928817" lon="-0.15213932305707864" name="Storage1" totalCapacity="11518" usedCapacity="0"/>
+    </percept>
+</message>
