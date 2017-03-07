@@ -127,16 +127,31 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self._set_belief("steps", int(simulation.get("steps")))
         self._set_belief("team", simulation.get("team"))
 
-
         role = simulation.find("role")
         self._set_belief("role",
             pyson.Literal(role.get("name").lower()),
             int(role.get("speed")),
             int(role.get("load")),
             int(role.get("battery")),
-            tuple(pyson.Literal(tool.text) for tool in role.findall("tool")))
+            tuple(pyson.Literal(tool.text) for tool in role.findall("./tool")))
 
-        # TODO: Add item percepts
+        # Update item beliefs.
+        for belief in list(self.beliefs[("item", 4)]):
+            self.call(pyson.Trigger.removal, pyson.GoalType.belief, belief,
+                      pyson.runtime.Intention())
+
+        for item in simulation.findall("./item"):
+            belief = pyson.Literal("item", (
+                item.get("name"),
+                int(item.get("volume")),
+                pyson.Literal("tools", (
+                    tuple(pyson.Literal(tool.text) for tool in item.findall("./tool")),
+                )),
+                tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount"))))
+                      for part in item.findall("./item"))))
+
+            self.call(pyson.Trigger.addition, pyson.GoalType.belief, belief,
+                      pyson.runtime.Intention())
 
     def handle_sim_end(self, end):
         self._set_belief("ranking", int(end.get("ranking")))
