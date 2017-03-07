@@ -116,7 +116,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def _replace_beliefs(self, group, beliefs):
         for old_belief in list(self.beliefs[group]):
             for new_belief in beliefs:
-                if pyson.unifies(old_belief, new_belief):
+                if pyson.unifies(new_belief, old_belief):
                     break
             else:
                 self.call(pyson.Trigger.removal, pyson.GoalType.belief, old_belief,
@@ -124,7 +124,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         for new_belief in beliefs:
             for old_belief in self.beliefs[group]:
-                if pyson.unifies(old_belief, new_belief):
+                if pyson.unifies(new_belief, old_belief):
                     break
             else:
                 self.call(pyson.Trigger.addition, pyson.GoalType.belief, new_belief,
