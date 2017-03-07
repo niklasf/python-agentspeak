@@ -191,7 +191,14 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         self._set_belief("money", int(req.find("team").get("money")))
 
-        # TODO: Last action
+        action = self_data.find("action")
+        if action is not None:
+            self._set_belief("lastAction", pyson.Literal(action.get("type")))
+            self._set_belief("lastActionResult", pyson.Literal(action.get("result")))
+            # TODO: Action parameters
+        else:
+            self._replace_beliefs(("lastAction", 1), [])
+            self._replace_beliefs(("lastActionResult", 1), [])
 
         # Update carried items.
         carried_items = []
@@ -203,3 +210,25 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self._replace_beliefs(("item", 2), carried_items)
 
         # TODO: Waypoints
+
+        # Update entities.
+        entities = []
+        for entity in req.findall("entity"):
+            entities.append(
+                pyson.Literal("entity",
+                    (pyson.Literal(entity.get("name")), entity.get("team"),
+                     float(entity.get("lat")), float(entity.get("lon")),
+                     pyson.Literal(entity.get("role").lower()))))
+        self._replace_beliefs(("entity", 5), entities)
+
+        # TODO: Entities
+
+        # TODO: Charging station pecepts
+
+        # TODO: Shop percepts
+
+        # TODO: Storage percepts
+
+        # TODO: Workshop percepts
+
+        # TODO: Job percepts
