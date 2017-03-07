@@ -225,9 +225,16 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # TODO: Charging station pecepts
 
-        # TODO: Shop percepts
-
-        # TODO: Storage percepts
+        # Update storage percepts.
+        storages = []
+        for storage in req.findall("storage"):
+            storage_items = tuple() # TODO: Stored items
+            storages.append(
+                pyson.Literal("storage", (
+                    storage.get("name"), float(storage.get("lat")), float(storage.get("lon")),
+                    int(storage.get("totalCapacity")), int(storage.get("usedCapacity")),
+                    storage_items), PERCEPT_TAG))
+        self._replace_beliefs(("storage", 6), storages)
 
         # Update workshops.
         workshops = []
