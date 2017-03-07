@@ -18,9 +18,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def __init__(self):
         super(Agent, self).__init__()
 
-    def connect(self, username, password, host="localhost", port=12300):
+    def connect(self, name, password, host="localhost", port=12300):
         self.action_id = None
-        self.username = username
+        self.name = name
         self.password = password
 
         loop = asyncio.get_event_loop()
@@ -39,7 +39,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     @actions.add(".skip", 0)
     def _skip(self, term, intention):
         if self.action_id is None:
-            LOGGER.warning("%s already did an action in this step", self.username)
+            LOGGER.warning("%s already did an action in this step", self.name)
             return
 
         message = etree.Element("message")
@@ -50,18 +50,18 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
     def send_message(self, message):
         xml = etree.tostring(message)
-        LOGGER.debug("%s >> %s", self.username, xml.decode("utf-8"))
+        LOGGER.debug("%s >> %s", self.name, xml.decode("utf-8"))
         self.transport.write(xml + b"\0")
 
     def connection_made(self, transport):
-        LOGGER.info("socket for %s connected", self.username)
+        LOGGER.info("socket for %s connected", self.name)
 
         self.transport = transport
         self.buffer = b""
 
         # Authenticate
         message = etree.Element("message")
-        etree.SubElement(message, "auth-request", username=self.username, password=self.password)
+        etree.SubElement(message, "auth-request", username=self.name, password=self.password)
         self.send_message(message)
 
     def connection_lost(self, exc):
@@ -70,7 +70,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.call(
             pyson.Trigger.removal,
             pyson.GoalType.belief,
-            pyson.Literal("connected", (self.username, )),
+            pyson.Literal("connected", (self.name, )),
             pyson.runtime.Intention())
 
         self.run()
@@ -79,7 +79,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.buffer += data
         while b"\0" in self.buffer:
             xml, self.buffer = self.buffer.split(b"\0", 1)
-            LOGGER.debug("%s << %s", self.username, xml.decode("utf-8"))
+            LOGGER.debug("%s << %s", self.name, xml.decode("utf-8"))
             self.message_received(etree.fromstring(xml))
 
     def message_received(self, message):
@@ -115,9 +115,9 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
     def handle_auth_response(self, response):
         if response.get("result") != "ok":
-            LOGGER.error("auth response for %s: %r", self.username, response.get("result"))
+            LOGGER.error("auth response for %s: %r", self.name, response.get("result"))
         else:
-            self._set_belief("connected", self.username)
+            self._set_belief("connected", self.name)
 
 
     def handle_sim_start(self, simulation):
@@ -146,7 +146,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         req = message[0]
 
         if self.action_id is not None:
-            LOGGER.warning("%s: action id %d was not used", self.username, self.action_id)
+            LOGGER.warning("%s: action id %d was not used", self.name, self.action_id)
         self.action_id = int(req.get("id"))
 
         self._set_belief("timestamp", int(message.get("timestamp")))
