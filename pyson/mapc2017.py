@@ -133,8 +133,8 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.Literal(role.get("name").lower()),
             int(role.get("speed")),
             int(role.get("load")),
-            int(role.get("battery")))
-        # TODO: Eismassim was also passing some tools?
+            int(role.get("battery")),
+            tuple(pyson.Literal(tool.text) for tool in role.findall("tool")))
 
         # TODO: Add item percepts
 
