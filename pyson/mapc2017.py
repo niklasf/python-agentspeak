@@ -244,11 +244,17 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         # Update shops.
         shops = []
         for shop in req.findall("shop"):
-            shop_items = tuple() # TODO: Shop items
+            shop_items = []
+            for item in shop.findall("item"):
+                shop_items.append(
+                    pyson.Literal("item", (
+                        item.get("name"),
+                        int(item.get("price")),
+                        int(item.get("amount")))))
             shops.append(
                 pyson.Literal("shop", (
                     shop.get("name"), float(shop.get("lat")), float(shop.get("lon")),
-                    int(shop.get("restock")), shop_items), PERCEPT_TAG))
+                    int(shop.get("restock")), tuple(shop_items)), PERCEPT_TAG))
         self._replace_beliefs(("shop", 5), shops)
 
         # Update storage percepts.
