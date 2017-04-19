@@ -260,12 +260,18 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         # Update storage percepts.
         storages = []
         for storage in req.findall("storage"):
-            storage_items = tuple() # TODO: Stored items
+            storage_items = []
+            for item in storage.findall("item"):
+                storage_items.append(
+                    pyson.Literal("item", (
+                        item.get("name"),
+                        int(item.get("stored")),
+                        int(item.get("delivered")))))
             storages.append(
                 pyson.Literal("storage", (
                     storage.get("name"), float(storage.get("lat")), float(storage.get("lon")),
                     int(storage.get("totalCapacity")), int(storage.get("usedCapacity")),
-                    storage_items), PERCEPT_TAG))
+                    tuple(storage_items)), PERCEPT_TAG))
         self._replace_beliefs(("storage", 6), storages)
 
         # Update workshops.
