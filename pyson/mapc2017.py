@@ -241,6 +241,16 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     PERCEPT_TAG))
         self._replace_beliefs(("dump", 4), dumps)
 
+        # Update shops.
+        shops = []
+        for shop in req.findall("shop"):
+            shop_items = tuple() # TODO: Shop items
+            shops.append(
+                pyson.Literal("shop", (
+                    shop.get("name"), float(shop.get("lat")), float(shop.get("lon")),
+                    int(shop.get("restock")), shop_items), PERCEPT_TAG))
+        self._replace_beliefs(("shop", 5), shops)
+
         # Update storage percepts.
         storages = []
         for storage in req.findall("storage"):

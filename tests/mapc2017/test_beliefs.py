@@ -6,8 +6,9 @@ import os.path
 
 from lxml import etree
 
-import pyson.mapc2017
+import pyson
 import pyson.runtime
+import pyson.mapc2017
 
 
 class BeliefTest(unittest.TestCase):
@@ -18,6 +19,10 @@ class BeliefTest(unittest.TestCase):
             agent.message_received(etree.parse(xml).getroot())
 
         term = pyson.Literal("money", (50000, ))
+        intention = pyson.runtime.Intention()
+        self.assertTrue(agent.test_belief(term, intention))
+
+        term = pyson.Literal("shop", ("shop1", 48.8217, 2.33207, 4, pyson.Var()))
         intention = pyson.runtime.Intention()
         self.assertTrue(agent.test_belief(term, intention))
 
