@@ -40,53 +40,39 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         asyncio.get_event_loop().stop()
         yield
 
-    @actions.add(".action", 1)
-    def _action(self, term, intention):
-        if self.action_id is None:
-            LOGGER.warning("%s already did an action in this step", self.name)
-            return
-
-        message = etree.Element("message")
-        etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
-        self.send_message(message)
-        self.action_id = None
-        yield
-
-    @actions.add(".action", 2)
-    def _action(self, term, intention):
-        if self.action_id is None:
-            LOGGER.warning("%s already did an action in this step", self.name)
-            return
-
-        message = etree.Element("message")
-        action = etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
-        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[1], intention.scope))
-        self.send_message(message)
-        self.action_id = None
-        yield
-
-    @actions.add(".action", 3)
-    def _action(self, term, intention):
-        if self.action_id is None:
-            LOGGER.warning("%s already did an action in this step", self.name)
-            return
-
-        message = etree.Element("message")
-        action = etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
-        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[1], intention.scope))
-        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[2], intention.scope))
-        self.send_message(message)
-        self.action_id = None
-        yield
-
+    @actions.add(".goto", 0)
+    @actions.add(".goto", 1)
+    @actions.add(".goto", 2)
+    @actions.add(".give", 3)
+    @actions.add(".receive", 0)
+    @actions.add(".store", 2)
+    @actions.add(".retrieve", 2)
+    @actions.add(".retrieve_delivered", 2)
+    @actions.add(".assemble", 1)
+    @actions.add(".assist_assemble", 1)
+    @actions.add(".buy", 2)
+    @actions.add(".deliver_job", 1)
+    @actions.add(".bid_for_job", 2)
+    @actions.add(".post_job")
+    @actions.add(".dump", 2)
+    @actions.add(".charge", 0)
+    @actions.add(".recharge", 0)
+    @actions.add(".continue", 0)
     @actions.add(".skip", 0)
-    def _skip(self, term, intention):
+    @actions.add(".abort", 0)
+    @actions.add(".unknownAction", 0)
+    @actions.add(".randomFail", 0)
+    @actions.add(".noAction", 0)
+    @actions.add(".gather", 0)
+    def _mapc_action(self, term, intention):
         if self.action_id is None:
             LOGGER.warning("%s already did an action in this step", self.name)
             return
 
         message = etree.Element("message")
-        etree.SubElement(message, "action", type="skip", id=str(self.action_id))
+        action = etree.SubElement(message, "action", type=term.functor.lstrip("."), id=str(self.action_id))
+        for param in term.args:
+            etree.SubElement(action, "p").text = str(pyson.grounded(param, intention.scope))
         self.send_message(message)
         self.action_id = None
         yield
