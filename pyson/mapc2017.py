@@ -40,6 +40,45 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         asyncio.get_event_loop().stop()
         yield
 
+    @actions.add(".action", 1)
+    def _action(self, term, intention):
+        if self.action_id is None:
+            LOGGER.warning("%s already did an action in this step", self.name)
+            return
+
+        message = etree.Element("message")
+        etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
+        self.send_message(message)
+        self.action_id = None
+        yield
+
+    @actions.add(".action", 2)
+    def _action(self, term, intention):
+        if self.action_id is None:
+            LOGGER.warning("%s already did an action in this step", self.name)
+            return
+
+        message = etree.Element("message")
+        action = etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
+        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[1], intention.scope))
+        self.send_message(message)
+        self.action_id = None
+        yield
+
+    @actions.add(".action", 3)
+    def _action(self, term, intention):
+        if self.action_id is None:
+            LOGGER.warning("%s already did an action in this step", self.name)
+            return
+
+        message = etree.Element("message")
+        action = etree.SubElement(message, "action", type=term.args[0], id=str(self.action_id))
+        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[1], intention.scope))
+        etree.SubElement(action, "p").text = str(pyson.evaluate(term.args[2], intention.scope))
+        self.send_message(message)
+        self.action_id = None
+        yield
+
     @actions.add(".skip", 0)
     def _skip(self, term, intention):
         if self.action_id is None:
@@ -288,14 +327,14 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         auctions = []
         for job in req.findall("job"):
             required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
-                             for item in job.findall("item"))
+                             for item in job.findall("required"))
 
             # TODO: Auctions
 
             jobs.append(
                 pyson.Literal("job", (
-                    job.get("id"), job.get("storage"),
-                    int(job.get("reward")), int(job.get("end")), required),
+                    job.get("id"), job.get("storage"), int(job.get("reward")),
+                    int(job.get("start")),int(job.get("end")), required),
                     PERCEPT_TAG))
         self._replace_beliefs(("jobs", 5), jobs)
         self._replace_beliefs(("jobs", 9), auctions)
