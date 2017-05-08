@@ -930,7 +930,6 @@ def parse_agent(tokens, log, included_files, directive=None):
                     log.info("missing '.' after this rule", loc=ast_node.loc)
                     raise log.error("expected '.' after rule, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[ast_node.loc])
                 agent.rules.append(ast_node)
-                #rules_in_file += 1
             else:
                 if tok.lexeme != ".":
                     log.info("missing '.' after this belief", loc=ast_node.loc)

@@ -760,10 +760,10 @@ class Actions(object):
     def add(self, functor, arity=None, f=None):
         def _add(f):
             if arity is None:
-                assert functor not in self.variadic_actions
+                assert functor not in self.variadic_actions, "%s/* already exists" % (functor, )
                 self.variadic_actions[functor] = f
             else:
-                assert (functor, arity) not in self.actions
+                assert (functor, arity) not in self.actions, "%s/%d already exists" % (functor, arity)
                 self.actions[(functor, arity)] = f
             return f
 

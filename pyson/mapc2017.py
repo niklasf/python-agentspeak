@@ -40,14 +40,39 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         asyncio.get_event_loop().stop()
         yield
 
+    @actions.add(".goto", 0)
+    @actions.add(".goto", 1)
+    @actions.add(".goto", 2)
+    @actions.add(".give", 3)
+    @actions.add(".receive", 0)
+    @actions.add(".store", 2)
+    @actions.add(".retrieve", 2)
+    @actions.add(".retrieve_delivered", 2)
+    @actions.add(".assemble", 1)
+    @actions.add(".assist_assemble", 1)
+    @actions.add(".buy", 2)
+    @actions.add(".deliver_job", 1)
+    @actions.add(".bid_for_job", 2)
+    @actions.add(".post_job")
+    @actions.add(".dump", 2)
+    @actions.add(".charge", 0)
+    @actions.add(".recharge", 0)
+    @actions.add(".continue", 0)
     @actions.add(".skip", 0)
-    def _skip(self, term, intention):
+    @actions.add(".abort", 0)
+    @actions.add(".unknownAction", 0)
+    @actions.add(".randomFail", 0)
+    @actions.add(".noAction", 0)
+    @actions.add(".gather", 0)
+    def _mapc_action(self, term, intention):
         if self.action_id is None:
             LOGGER.warning("%s already did an action in this step", self.name)
             return
 
         message = etree.Element("message")
-        etree.SubElement(message, "action", type="skip", id=str(self.action_id))
+        action = etree.SubElement(message, "action", type=term.functor.lstrip("."), id=str(self.action_id))
+        for param in term.args:
+            etree.SubElement(action, "p").text = str(pyson.grounded(param, intention.scope))
         self.send_message(message)
         self.action_id = None
         yield
@@ -241,15 +266,37 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     PERCEPT_TAG))
         self._replace_beliefs(("dump", 4), dumps)
 
+        # Update shops.
+        shops = []
+        for shop in req.findall("shop"):
+            shop_items = []
+            for item in shop.findall("item"):
+                shop_items.append(
+                    pyson.Literal("item", (
+                        item.get("name"),
+                        int(item.get("price")),
+                        int(item.get("amount")))))
+            shops.append(
+                pyson.Literal("shop", (
+                    shop.get("name"), float(shop.get("lat")), float(shop.get("lon")),
+                    int(shop.get("restock")), tuple(shop_items)), PERCEPT_TAG))
+        self._replace_beliefs(("shop", 5), shops)
+
         # Update storage percepts.
         storages = []
         for storage in req.findall("storage"):
-            storage_items = tuple() # TODO: Stored items
+            storage_items = []
+            for item in storage.findall("item"):
+                storage_items.append(
+                    pyson.Literal("item", (
+                        item.get("name"),
+                        int(item.get("stored")),
+                        int(item.get("delivered")))))
             storages.append(
                 pyson.Literal("storage", (
                     storage.get("name"), float(storage.get("lat")), float(storage.get("lon")),
                     int(storage.get("totalCapacity")), int(storage.get("usedCapacity")),
-                    storage_items), PERCEPT_TAG))
+                    tuple(storage_items)), PERCEPT_TAG))
         self._replace_beliefs(("storage", 6), storages)
 
         # Update workshops.
@@ -266,14 +313,14 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         auctions = []
         for job in req.findall("job"):
             required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
-                             for item in job.findall("item"))
+                             for item in job.findall("required"))
 
             # TODO: Auctions
 
             jobs.append(
                 pyson.Literal("job", (
-                    job.get("id"), job.get("storage"),
-                    int(job.get("reward")), int(job.get("end")), required),
+                    job.get("id"), job.get("storage"), int(job.get("reward")),
+                    int(job.get("start")),int(job.get("end")), required),
                     PERCEPT_TAG))
         self._replace_beliefs(("jobs", 5), jobs)
         self._replace_beliefs(("jobs", 9), auctions)

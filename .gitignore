@@ -1,0 +1,7 @@
+*.py[cod]
+*~
+.tox
+
+pyson.egg-info/
+
+venv*/
