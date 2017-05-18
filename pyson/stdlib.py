@@ -102,9 +102,7 @@ def _fail(agent, term, intention):
 
 @actions.add(".my_name", 1)
 def _my_name(agent, term, intention):
-    name = hex(id(agent))
-
-    if pyson.unify(term.args[0], name, intention.scope, intention.stack):
+    if pyson.unify(term.args[0], agent.name, intention.scope, intention.stack):
         yield
 
 

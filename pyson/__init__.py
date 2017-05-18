@@ -261,6 +261,18 @@ class BinaryOp(enum.Enum):
     op_or        = Operator("|", operator.__or__, boolean=True, query=True)
 
 
+KEYWORDS = ["true", "false", "not", "div", "mod", "if", "else", "while", "for",
+            "include", "begin", "end"]
+
+def sanitize_functor(s):
+    """Transliterates s into a valid functor."""
+    alnum = "".join(ch if ch.isalnum() else "_" for ch in s).lstrip("_")
+    functor = alnum[:1].lower() + alnum[1:] if alnum else ""
+    while functor in KEYWORDS:
+        functor += "_"
+    return functor
+
+
 def parse_string(s):
     """Parses a double quoted string."""
     assert s.startswith("\"") and s.endswith("\"")

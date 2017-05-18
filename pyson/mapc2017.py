@@ -17,6 +17,10 @@ actions = pyson.Actions(pyson.ext_stdlib.actions)
 PERCEPT_TAG = frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))])
 
 
+class Environment(pyson.runtime.Environment):
+    pass
+
+
 class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def __init__(self):
         super(Agent, self).__init__()

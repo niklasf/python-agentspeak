@@ -23,6 +23,7 @@ import collections
 import copy
 import functools
 import time
+import os.path
 
 import pyson
 import pyson.parser
@@ -299,7 +300,9 @@ class Intention:
 
 
 class Agent:
-    def __init__(self, beliefs=None, rules=None, plans=None):
+    def __init__(self, name, beliefs=None, rules=None, plans=None):
+        self.name = name
+
         self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
         self.rules = collections.defaultdict(lambda: []) if rules is None else rules
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
@@ -470,14 +473,28 @@ class Agent:
 
 
 class Environment:
-    def build_agent(self, source, actions, agent_cls=Agent):
+    def __init__(self):
+        self.agents = {}
+
+    def _make_name(self, path):
+        base_name = pyson.sanitize_functor(os.path.splitext(os.path.basename(path))[0])
+        if not base_name:
+            base_name = "agent"
+        name = base_name
+        i = 1
+        while name in self.agents:
+            name = base_name + str(i)
+            i += 1
+        return name
+
+    def _build_agent(self, source, actions, agent_cls=Agent):
         # Parse source.
         log = pyson.Log(LOGGER, 3)
         tokens = pyson.lexer.TokenStream(source, log)
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
-        agent = agent_cls()
+        agent = agent_cls(self._make_name(source.name))
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
@@ -522,15 +539,20 @@ class Environment:
 
         return agent
 
+    def build_agent(self, source, actions, agent_cls=Agent):
+        agent = self._build_agent(source, actions, agent_cls)
+        self.agents[agent.name] = agent
+        return agent
+
     def build_agents(self, source, n, actions, agent_cls=Agent):
-        prototype_agent = self.build_agent(source, actions, agent_cls=agent_cls)
+        prototype_agent = self._build_agent(source, actions, agent_cls=agent_cls)
 
         # Create more instances from the prototype, but with their own
         # callstacks. This is more efficient than making complete deep copies.
         agents = [prototype_agent] if n > 0 else []
 
         while len(agents) < n:
-            agent = agent_cls(
+            agent = agent_cls(self._make_name(source.name),
                 copy.copy(prototype_agent.beliefs),
                 copy.copy(prototype_agent.rules),
                 copy.copy(prototype_agent.plans))
@@ -541,6 +563,7 @@ class Environment:
                            term, {}, delayed=True)
 
             agents.append(agent)
+            self.agents[agent.name] = agent
 
         return agents
 
