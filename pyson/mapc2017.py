@@ -22,8 +22,8 @@ class Environment(pyson.runtime.Environment):
 
 
 class Agent(pyson.runtime.Agent, asyncio.Protocol):
-    def __init__(self):
-        super(Agent, self).__init__()
+    def __init__(self, env, name):
+        super(Agent, self).__init__(env, name)
         self.action_id = None
 
     def connect(self, name, password, host="localhost", port=12300):
@@ -106,7 +106,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             pyson.Literal("connected", (self.name, )),
             pyson.runtime.Intention())
 
-        self.run()
+        self.env.run()
 
     def data_received(self, data):
         self.buffer += data
@@ -127,7 +127,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         else:
             LOGGER.error("unknown message type: %r", message.get("type"))
 
-        self.run()
+        self.env.run()
 
     def _set_belief(self, name, *args):
         term = pyson.Literal(name, tuple(args), PERCEPT_TAG)
