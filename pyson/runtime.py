@@ -538,19 +538,22 @@ class Environment:
         # Report errors.
         log.throw()
 
+        self.agents[agent.name] = agent
         return ast_agent, agent
 
     def build_agent(self, source, actions, agent_cls=Agent):
         _, agent = self._build_agent(source, actions, agent_cls)
-        self.agents[agent.name] = agent
         return agent
 
     def build_agents(self, source, n, actions, agent_cls=Agent):
+        if n <= 0:
+            return []
+
         ast_agent, prototype_agent = self._build_agent(source, actions, agent_cls=agent_cls)
 
         # Create more instances from the prototype, but with their own
         # callstacks. This is more efficient than making complete deep copies.
-        agents = [prototype_agent] if n > 0 else []
+        agents = [prototype_agent]
 
         while len(agents) < n:
             agent = agent_cls(self, self._make_name(source.name),
