@@ -83,13 +83,8 @@ def _print(agent, term, intention, _color_map={}, _current_color=[0]):
     memo = {}
     text = " ".join(pyson_str(pyson.freeze(t, intention.scope, memo)) for t in term.args)
 
-    try:
-        name = agent.name
-    except AttributeError:
-        name = hex(id(agent))
-
     with colorama.colorama_text():
-        print(color[0], color[1], name, colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
+        print(color[0], color[1], agent.name, colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
 
     yield
 

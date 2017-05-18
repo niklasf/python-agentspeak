@@ -300,7 +300,7 @@ class Intention:
 
 
 class Agent:
-    def __init__(self, name, beliefs=None, rules=None, plans=None):
+    def __init__(self, env, name, beliefs=None, rules=None, plans=None):
         self.name = name
 
         self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
@@ -494,7 +494,7 @@ class Environment:
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
-        agent = agent_cls(self._make_name(source.name))
+        agent = agent_cls(self, self._make_name(source.name))
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
@@ -552,7 +552,7 @@ class Environment:
         agents = [prototype_agent] if n > 0 else []
 
         while len(agents) < n:
-            agent = agent_cls(self._make_name(source.name),
+            agent = agent_cls(self, self._make_name(source.name),
                 copy.copy(prototype_agent.beliefs),
                 copy.copy(prototype_agent.rules),
                 copy.copy(prototype_agent.plans))
@@ -789,9 +789,9 @@ def repl(agent, env, actions):
 
             try:
                 if not tokens:
-                    line = pyson.util.prompt("%s >>> " % hex(id(agent)))
+                    line = pyson.util.prompt("%s >>> " % agent.name)
                 else:
-                    line = pyson.util.prompt("%s ... " % hex(id(agent)))
+                    line = pyson.util.prompt("%s ... " % agent.name)
             except KeyboardInterrupt:
                 print()
                 sys.exit(0)
@@ -840,7 +840,7 @@ def main(post_repl=True):
                         repl(agent, env, pyson.ext_stdlib.actions)
                     break
         elif sys.stdin.isatty():
-            agent = Agent()
+            agent = Agent(env, "stdin")
             repl(agent, env, pyson.ext_stdlib.actions)
         else:
             env.run_agent(env.build_agent(sys.stdin, pyson.ext_stdlib.actions))
