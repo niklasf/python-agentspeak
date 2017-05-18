@@ -301,6 +301,7 @@ class Intention:
 
 class Agent:
     def __init__(self, env, name, beliefs=None, rules=None, plans=None):
+        self.env = env
         self.name = name
 
         self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
@@ -537,15 +538,15 @@ class Environment:
         # Report errors.
         log.throw()
 
-        return agent
+        return ast_agent, agent
 
     def build_agent(self, source, actions, agent_cls=Agent):
-        agent = self._build_agent(source, actions, agent_cls)
+        _, agent = self._build_agent(source, actions, agent_cls)
         self.agents[agent.name] = agent
         return agent
 
     def build_agents(self, source, n, actions, agent_cls=Agent):
-        prototype_agent = self._build_agent(source, actions, agent_cls=agent_cls)
+        ast_agent, prototype_agent = self._build_agent(source, actions, agent_cls=agent_cls)
 
         # Create more instances from the prototype, but with their own
         # callstacks. This is more efficient than making complete deep copies.
@@ -576,6 +577,14 @@ class Environment:
             if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
                 time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - time.time())
                 more_work = True
+
+    def run(self):
+        maybe_more_work = True
+        while maybe_more_work:
+            maybe_more_work = False
+            for agent in self.agents.values():
+                if agent.step():
+                    maybe_more_work = True
 
     def shutdown(self):
         sys.exit(1)

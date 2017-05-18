@@ -32,7 +32,6 @@ from pyson import pyson_str
 
 # TODO:
 # * Communication
-#   - .broadcast
 #   - .send
 # * Plan Library Manipulation
 #   - .add_plan
@@ -61,6 +60,24 @@ from pyson import pyson_str
 
 
 actions = pyson.Actions()
+
+
+@actions.add(".broadcast", 2)
+def _broadcast(agent, term, intention):
+    ilf = term.args[0]
+    message = pyson.freeze(term.args[1], intention.scope, {})
+
+    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
+    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+
+    for receiver in agent.env.agents.values():
+        if receiver == agent:
+            continue
+
+        receiver.call(pyson.Trigger.addition, pyson.GoalType.belief,
+                      tagged_message, pyson.runtime.Intention())
+
+    yield
 
 
 COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
