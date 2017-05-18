@@ -64,7 +64,16 @@ actions = pyson.Actions()
 
 @actions.add(".broadcast", 2)
 def _broadcast(agent, term, intention):
-    ilf = term.args[0]
+    ilf = pyson.grounded(term.args[0], intention.scope)
+    if not pyson.is_atom(ilf):
+        return
+    if ilf.functor == "tell":
+        goal_type = pyson.GoalType.belief
+    elif ilf.functor == "achieve":
+        goal_type = pyson.GoalType.achievement
+    else:
+        return
+
     message = pyson.freeze(term.args[1], intention.scope, {})
 
     source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
@@ -74,7 +83,7 @@ def _broadcast(agent, term, intention):
         if receiver == agent:
             continue
 
-        receiver.call(pyson.Trigger.addition, pyson.GoalType.belief,
+        receiver.call(pyson.Trigger.addition, goal_type,
                       tagged_message, pyson.runtime.Intention())
 
     yield
