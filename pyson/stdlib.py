@@ -31,8 +31,6 @@ from pyson import pyson_str
 
 
 # TODO:
-# * Communication
-#   - .send
 # * Plan Library Manipulation
 #   - .add_plan
 #   - .plan_label
@@ -64,6 +62,7 @@ actions = pyson.Actions()
 
 @actions.add(".broadcast", 2)
 def _broadcast(agent, term, intention):
+    # Illocutionary force.
     ilf = pyson.grounded(term.args[0], intention.scope)
     if not pyson.is_atom(ilf):
         return
@@ -72,17 +71,58 @@ def _broadcast(agent, term, intention):
     elif ilf.functor == "achieve":
         goal_type = pyson.GoalType.achievement
     else:
-        return
+        raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
 
+    # Prepare message.
     message = pyson.freeze(term.args[1], intention.scope, {})
-
     source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
     tagged_message = pyson.Literal(message.functor, message.args, source_tag)
 
+    # Broadcast.
     for receiver in agent.env.agents.values():
         if receiver == agent:
             continue
 
+        receiver.call(pyson.Trigger.addition, goal_type,
+                      tagged_message, pyson.runtime.Intention())
+
+    yield
+
+
+@actions.add(".send", 3)
+def _send(agent, term, intention):
+    # Find the receivers: By a string, atom or list of strings or atoms.
+    receivers = pyson.grounded(term.args[0], intention.scope)
+    if not pyson.is_list(receivers):
+        receivers = [receivers]
+
+    receiving_agents = []
+    for receiver in receivers:
+        if receiver.is_atom():
+            receiving_agents.append(agent.env.agents[receiver.functor])
+        else:
+            receiving_agents.append(agent.env.agents[receiver])
+
+    # Illocutionary force.
+    ilf = pyson.grounded(term.args[1], intention.scope)
+    if not pyson.is_atom(ilf):
+        return
+    if ilf.functor == "tell":
+        goal_type = pyson.GoalType.belief
+    elif ilf.functor == "achieve":
+        goal_type = pyson.GoalType.achievement
+    else:
+        raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
+
+    # TODO: untell, unachieve, askOne, askAll, tellHow, untellHow, askHow
+
+    # Prepare message.
+    message = pyson.freeze(term.args[2], intention.scope, {})
+    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
+    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+
+    # Broadcast.
+    for receiver in receiving_agents:
         receiver.call(pyson.Trigger.addition, goal_type,
                       tagged_message, pyson.runtime.Intention())
 
