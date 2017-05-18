@@ -5,13 +5,13 @@ from lxml import etree
 
 import pyson
 import pyson.runtime
-import pyson.stdlib
+import pyson.ext_stdlib
 
 
 LOGGER = pyson.get_logger(__name__)
 
 
-actions = pyson.Actions(pyson.stdlib.actions)
+actions = pyson.Actions(pyson.ext_stdlib.actions)
 
 
 PERCEPT_TAG = frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))])

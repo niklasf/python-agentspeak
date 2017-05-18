@@ -804,23 +804,23 @@ def repl(agent, env, actions):
 
 
 def main(post_repl=True):
-    import pyson.stdlib
+    import pyson.ext_stdlib
     env = Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
-                    agent = env.build_agent(source, pyson.stdlib.actions)
+                    agent = env.build_agent(source, pyson.ext_stdlib.actions)
                     env.run_agent(agent)
                     if post_repl:
-                        repl(agent, env, pyson.stdlib.actions)
+                        repl(agent, env, pyson.ext_stdlib.actions)
                     break
         elif sys.stdin.isatty():
             agent = Agent()
-            repl(agent, env, pyson.stdlib.actions)
+            repl(agent, env, pyson.ext_stdlib.actions)
         else:
-            env.run_agent(env.build_agent(sys.stdin, pyson.stdlib.actions))
+            env.run_agent(env.build_agent(sys.stdin, pyson.ext_stdlib.actions))
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
