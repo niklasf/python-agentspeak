@@ -785,6 +785,9 @@ class Actions(object):
 
             return self.add(functor, len(arg_specs) + 1, wrapper)
 
+        # Marker for the optimizer
+        _add_function.is_function = True
+
         if f is None:
             return _add_function
         else:
@@ -801,6 +804,9 @@ class Actions(object):
 
             return self.add(functor, len(arg_specs), wrapper)
 
+        # Marker for the optimizer
+        _add_procedure.is_procedure = True
+        
         if f is None:
             return _add_procedure
         else:
@@ -816,6 +822,9 @@ class Actions(object):
                     yield
 
             return self.add(functor, len(arg_specs), wrapper)
+
+        # Marker for the optimizer
+        _add_predicate.is_procedure = True
 
         if f is None:
             return _add_predicate

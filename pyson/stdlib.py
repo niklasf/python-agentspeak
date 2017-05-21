@@ -29,6 +29,8 @@ import collections
 
 from pyson import pyson_str
 
+import pyson.optimizer
+
 
 # TODO:
 # * Communication
@@ -72,6 +74,7 @@ COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
 
 
 @actions.add(".print")
+@pyson.optimizer.no_scope_effects
 def _print(agent, term, intention, _color_map={}, _current_color=[0]):
     if agent in _color_map:
         color = _color_map[agent]
@@ -95,12 +98,14 @@ def _print(agent, term, intention, _color_map={}, _current_color=[0]):
 
 
 @actions.add(".fail", 0)
+@pyson.optimizer.no_scope_effects
 def _fail(agent, term, intention):
     return
     yield
 
 
 @actions.add(".my_name", 1)
+@pyson.optimizer.function_like
 def _my_name(agent, term, intention):
     name = hex(id(agent))
 
@@ -109,6 +114,7 @@ def _my_name(agent, term, intention):
 
 
 @actions.add(".concat")
+@pyson.optimizer.function_like
 def _concat(agent, term, intention):
     args = [pyson.grounded(arg, intention.scope) for arg in term.args[:-1]]
 
@@ -122,7 +128,6 @@ def _concat(agent, term, intention):
 
 
 actions.add_function(".random", (), random.random)
-
 
 actions.add_function(".min", (tuple, ), min)
 actions.add_function(".max", (tuple, ), max)
@@ -141,6 +146,7 @@ def _sort(l):
 
 
 @actions.add(".substring", 3)
+@pyson.optimizer.function_like
 def _substring(agent, term, intention):
     needle = pyson_str(pyson.grounded(term.args[0], intention.scope))
     haystack = pyson_str(pyson.grounded(term.args[1], intention.scope))
@@ -159,6 +165,7 @@ def _substring(agent, term, intention):
 
 
 @actions.add(".member", 2)
+@pyson.optimizer.function_like
 def _member(agent, term, intention):
     choicepoint = object()
 
@@ -180,12 +187,14 @@ actions.add_predicate(".structure", (None, ), pyson.is_structure)
 
 
 @actions.add(".ground", 1)
+@pyson.optimizer.no_scope_effects
 def _ground(agent, term, intention):
     if pyson.is_ground(term, intention.scope):
         yield
 
 
 @actions.add(".findall", 3)
+@pyson.optimizer.function_like
 def _findall(agent, term, intention):
     pattern = pyson.evaluate(term.args[0], intention.scope)
     query = pyson.runtime.TermQuery(term.args[1])
@@ -201,6 +210,7 @@ def _findall(agent, term, intention):
 
 
 @actions.add(".count", 2)
+@pyson.optimizer.function_like
 def _count(agent, term, intention):
     lookup = pyson.evaluate(term.args[0], intention.scope)
     relevant_beliefs = agent.beliefs[lookup.literal_group()]
@@ -216,6 +226,10 @@ def _count(agent, term, intention):
 
 
 @actions.add(".date", 3)
+@pyson.optimizer.side_effect(
+    pyson.optimizer.InferenceEvilnessConst.AFFECT_PARAM_ALL,
+    pyson.optimizer.InferenceEvilnessConst.EFFECT_DOBIND
+)
 def _date(agent, term, intention):
     date = datetime.datetime.now()
 
@@ -227,6 +241,10 @@ def _date(agent, term, intention):
 
 
 @actions.add(".time", 3)
+@pyson.optimizer.side_effect(
+    pyson.optimizer.InferenceEvilnessConst.AFFECT_PARAM_ALL,
+    pyson.optimizer.InferenceEvilnessConst.EFFECT_DOBIND
+)
 def _time(agent, term, intention):
     time = datetime.datetime.now()
 
@@ -238,6 +256,7 @@ def _time(agent, term, intention):
 
 
 @actions.add(".wait", 1)
+@pyson.optimizer.all_bound
 def _wait(agent, term, intention):
     millis = pyson.grounded(term.args[0], intention.scope)
     intention.wait_until = time.time() + millis / 1000
@@ -248,6 +267,7 @@ def _wait(agent, term, intention):
 
 
 @actions.add(".range", 2)
+@pyson.optimizer.function_like
 def _range_2(agent, term, intention):
     choicepoint = object()
 
@@ -261,18 +281,24 @@ def _range_2(agent, term, intention):
 
 
 @actions.add(".dump", 0)
+@pyson.optimizer.no_scope_effects
 def _dump(agent, term, intention):
     agent.dump()
     yield
 
 
 @actions.add(".unbind_all", 0)
+@pyson.optimizer.side_effect(
+    pyson.optimizer.InferenceEvilnessConst.AFFECT_SCOPE,
+    pyson.optimizer.InferenceEvilnessConst.EFFECT_UNBIND
+)
 def _unbind_all(agent, term, intention):
     intention.scope.clear()
     yield
 
 
 @actions.add(".control_flow", 0)
+@pyson.optimizer.no_scope_effects
 def _control_flow(agent, term, intention):
     out = open("control_flow.dot", "w")
     print("digraph control_flow {", file=out)
@@ -299,3 +325,7 @@ def _control_flow(agent, term, intention):
     out.close()
     print("Graph dumped to control_flow.dot")
     yield
+
+
+# Add the actions used by the optimizer as markers
+pyson.optimizer.init_optimizer_actions(actions)

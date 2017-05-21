@@ -477,6 +477,10 @@ class Environment:
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
+        return self.build_agent_from_ast(ast_agent, actions, agent_cls)
+    
+    def build_agent_from_ast(self, ast_agent, actions, agent_cls=Agent):
+        log = pyson.Log(LOGGER, 3)
         agent = agent_cls()
 
         # Add rules to agent prototype.

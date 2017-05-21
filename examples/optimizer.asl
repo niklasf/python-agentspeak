@@ -135,5 +135,9 @@
     p[1] = p; /* warning */
     p(X+1)[X+2, w(X+3)] = p(X+3)[X+4, w(X+5)]; /* split */
     
+    /* standard library */
+    Ia = 5;
+    .unbind_all;
+    .print(Ia); /* nothing, Ia considered unproven */
 
     true.

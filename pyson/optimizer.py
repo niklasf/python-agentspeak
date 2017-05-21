@@ -13,6 +13,7 @@ import re
 
 import pyson.lexer
 import pyson.parser
+import pyson.runtime
 
 from pyson import FormulaType, BinaryOp, UnaryOp
 from pyson.parser import (AstNode, AstLiteral, AstVariable, AstConst, AstBinaryOp, AstUnaryOp,
@@ -287,13 +288,13 @@ class CallbackReverseVisitor(CallbackVisitor):
 class DefaultCallback(object):
     @classmethod
     def apply(cls, ast_node, *a):
-        return ast_node.accept(CallbackVisitor(cls(*a)))
+        return CallbackVisitor(cls(*a)).resolve_single(ast_node)
 
     def __init__(self):
         self.visitor_parent = None
         
-    def pre_ast_node(self, type, ast_obj): pass
-    def on_ast_node (self, type, ast_obj): pass
+    def pre_ast_node(self, type, ast_obj): return
+    def on_ast_node (self, type, ast_obj): return _IAC.KEEP_CURRENT
 
 class TypedCallback(DefaultCallback):
     def on_ast_node (self, type, ast_obj):
@@ -546,8 +547,12 @@ class InferenceEvilnessConst(object):
         return (cls._AFFECT_PARAM, par, par)
     
     @classmethod
-    def AFFECT_PARAM_RANGE(cls, fr, to):
-        return (cls._AFFECT_PARAM, fr, to - 1)
+    def AFFECT_PARAM_INTERVAL(cls, fr, to_and_including_the_index):
+        '''The to_and_including_the_index argument specifies the end point of the interval, WHICH IS
+           INCLUDED IN THE INTERVAL. (Contrary to usual python semantics.) It is much easier to
+           implement this way.
+        '''
+        return (cls._AFFECT_PARAM, fr, to_and_including_the_index)
     
     EFFECT_CHANGE        = 10  # The values of bound variables may change
     EFFECT_DOBIND        = 12  # Unbound variables will definitely be bound
@@ -574,7 +579,10 @@ class Evilness(object):
         self.evils = copy.copy(evils)
 
         if affect is not None:
-            self.evils.append((affect, effect))
+            self.add_evil(affect, effect)
+
+    def add_evil(self, affect, effect):
+        self.evils.append((affect, effect))
 
     def query(self, affect, effect, arity):
         for af, ef in self.evils:
@@ -585,9 +593,9 @@ class Evilness(object):
     def check_arity_makes_sense(self, arity, log, name):
         for af, _ in self.evils:
             af, af_fr, af_to = expand_affect(af, arity)
-            if af == _IEC._AFFECT_PARAM and not (0 <= af_fr <= af_to < arity):
+            if af == _IEC._AFFECT_PARAM and arity != -1 and not (0 <= af_fr <= af_to < arity):
                 raise log.error("action %s has an evilness with parameters that aren't there (indic"
-                                "es %d-%d, arity %d)", name, af_fr, af_to, arity)
+                                "es %d to %d, arity %d)", name, af_fr, af_to, arity)
 
     def affect_contains(self, af1, af2, arity):
         af1, af1_fr, af1_to = expand_affect(af1, arity)
@@ -611,59 +619,56 @@ class Evilness(object):
     def find_disregard_arity(self, affect):
         return self.find(affect, 0)
 
-def optimize_away(f=None):
-    def _(f):
-        f.optimize_away = True
-        return f
-    return _ if f is None else _(f)
-
-def no_scope_effects(f=None):
-    def _(f):
-        f.evilness = Evilness()
-        return f
-    return _ if f is None else _(f)
-
-def rule_like(f=None):
-    def _(f):
-        f.evilness = Evilness(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_BIND)
-        return f
-    return _ if f is None else _(f)
-
-def function_like(f=None):
-    # arity is the number of arguments of the function, which is one less than the arity of the
-    # predicate. We should be able to infer in most cases, eliminating the off-by-one errors. Else,
-    # the check in check_arity_makes_sense should catch it.
-    def _(f):
-        f.evilness = Evilness(evils = 
-            [(_IEC.AFFECT_PARAM_RANGE(0, -1), _IEC.EFFECT_REQUIRE_BOUND),
-             (_IEC.AFFECT_PARAM(-1),          _IEC.EFFECT_DOBIND)       ]
+    @classmethod
+    def default_function_like(cls):
+        return cls(evils = 
+            [(_IEC.AFFECT_PARAM_INTERVAL(0, -1), _IEC.EFFECT_REQUIRE_BOUND),
+             (_IEC.AFFECT_PARAM(-1),             _IEC.EFFECT_DOBIND)       ]
         )
-        return f
-    return _ if f is None else _(f)
-
-def all_bound(f=None):
-    def _(f):
-        f.evilness = Evilness(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_REQUIRE_BOUND)
-        return f
-    return _ if f is None else _(f)
     
+    @classmethod
+    def default_rule_like(cls):
+        return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_BIND)
+    
+    @classmethod
+    def default_no_scope_effects(cls):
+        return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_BIND)
 
-def side_effect(effect, affect, f = None):
-    evilness = Evilness(effect, affect)
+    @classmethod
+    def default_all_bound(cls):
+        return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_REQUIRE_BOUND)
+
+def optimize_away(f=None):
+    def _(f): f.optimize_away = True; return f
+    return _ if f is None else _(f)
+def no_scope_effects(f=None):
+    def _(f): f.evilness = Evilness.default_no_scope_effects(); return f
+    return _ if f is None else _(f)
+def rule_like(f=None):
+    def _(f): f.evilness = Evilness.default_rule_like(); return f
+    return _ if f is None else _(f)
+def function_like(f=None):
+    def _(f): f.evilness = Evilness.default_function_like(); return f
+    return _ if f is None else _(f)
+def all_bound(f=None):
+    def _(f): f.evilness = Evilness.default_all_bound(); return f
+    return _ if f is None else _(f)
+
+def side_effect(affect, effect, f = None):
     def _(f):
-        f.evilness = evilness
+        if not hasattr(f, 'evilness'):
+            f.evilness = Evilness()
+        f.evilness.add_evil(affect, effect)
         return f
-
-    if f is None:
-        return _
-    else:
-        return _(f)
+    return _ if f is None else _(f)
 
 class InferenceOptions(object):
-    def __init__(self, *, preserve_errors=True):
+    def __init__(self, *, preserve_errors=False):
         # Whether the optimizer is prohibited from removing statements that may cause errors, but
         # have no additional effect. Disables most of the eliminations that remove terms without
         # side-effects.
+        # THIS OPTION IS NOT SUPPORTED VERY WELL AND THE OPTIMIZER MAY CHANGE
+        # THE BEHAVIOUR OF PROGRAMS WITH REGARDS TO ERRORS.
         self.preserve_errors = preserve_errors
     
             
@@ -803,9 +808,17 @@ class InferenceCallback(DefaultCallback):
         evilness = getattr(action, 'evilness', None)
         optimize_away = getattr(action, 'optimize_away', False)
 
+        if evilness is None and getattr(action, 'is_function', True):
+            evilness = Evilness.default_function_like()
+        
+        if evilness is None and getattr(action, 'is_procedure', True):
+            evilness = Evilness.default_all_bound()
+
         if evilness is not None:
             self.action_table[name, arity] = evilness
             evilness.check_arity_makes_sense(arity, self.log, name)
+        else:
+            self.log.warn('no side effects found for action %s/%s', name, arity)
 
         if optimize_away and name not in self.actions_optimize_away_list:
             self.actions_optimize_away_list.append((name, arity))
@@ -1006,12 +1019,16 @@ class TermGroundingCb(DefaultCallback):
                             self.state.status[name] = self.apply_evilness(t, ef, self.state.status[name])
                     if capture_scope:
                         # This could be made more fine-grained
-                        t.scope_info = list(self.state.status.keys())
+                        t.scope_info = set(self.state.status.keys())
 
                     for i, ast_var in enumerate(t.terms):
                         if not isinstance(ast_var, AstVariable): continue
                         for ef in evilness.find(_IEC.AFFECT_PARAM(i), len(t.terms)):
                             name = ast_var.name
+                            self.state.status[name] = self.apply_evilness(t, ef, self.state.status[name])
+
+                    for ef in evilness.find(_IEC.AFFECT_SCOPE, len(t.terms)):
+                        for name in self.state.status.keys():
                             self.state.status[name] = self.apply_evilness(t, ef, self.state.status[name])
                 else:
                     ast_node.term = self.symbolic_belief_query(t)
@@ -1474,7 +1491,7 @@ class UselessTermEliminatorCb(DefaultCallback):
     @classmethod
     def apply(cls, ast_plan, inf_cb):
         assert isinstance(ast_plan, AstPlan)
-        return ast_plan.accept(CallbackReverseVisitor(cls(inf_cb)))
+        return CallbackReverseVisitor(cls(inf_cb)).resolve_single(ast_plan)
 
     def __init__(self, inf_cb):
         self.inf_cb = inf_cb
@@ -1799,60 +1816,66 @@ def dump(*a):
 
 
 
-actions = pyson.Actions()
+def init_optimizer_actions(actions):
+    @actions.add(".inf_mark_nosidef", 1)
+    @no_scope_effects
+    @optimize_away
+    def _inf_mark_nosidef(agent, term, intention): yield
 
-@actions.add(".inf_mark_nosidef", 1)
-@no_scope_effects
-@optimize_away
-def _inf_mark_nosidef(agent, term, intention): yield
+    @actions.add(".inf_nosideef", 0)
+    @no_scope_effects
+    @optimize_away
+    def _inf_nosideef(agent, term, intention): yield
 
-@actions.add(".inf_nosideef", 0)
-@no_scope_effects
-@optimize_away
-def _inf_nosideef(agent, term, intention): yield
+    @actions.add(".inf_side_effect")
+    @no_scope_effects
+    @optimize_away
+    def _inf_side_effect(agent, term, intention): yield
 
-@actions.add(".inf_side_effect")
-@no_scope_effects
-@optimize_away
-def _inf_par_cha(agent, term, intention): yield
+    @actions.add(".inf_disable_global", 0)
+    @side_effect(_IEC.AFFECT_UNIVERSE, _IEC.EFFECT_ALL)
+    @optimize_away
+    def _inf_disable_global(agent, term, intention): yield
 
-@actions.add(".inf_disable_global", 0)
-@side_effect(_IEC.AFFECT_UNIVERSE, _IEC.EFFECT_ALL)
-@optimize_away
-def _inf_disable_global(agent, term, intention): yield
+    @actions.add(".inf_disable_local", 0)
+    @side_effect(_IEC.AFFECT_SCOPE, _IEC.EFFECT_ALL)
+    @optimize_away
+    def _inf_disable_local(agent, term, intention): yield
 
-@actions.add(".inf_disable_local", 0)
-@side_effect(_IEC.AFFECT_SCOPE, _IEC.EFFECT_ALL)
-@optimize_away
-def _inf_disable_local(agent, term, intention): yield
+_LOGGER = pyson.get_logger(__name__)
     
-def main(source):
-    log = pyson.Log(pyson.get_logger(__name__), 3)
-
-    tokens = list(pyson.lexer.tokenize(source, log, 1))
-    #print_tokens(tokens)
-    agent = pyson.parser.parse(iter(tokens), log, frozenset(source.name))
-    #dump(agent)
-    print('--------')
-    InferenceCallback.apply(agent, log, actions)
-    dump(agent)
-    print('--------')
-    print(agent)
-
+def build_agent_optimized(env, source, actions, agent_cls=pyson.runtime.Agent):
+    log = pyson.Log(_LOGGER, 3)
+    tokens = pyson.lexer.TokenStream(source, log)
+    ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
+    ast_agent = InferenceCallback.apply(ast_agent, log, pyson.stdlib.actions)
     log.throw()
 
-    return agent
+    return env.build_agent_from_ast(ast_agent, actions)
 
-
-if __name__ == "__main__":
+def main():
+    import pyson.stdlib
+    
+    env = pyson.runtime.Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
-                    main(source)
+                    agent = build_agent_optimized(env, source, pyson.stdlib.actions)
+                    env.run_agent(agent)
+                    break
+        elif sys.stdin.isatty():
+            LOGGER.error('pyson.optimizer does not support a REPL. Please use the main pyson instead.')
+            sys.exit(1)
         else:
-            print(main(sys.stdin))
+            env.run_agent(env.build_agent(sys.stdin, pyson.stdlib.actions))
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
-        sys.exit(0)
+        sys.exit(1)
+    except pyson.PysonError as error:
+        LOGGER.error("%s", error)
+        sys.exit(1)
+        
+if __name__ == "__main__":
+    main()
