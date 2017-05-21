@@ -23,6 +23,7 @@ import collections
 import copy
 import functools
 import time
+import os.path
 
 import pyson
 import pyson.parser
@@ -299,7 +300,10 @@ class Intention:
 
 
 class Agent:
-    def __init__(self, beliefs=None, rules=None, plans=None):
+    def __init__(self, env, name, beliefs=None, rules=None, plans=None):
+        self.env = env
+        self.name = name
+
         self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
         self.rules = collections.defaultdict(lambda: []) if rules is None else rules
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
@@ -470,7 +474,21 @@ class Agent:
 
 
 class Environment:
-    def build_agent(self, source, actions, agent_cls=Agent):
+    def __init__(self):
+        self.agents = {}
+
+    def _make_name(self, path):
+        base_name = pyson.sanitize_functor(os.path.splitext(os.path.basename(path))[0])
+        if not base_name:
+            base_name = "agent"
+        name = base_name
+        i = 1
+        while name in self.agents:
+            name = base_name + str(i)
+            i += 1
+        return name
+
+    def _build_agent(self, source, actions, agent_cls=Agent):
         # Parse source.
         log = pyson.Log(LOGGER, 3)
         tokens = pyson.lexer.TokenStream(source, log)
@@ -481,7 +499,7 @@ class Environment:
     
     def build_agent_from_ast(self, ast_agent, actions, agent_cls=Agent):
         log = pyson.Log(LOGGER, 3)
-        agent = agent_cls()
+        agent = agent_cls(self, self._make_name(source.name))
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
@@ -524,17 +542,25 @@ class Environment:
         # Report errors.
         log.throw()
 
+        self.agents[agent.name] = agent
+        return ast_agent, agent
+
+    def build_agent(self, source, actions, agent_cls=Agent):
+        _, agent = self._build_agent(source, actions, agent_cls)
         return agent
 
     def build_agents(self, source, n, actions, agent_cls=Agent):
-        prototype_agent = self.build_agent(source, actions, agent_cls=agent_cls)
+        if n <= 0:
+            return []
+
+        ast_agent, prototype_agent = self._build_agent(source, actions, agent_cls=agent_cls)
 
         # Create more instances from the prototype, but with their own
         # callstacks. This is more efficient than making complete deep copies.
-        agents = [prototype_agent] if n > 0 else []
+        agents = [prototype_agent]
 
         while len(agents) < n:
-            agent = agent_cls(
+            agent = agent_cls(self, self._make_name(source.name),
                 copy.copy(prototype_agent.beliefs),
                 copy.copy(prototype_agent.rules),
                 copy.copy(prototype_agent.plans))
@@ -545,6 +571,7 @@ class Environment:
                            term, {}, delayed=True)
 
             agents.append(agent)
+            self.agents[agent.name] = agent
 
         return agents
 
@@ -557,6 +584,14 @@ class Environment:
             if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
                 time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - time.time())
                 more_work = True
+
+    def run(self):
+        maybe_more_work = True
+        while maybe_more_work:
+            maybe_more_work = False
+            for agent in self.agents.values():
+                if agent.step():
+                    maybe_more_work = True
 
     def shutdown(self):
         sys.exit(1)
@@ -770,9 +805,9 @@ def repl(agent, env, actions):
 
             try:
                 if not tokens:
-                    line = pyson.util.prompt("%s >>> " % hex(id(agent)))
+                    line = pyson.util.prompt("%s >>> " % agent.name)
                 else:
-                    line = pyson.util.prompt("%s ... " % hex(id(agent)))
+                    line = pyson.util.prompt("%s ... " % agent.name)
             except KeyboardInterrupt:
                 print()
                 sys.exit(0)
@@ -808,23 +843,23 @@ def repl(agent, env, actions):
 
 
 def main(post_repl=True):
-    import pyson.stdlib
+    import pyson.ext_stdlib
     env = Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
-                    agent = env.build_agent(source, pyson.stdlib.actions)
+                    agent = env.build_agent(source, pyson.ext_stdlib.actions)
                     env.run_agent(agent)
                     if post_repl:
-                        repl(agent, env, pyson.stdlib.actions)
+                        repl(agent, env, pyson.ext_stdlib.actions)
                     break
         elif sys.stdin.isatty():
-            agent = Agent()
-            repl(agent, env, pyson.stdlib.actions)
+            agent = Agent(env, "stdin")
+            repl(agent, env, pyson.ext_stdlib.actions)
         else:
-            env.run_agent(env.build_agent(sys.stdin, pyson.stdlib.actions))
+            env.run_agent(env.build_agent(sys.stdin, pyson.ext_stdlib.actions))
     except pyson.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)

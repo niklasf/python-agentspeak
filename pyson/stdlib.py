@@ -33,9 +33,6 @@ import pyson.optimizer
 
 
 # TODO:
-# * Communication
-#   - .broadcast
-#   - .send
 # * Plan Library Manipulation
 #   - .add_plan
 #   - .plan_label
@@ -65,6 +62,75 @@ import pyson.optimizer
 actions = pyson.Actions()
 
 
+@actions.add(".broadcast", 2)
+def _broadcast(agent, term, intention):
+    # Illocutionary force.
+    ilf = pyson.grounded(term.args[0], intention.scope)
+    if not pyson.is_atom(ilf):
+        return
+    if ilf.functor == "tell":
+        goal_type = pyson.GoalType.belief
+    elif ilf.functor == "achieve":
+        goal_type = pyson.GoalType.achievement
+    else:
+        raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
+
+    # Prepare message.
+    message = pyson.freeze(term.args[1], intention.scope, {})
+    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
+    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+
+    # Broadcast.
+    for receiver in agent.env.agents.values():
+        if receiver == agent:
+            continue
+
+        receiver.call(pyson.Trigger.addition, goal_type,
+                      tagged_message, pyson.runtime.Intention())
+
+    yield
+
+
+@actions.add(".send", 3)
+def _send(agent, term, intention):
+    # Find the receivers: By a string, atom or list of strings or atoms.
+    receivers = pyson.grounded(term.args[0], intention.scope)
+    if not pyson.is_list(receivers):
+        receivers = [receivers]
+
+    receiving_agents = []
+    for receiver in receivers:
+        if receiver.is_atom():
+            receiving_agents.append(agent.env.agents[receiver.functor])
+        else:
+            receiving_agents.append(agent.env.agents[receiver])
+
+    # Illocutionary force.
+    ilf = pyson.grounded(term.args[1], intention.scope)
+    if not pyson.is_atom(ilf):
+        return
+    if ilf.functor == "tell":
+        goal_type = pyson.GoalType.belief
+    elif ilf.functor == "achieve":
+        goal_type = pyson.GoalType.achievement
+    else:
+        raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
+
+    # TODO: untell, unachieve, askOne, askAll, tellHow, untellHow, askHow
+
+    # Prepare message.
+    message = pyson.freeze(term.args[2], intention.scope, {})
+    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
+    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+
+    # Broadcast.
+    for receiver in receiving_agents:
+        receiver.call(pyson.Trigger.addition, goal_type,
+                      tagged_message, pyson.runtime.Intention())
+
+    yield
+
+
 COLORS = [(colorama.Back.GREEN, colorama.Fore.WHITE),
           (colorama.Back.MAGENTA, colorama.Fore.WHITE),
           (colorama.Back.YELLOW, colorama.Fore.BLACK),
@@ -86,13 +152,8 @@ def _print(agent, term, intention, _color_map={}, _current_color=[0]):
     memo = {}
     text = " ".join(pyson_str(pyson.freeze(t, intention.scope, memo)) for t in term.args)
 
-    try:
-        name = agent.name
-    except AttributeError:
-        name = hex(id(agent))
-
     with colorama.colorama_text():
-        print(color[0], color[1], name, colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
+        print(color[0], color[1], agent.name, colorama.Fore.RESET, colorama.Back.RESET, " ", text, sep="")
 
     yield
 
@@ -107,9 +168,7 @@ def _fail(agent, term, intention):
 @actions.add(".my_name", 1)
 @pyson.optimizer.function_like
 def _my_name(agent, term, intention):
-    name = hex(id(agent))
-
-    if pyson.unify(term.args[0], name, intention.scope, intention.stack):
+    if pyson.unify(term.args[0], agent.name, intention.scope, intention.stack):
         yield
 
 

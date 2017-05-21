@@ -10,7 +10,8 @@ import pyson.runtime
 class StdlibTest(unittest.TestCase):
 
     def test_concat_strings(self):
-        agent = pyson.runtime.Agent()
+        env = pyson.runtime.Environment()
+        agent = pyson.runtime.Agent(env, "agent")
         intention = pyson.runtime.Intention()
         X = pyson.Var()
 
@@ -20,7 +21,8 @@ class StdlibTest(unittest.TestCase):
         self.assertEqual(X.grounded(intention.scope), "hello world")
 
     def test_concat_lists(self):
-        agent = pyson.runtime.Agent()
+        env = pyson.runtime.Environment()
+        agent = pyson.runtime.Agent(env, "agent")
         intention = pyson.runtime.Intention()
         X = pyson.Var()
 

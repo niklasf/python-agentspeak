@@ -10,7 +10,7 @@ pyson.get_logger("pyson.mapc2017").setLevel(logging.DEBUG)
 
 
 async def main():
-    env = pyson.runtime.Environment()
+    env = pyson.mapc2017.Environment()
 
     with open("agent1.asl") as source:
         agent1 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
