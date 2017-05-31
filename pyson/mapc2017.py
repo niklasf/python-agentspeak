@@ -212,10 +212,6 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             LOGGER.warning("%s: action id %d was not used", self.name, self.action_id)
         self.action_id = int(req.get("id"))
 
-        self._set_belief("timestamp", int(message.get("timestamp")))
-        self._set_belief("deadline", int(req.get("deadline")))
-        self._set_belief("step", int(req.find("simulation").get("step")))
-
         self_data = req.find("self")
         self._set_belief("charge", int(self_data.get("charge")))
         self._set_belief("load", int(self_data.get("load")))
@@ -340,3 +336,8 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     PERCEPT_TAG))
         self._replace_beliefs(("jobs", 5), jobs)
         self._replace_beliefs(("jobs", 9), auctions)
+
+        # Update step.
+        self._set_belief("timestamp", int(message.get("timestamp")))
+        self._set_belief("deadline", int(req.get("deadline")))
+        self._set_belief("step", int(req.find("simulation").get("step")))
