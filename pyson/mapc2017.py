@@ -25,6 +25,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
     def __init__(self, env, name):
         super(Agent, self).__init__(env, name)
         self.action_id = None
+        self.simulation_step = None
 
     def connect(self, name, password, host="localhost", port=12300):
         self.action_id = None
@@ -130,7 +131,13 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         else:
             LOGGER.error("unknown message type: %r", message.get("type"))
 
-        self.env.run()
+        # Delay run until all agents are in a consistent state.
+        if all(agent.simulation_step is None or agent.simulation_step == self.simulation_step for agent in self.env.agents.values()):
+            if self.simulation_step is not None:
+                LOGGER.debug("%s was the last agent to receive step %d", self.name, self.simulation_step)
+            self.env.run()
+        else:
+            LOGGER.debug("%s will wait for other agents to be in step %d", self.name, self.simulation_step)
 
     def _set_belief(self, name, *args):
         term = pyson.Literal(name, tuple(args), PERCEPT_TAG)
@@ -340,4 +347,5 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         # Update step.
         self._set_belief("timestamp", int(message.get("timestamp")))
         self._set_belief("deadline", int(req.get("deadline")))
-        self._set_belief("step", int(req.find("simulation").get("step")))
+        self.simulation_step = int(req.find("simulation").get("step"))
+        self._set_belief("step", self.simulation_step)
