@@ -77,7 +77,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         action = etree.SubElement(message, "action", type=term.functor.lstrip("."), id=str(self.action_id))
         for param in term.args:
             p = pyson.grounded(param, intention.scope)
-            if(isinstance(p, float) and p == int(p)):
+            if isinstance(p, float) and p.is_integer():
                 p = int(p)
             etree.SubElement(action, "p").text = str(p)
         self.send_message(message)
@@ -314,7 +314,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     workshop.get("name"), float(workshop.get("lat")), float(workshop.get("lon"))),
                     PERCEPT_TAG))
         self._replace_beliefs(("workshop", 3), workshops)
-		
+
         # Update resource nodes.
         resource_nodes = []
         for node in req.findall("resourceNode"):

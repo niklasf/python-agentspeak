@@ -1851,7 +1851,7 @@ def build_agent_optimized(env, source, actions, agent_cls=pyson.runtime.Agent):
     ast_agent = InferenceCallback.apply(ast_agent, log, pyson.stdlib.actions)
     log.throw()
 
-    return env.build_agent_from_ast(ast_agent, actions)
+    return env.build_agent_from_ast(source, ast_agent, actions)
 
 def main():
     import pyson.stdlib
