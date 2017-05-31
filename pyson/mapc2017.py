@@ -76,7 +76,10 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         message = etree.Element("message")
         action = etree.SubElement(message, "action", type=term.functor.lstrip("."), id=str(self.action_id))
         for param in term.args:
-            etree.SubElement(action, "p").text = str(pyson.grounded(param, intention.scope))
+            p = pyson.grounded(param, intention.scope)
+            if(isinstance(p, float) and p == int(p)):
+                p = int(p)
+            etree.SubElement(action, "p").text = str(p)
         self.send_message(message)
         self.action_id = None
         yield
@@ -182,14 +185,14 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
             int(role.get("speed")),
             int(role.get("load")),
             int(role.get("battery")),
-            tuple(pyson.Literal(tool.text) for tool in role.findall("./tool")))
+            tuple(tool.get("name") for tool in role.findall("./tool")))
 
         # Update item beliefs.
         item_beliefs = []
 
         for item in simulation.findall("./item"):
-            tools = tuple(pyson.Literal(tool.text) for tool in item.findall("./tool"))
-            parts = tuple(pyson.Literal("parts", (pyson.Literal(part.get("name")), int(part.get("amount")))) for part in item.findall("./item"))
+            tools = tuple(tool.get("name") for tool in item.findall("./tool"))
+            parts = tuple(pyson.Literal("parts", (part.get("name"), int(part.get("amount")))) for part in item.findall("./item"))
 
             item_beliefs.append(
                 pyson.Literal("item", (
@@ -233,7 +236,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # Update carried items.
         carried_items = []
-        for item in self_data.findall("./item"):
+        for item in self_data.findall("./items"):
             carried_items.append(
                 pyson.Literal("item", (
                     item.get("name"), int(item.get("amount"))),
@@ -311,6 +314,15 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     workshop.get("name"), float(workshop.get("lat")), float(workshop.get("lon"))),
                     PERCEPT_TAG))
         self._replace_beliefs(("workshop", 3), workshops)
+		
+        # Update resource nodes.
+        resource_nodes = []
+        for node in req.findall("resourceNode"):
+            resource_nodes.append(
+                pyson.Literal("resourceNode", (
+                    node.get("name"), float(workshop.get("lat")), float(workshop.get("lon")), node.get("resource")),
+                    PERCEPT_TAG))
+        self._replace_beliefs(("resourceNode", 4), resource_nodes)
 
         # Update job percepts.
         jobs = []
