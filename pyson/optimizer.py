@@ -19,6 +19,12 @@ from pyson import FormulaType, BinaryOp, UnaryOp
 from pyson.parser import (AstNode, AstLiteral, AstVariable, AstConst, AstBinaryOp, AstUnaryOp,
     AstFormula, AstPlan, AstBody, AstList)
 
+def _is_str_type(s):
+    try:
+        return isinstance(s, unicode)
+    except NameError:
+        return isinstance(s, str)
+
 @enum.unique
 class AstType(enum.Enum):
     LITERAL      = 1
@@ -719,7 +725,7 @@ class InferenceCallback(DefaultCallback):
             raise self.log.error("wrong number of arguments for %s (need 1, got %d)",
                                  ast_action.functor, len(ast_action.terms), loc=ast_action.loc)
         elif not (isinstance(ast_action.terms[0], AstConst)
-                and isinstance(ast_action.terms[0].value, str)):
+                  and _is_str_type(ast_action.terms[0].value)):
             raise self.log.error("expected string as first argument to %s",
                 ast_action.functor, loc=ast_action.loc)
         else:
@@ -775,7 +781,7 @@ class InferenceCallback(DefaultCallback):
             return Evilness(_IEC.AFFECT_UNIVERSE, _IEC.EFFECT_ALL)
 
     def handle_inf_side_effect(self, ast_literal):
-        is_str = lambda x: isinstance(x, AstConst) and isinstance(x.value, str)
+        is_str = lambda x: isinstance(x, AstConst) and _is_str_type(x.value)
         
         if len(ast_literal.terms) < 2:
             raise self.log.error('.inf_side_effect expects at least 2 arguments', loc=ast_literal.loc)
@@ -1851,7 +1857,8 @@ def build_agent_optimized(env, source, actions, agent_cls=pyson.runtime.Agent):
     ast_agent = InferenceCallback.apply(ast_agent, log, pyson.stdlib.actions)
     log.throw()
 
-    return env.build_agent_from_ast(source, ast_agent, actions)
+    _, agent = env.build_agent_from_ast(source, ast_agent, actions)
+    return agent
 
 def main():
     import pyson.stdlib

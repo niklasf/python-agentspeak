@@ -489,6 +489,8 @@ class Environment:
         return name
 
     def build_agent_from_ast(self, source, ast_agent, actions, agent_cls=Agent):
+        # This function is also called by the optimizer
+        
         log = pyson.Log(LOGGER, 3)
         agent = agent_cls(self, self._make_name(source.name))
 
