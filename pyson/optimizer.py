@@ -663,7 +663,7 @@ def side_effect(affect, effect, f = None):
     return _ if f is None else _(f)
 
 class InferenceOptions(object):
-    def __init__(self, *, preserve_errors=False):
+    def __init__(self, preserve_errors=False):
         # Whether the optimizer is prohibited from removing statements that may cause errors, but
         # have no additional effect. Disables most of the eliminations that remove terms without
         # side-effects.
