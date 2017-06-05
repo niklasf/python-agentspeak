@@ -642,13 +642,10 @@ class Literal(object):
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
 
     def __eq__(self, other):
-        ne = self.__ne__(other)
-        return NotImplemented if ne is NotImplemented else not ne
+        return not self.__ne__(other)
 
     def __ne__(self, other):
-        if not is_literal(other):
-            return NotImplemented
-        return self.functor != other.functor or self.args != other.args or self.annots != other.annots
+        return not is_literal(other) or self.functor != other.functor or self.args != other.args or self.annots != other.annots
 
     def __lt__(self, other):
         if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
