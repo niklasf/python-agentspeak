@@ -508,6 +508,9 @@ class BinaryExpr(object):
             raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
             raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+        elif self.binary_op.comp_op:
+            left = grounded(left, scope)
+            right = grounded(right, scope)
 
         return self.binary_op.func(left, right)
 
@@ -639,10 +642,33 @@ class Literal(object):
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
 
     def __eq__(self, other):
-        return not self.__ne__(other)
+        ne = self.__ne__(other)
+        return NotImplemented if ne is NotImplemented else not ne
 
     def __ne__(self, other):
+        if not is_literal(other):
+            return NotImplemented
         return self.functor != other.functor or self.args != other.args or self.annots != other.annots
+
+    def __lt__(self, other):
+        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+            return NotImplemented
+        return self.args < other.args
+
+    def __le__(self, other):
+        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+            return NotImplemented
+        return self.args <= other.args
+
+    def __gt__(self, other):
+        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+            return NotImplemented
+        return self.args > other.args
+
+    def __ge__(self, other):
+        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+            return NotImplemented
+        return self.args >= other.args
 
     def __hash__(self):
         return hash((self.functor, self.args, self.annots))
@@ -818,7 +844,7 @@ class Actions(object):
 
         # Marker for the optimizer
         _add_procedure.is_procedure = True
-        
+
         if f is None:
             return _add_procedure
         else:
