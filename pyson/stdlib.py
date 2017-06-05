@@ -271,14 +271,14 @@ def _findall(agent, term, intention):
 @actions.add(".count", 2)
 @pyson.optimizer.function_like
 def _count(agent, term, intention):
-    lookup = pyson.evaluate(term.args[0], intention.scope)
-    relevant_beliefs = agent.beliefs[lookup.literal_group()]
+    query = pyson.runtime.TermQuery(term.args[0])
 
+    choicepoint = object()
     count = 0
-
-    for belief in relevant_beliefs:
-        if pyson.unify(lookup, belief, {}, collections.deque()):
-            count += 1
+    intention.stack.append(choicepoint)
+    for _ in query.execute(agent, intention):
+        count += 1
+    pyson.reroll(intention.scope, intention.stack, choicepoint)
 
     if pyson.unify(count, term.args[1], intention.scope, intention.stack):
         yield
