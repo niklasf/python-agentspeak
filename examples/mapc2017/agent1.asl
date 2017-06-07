@@ -1,11 +1,10 @@
 +connected(Username) <-
-  .print("Now authenticated as", Username);
-  +step("Hello there").
+  .print("Now authenticated as", Username).
 
 -connected(_) <-
   .print("No longer connected");
   .dump.
 
-+step(Step) : Step \== "Hello there" <-
++step(Step) <-
   .print("Step:", Step);
   .skip.
