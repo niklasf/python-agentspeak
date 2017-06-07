@@ -724,7 +724,7 @@ class BuildInstructionsVisitor:
         last_in_loop = ast_for.body.accept(self)
         last_in_loop.success = for_head
 
-        self.tail = Instruction(noop)
+        self.tail = Instruction(pop_query)
         for_head.failure = self.tail
         return self.tail
 
