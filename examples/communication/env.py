@@ -15,4 +15,5 @@ with open(os.path.join(os.path.dirname(__file__), "receiver.asl")) as source:
 with open(os.path.join(os.path.dirname(__file__), "sender.asl")) as source:
     agents.append(env.build_agent(source, pyson.stdlib.actions))
 
-env.run()
+if __name__ == "__main__":
+    env.run()
