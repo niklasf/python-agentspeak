@@ -24,9 +24,9 @@ class("AssumptionViolatedException").
 # junit4/src/main/java/org/junit/ComparisonFailure.java
 
 class("ComparisonFailure").
-method("ComparisonFailure", "getMessage").
-method("ComparisonFailure", "getActual").
-method("ComparisonFailure", "getExpected").
+method("ComparisonFailure", "getMessage", 3).
+method("ComparisonFailure", "getActual", 3).
+method("ComparisonFailure", "getExpected", 3).
 
 # junit4/src/main/java/org/junit/TestCouldNotBeSkippedException.java
 
@@ -41,141 +41,141 @@ class("TestCouldNotBeSkippedException").
 # junit4/src/main/java/org/junit/Assert.java
 
 class("Assert").
-method("Assert", "assertTrue").
+method("Assert", "assertTrue", 5).
 calls("Assert", "assertTrue", "Assert", "fail").
-method("Assert", "assertTrue").
+method("Assert", "assertTrue", 3).
 calls("Assert", "assertTrue", "Assert", "assertTrue").
-method("Assert", "assertFalse").
+method("Assert", "assertFalse", 3).
 calls("Assert", "assertFalse", "Assert", "assertTrue").
-method("Assert", "assertFalse").
+method("Assert", "assertFalse", 3).
 calls("Assert", "assertFalse", "Assert", "assertFalse").
-method("Assert", "fail").
-method("Assert", "fail").
+method("Assert", "fail", 6).
+method("Assert", "fail", 3).
 calls("Assert", "fail", "Assert", "fail").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 11).
 calls("Assert", "assertEquals", "Assert", "equalsRegardingNull").
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "equalsRegardingNull").
+method("Assert", "equalsRegardingNull", 6).
 calls("Assert", "equalsRegardingNull", "Assert", "isEquals").
-method("Assert", "isEquals").
+method("Assert", "isEquals", 3).
 calls("Assert", "isEquals", "Object", "equals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 5).
 calls("Assert", "assertNotEquals", "Assert", "equalsRegardingNull").
 calls("Assert", "assertNotEquals", "Assert", "failEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 3).
 calls("Assert", "assertNotEquals", "Assert", "assertNotEquals").
-method("Assert", "failEquals").
+method("Assert", "failEquals", 8).
 calls("Assert", "failEquals", "Assert", "fail").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 5).
 calls("Assert", "assertNotEquals", "Assert", "failEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 3).
 calls("Assert", "assertNotEquals", "Assert", "assertNotEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 5).
 calls("Assert", "assertNotEquals", "Assert", "doubleIsDifferent").
 calls("Assert", "assertNotEquals", "Assert", "failEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 3).
 calls("Assert", "assertNotEquals", "Assert", "assertNotEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 3).
 calls("Assert", "assertNotEquals", "Assert", "assertNotEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "internalArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
-method("Assert", "assertArrayEquals").
+method("Assert", "assertArrayEquals", 3).
+method("Assert", "assertArrayEquals", 3).
 calls("Assert", "assertArrayEquals", "Assert", "assertArrayEquals").
-method("Assert", "internalArrayEquals").
-method("Assert", "assertEquals").
+method("Assert", "internalArrayEquals", 3).
+method("Assert", "assertEquals", 5).
 calls("Assert", "assertEquals", "Assert", "doubleIsDifferent").
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 5).
 calls("Assert", "assertEquals", "Assert", "floatIsDifferent").
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertNotEquals").
+method("Assert", "assertNotEquals", 5).
 calls("Assert", "assertNotEquals", "Assert", "floatIsDifferent").
 calls("Assert", "assertNotEquals", "Assert", "failEquals").
-method("Assert", "doubleIsDifferent").
-method("Assert", "floatIsDifferent").
-method("Assert", "assertEquals").
+method("Assert", "doubleIsDifferent", 9).
+method("Assert", "floatIsDifferent", 9).
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 5).
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "fail").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertNotNull").
+method("Assert", "assertNotNull", 3).
 calls("Assert", "assertNotNull", "Assert", "assertTrue").
-method("Assert", "assertNotNull").
+method("Assert", "assertNotNull", 3).
 calls("Assert", "assertNotNull", "Assert", "assertNotNull").
-method("Assert", "assertNull").
+method("Assert", "assertNull", 6).
 calls("Assert", "assertNull", "Assert", "failNotNull").
-method("Assert", "assertNull").
+method("Assert", "assertNull", 3).
 calls("Assert", "assertNull", "Assert", "assertNull").
-method("Assert", "failNotNull").
+method("Assert", "failNotNull", 7).
 calls("Assert", "failNotNull", "Assert", "fail").
-method("Assert", "assertSame").
+method("Assert", "assertSame", 6).
 calls("Assert", "assertSame", "Assert", "failNotSame").
-method("Assert", "assertSame").
+method("Assert", "assertSame", 3).
 calls("Assert", "assertSame", "Assert", "assertSame").
-method("Assert", "assertNotSame").
+method("Assert", "assertNotSame", 5).
 calls("Assert", "assertNotSame", "Assert", "failSame").
-method("Assert", "assertNotSame").
+method("Assert", "assertNotSame", 3).
 calls("Assert", "assertNotSame", "Assert", "assertNotSame").
-method("Assert", "failSame").
+method("Assert", "failSame", 7).
 calls("Assert", "failSame", "Assert", "fail").
-method("Assert", "failNotSame").
+method("Assert", "failNotSame", 7).
 calls("Assert", "failNotSame", "Assert", "fail").
-method("Assert", "failNotEquals").
+method("Assert", "failNotEquals", 3).
 calls("Assert", "failNotEquals", "Assert", "fail").
-method("Assert", "format").
+method("Assert", "format", 13).
 calls("Assert", "format", "Assert", "equalsRegardingNull").
-method("Assert", "formatClass").
-method("Assert", "formatClassAndValue").
-method("Assert", "assertEquals").
+method("Assert", "formatClass", 4).
+method("Assert", "formatClassAndValue", 4).
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertArrayEquals").
-method("Assert", "assertThat").
+method("Assert", "assertThat", 3).
 calls("Assert", "assertThat", "Assert", "assertThat").
-method("Assert", "assertThat").
+method("Assert", "assertThat", 3).
 calls("Assert", "assertThat", "MatcherAssert", "assertThat").
-method("Assert", "assertThrows").
+method("Assert", "assertThrows", 3).
 calls("Assert", "assertThrows", "Assert", "expectThrows").
-method("Assert", "expectThrows").
+method("Assert", "expectThrows", 23).
 calls("Assert", "expectThrows", "ThrowingRunnable", "run").
 calls("Assert", "expectThrows", "Class", "isInstance").
 calls("Assert", "expectThrows", "String", "equals").
@@ -184,23 +184,23 @@ calls("Assert", "expectThrows", "AssertionError", "initCause").
 # junit4/src/main/java/org/junit/Assume.java
 
 class("Assume").
-method("Assume", "assumeTrue").
+method("Assume", "assumeTrue", 3).
 calls("Assume", "assumeTrue", "Assume", "assumeThat").
-method("Assume", "assumeFalse").
+method("Assume", "assumeFalse", 3).
 calls("Assume", "assumeFalse", "Assume", "assumeTrue").
-method("Assume", "assumeTrue").
-method("Assume", "assumeFalse").
+method("Assume", "assumeTrue", 5).
+method("Assume", "assumeFalse", 3).
 calls("Assume", "assumeFalse", "Assume", "assumeTrue").
-method("Assume", "assumeNotNull").
+method("Assume", "assumeNotNull", 4).
 calls("Assume", "assumeNotNull", "Assume", "assumeThat").
 calls("Assume", "assumeNotNull", "Assume", "assumeThat").
-method("Assume", "assumeThat").
+method("Assume", "assumeThat", 5).
 calls("Assume", "assumeThat", "Matcher", "matches").
-method("Assume", "assumeThat").
+method("Assume", "assumeThat", 5).
 calls("Assume", "assumeThat", "Matcher", "matches").
-method("Assume", "assumeNoException").
+method("Assume", "assumeNoException", 3).
 calls("Assume", "assumeNoException", "Assume", "assumeThat").
-method("Assume", "assumeNoException").
+method("Assume", "assumeNoException", 3).
 calls("Assume", "assumeNoException", "Assume", "assumeThat").
 
 # junit4/src/main/java/org/junit/ClassRule.java
@@ -212,9 +212,9 @@ calls("Assume", "assumeNoException", "Assume", "assumeThat").
 # junit4/src/main/java/org/junit/internal/RealSystem.java
 
 class("RealSystem").
-method("RealSystem", "exit").
+method("RealSystem", "exit", 3).
 calls("RealSystem", "exit", "System", "exit").
-method("RealSystem", "out").
+method("RealSystem", "out", 3).
 
 # junit4/src/main/java/org/junit/internal/JUnitSystem.java
 
@@ -222,9 +222,9 @@ method("RealSystem", "out").
 # junit4/src/main/java/org/junit/internal/AssumptionViolatedException.java
 
 class("AssumptionViolatedException").
-method("AssumptionViolatedException", "getMessage").
+method("AssumptionViolatedException", "getMessage", 3).
 calls("AssumptionViolatedException", "getMessage", "StringDescription", "asString").
-method("AssumptionViolatedException", "describeTo").
+method("AssumptionViolatedException", "describeTo", 16).
 calls("AssumptionViolatedException", "describeTo", "Description", "appendText").
 calls("AssumptionViolatedException", "describeTo", "Description", "appendText").
 calls("AssumptionViolatedException", "describeTo", "Description", "appendText").
@@ -235,105 +235,105 @@ calls("AssumptionViolatedException", "describeTo", "Description", "appendDescrip
 # junit4/src/main/java/org/junit/internal/Checks.java
 
 class("Checks").
-method("Checks", "notNull").
-method("Checks", "notNull").
+method("Checks", "notNull", 6).
+method("Checks", "notNull", 6).
 
 # junit4/src/main/java/org/junit/internal/Classes.java
 
 class("Classes").
-method("Classes", "getClass").
+method("Classes", "getClass", 3).
 calls("Classes", "getClass", "Classes", "getClass").
-method("Classes", "getClass").
+method("Classes", "getClass", 4).
 calls("Classes", "getClass", "Class", "forName").
 
 # junit4/src/main/java/org/junit/internal/Throwables.java
 
 class("Throwables").
-method("Throwables", "rethrowAsException").
+method("Throwables", "rethrowAsException", 4).
 calls("Throwables", "rethrowAsException", "Throwables", "Throwables").
-method("Throwables", "rethrow").
-method("Throwables", "getStacktrace").
+method("Throwables", "rethrow", 3).
+method("Throwables", "getStacktrace", 6).
 calls("Throwables", "getStacktrace", "Throwable", "printStackTrace").
 calls("Throwables", "getStacktrace", "StringWriter", "toString").
-method("Throwables", "getTrimmedStackTrace").
+method("Throwables", "getTrimmedStackTrace", 10).
 calls("Throwables", "getTrimmedStackTrace", "List", "isEmpty").
 calls("Throwables", "getTrimmedStackTrace", "Throwables", "getFullStackTrace").
 calls("Throwables", "getTrimmedStackTrace", "Throwables", "appendStackTraceLines").
 calls("Throwables", "getTrimmedStackTrace", "Throwables", "appendStackTraceLines").
 calls("Throwables", "getTrimmedStackTrace", "StringBuilder", "toString").
-method("Throwables", "getTrimmedStackTraceLines").
+method("Throwables", "getTrimmedStackTraceLines", 19).
 calls("Throwables", "getTrimmedStackTraceLines", "List", "add").
 calls("Throwables", "getTrimmedStackTraceLines", "List", "add").
 calls("Throwables", "getTrimmedStackTraceLines", "List", "add").
 calls("Throwables", "getTrimmedStackTraceLines", "Collections", "emptyList").
-method("Throwables", "initGetSuppressed").
-method("Throwables", "hasSuppressed").
-method("Throwables", "getCauseStackTraceLines").
+method("Throwables", "initGetSuppressed", 6).
+method("Throwables", "hasSuppressed", 10).
+method("Throwables", "getCauseStackTraceLines", 18).
 calls("Throwables", "getCauseStackTraceLines", "List", "add").
 calls("Throwables", "getCauseStackTraceLines", "List", "add").
 calls("Throwables", "getCauseStackTraceLines", "Collections", "emptyList").
-method("Throwables", "getFullStackTrace").
+method("Throwables", "getFullStackTrace", 6).
 calls("Throwables", "getFullStackTrace", "Throwable", "printStackTrace").
 calls("Throwables", "getFullStackTrace", "StringWriter", "toString").
-method("Throwables", "appendStackTraceLines").
+method("Throwables", "appendStackTraceLines", 4).
 calls("Throwables", "appendStackTraceLines", "StringBuilder", "append").
-method("Throwables", "asReversedList").
-method("Throwables", "isTestFrameworkMethod").
-method("Throwables", "isReflectionMethod").
+method("Throwables", "asReversedList", 3).
+method("Throwables", "isTestFrameworkMethod", 3).
+method("Throwables", "isReflectionMethod", 3).
 calls("Throwables", "isReflectionMethod", "Throwables", "isMatchingMethod").
-method("Throwables", "isMatchingMethod").
+method("Throwables", "isMatchingMethod", 7).
 calls("Throwables", "isMatchingMethod", "String", "startsWith").
 
 # junit4/src/main/java/org/junit/internal/InexactComparisonCriteria.java
 
 class("InexactComparisonCriteria").
-method("InexactComparisonCriteria", "assertElementsEqual").
+method("InexactComparisonCriteria", "assertElementsEqual", 7).
 calls("InexactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals").
 calls("InexactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals").
 
 # junit4/src/main/java/org/junit/internal/ComparisonCriteria.java
 
 class("ComparisonCriteria").
-method("ComparisonCriteria", "arrayEquals").
+method("ComparisonCriteria", "arrayEquals", 3).
 calls("ComparisonCriteria", "arrayEquals", "ComparisonCriteria", "arrayEquals").
-method("ComparisonCriteria", "arrayEquals").
+method("ComparisonCriteria", "arrayEquals", 44).
 calls("ComparisonCriteria", "arrayEquals", "Assert", "fail").
 calls("ComparisonCriteria", "arrayEquals", "Assert", "fail").
 calls("ComparisonCriteria", "arrayEquals", "ComparisonCriteria", "arrayEquals").
 calls("ComparisonCriteria", "arrayEquals", "ArrayComparisonFailure", "addDimension").
 calls("ComparisonCriteria", "arrayEquals", "ComparisonCriteria", "assertElementsEqual").
 calls("ComparisonCriteria", "arrayEquals", "Assert", "assertEquals").
-method("ComparisonCriteria", "getToStringableArrayElement").
+method("ComparisonCriteria", "getToStringableArrayElement", 12).
 calls("ComparisonCriteria", "getToStringableArrayElement", "ComparisonCriteria", "isArray").
 calls("ComparisonCriteria", "getToStringableArrayElement", "ComparisonCriteria", "objectWithToString").
-method("ComparisonCriteria", "objectWithToString").
-method("ComparisonCriteria", "componentTypeName").
+method("ComparisonCriteria", "objectWithToString", 3).
+method("ComparisonCriteria", "componentTypeName", 8).
 calls("ComparisonCriteria", "componentTypeName", "Class", "isArray").
 calls("ComparisonCriteria", "componentTypeName", "Class", "getName").
-method("ComparisonCriteria", "isArray").
-method("ComparisonCriteria", "assertElementsEqual").
+method("ComparisonCriteria", "isArray", 3).
+method("ComparisonCriteria", "assertElementsEqual", 1).
 
 # junit4/src/main/java/org/junit/internal/ExactComparisonCriteria.java
 
 class("ExactComparisonCriteria").
-method("ExactComparisonCriteria", "assertElementsEqual").
+method("ExactComparisonCriteria", "assertElementsEqual", 3).
 calls("ExactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals").
 
 # junit4/src/main/java/org/junit/internal/MethodSorter.java
 
 class("MethodSorter").
-method("MethodSorter", "getDeclaredMethods").
+method("MethodSorter", "getDeclaredMethods", 8).
 calls("MethodSorter", "getDeclaredMethods", "Arrays", "sort").
-method("MethodSorter", "getSorter").
+method("MethodSorter", "getSorter", 6).
 calls("MethodSorter", "getSorter", "FixMethodOrder", "value").
 
 # junit4/src/main/java/org/junit/internal/ArrayComparisonFailure.java
 
 class("ArrayComparisonFailure").
-method("ArrayComparisonFailure", "addDimension").
+method("ArrayComparisonFailure", "addDimension", 3).
 calls("ArrayComparisonFailure", "addDimension", "List", "add").
-method("ArrayComparisonFailure", "getCause").
-method("ArrayComparisonFailure", "getMessage").
+method("ArrayComparisonFailure", "getCause", 3).
+method("ArrayComparisonFailure", "getMessage", 14).
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
@@ -342,35 +342,35 @@ calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "append").
 calls("ArrayComparisonFailure", "getMessage", "StringBuilder", "toString").
-method("ArrayComparisonFailure", "toString").
+method("ArrayComparisonFailure", "toString", 3).
 calls("ArrayComparisonFailure", "toString", "ArrayComparisonFailure", "getMessage").
 
 # junit4/src/main/java/org/junit/internal/TextListener.java
 
 class("TextListener").
-method("TextListener", "testRunFinished").
+method("TextListener", "testRunFinished", 5).
 calls("TextListener", "testRunFinished", "TextListener", "printHeader").
 calls("TextListener", "testRunFinished", "TextListener", "printFailures").
 calls("TextListener", "testRunFinished", "TextListener", "printFooter").
-method("TextListener", "testStarted").
+method("TextListener", "testStarted", 3).
 calls("TextListener", "testStarted", "PrintStream", "append").
-method("TextListener", "testFailure").
+method("TextListener", "testFailure", 3).
 calls("TextListener", "testFailure", "PrintStream", "append").
-method("TextListener", "testIgnored").
+method("TextListener", "testIgnored", 3).
 calls("TextListener", "testIgnored", "PrintStream", "append").
-method("TextListener", "getWriter").
-method("TextListener", "printHeader").
+method("TextListener", "getWriter", 3).
+method("TextListener", "printHeader", 4).
 calls("TextListener", "printHeader", "TextListener", "getWriter").
 calls("TextListener", "printHeader", "TextListener", "getWriter").
-method("TextListener", "printFailures").
+method("TextListener", "printFailures", 14).
 calls("TextListener", "printFailures", "List", "isEmpty").
 calls("TextListener", "printFailures", "TextListener", "getWriter").
 calls("TextListener", "printFailures", "TextListener", "getWriter").
 calls("TextListener", "printFailures", "TextListener", "printFailure").
-method("TextListener", "printFailure").
+method("TextListener", "printFailure", 4).
 calls("TextListener", "printFailure", "TextListener", "getWriter").
 calls("TextListener", "printFailure", "TextListener", "getWriter").
-method("TextListener", "printFooter").
+method("TextListener", "printFooter", 12).
 calls("TextListener", "printFooter", "Result", "wasSuccessful").
 calls("TextListener", "printFooter", "TextListener", "getWriter").
 calls("TextListener", "printFooter", "TextListener", "getWriter").
@@ -379,17 +379,17 @@ calls("TextListener", "printFooter", "TextListener", "getWriter").
 calls("TextListener", "printFooter", "TextListener", "getWriter").
 calls("TextListener", "printFooter", "TextListener", "getWriter").
 calls("TextListener", "printFooter", "TextListener", "getWriter").
-method("TextListener", "elapsedTimeAsString").
+method("TextListener", "elapsedTimeAsString", 3).
 calls("TextListener", "elapsedTimeAsString", "NumberFormat", "getInstance").
 
 # junit4/src/main/java/org/junit/experimental/ParallelComputer.java
 
 class("ParallelComputer").
-method("ParallelComputer", "classes").
-method("ParallelComputer", "methods").
-method("ParallelComputer", "parallelize").
-method("ParallelComputer", "getSuite").
-method("ParallelComputer", "getRunner").
+method("ParallelComputer", "classes", 3).
+method("ParallelComputer", "methods", 3).
+method("ParallelComputer", "parallelize", 6).
+method("ParallelComputer", "getSuite", 4).
+method("ParallelComputer", "getRunner", 4).
 
 # junit4/src/main/java/org/junit/runners/JUnit4.java
 
@@ -402,56 +402,56 @@ class("AllTests").
 # junit4/src/main/java/org/junit/runners/ParentRunner.java
 
 class("ParentRunner").
-method("ParentRunner", "createTestClass").
-method("ParentRunner", "getChildren").
-method("ParentRunner", "describeChild").
-method("ParentRunner", "runChild").
-method("ParentRunner", "collectInitializationErrors").
+method("ParentRunner", "createTestClass", 3).
+method("ParentRunner", "getChildren", 1).
+method("ParentRunner", "describeChild", 1).
+method("ParentRunner", "runChild", 1).
+method("ParentRunner", "collectInitializationErrors", 6).
 calls("ParentRunner", "collectInitializationErrors", "ParentRunner", "validatePublicVoidNoArgMethods").
 calls("ParentRunner", "collectInitializationErrors", "ParentRunner", "validatePublicVoidNoArgMethods").
 calls("ParentRunner", "collectInitializationErrors", "ParentRunner", "validateClassRules").
 calls("ParentRunner", "collectInitializationErrors", "ParentRunner", "applyValidators").
-method("ParentRunner", "applyValidators").
+method("ParentRunner", "applyValidators", 6).
 calls("ParentRunner", "applyValidators", "List", "addAll").
-method("ParentRunner", "validatePublicVoidNoArgMethods").
+method("ParentRunner", "validatePublicVoidNoArgMethods", 5).
 calls("ParentRunner", "validatePublicVoidNoArgMethods", "FrameworkMethod", "validatePublicVoidNoArg").
-method("ParentRunner", "validateClassRules").
+method("ParentRunner", "validateClassRules", 4).
 calls("ParentRunner", "validateClassRules", "CLASS_RULE_VALIDATOR", "validate").
 calls("ParentRunner", "validateClassRules", "CLASS_RULE_METHOD_VALIDATOR", "validate").
-method("ParentRunner", "classBlock").
+method("ParentRunner", "classBlock", 9).
 calls("ParentRunner", "classBlock", "ParentRunner", "areAllChildrenIgnored").
-method("ParentRunner", "areAllChildrenIgnored").
+method("ParentRunner", "areAllChildrenIgnored", 7).
 calls("ParentRunner", "areAllChildrenIgnored", "ParentRunner", "isIgnored").
-method("ParentRunner", "withBeforeClasses").
-method("ParentRunner", "withAfterClasses").
-method("ParentRunner", "withClassRules").
-method("ParentRunner", "classRules").
+method("ParentRunner", "withBeforeClasses", 4).
+method("ParentRunner", "withAfterClasses", 4).
+method("ParentRunner", "withClassRules", 4).
+method("ParentRunner", "classRules", 5).
 calls("ParentRunner", "classRules", "List", "addAll").
-method("ParentRunner", "childrenInvoker").
-method("ParentRunner", "isIgnored").
-method("ParentRunner", "runChildren").
+method("ParentRunner", "childrenInvoker", 3).
+method("ParentRunner", "isIgnored", 3).
+method("ParentRunner", "runChildren", 8).
 calls("ParentRunner", "runChildren", "RunnerScheduler", "schedule").
 calls("ParentRunner", "runChildren", "RunnerScheduler", "finished").
-method("ParentRunner", "getName").
+method("ParentRunner", "getName", 3).
 calls("ParentRunner", "getName", "TestClass", "getName").
-method("ParentRunner", "getTestClass").
-method("ParentRunner", "runLeaf").
+method("ParentRunner", "getTestClass", 3).
+method("ParentRunner", "runLeaf", 12).
 calls("ParentRunner", "runLeaf", "EachTestNotifier", "fireTestStarted").
 calls("ParentRunner", "runLeaf", "Statement", "evaluate").
 calls("ParentRunner", "runLeaf", "EachTestNotifier", "addFailedAssumption").
 calls("ParentRunner", "runLeaf", "EachTestNotifier", "addFailure").
 calls("ParentRunner", "runLeaf", "EachTestNotifier", "fireTestFinished").
-method("ParentRunner", "getRunnerAnnotations").
+method("ParentRunner", "getRunnerAnnotations", 3).
 calls("ParentRunner", "getRunnerAnnotations", "TestClass", "getAnnotations").
-method("ParentRunner", "getDescription").
+method("ParentRunner", "getDescription", 12).
 calls("ParentRunner", "getDescription", "Description", "addChild").
-method("ParentRunner", "run").
+method("ParentRunner", "run", 15).
 calls("ParentRunner", "run", "EachTestNotifier", "fireTestSuiteStarted").
 calls("ParentRunner", "run", "Statement", "evaluate").
 calls("ParentRunner", "run", "EachTestNotifier", "addFailedAssumption").
 calls("ParentRunner", "run", "EachTestNotifier", "addFailure").
 calls("ParentRunner", "run", "EachTestNotifier", "fireTestSuiteFinished").
-method("ParentRunner", "filter").
+method("ParentRunner", "filter", 21).
 calls("ParentRunner", "filter", "Lock", "lock").
 calls("ParentRunner", "filter", "ParentRunner", "shouldRun").
 calls("ParentRunner", "filter", "Filter", "apply").
@@ -459,21 +459,21 @@ calls("ParentRunner", "filter", "Iterator", "remove").
 calls("ParentRunner", "filter", "Iterator", "remove").
 calls("ParentRunner", "filter", "Collection", "isEmpty").
 calls("ParentRunner", "filter", "Lock", "unlock").
-method("ParentRunner", "sort").
+method("ParentRunner", "sort", 11).
 calls("ParentRunner", "sort", "Lock", "lock").
 calls("ParentRunner", "sort", "Sorter", "apply").
 calls("ParentRunner", "sort", "Collections", "sort").
 calls("ParentRunner", "sort", "Lock", "unlock").
-method("ParentRunner", "validate").
+method("ParentRunner", "validate", 7).
 calls("ParentRunner", "validate", "ParentRunner", "collectInitializationErrors").
 calls("ParentRunner", "validate", "List", "isEmpty").
-method("ParentRunner", "getFilteredChildren").
+method("ParentRunner", "getFilteredChildren", 12).
 calls("ParentRunner", "getFilteredChildren", "Lock", "lock").
 calls("ParentRunner", "getFilteredChildren", "Lock", "unlock").
-method("ParentRunner", "shouldRun").
+method("ParentRunner", "shouldRun", 3).
 calls("ParentRunner", "shouldRun", "Filter", "shouldRun").
-method("ParentRunner", "comparator").
-method("ParentRunner", "setScheduler").
+method("ParentRunner", "comparator", 3).
+method("ParentRunner", "setScheduler", 3).
 
 # junit4/src/main/java/org/junit/runners/package-info.java
 
@@ -484,98 +484,98 @@ method("ParentRunner", "setScheduler").
 # junit4/src/main/java/org/junit/runners/BlockJUnit4ClassRunner.java
 
 class("BlockJUnit4ClassRunner").
-method("BlockJUnit4ClassRunner", "runChild").
+method("BlockJUnit4ClassRunner", "runChild", 13).
 calls("BlockJUnit4ClassRunner", "runChild", "BlockJUnit4ClassRunner", "isIgnored").
 calls("BlockJUnit4ClassRunner", "runChild", "RunNotifier", "fireTestIgnored").
 calls("BlockJUnit4ClassRunner", "runChild", "BlockJUnit4ClassRunner", "runLeaf").
-method("BlockJUnit4ClassRunner", "isIgnored").
-method("BlockJUnit4ClassRunner", "describeChild").
+method("BlockJUnit4ClassRunner", "isIgnored", 3).
+method("BlockJUnit4ClassRunner", "describeChild", 8).
 calls("BlockJUnit4ClassRunner", "describeChild", "ConcurrentMap", "putIfAbsent").
-method("BlockJUnit4ClassRunner", "getChildren").
+method("BlockJUnit4ClassRunner", "getChildren", 3).
 calls("BlockJUnit4ClassRunner", "getChildren", "BlockJUnit4ClassRunner", "computeTestMethods").
-method("BlockJUnit4ClassRunner", "computeTestMethods").
+method("BlockJUnit4ClassRunner", "computeTestMethods", 3).
 calls("BlockJUnit4ClassRunner", "computeTestMethods", "BlockJUnit4ClassRunner", "getTestClass").
-method("BlockJUnit4ClassRunner", "collectInitializationErrors").
+method("BlockJUnit4ClassRunner", "collectInitializationErrors", 9).
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validatePublicConstructor").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateConstructor").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateInstanceMethods").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateFields").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateMethods").
-method("BlockJUnit4ClassRunner", "validatePublicConstructor").
+method("BlockJUnit4ClassRunner", "validatePublicConstructor", 5).
 calls("BlockJUnit4ClassRunner", "validatePublicConstructor", "List", "addAll").
-method("BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass").
+method("BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass", 6).
 calls("BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass", "BlockJUnit4ClassRunner", "getTestClass").
 calls("BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass", "List", "add").
-method("BlockJUnit4ClassRunner", "validateConstructor").
+method("BlockJUnit4ClassRunner", "validateConstructor", 4).
 calls("BlockJUnit4ClassRunner", "validateConstructor", "BlockJUnit4ClassRunner", "validateOnlyOneConstructor").
 calls("BlockJUnit4ClassRunner", "validateConstructor", "BlockJUnit4ClassRunner", "validateZeroArgConstructor").
-method("BlockJUnit4ClassRunner", "validateOnlyOneConstructor").
+method("BlockJUnit4ClassRunner", "validateOnlyOneConstructor", 6).
 calls("BlockJUnit4ClassRunner", "validateOnlyOneConstructor", "BlockJUnit4ClassRunner", "hasOneConstructor").
 calls("BlockJUnit4ClassRunner", "validateOnlyOneConstructor", "List", "add").
-method("BlockJUnit4ClassRunner", "validateZeroArgConstructor").
+method("BlockJUnit4ClassRunner", "validateZeroArgConstructor", 6).
 calls("BlockJUnit4ClassRunner", "validateZeroArgConstructor", "List", "add").
-method("BlockJUnit4ClassRunner", "hasOneConstructor").
-method("BlockJUnit4ClassRunner", "validateInstanceMethods").
+method("BlockJUnit4ClassRunner", "hasOneConstructor", 3).
+method("BlockJUnit4ClassRunner", "validateInstanceMethods", 8).
 calls("BlockJUnit4ClassRunner", "validateInstanceMethods", "BlockJUnit4ClassRunner", "validatePublicVoidNoArgMethods").
 calls("BlockJUnit4ClassRunner", "validateInstanceMethods", "BlockJUnit4ClassRunner", "validatePublicVoidNoArgMethods").
 calls("BlockJUnit4ClassRunner", "validateInstanceMethods", "BlockJUnit4ClassRunner", "validateTestMethods").
 calls("BlockJUnit4ClassRunner", "validateInstanceMethods", "BlockJUnit4ClassRunner", "computeTestMethods").
 calls("BlockJUnit4ClassRunner", "validateInstanceMethods", "List", "add").
-method("BlockJUnit4ClassRunner", "validateFields").
+method("BlockJUnit4ClassRunner", "validateFields", 3).
 calls("BlockJUnit4ClassRunner", "validateFields", "RULE_VALIDATOR", "validate").
-method("BlockJUnit4ClassRunner", "validateMethods").
+method("BlockJUnit4ClassRunner", "validateMethods", 3).
 calls("BlockJUnit4ClassRunner", "validateMethods", "RULE_METHOD_VALIDATOR", "validate").
-method("BlockJUnit4ClassRunner", "validateTestMethods").
+method("BlockJUnit4ClassRunner", "validateTestMethods", 3).
 calls("BlockJUnit4ClassRunner", "validateTestMethods", "BlockJUnit4ClassRunner", "validatePublicVoidNoArgMethods").
-method("BlockJUnit4ClassRunner", "createTest").
+method("BlockJUnit4ClassRunner", "createTest", 3).
 calls("BlockJUnit4ClassRunner", "createTest", "BlockJUnit4ClassRunner", "getTestClass").
-method("BlockJUnit4ClassRunner", "createTest").
+method("BlockJUnit4ClassRunner", "createTest", 3).
 calls("BlockJUnit4ClassRunner", "createTest", "BlockJUnit4ClassRunner", "createTest").
-method("BlockJUnit4ClassRunner", "testName").
+method("BlockJUnit4ClassRunner", "testName", 3).
 calls("BlockJUnit4ClassRunner", "testName", "FrameworkMethod", "getName").
-method("BlockJUnit4ClassRunner", "methodBlock").
-method("BlockJUnit4ClassRunner", "methodInvoker").
-method("BlockJUnit4ClassRunner", "possiblyExpectingExceptions").
-method("BlockJUnit4ClassRunner", "withPotentialTimeout").
+method("BlockJUnit4ClassRunner", "methodBlock", 14).
+method("BlockJUnit4ClassRunner", "methodInvoker", 3).
+method("BlockJUnit4ClassRunner", "possiblyExpectingExceptions", 5).
+method("BlockJUnit4ClassRunner", "withPotentialTimeout", 7).
 calls("BlockJUnit4ClassRunner", "withPotentialTimeout", "FailOnTimeout", "builder").
-method("BlockJUnit4ClassRunner", "withBefores").
-method("BlockJUnit4ClassRunner", "withAfters").
-method("BlockJUnit4ClassRunner", "withRules").
-method("BlockJUnit4ClassRunner", "withMethodRules").
-method("BlockJUnit4ClassRunner", "getMethodRules").
+method("BlockJUnit4ClassRunner", "withBefores", 4).
+method("BlockJUnit4ClassRunner", "withAfters", 4).
+method("BlockJUnit4ClassRunner", "withRules", 7).
+method("BlockJUnit4ClassRunner", "withMethodRules", 8).
+method("BlockJUnit4ClassRunner", "getMethodRules", 3).
 calls("BlockJUnit4ClassRunner", "getMethodRules", "BlockJUnit4ClassRunner", "rules").
-method("BlockJUnit4ClassRunner", "rules").
+method("BlockJUnit4ClassRunner", "rules", 5).
 calls("BlockJUnit4ClassRunner", "rules", "List", "addAll").
-method("BlockJUnit4ClassRunner", "withTestRules").
-method("BlockJUnit4ClassRunner", "getTestRules").
+method("BlockJUnit4ClassRunner", "withTestRules", 3).
+method("BlockJUnit4ClassRunner", "getTestRules", 5).
 calls("BlockJUnit4ClassRunner", "getTestRules", "List", "addAll").
-method("BlockJUnit4ClassRunner", "getExpectedException").
+method("BlockJUnit4ClassRunner", "getExpectedException", 7).
 calls("BlockJUnit4ClassRunner", "getExpectedException", "Test", "expected").
-method("BlockJUnit4ClassRunner", "getTimeout").
+method("BlockJUnit4ClassRunner", "getTimeout", 6).
 calls("BlockJUnit4ClassRunner", "getTimeout", "Test", "timeout").
 
 # junit4/src/main/java/org/junit/runners/Parameterized.java
 
 class("Parameterized").
-method("Parameterized", "validateBeforeParamAndAfterParamMethods").
+method("Parameterized", "validateBeforeParamAndAfterParamMethods", 8).
 calls("Parameterized", "validateBeforeParamAndAfterParamMethods", "Parameterized", "validatePublicStaticVoidMethods").
 calls("Parameterized", "validateBeforeParamAndAfterParamMethods", "Parameterized", "validatePublicStaticVoidMethods").
 calls("Parameterized", "validateBeforeParamAndAfterParamMethods", "List", "isEmpty").
-method("Parameterized", "validatePublicStaticVoidMethods").
+method("Parameterized", "validatePublicStaticVoidMethods", 11).
 calls("Parameterized", "validatePublicStaticVoidMethods", "FrameworkMethod", "validatePublicVoid").
 calls("Parameterized", "validatePublicStaticVoidMethods", "List", "add").
 
 # junit4/src/main/java/org/junit/runners/Suite.java
 
 class("Suite").
-method("Suite", "emptySuite").
-method("Suite", "getAnnotatedClasses").
+method("Suite", "emptySuite", 6).
+method("Suite", "getAnnotatedClasses", 7).
 calls("Suite", "getAnnotatedClasses", "SuiteClasses", "value").
-method("Suite", "getChildren").
-method("Suite", "describeChild").
+method("Suite", "getChildren", 3).
+method("Suite", "describeChild", 3).
 calls("Suite", "describeChild", "Runner", "getDescription").
-method("Suite", "runChild").
+method("Suite", "runChild", 3).
 calls("Suite", "runChild", "Runner", "run").
 
 # junit4/src/main/java/org/junit/function/ThrowingRunnable.java
@@ -584,144 +584,144 @@ calls("Suite", "runChild", "Runner", "run").
 # junit4/src/main/java/org/junit/rules/ExpectedException.java
 
 class("ExpectedException").
-method("ExpectedException", "none").
-method("ExpectedException", "handleAssertionErrors").
-method("ExpectedException", "handleAssumptionViolatedExceptions").
-method("ExpectedException", "reportMissingExceptionWithMessage").
-method("ExpectedException", "apply").
-method("ExpectedException", "expect").
+method("ExpectedException", "none", 3).
+method("ExpectedException", "handleAssertionErrors", 3).
+method("ExpectedException", "handleAssumptionViolatedExceptions", 3).
+method("ExpectedException", "reportMissingExceptionWithMessage", 4).
+method("ExpectedException", "apply", 3).
+method("ExpectedException", "expect", 4).
 calls("ExpectedException", "expect", "ExpectedExceptionMatcherBuilder", "add").
-method("ExpectedException", "expect").
+method("ExpectedException", "expect", 4).
 calls("ExpectedException", "expect", "ExpectedException", "expect").
-method("ExpectedException", "expectMessage").
+method("ExpectedException", "expectMessage", 4).
 calls("ExpectedException", "expectMessage", "ExpectedException", "expectMessage").
-method("ExpectedException", "expectMessage").
+method("ExpectedException", "expectMessage", 4).
 calls("ExpectedException", "expectMessage", "ExpectedException", "expect").
-method("ExpectedException", "expectCause").
+method("ExpectedException", "expectCause", 4).
 calls("ExpectedException", "expectCause", "ExpectedException", "expect").
-method("ExpectedException", "isAnyExceptionExpected").
+method("ExpectedException", "isAnyExceptionExpected", 3).
 calls("ExpectedException", "isAnyExceptionExpected", "ExpectedExceptionMatcherBuilder", "expectsThrowable").
-method("ExpectedException", "handleException").
+method("ExpectedException", "handleException", 7).
 calls("ExpectedException", "handleException", "ExpectedException", "isAnyExceptionExpected").
 calls("ExpectedException", "handleException", "ExpectedException", "assertThat").
-method("ExpectedException", "failDueToMissingException").
+method("ExpectedException", "failDueToMissingException", 3).
 calls("ExpectedException", "failDueToMissingException", "ExpectedException", "fail").
-method("ExpectedException", "missingExceptionMessage").
+method("ExpectedException", "missingExceptionMessage", 4).
 calls("ExpectedException", "missingExceptionMessage", "ExpectedException", "format").
 
 # junit4/src/main/java/org/junit/rules/RuleChain.java
 
 class("RuleChain").
-method("RuleChain", "emptyRuleChain").
-method("RuleChain", "outerRule").
+method("RuleChain", "emptyRuleChain", 3).
+method("RuleChain", "outerRule", 3).
 calls("RuleChain", "outerRule", "RuleChain", "emptyRuleChain").
-method("RuleChain", "around").
+method("RuleChain", "around", 9).
 calls("RuleChain", "around", "List", "add").
 calls("RuleChain", "around", "List", "addAll").
-method("RuleChain", "apply").
+method("RuleChain", "apply", 3).
 
 # junit4/src/main/java/org/junit/rules/ErrorCollector.java
 
 class("ErrorCollector").
-method("ErrorCollector", "verify").
+method("ErrorCollector", "verify", 3).
 calls("ErrorCollector", "verify", "MultipleFailureException", "assertEmpty").
-method("ErrorCollector", "addError").
+method("ErrorCollector", "addError", 12).
 calls("ErrorCollector", "addError", "AssertionError", "initCause").
 calls("ErrorCollector", "addError", "List", "add").
 calls("ErrorCollector", "addError", "List", "add").
-method("ErrorCollector", "checkThat").
+method("ErrorCollector", "checkThat", 3).
 calls("ErrorCollector", "checkThat", "ErrorCollector", "checkThat").
-method("ErrorCollector", "checkThat").
+method("ErrorCollector", "checkThat", 3).
 calls("ErrorCollector", "checkThat", "ErrorCollector", "checkSucceeds").
-method("ErrorCollector", "checkSucceeds").
+method("ErrorCollector", "checkSucceeds", 12).
 calls("ErrorCollector", "checkSucceeds", "Callable", "call").
 calls("ErrorCollector", "checkSucceeds", "AssertionError", "initCause").
 calls("ErrorCollector", "checkSucceeds", "ErrorCollector", "addError").
 calls("ErrorCollector", "checkSucceeds", "ErrorCollector", "addError").
-method("ErrorCollector", "checkThrows").
+method("ErrorCollector", "checkThrows", 6).
 calls("ErrorCollector", "checkThrows", "ErrorCollector", "assertThrows").
 calls("ErrorCollector", "checkThrows", "ErrorCollector", "addError").
 
 # junit4/src/main/java/org/junit/rules/Verifier.java
 
 class("Verifier").
-method("Verifier", "apply").
-method("Verifier", "verify").
+method("Verifier", "apply", 3).
+method("Verifier", "verify", 1).
 
 # junit4/src/main/java/org/junit/rules/TestWatcher.java
 
 class("TestWatcher").
-method("TestWatcher", "apply").
-method("TestWatcher", "succeededQuietly").
+method("TestWatcher", "apply", 3).
+method("TestWatcher", "succeededQuietly", 6).
 calls("TestWatcher", "succeededQuietly", "TestWatcher", "succeeded").
 calls("TestWatcher", "succeededQuietly", "List", "add").
-method("TestWatcher", "failedQuietly").
+method("TestWatcher", "failedQuietly", 6).
 calls("TestWatcher", "failedQuietly", "TestWatcher", "failed").
 calls("TestWatcher", "failedQuietly", "List", "add").
-method("TestWatcher", "skippedQuietly").
+method("TestWatcher", "skippedQuietly", 10).
 calls("TestWatcher", "skippedQuietly", "TestWatcher", "skipped").
 calls("TestWatcher", "skippedQuietly", "TestWatcher", "skipped").
 calls("TestWatcher", "skippedQuietly", "List", "add").
-method("TestWatcher", "startingQuietly").
+method("TestWatcher", "startingQuietly", 6).
 calls("TestWatcher", "startingQuietly", "TestWatcher", "starting").
 calls("TestWatcher", "startingQuietly", "List", "add").
-method("TestWatcher", "finishedQuietly").
+method("TestWatcher", "finishedQuietly", 6).
 calls("TestWatcher", "finishedQuietly", "TestWatcher", "finished").
 calls("TestWatcher", "finishedQuietly", "List", "add").
-method("TestWatcher", "succeeded").
-method("TestWatcher", "failed").
-method("TestWatcher", "skipped").
+method("TestWatcher", "succeeded", 1).
+method("TestWatcher", "failed", 1).
+method("TestWatcher", "skipped", 4).
 calls("TestWatcher", "skipped", "TestWatcher", "skipped").
-method("TestWatcher", "skipped").
-method("TestWatcher", "starting").
-method("TestWatcher", "finished").
+method("TestWatcher", "skipped", 1).
+method("TestWatcher", "starting", 1).
+method("TestWatcher", "finished", 1).
 
 # junit4/src/main/java/org/junit/rules/TestWatchman.java
 
 class("TestWatchman").
-method("TestWatchman", "apply").
-method("TestWatchman", "succeeded").
-method("TestWatchman", "failed").
-method("TestWatchman", "starting").
-method("TestWatchman", "finished").
+method("TestWatchman", "apply", 3).
+method("TestWatchman", "succeeded", 1).
+method("TestWatchman", "failed", 1).
+method("TestWatchman", "starting", 1).
+method("TestWatchman", "finished", 1).
 
 # junit4/src/main/java/org/junit/rules/TemporaryFolder.java
 
 class("TemporaryFolder").
-method("TemporaryFolder", "builder").
-method("TemporaryFolder", "before").
+method("TemporaryFolder", "builder", 3).
+method("TemporaryFolder", "before", 3).
 calls("TemporaryFolder", "before", "TemporaryFolder", "create").
-method("TemporaryFolder", "after").
+method("TemporaryFolder", "after", 3).
 calls("TemporaryFolder", "after", "TemporaryFolder", "delete").
-method("TemporaryFolder", "create").
-method("TemporaryFolder", "newFile").
+method("TemporaryFolder", "create", 3).
+method("TemporaryFolder", "newFile", 7).
 calls("TemporaryFolder", "newFile", "File", "createNewFile").
-method("TemporaryFolder", "newFile").
+method("TemporaryFolder", "newFile", 3).
 calls("TemporaryFolder", "newFile", "File", "createTempFile").
-method("TemporaryFolder", "newFolder").
+method("TemporaryFolder", "newFolder", 3).
 calls("TemporaryFolder", "newFolder", "TemporaryFolder", "newFolder").
-method("TemporaryFolder", "newFolder").
-method("TemporaryFolder", "newFolder").
+method("TemporaryFolder", "newFolder", 24).
+method("TemporaryFolder", "newFolder", 3).
 calls("TemporaryFolder", "newFolder", "TemporaryFolder", "createTemporaryFolderIn").
-method("TemporaryFolder", "createTemporaryFolderIn").
+method("TemporaryFolder", "createTemporaryFolderIn", 15).
 calls("TemporaryFolder", "createTemporaryFolderIn", "File", "mkdir").
 calls("TemporaryFolder", "createTemporaryFolderIn", "File", "delete").
 calls("TemporaryFolder", "createTemporaryFolderIn", "File", "delete").
-method("TemporaryFolder", "getRoot").
-method("TemporaryFolder", "delete").
+method("TemporaryFolder", "getRoot", 6).
+method("TemporaryFolder", "delete", 7).
 calls("TemporaryFolder", "delete", "TemporaryFolder", "tryDelete").
 calls("TemporaryFolder", "delete", "TemporaryFolder", "fail").
-method("TemporaryFolder", "tryDelete").
+method("TemporaryFolder", "tryDelete", 6).
 calls("TemporaryFolder", "tryDelete", "TemporaryFolder", "recursiveDelete").
-method("TemporaryFolder", "recursiveDelete").
+method("TemporaryFolder", "recursiveDelete", 12).
 calls("TemporaryFolder", "recursiveDelete", "File", "delete").
 
 # junit4/src/main/java/org/junit/rules/RunRules.java
 
 class("RunRules").
-method("RunRules", "evaluate").
+method("RunRules", "evaluate", 3).
 calls("RunRules", "evaluate", "Statement", "evaluate").
-method("RunRules", "applyAll").
+method("RunRules", "applyAll", 5).
 
 # junit4/src/main/java/org/junit/rules/MethodRule.java
 
@@ -729,51 +729,51 @@ method("RunRules", "applyAll").
 # junit4/src/main/java/org/junit/rules/Stopwatch.java
 
 class("Stopwatch").
-method("Stopwatch", "runtime").
+method("Stopwatch", "runtime", 3).
 calls("Stopwatch", "runtime", "TimeUnit", "convert").
-method("Stopwatch", "succeeded").
-method("Stopwatch", "failed").
-method("Stopwatch", "skipped").
-method("Stopwatch", "finished").
-method("Stopwatch", "getNanos").
-method("Stopwatch", "starting").
-method("Stopwatch", "stopping").
-method("Stopwatch", "apply").
+method("Stopwatch", "succeeded", 1).
+method("Stopwatch", "failed", 1).
+method("Stopwatch", "skipped", 1).
+method("Stopwatch", "finished", 1).
+method("Stopwatch", "getNanos", 10).
+method("Stopwatch", "starting", 4).
+method("Stopwatch", "stopping", 3).
+method("Stopwatch", "apply", 3).
 
 # junit4/src/main/java/org/junit/rules/ExpectedExceptionMatcherBuilder.java
 
 class("ExpectedExceptionMatcherBuilder").
-method("ExpectedExceptionMatcherBuilder", "add").
+method("ExpectedExceptionMatcherBuilder", "add", 3).
 calls("ExpectedExceptionMatcherBuilder", "add", "List", "add").
-method("ExpectedExceptionMatcherBuilder", "expectsThrowable").
+method("ExpectedExceptionMatcherBuilder", "expectsThrowable", 3).
 calls("ExpectedExceptionMatcherBuilder", "expectsThrowable", "List", "isEmpty").
-method("ExpectedExceptionMatcherBuilder", "build").
+method("ExpectedExceptionMatcherBuilder", "build", 3).
 calls("ExpectedExceptionMatcherBuilder", "build", "ExpectedExceptionMatcherBuilder", "isThrowable").
-method("ExpectedExceptionMatcherBuilder", "allOfTheMatchers").
+method("ExpectedExceptionMatcherBuilder", "allOfTheMatchers", 6).
 calls("ExpectedExceptionMatcherBuilder", "allOfTheMatchers", "ExpectedExceptionMatcherBuilder", "cast").
 calls("ExpectedExceptionMatcherBuilder", "allOfTheMatchers", "ExpectedExceptionMatcherBuilder", "allOf").
-method("ExpectedExceptionMatcherBuilder", "castedMatchers").
-method("ExpectedExceptionMatcherBuilder", "cast").
+method("ExpectedExceptionMatcherBuilder", "castedMatchers", 3).
+method("ExpectedExceptionMatcherBuilder", "cast", 3).
 
 # junit4/src/main/java/org/junit/rules/Timeout.java
 
 class("Timeout").
-method("Timeout", "builder").
-method("Timeout", "millis").
-method("Timeout", "seconds").
-method("Timeout", "getTimeout").
+method("Timeout", "builder", 3).
+method("Timeout", "millis", 3).
+method("Timeout", "seconds", 3).
+method("Timeout", "getTimeout", 3).
 calls("Timeout", "getTimeout", "TimeUnit", "convert").
-method("Timeout", "getLookingForStuckThread").
-method("Timeout", "createFailOnTimeoutStatement").
+method("Timeout", "getLookingForStuckThread", 3).
+method("Timeout", "createFailOnTimeoutStatement", 3).
 calls("Timeout", "createFailOnTimeoutStatement", "FailOnTimeout", "builder").
-method("Timeout", "apply").
+method("Timeout", "apply", 6).
 calls("Timeout", "apply", "Timeout", "createFailOnTimeoutStatement").
 
 # junit4/src/main/java/org/junit/rules/TestName.java
 
 class("TestName").
-method("TestName", "starting").
-method("TestName", "getMethodName").
+method("TestName", "starting", 3).
+method("TestName", "getMethodName", 3).
 
 # junit4/src/main/java/org/junit/rules/TestRule.java
 
@@ -781,69 +781,69 @@ method("TestName", "getMethodName").
 # junit4/src/main/java/org/junit/rules/ExternalResource.java
 
 class("ExternalResource").
-method("ExternalResource", "apply").
+method("ExternalResource", "apply", 3).
 calls("ExternalResource", "apply", "ExternalResource", "statement").
-method("ExternalResource", "statement").
-method("ExternalResource", "before").
-method("ExternalResource", "after").
+method("ExternalResource", "statement", 3).
+method("ExternalResource", "before", 1).
+method("ExternalResource", "after", 1).
 
 # junit4/src/main/java/org/junit/rules/DisableOnDebug.java
 
 class("DisableOnDebug").
-method("DisableOnDebug", "apply").
+method("DisableOnDebug", "apply", 7).
 calls("DisableOnDebug", "apply", "TestRule", "apply").
-method("DisableOnDebug", "isDebugging").
+method("DisableOnDebug", "isDebugging", 11).
 calls("DisableOnDebug", "isDebugging", "String", "startsWith").
-method("DisableOnDebug", "isDebugging").
+method("DisableOnDebug", "isDebugging", 3).
 
 # junit4/src/main/java/org/junit/runner/Result.java
 
 class("Result").
-method("Result", "getRunCount").
+method("Result", "getRunCount", 3).
 calls("Result", "getRunCount", "AtomicInteger", "get").
-method("Result", "getFailureCount").
+method("Result", "getFailureCount", 3).
 calls("Result", "getFailureCount", "CopyOnWriteArrayList", "size").
-method("Result", "getRunTime").
+method("Result", "getRunTime", 3).
 calls("Result", "getRunTime", "AtomicLong", "get").
-method("Result", "getFailures").
-method("Result", "getIgnoreCount").
+method("Result", "getFailures", 3).
+method("Result", "getIgnoreCount", 3).
 calls("Result", "getIgnoreCount", "AtomicInteger", "get").
-method("Result", "wasSuccessful").
-method("Result", "writeObject").
+method("Result", "wasSuccessful", 3).
+method("Result", "writeObject", 4).
 calls("Result", "writeObject", "SerializedForm", "serialize").
-method("Result", "readObject").
-method("Result", "readResolve").
-method("Result", "createListener").
+method("Result", "readObject", 3).
+method("Result", "readResolve", 3).
+method("Result", "createListener", 3).
 
 # junit4/src/main/java/org/junit/runner/FilterFactories.java
 
 class("FilterFactories").
-method("FilterFactories", "createFilterFromFilterSpec").
+method("FilterFactories", "createFilterFromFilterSpec", 10).
 calls("FilterFactories", "createFilterFromFilterSpec", "String", "contains").
 calls("FilterFactories", "createFilterFromFilterSpec", "FilterFactories", "createFilter").
-method("FilterFactories", "createFilter").
+method("FilterFactories", "createFilter", 4).
 calls("FilterFactories", "createFilter", "FilterFactory", "createFilter").
-method("FilterFactories", "createFilter").
+method("FilterFactories", "createFilter", 4).
 calls("FilterFactories", "createFilter", "FilterFactory", "createFilter").
-method("FilterFactories", "createFilterFactory").
+method("FilterFactories", "createFilterFactory", 8).
 calls("FilterFactories", "createFilterFactory", "FilterFactories", "createFilterFactory").
-method("FilterFactories", "createFilterFactory").
+method("FilterFactories", "createFilterFactory", 6).
 calls("FilterFactories", "createFilterFactory", "Class", "getConstructor").
 
 # junit4/src/main/java/org/junit/runner/Computer.java
 
 class("Computer").
-method("Computer", "serial").
-method("Computer", "getSuite").
-method("Computer", "getRunner").
+method("Computer", "serial", 3).
+method("Computer", "getSuite", 3).
+method("Computer", "getRunner", 3).
 calls("Computer", "getRunner", "RunnerBuilder", "runnerForClass").
 
 # junit4/src/main/java/org/junit/runner/Runner.java
 
 class("Runner").
-method("Runner", "getDescription").
-method("Runner", "run").
-method("Runner", "testCount").
+method("Runner", "getDescription", 1).
+method("Runner", "run", 1).
+method("Runner", "testCount", 3).
 calls("Runner", "testCount", "Runner", "getDescription").
 
 # junit4/src/main/java/org/junit/runner/package-info.java
@@ -852,45 +852,45 @@ calls("Runner", "testCount", "Runner", "getDescription").
 # junit4/src/main/java/org/junit/runner/Description.java
 
 class("Description").
-method("Description", "createSuiteDescription").
-method("Description", "createSuiteDescription").
-method("Description", "createTestDescription").
-method("Description", "createTestDescription").
-method("Description", "createTestDescription").
-method("Description", "createTestDescription").
-method("Description", "formatDisplayName").
+method("Description", "createSuiteDescription", 3).
+method("Description", "createSuiteDescription", 3).
+method("Description", "createTestDescription", 3).
+method("Description", "createTestDescription", 3).
+method("Description", "createTestDescription", 3).
+method("Description", "createTestDescription", 3).
+method("Description", "formatDisplayName", 3).
 calls("Description", "formatDisplayName", "String", "format").
-method("Description", "createSuiteDescription").
-method("Description", "createSuiteDescription").
-method("Description", "getDisplayName").
-method("Description", "addChild").
+method("Description", "createSuiteDescription", 3).
+method("Description", "createSuiteDescription", 3).
+method("Description", "getDisplayName", 3).
+method("Description", "addChild", 3).
 calls("Description", "addChild", "Collection", "add").
-method("Description", "getChildren").
-method("Description", "isSuite").
+method("Description", "getChildren", 3).
+method("Description", "isSuite", 3).
 calls("Description", "isSuite", "Description", "isTest").
-method("Description", "isTest").
+method("Description", "isTest", 3).
 calls("Description", "isTest", "Collection", "isEmpty").
-method("Description", "testCount").
+method("Description", "testCount", 9).
 calls("Description", "testCount", "Description", "isTest").
-method("Description", "hashCode").
+method("Description", "hashCode", 3).
 calls("Description", "hashCode", "Serializable", "hashCode").
-method("Description", "equals").
+method("Description", "equals", 7).
 calls("Description", "equals", "Serializable", "equals").
-method("Description", "toString").
+method("Description", "toString", 3).
 calls("Description", "toString", "Description", "getDisplayName").
-method("Description", "isEmpty").
+method("Description", "isEmpty", 3).
 calls("Description", "isEmpty", "Description", "equals").
-method("Description", "childlessCopy").
-method("Description", "getAnnotation").
+method("Description", "childlessCopy", 3).
+method("Description", "getAnnotation", 7).
 calls("Description", "getAnnotation", "Annotation", "annotationType").
 calls("Description", "getAnnotation", "Class", "cast").
-method("Description", "getAnnotations").
+method("Description", "getAnnotations", 3).
 calls("Description", "getAnnotations", "Arrays", "asList").
-method("Description", "getTestClass").
-method("Description", "getClassName").
-method("Description", "getMethodName").
+method("Description", "getTestClass", 14).
+method("Description", "getClassName", 3).
+method("Description", "getMethodName", 3).
 calls("Description", "getMethodName", "Description", "methodAndClassNamePatternGroupOrDefault").
-method("Description", "methodAndClassNamePatternGroupOrDefault").
+method("Description", "methodAndClassNamePatternGroupOrDefault", 4).
 
 # junit4/src/main/java/org/junit/runner/Describable.java
 
@@ -898,23 +898,23 @@ method("Description", "methodAndClassNamePatternGroupOrDefault").
 # junit4/src/main/java/org/junit/runner/Request.java
 
 class("Request").
-method("Request", "method").
+method("Request", "method", 4).
 calls("Request", "method", "Request", "aClass").
-method("Request", "aClass").
-method("Request", "classWithoutSuiteMethod").
-method("Request", "classes").
+method("Request", "aClass", 3).
+method("Request", "classWithoutSuiteMethod", 3).
+method("Request", "classes", 8).
 calls("Request", "classes", "Request", "runner").
 calls("Request", "classes", "Request", "runner").
-method("Request", "classes").
+method("Request", "classes", 3).
 calls("Request", "classes", "Request", "classes").
-method("Request", "errorReport").
+method("Request", "errorReport", 3).
 calls("Request", "errorReport", "Request", "runner").
-method("Request", "runner").
-method("Request", "getRunner").
-method("Request", "filterWith").
-method("Request", "filterWith").
+method("Request", "runner", 3).
+method("Request", "getRunner", 1).
+method("Request", "filterWith", 3).
+method("Request", "filterWith", 3).
 calls("Request", "filterWith", "Request", "filterWith").
-method("Request", "sortWith").
+method("Request", "sortWith", 3).
 
 # junit4/src/main/java/org/junit/runner/RunWith.java
 
@@ -925,49 +925,49 @@ method("Request", "sortWith").
 # junit4/src/main/java/org/junit/runner/JUnitCore.java
 
 class("JUnitCore").
-method("JUnitCore", "main").
+method("JUnitCore", "main", 4).
 calls("JUnitCore", "main", "System", "exit").
-method("JUnitCore", "runClasses").
+method("JUnitCore", "runClasses", 3).
 calls("JUnitCore", "runClasses", "JUnitCore", "runClasses").
-method("JUnitCore", "runClasses").
-method("JUnitCore", "runMain").
+method("JUnitCore", "runClasses", 3).
+method("JUnitCore", "runMain", 7).
 calls("JUnitCore", "runMain", "JUnitSystem", "out").
 calls("JUnitCore", "runMain", "JUnitCore", "addListener").
 calls("JUnitCore", "runMain", "JUnitCore", "run").
-method("JUnitCore", "getVersion").
+method("JUnitCore", "getVersion", 3).
 calls("JUnitCore", "getVersion", "Version", "id").
-method("JUnitCore", "run").
+method("JUnitCore", "run", 3).
 calls("JUnitCore", "run", "JUnitCore", "run").
-method("JUnitCore", "run").
+method("JUnitCore", "run", 3).
 calls("JUnitCore", "run", "JUnitCore", "run").
-method("JUnitCore", "run").
+method("JUnitCore", "run", 3).
 calls("JUnitCore", "run", "JUnitCore", "run").
-method("JUnitCore", "run").
+method("JUnitCore", "run", 3).
 calls("JUnitCore", "run", "JUnitCore", "run").
-method("JUnitCore", "run").
+method("JUnitCore", "run", 12).
 calls("JUnitCore", "run", "RunNotifier", "addFirstListener").
 calls("JUnitCore", "run", "RunNotifier", "fireTestRunStarted").
 calls("JUnitCore", "run", "Runner", "run").
 calls("JUnitCore", "run", "RunNotifier", "fireTestRunFinished").
 calls("JUnitCore", "run", "JUnitCore", "removeListener").
-method("JUnitCore", "addListener").
+method("JUnitCore", "addListener", 3).
 calls("JUnitCore", "addListener", "RunNotifier", "addListener").
-method("JUnitCore", "removeListener").
+method("JUnitCore", "removeListener", 3).
 calls("JUnitCore", "removeListener", "RunNotifier", "removeListener").
-method("JUnitCore", "defaultComputer").
+method("JUnitCore", "defaultComputer", 3).
 
 # junit4/src/main/java/org/junit/runner/JUnitCommandLineParseResult.java
 
 class("JUnitCommandLineParseResult").
-method("JUnitCommandLineParseResult", "getFilterSpecs").
+method("JUnitCommandLineParseResult", "getFilterSpecs", 3).
 calls("JUnitCommandLineParseResult", "getFilterSpecs", "Collections", "unmodifiableList").
-method("JUnitCommandLineParseResult", "getClasses").
+method("JUnitCommandLineParseResult", "getClasses", 3).
 calls("JUnitCommandLineParseResult", "getClasses", "Collections", "unmodifiableList").
-method("JUnitCommandLineParseResult", "parse").
+method("JUnitCommandLineParseResult", "parse", 5).
 calls("JUnitCommandLineParseResult", "parse", "JUnitCommandLineParseResult", "parseArgs").
-method("JUnitCommandLineParseResult", "parseArgs").
+method("JUnitCommandLineParseResult", "parseArgs", 3).
 calls("JUnitCommandLineParseResult", "parseArgs", "JUnitCommandLineParseResult", "parseParameters").
-method("JUnitCommandLineParseResult", "parseOptions").
+method("JUnitCommandLineParseResult", "parseOptions", 30).
 calls("JUnitCommandLineParseResult", "parseOptions", "String", "equals").
 calls("JUnitCommandLineParseResult", "parseOptions", "JUnitCommandLineParseResult", "copyArray").
 calls("JUnitCommandLineParseResult", "parseOptions", "String", "startsWith").
@@ -976,31 +976,31 @@ calls("JUnitCommandLineParseResult", "parseOptions", "List", "add").
 calls("JUnitCommandLineParseResult", "parseOptions", "List", "add").
 calls("JUnitCommandLineParseResult", "parseOptions", "List", "add").
 calls("JUnitCommandLineParseResult", "parseOptions", "JUnitCommandLineParseResult", "copyArray").
-method("JUnitCommandLineParseResult", "copyArray").
-method("JUnitCommandLineParseResult", "parseParameters").
+method("JUnitCommandLineParseResult", "copyArray", 6).
+method("JUnitCommandLineParseResult", "parseParameters", 7).
 calls("JUnitCommandLineParseResult", "parseParameters", "List", "add").
 calls("JUnitCommandLineParseResult", "parseParameters", "List", "add").
-method("JUnitCommandLineParseResult", "errorReport").
+method("JUnitCommandLineParseResult", "errorReport", 3).
 calls("JUnitCommandLineParseResult", "errorReport", "Request", "errorReport").
-method("JUnitCommandLineParseResult", "createRequest").
+method("JUnitCommandLineParseResult", "createRequest", 8).
 calls("JUnitCommandLineParseResult", "createRequest", "List", "isEmpty").
 calls("JUnitCommandLineParseResult", "createRequest", "JUnitCommandLineParseResult", "applyFilterSpecs").
 calls("JUnitCommandLineParseResult", "createRequest", "JUnitCommandLineParseResult", "errorReport").
-method("JUnitCommandLineParseResult", "applyFilterSpecs").
+method("JUnitCommandLineParseResult", "applyFilterSpecs", 9).
 calls("JUnitCommandLineParseResult", "applyFilterSpecs", "JUnitCommandLineParseResult", "errorReport").
 
 # junit4/src/main/java/org/junit/runner/FilterFactoryParams.java
 
 class("FilterFactoryParams").
-method("FilterFactoryParams", "getArgs").
-method("FilterFactoryParams", "getTopLevelDescription").
+method("FilterFactoryParams", "getArgs", 3).
+method("FilterFactoryParams", "getTopLevelDescription", 3).
 
 # junit4/src/main/java/org/junit/validator/AnnotationValidator.java
 
 class("AnnotationValidator").
-method("AnnotationValidator", "validateAnnotatedClass").
-method("AnnotationValidator", "validateAnnotatedField").
-method("AnnotationValidator", "validateAnnotatedMethod").
+method("AnnotationValidator", "validateAnnotatedClass", 3).
+method("AnnotationValidator", "validateAnnotatedField", 3).
+method("AnnotationValidator", "validateAnnotatedMethod", 3).
 
 # junit4/src/main/java/org/junit/validator/TestClassValidator.java
 
@@ -1008,21 +1008,21 @@ method("AnnotationValidator", "validateAnnotatedMethod").
 # junit4/src/main/java/org/junit/validator/AnnotationValidatorFactory.java
 
 class("AnnotationValidatorFactory").
-method("AnnotationValidatorFactory", "createAnnotationValidator").
+method("AnnotationValidatorFactory", "createAnnotationValidator", 13).
 calls("AnnotationValidatorFactory", "createAnnotationValidator", "VALIDATORS_FOR_ANNOTATION_TYPES", "putIfAbsent").
 calls("AnnotationValidatorFactory", "createAnnotationValidator", "VALIDATORS_FOR_ANNOTATION_TYPES", "get").
 
 # junit4/src/main/java/org/junit/validator/PublicClassValidator.java
 
 class("PublicClassValidator").
-method("PublicClassValidator", "validateTestClass").
+method("PublicClassValidator", "validateTestClass", 7).
 calls("PublicClassValidator", "validateTestClass", "TestClass", "isPublic").
 calls("PublicClassValidator", "validateTestClass", "PublicClassValidator", "singletonList").
 
 # junit4/src/main/java/org/junit/validator/AnnotationsValidator.java
 
 class("AnnotationsValidator").
-method("AnnotationsValidator", "validateTestClass").
+method("AnnotationsValidator", "validateTestClass", 7).
 calls("AnnotationsValidator", "validateTestClass", "List", "addAll").
 
 # junit4/src/main/java/org/junit/validator/ValidateWith.java
@@ -1034,48 +1034,48 @@ calls("AnnotationsValidator", "validateTestClass", "List", "addAll").
 # junit4/src/main/java/org/junit/matchers/JUnitMatchers.java
 
 class("JUnitMatchers").
-method("JUnitMatchers", "hasItem").
+method("JUnitMatchers", "hasItem", 3).
 calls("JUnitMatchers", "hasItem", "CoreMatchers", "hasItem").
-method("JUnitMatchers", "hasItem").
+method("JUnitMatchers", "hasItem", 3).
 calls("JUnitMatchers", "hasItem", "JUnitMatchers", "CoreMatchers").
-method("JUnitMatchers", "hasItems").
+method("JUnitMatchers", "hasItems", 3).
 calls("JUnitMatchers", "hasItems", "CoreMatchers", "hasItems").
-method("JUnitMatchers", "hasItems").
+method("JUnitMatchers", "hasItems", 3).
 calls("JUnitMatchers", "hasItems", "CoreMatchers", "hasItems").
-method("JUnitMatchers", "everyItem").
+method("JUnitMatchers", "everyItem", 3).
 calls("JUnitMatchers", "everyItem", "CoreMatchers", "everyItem").
-method("JUnitMatchers", "containsString").
+method("JUnitMatchers", "containsString", 3).
 calls("JUnitMatchers", "containsString", "CoreMatchers", "containsString").
-method("JUnitMatchers", "both").
+method("JUnitMatchers", "both", 3).
 calls("JUnitMatchers", "both", "CoreMatchers", "both").
-method("JUnitMatchers", "either").
+method("JUnitMatchers", "either", 3).
 calls("JUnitMatchers", "either", "CoreMatchers", "either").
-method("JUnitMatchers", "isThrowable").
+method("JUnitMatchers", "isThrowable", 3).
 calls("JUnitMatchers", "isThrowable", "StacktracePrintingMatcher", "isThrowable").
-method("JUnitMatchers", "isException").
+method("JUnitMatchers", "isException", 3).
 calls("JUnitMatchers", "isException", "StacktracePrintingMatcher", "isException").
 
 # junit4/src/main/java/org/junit/internal/runners/MethodValidator.java
 
 class("MethodValidator").
-method("MethodValidator", "validateInstanceMethods").
+method("MethodValidator", "validateInstanceMethods", 9).
 calls("MethodValidator", "validateInstanceMethods", "MethodValidator", "validateTestMethods").
 calls("MethodValidator", "validateInstanceMethods", "MethodValidator", "validateTestMethods").
 calls("MethodValidator", "validateInstanceMethods", "MethodValidator", "validateTestMethods").
 calls("MethodValidator", "validateInstanceMethods", "List", "add").
-method("MethodValidator", "validateStaticMethods").
+method("MethodValidator", "validateStaticMethods", 4).
 calls("MethodValidator", "validateStaticMethods", "MethodValidator", "validateTestMethods").
 calls("MethodValidator", "validateStaticMethods", "MethodValidator", "validateTestMethods").
-method("MethodValidator", "validateMethodsForDefaultRunner").
+method("MethodValidator", "validateMethodsForDefaultRunner", 6).
 calls("MethodValidator", "validateMethodsForDefaultRunner", "MethodValidator", "validateNoArgConstructor").
 calls("MethodValidator", "validateMethodsForDefaultRunner", "MethodValidator", "validateStaticMethods").
 calls("MethodValidator", "validateMethodsForDefaultRunner", "MethodValidator", "validateInstanceMethods").
-method("MethodValidator", "assertValid").
+method("MethodValidator", "assertValid", 5).
 calls("MethodValidator", "assertValid", "List", "isEmpty").
-method("MethodValidator", "validateNoArgConstructor").
+method("MethodValidator", "validateNoArgConstructor", 6).
 calls("MethodValidator", "validateNoArgConstructor", "TestClass", "getConstructor").
 calls("MethodValidator", "validateNoArgConstructor", "List", "add").
-method("MethodValidator", "validateTestMethods").
+method("MethodValidator", "validateTestMethods", 20).
 calls("MethodValidator", "validateTestMethods", "List", "add").
 calls("MethodValidator", "validateTestMethods", "Modifier", "isPublic").
 calls("MethodValidator", "validateTestMethods", "List", "add").
@@ -1091,52 +1091,52 @@ class("FailedBefore").
 # junit4/src/main/java/org/junit/internal/runners/TestClass.java
 
 class("TestClass").
-method("TestClass", "getTestMethods").
+method("TestClass", "getTestMethods", 3).
 calls("TestClass", "getTestMethods", "TestClass", "getAnnotatedMethods").
-method("TestClass", "getBefores").
+method("TestClass", "getBefores", 3).
 calls("TestClass", "getBefores", "TestClass", "getAnnotatedMethods").
-method("TestClass", "getAfters").
+method("TestClass", "getAfters", 3).
 calls("TestClass", "getAfters", "TestClass", "getAnnotatedMethods").
-method("TestClass", "getAnnotatedMethods").
+method("TestClass", "getAnnotatedMethods", 14).
 calls("TestClass", "getAnnotatedMethods", "List", "add").
 calls("TestClass", "getAnnotatedMethods", "TestClass", "runsTopToBottom").
 calls("TestClass", "getAnnotatedMethods", "Collections", "reverse").
-method("TestClass", "runsTopToBottom").
-method("TestClass", "isShadowed").
+method("TestClass", "runsTopToBottom", 3).
+method("TestClass", "isShadowed", 7).
 calls("TestClass", "isShadowed", "TestClass", "isShadowed").
-method("TestClass", "isShadowed").
+method("TestClass", "isShadowed", 13).
 calls("TestClass", "isShadowed", "Method", "getName").
 calls("TestClass", "isShadowed", "Method", "getParameterTypes").
-method("TestClass", "getSuperClasses").
+method("TestClass", "getSuperClasses", 8).
 calls("TestClass", "getSuperClasses", "List", "add").
-method("TestClass", "getConstructor").
+method("TestClass", "getConstructor", 3).
 calls("TestClass", "getConstructor", "Class", "getConstructor").
-method("TestClass", "getJavaClass").
-method("TestClass", "getName").
+method("TestClass", "getJavaClass", 3).
+method("TestClass", "getName", 3).
 calls("TestClass", "getName", "Class", "getName").
 
 # junit4/src/main/java/org/junit/internal/runners/SuiteMethod.java
 
 class("SuiteMethod").
-method("SuiteMethod", "testFromSuiteMethod").
+method("SuiteMethod", "testFromSuiteMethod", 13).
 calls("SuiteMethod", "testFromSuiteMethod", "Modifier", "isStatic").
 calls("SuiteMethod", "testFromSuiteMethod", "InvocationTargetException", "getCause").
 
 # junit4/src/main/java/org/junit/internal/runners/TestMethod.java
 
 class("TestMethod").
-method("TestMethod", "isIgnored").
-method("TestMethod", "getTimeout").
-method("TestMethod", "getExpectedException").
+method("TestMethod", "isIgnored", 3).
+method("TestMethod", "getTimeout", 8).
+method("TestMethod", "getExpectedException", 8).
 calls("TestMethod", "getExpectedException", "Test", "expected").
-method("TestMethod", "isUnexpected").
+method("TestMethod", "isUnexpected", 3).
 calls("TestMethod", "isUnexpected", "TestMethod", "getExpectedException").
-method("TestMethod", "expectsException").
-method("TestMethod", "getBefores").
+method("TestMethod", "expectsException", 3).
+method("TestMethod", "getBefores", 3).
 calls("TestMethod", "getBefores", "TestClass", "getAnnotatedMethods").
-method("TestMethod", "getAfters").
+method("TestMethod", "getAfters", 3).
 calls("TestMethod", "getAfters", "TestClass", "getAnnotatedMethods").
-method("TestMethod", "invoke").
+method("TestMethod", "invoke", 3).
 calls("TestMethod", "invoke", "Method", "invoke").
 
 # junit4/src/main/java/org/junit/internal/runners/package-info.java
@@ -1145,22 +1145,22 @@ calls("TestMethod", "invoke", "Method", "invoke").
 # junit4/src/main/java/org/junit/internal/runners/MethodRoadie.java
 
 class("MethodRoadie").
-method("MethodRoadie", "run").
+method("MethodRoadie", "run", 16).
 calls("MethodRoadie", "run", "TestMethod", "isIgnored").
 calls("MethodRoadie", "run", "RunNotifier", "fireTestIgnored").
 calls("MethodRoadie", "run", "RunNotifier", "fireTestStarted").
 calls("MethodRoadie", "run", "MethodRoadie", "runWithTimeout").
 calls("MethodRoadie", "run", "MethodRoadie", "runTest").
 calls("MethodRoadie", "run", "RunNotifier", "fireTestFinished").
-method("MethodRoadie", "runWithTimeout").
+method("MethodRoadie", "runWithTimeout", 3).
 calls("MethodRoadie", "runWithTimeout", "MethodRoadie", "runBeforesThenTestThenAfters").
-method("MethodRoadie", "runTest").
+method("MethodRoadie", "runTest", 3).
 calls("MethodRoadie", "runTest", "MethodRoadie", "runBeforesThenTestThenAfters").
-method("MethodRoadie", "runBeforesThenTestThenAfters").
+method("MethodRoadie", "runBeforesThenTestThenAfters", 10).
 calls("MethodRoadie", "runBeforesThenTestThenAfters", "MethodRoadie", "runBefores").
 calls("MethodRoadie", "runBeforesThenTestThenAfters", "Runnable", "run").
 calls("MethodRoadie", "runBeforesThenTestThenAfters", "MethodRoadie", "runAfters").
-method("MethodRoadie", "runTestMethod").
+method("MethodRoadie", "runTestMethod", 23).
 calls("MethodRoadie", "runTestMethod", "TestMethod", "invoke").
 calls("MethodRoadie", "runTestMethod", "TestMethod", "expectsException").
 calls("MethodRoadie", "runTestMethod", "MethodRoadie", "addFailure").
@@ -1169,79 +1169,79 @@ calls("MethodRoadie", "runTestMethod", "MethodRoadie", "addFailure").
 calls("MethodRoadie", "runTestMethod", "TestMethod", "isUnexpected").
 calls("MethodRoadie", "runTestMethod", "MethodRoadie", "addFailure").
 calls("MethodRoadie", "runTestMethod", "MethodRoadie", "addFailure").
-method("MethodRoadie", "runBefores").
+method("MethodRoadie", "runBefores", 14).
 calls("MethodRoadie", "runBefores", "Method", "invoke").
 calls("MethodRoadie", "runBefores", "InvocationTargetException", "getTargetException").
 calls("MethodRoadie", "runBefores", "MethodRoadie", "addFailure").
-method("MethodRoadie", "runAfters").
+method("MethodRoadie", "runAfters", 10).
 calls("MethodRoadie", "runAfters", "Method", "invoke").
 calls("MethodRoadie", "runAfters", "MethodRoadie", "addFailure").
 calls("MethodRoadie", "runAfters", "MethodRoadie", "addFailure").
-method("MethodRoadie", "addFailure").
+method("MethodRoadie", "addFailure", 3).
 calls("MethodRoadie", "addFailure", "RunNotifier", "fireTestFailure").
 
 # junit4/src/main/java/org/junit/internal/runners/JUnit4ClassRunner.java
 
 class("JUnit4ClassRunner").
-method("JUnit4ClassRunner", "getTestMethods").
+method("JUnit4ClassRunner", "getTestMethods", 3).
 calls("JUnit4ClassRunner", "getTestMethods", "TestClass", "getTestMethods").
-method("JUnit4ClassRunner", "validate").
+method("JUnit4ClassRunner", "validate", 5).
 calls("JUnit4ClassRunner", "validate", "MethodValidator", "validateMethodsForDefaultRunner").
 calls("JUnit4ClassRunner", "validate", "MethodValidator", "assertValid").
-method("JUnit4ClassRunner", "run").
-method("JUnit4ClassRunner", "runMethods").
+method("JUnit4ClassRunner", "run", 3).
+method("JUnit4ClassRunner", "runMethods", 4).
 calls("JUnit4ClassRunner", "runMethods", "JUnit4ClassRunner", "invokeTestMethod").
-method("JUnit4ClassRunner", "getDescription").
+method("JUnit4ClassRunner", "getDescription", 7).
 calls("JUnit4ClassRunner", "getDescription", "Description", "addChild").
-method("JUnit4ClassRunner", "classAnnotations").
+method("JUnit4ClassRunner", "classAnnotations", 3).
 calls("JUnit4ClassRunner", "classAnnotations", "TestClass", "getJavaClass").
-method("JUnit4ClassRunner", "getName").
+method("JUnit4ClassRunner", "getName", 3).
 calls("JUnit4ClassRunner", "getName", "JUnit4ClassRunner", "getTestClass").
-method("JUnit4ClassRunner", "createTest").
+method("JUnit4ClassRunner", "createTest", 3).
 calls("JUnit4ClassRunner", "createTest", "JUnit4ClassRunner", "getTestClass").
-method("JUnit4ClassRunner", "invokeTestMethod").
+method("JUnit4ClassRunner", "invokeTestMethod", 14).
 calls("JUnit4ClassRunner", "invokeTestMethod", "JUnit4ClassRunner", "testAborted").
 calls("JUnit4ClassRunner", "invokeTestMethod", "JUnit4ClassRunner", "testAborted").
-method("JUnit4ClassRunner", "testAborted").
+method("JUnit4ClassRunner", "testAborted", 5).
 calls("JUnit4ClassRunner", "testAborted", "RunNotifier", "fireTestStarted").
 calls("JUnit4ClassRunner", "testAborted", "RunNotifier", "fireTestFailure").
 calls("JUnit4ClassRunner", "testAborted", "RunNotifier", "fireTestFinished").
-method("JUnit4ClassRunner", "wrapMethod").
-method("JUnit4ClassRunner", "testName").
+method("JUnit4ClassRunner", "wrapMethod", 3).
+method("JUnit4ClassRunner", "testName", 3).
 calls("JUnit4ClassRunner", "testName", "Method", "getName").
-method("JUnit4ClassRunner", "methodDescription").
+method("JUnit4ClassRunner", "methodDescription", 3).
 calls("JUnit4ClassRunner", "methodDescription", "Description", "createTestDescription").
-method("JUnit4ClassRunner", "testAnnotations").
+method("JUnit4ClassRunner", "testAnnotations", 3).
 calls("JUnit4ClassRunner", "testAnnotations", "Method", "getAnnotations").
-method("JUnit4ClassRunner", "filter").
+method("JUnit4ClassRunner", "filter", 10).
 calls("JUnit4ClassRunner", "filter", "Filter", "shouldRun").
 calls("JUnit4ClassRunner", "filter", "Iterator", "remove").
 calls("JUnit4ClassRunner", "filter", "List", "isEmpty").
-method("JUnit4ClassRunner", "sort").
+method("JUnit4ClassRunner", "sort", 3).
 calls("JUnit4ClassRunner", "sort", "Collections", "sort").
-method("JUnit4ClassRunner", "getTestClass").
+method("JUnit4ClassRunner", "getTestClass", 3).
 
 # junit4/src/main/java/org/junit/internal/runners/InitializationError.java
 
 class("InitializationError").
-method("InitializationError", "getCauses").
+method("InitializationError", "getCauses", 3).
 
 # junit4/src/main/java/org/junit/internal/runners/ClassRoadie.java
 
 class("ClassRoadie").
-method("ClassRoadie", "runUnprotected").
+method("ClassRoadie", "runUnprotected", 3).
 calls("ClassRoadie", "runUnprotected", "Runnable", "run").
-method("ClassRoadie", "addFailure").
+method("ClassRoadie", "addFailure", 3).
 calls("ClassRoadie", "addFailure", "RunNotifier", "fireTestFailure").
-method("ClassRoadie", "runProtected").
+method("ClassRoadie", "runProtected", 8).
 calls("ClassRoadie", "runProtected", "ClassRoadie", "runBefores").
 calls("ClassRoadie", "runProtected", "ClassRoadie", "runUnprotected").
 calls("ClassRoadie", "runProtected", "ClassRoadie", "runAfters").
-method("ClassRoadie", "runBefores").
+method("ClassRoadie", "runBefores", 14).
 calls("ClassRoadie", "runBefores", "Method", "invoke").
 calls("ClassRoadie", "runBefores", "InvocationTargetException", "getTargetException").
 calls("ClassRoadie", "runBefores", "ClassRoadie", "addFailure").
-method("ClassRoadie", "runAfters").
+method("ClassRoadie", "runAfters", 10).
 calls("ClassRoadie", "runAfters", "Method", "invoke").
 calls("ClassRoadie", "runAfters", "ClassRoadie", "addFailure").
 calls("ClassRoadie", "runAfters", "ClassRoadie", "addFailure").
@@ -1249,50 +1249,50 @@ calls("ClassRoadie", "runAfters", "ClassRoadie", "addFailure").
 # junit4/src/main/java/org/junit/internal/runners/JUnit38ClassRunner.java
 
 class("JUnit38ClassRunner").
-method("JUnit38ClassRunner", "run").
+method("JUnit38ClassRunner", "run", 5).
 calls("JUnit38ClassRunner", "run", "TestResult", "addListener").
 calls("JUnit38ClassRunner", "run", "JUnit38ClassRunner", "getTest").
-method("JUnit38ClassRunner", "createAdaptingListener").
-method("JUnit38ClassRunner", "getDescription").
+method("JUnit38ClassRunner", "createAdaptingListener", 3).
+method("JUnit38ClassRunner", "getDescription", 3).
 calls("JUnit38ClassRunner", "getDescription", "JUnit38ClassRunner", "makeDescription").
-method("JUnit38ClassRunner", "makeDescription").
+method("JUnit38ClassRunner", "makeDescription", 29).
 calls("JUnit38ClassRunner", "makeDescription", "Description", "createTestDescription").
 calls("JUnit38ClassRunner", "makeDescription", "Description", "addChild").
 calls("JUnit38ClassRunner", "makeDescription", "Describable", "getDescription").
 calls("JUnit38ClassRunner", "makeDescription", "JUnit38ClassRunner", "makeDescription").
 calls("JUnit38ClassRunner", "makeDescription", "Description", "createSuiteDescription").
-method("JUnit38ClassRunner", "getAnnotations").
+method("JUnit38ClassRunner", "getAnnotations", 8).
 calls("JUnit38ClassRunner", "getAnnotations", "Method", "getDeclaredAnnotations").
-method("JUnit38ClassRunner", "createSuiteDescription").
+method("JUnit38ClassRunner", "createSuiteDescription", 5).
 calls("JUnit38ClassRunner", "createSuiteDescription", "String", "format").
-method("JUnit38ClassRunner", "filter").
+method("JUnit38ClassRunner", "filter", 21).
 calls("JUnit38ClassRunner", "filter", "Filterable", "filter").
 calls("JUnit38ClassRunner", "filter", "Filter", "shouldRun").
 calls("JUnit38ClassRunner", "filter", "TestSuite", "addTest").
 calls("JUnit38ClassRunner", "filter", "JUnit38ClassRunner", "setTest").
-method("JUnit38ClassRunner", "sort").
+method("JUnit38ClassRunner", "sort", 6).
 calls("JUnit38ClassRunner", "sort", "Sortable", "sort").
-method("JUnit38ClassRunner", "setTest").
-method("JUnit38ClassRunner", "getTest").
+method("JUnit38ClassRunner", "setTest", 3).
+method("JUnit38ClassRunner", "getTest", 3).
 
 # junit4/src/main/java/org/junit/internal/runners/ErrorReportingRunner.java
 
 class("ErrorReportingRunner").
-method("ErrorReportingRunner", "getDescription").
+method("ErrorReportingRunner", "getDescription", 6).
 calls("ErrorReportingRunner", "getDescription", "Description", "addChild").
-method("ErrorReportingRunner", "run").
+method("ErrorReportingRunner", "run", 4).
 calls("ErrorReportingRunner", "run", "ErrorReportingRunner", "runCause").
-method("ErrorReportingRunner", "getClassNames").
+method("ErrorReportingRunner", "getClassNames", 9).
 calls("ErrorReportingRunner", "getClassNames", "StringBuilder", "append").
 calls("ErrorReportingRunner", "getClassNames", "StringBuilder", "append").
 calls("ErrorReportingRunner", "getClassNames", "StringBuilder", "toString").
-method("ErrorReportingRunner", "getCauses").
+method("ErrorReportingRunner", "getCauses", 15).
 calls("ErrorReportingRunner", "getCauses", "ErrorReportingRunner", "getCauses").
 calls("ErrorReportingRunner", "getCauses", "ErrorReportingRunner", "singletonList").
 calls("ErrorReportingRunner", "getCauses", "ErrorReportingRunner", "singletonList").
-method("ErrorReportingRunner", "describeCause").
+method("ErrorReportingRunner", "describeCause", 3).
 calls("ErrorReportingRunner", "describeCause", "Description", "createTestDescription").
-method("ErrorReportingRunner", "runCause").
+method("ErrorReportingRunner", "runCause", 6).
 calls("ErrorReportingRunner", "runCause", "RunNotifier", "fireTestStarted").
 calls("ErrorReportingRunner", "runCause", "RunNotifier", "fireTestFailure").
 calls("ErrorReportingRunner", "runCause", "RunNotifier", "fireTestFinished").
@@ -1300,123 +1300,123 @@ calls("ErrorReportingRunner", "runCause", "RunNotifier", "fireTestFinished").
 # junit4/src/main/java/org/junit/internal/builders/AnnotatedBuilder.java
 
 class("AnnotatedBuilder").
-method("AnnotatedBuilder", "runnerForClass").
+method("AnnotatedBuilder", "runnerForClass", 8).
 calls("AnnotatedBuilder", "runnerForClass", "AnnotatedBuilder", "buildRunner").
-method("AnnotatedBuilder", "getEnclosingClassForNonStaticMemberClass").
+method("AnnotatedBuilder", "getEnclosingClassForNonStaticMemberClass", 7).
 calls("AnnotatedBuilder", "getEnclosingClassForNonStaticMemberClass", "Class", "getEnclosingClass").
-method("AnnotatedBuilder", "buildRunner").
+method("AnnotatedBuilder", "buildRunner", 10).
 calls("AnnotatedBuilder", "buildRunner", "Class", "getConstructor").
 calls("AnnotatedBuilder", "buildRunner", "Class", "getConstructor").
 
 # junit4/src/main/java/org/junit/internal/builders/IgnoredClassRunner.java
 
 class("IgnoredClassRunner").
-method("IgnoredClassRunner", "run").
+method("IgnoredClassRunner", "run", 3).
 calls("IgnoredClassRunner", "run", "RunNotifier", "fireTestIgnored").
-method("IgnoredClassRunner", "getDescription").
+method("IgnoredClassRunner", "getDescription", 3).
 calls("IgnoredClassRunner", "getDescription", "Description", "createSuiteDescription").
 
 # junit4/src/main/java/org/junit/internal/builders/JUnit3Builder.java
 
 class("JUnit3Builder").
-method("JUnit3Builder", "runnerForClass").
+method("JUnit3Builder", "runnerForClass", 6).
 calls("JUnit3Builder", "runnerForClass", "JUnit3Builder", "isPre4Test").
-method("JUnit3Builder", "isPre4Test").
+method("JUnit3Builder", "isPre4Test", 3).
 
 # junit4/src/main/java/org/junit/internal/builders/SuiteMethodBuilder.java
 
 class("SuiteMethodBuilder").
-method("SuiteMethodBuilder", "runnerForClass").
+method("SuiteMethodBuilder", "runnerForClass", 6).
 calls("SuiteMethodBuilder", "runnerForClass", "SuiteMethodBuilder", "hasSuiteMethod").
-method("SuiteMethodBuilder", "hasSuiteMethod").
+method("SuiteMethodBuilder", "hasSuiteMethod", 7).
 calls("SuiteMethodBuilder", "hasSuiteMethod", "Class", "getMethod").
 
 # junit4/src/main/java/org/junit/internal/builders/JUnit4Builder.java
 
 class("JUnit4Builder").
-method("JUnit4Builder", "runnerForClass").
+method("JUnit4Builder", "runnerForClass", 3).
 
 # junit4/src/main/java/org/junit/internal/builders/AllDefaultPossibilitiesBuilder.java
 
 class("AllDefaultPossibilitiesBuilder").
-method("AllDefaultPossibilitiesBuilder", "runnerForClass").
-method("AllDefaultPossibilitiesBuilder", "junit4Builder").
-method("AllDefaultPossibilitiesBuilder", "junit3Builder").
-method("AllDefaultPossibilitiesBuilder", "annotatedBuilder").
-method("AllDefaultPossibilitiesBuilder", "ignoredBuilder").
-method("AllDefaultPossibilitiesBuilder", "suiteMethodBuilder").
+method("AllDefaultPossibilitiesBuilder", "runnerForClass", 9).
+method("AllDefaultPossibilitiesBuilder", "junit4Builder", 3).
+method("AllDefaultPossibilitiesBuilder", "junit3Builder", 3).
+method("AllDefaultPossibilitiesBuilder", "annotatedBuilder", 3).
+method("AllDefaultPossibilitiesBuilder", "ignoredBuilder", 3).
+method("AllDefaultPossibilitiesBuilder", "suiteMethodBuilder", 6).
 
 # junit4/src/main/java/org/junit/internal/builders/IgnoredBuilder.java
 
 class("IgnoredBuilder").
-method("IgnoredBuilder", "runnerForClass").
+method("IgnoredBuilder", "runnerForClass", 6).
 
 # junit4/src/main/java/org/junit/internal/builders/NullBuilder.java
 
 class("NullBuilder").
-method("NullBuilder", "runnerForClass").
+method("NullBuilder", "runnerForClass", 3).
 
 # junit4/src/main/java/org/junit/internal/matchers/TypeSafeMatcher.java
 
 class("TypeSafeMatcher").
-method("TypeSafeMatcher", "matchesSafely").
-method("TypeSafeMatcher", "findExpectedType").
+method("TypeSafeMatcher", "matchesSafely", 1).
+method("TypeSafeMatcher", "findExpectedType", 8).
 calls("TypeSafeMatcher", "findExpectedType", "TypeSafeMatcher", "isMatchesSafelyMethod").
 calls("TypeSafeMatcher", "findExpectedType", "Method", "getParameterTypes").
-method("TypeSafeMatcher", "isMatchesSafelyMethod").
-method("TypeSafeMatcher", "matches").
+method("TypeSafeMatcher", "isMatchesSafelyMethod", 3).
+method("TypeSafeMatcher", "matches", 3).
 
 # junit4/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java
 
 class("ThrowableMessageMatcher").
-method("ThrowableMessageMatcher", "describeTo").
+method("ThrowableMessageMatcher", "describeTo", 4).
 calls("ThrowableMessageMatcher", "describeTo", "Description", "appendText").
 calls("ThrowableMessageMatcher", "describeTo", "Description", "appendDescriptionOf").
-method("ThrowableMessageMatcher", "matchesSafely").
+method("ThrowableMessageMatcher", "matchesSafely", 3).
 calls("ThrowableMessageMatcher", "matchesSafely", "Matcher", "matches").
-method("ThrowableMessageMatcher", "describeMismatchSafely").
+method("ThrowableMessageMatcher", "describeMismatchSafely", 4).
 calls("ThrowableMessageMatcher", "describeMismatchSafely", "Description", "appendText").
 calls("ThrowableMessageMatcher", "describeMismatchSafely", "Matcher", "describeMismatch").
-method("ThrowableMessageMatcher", "hasMessage").
+method("ThrowableMessageMatcher", "hasMessage", 3).
 
 # junit4/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java
 
 class("ThrowableCauseMatcher").
-method("ThrowableCauseMatcher", "describeTo").
+method("ThrowableCauseMatcher", "describeTo", 4).
 calls("ThrowableCauseMatcher", "describeTo", "Description", "appendText").
 calls("ThrowableCauseMatcher", "describeTo", "Description", "appendDescriptionOf").
-method("ThrowableCauseMatcher", "matchesSafely").
+method("ThrowableCauseMatcher", "matchesSafely", 3).
 calls("ThrowableCauseMatcher", "matchesSafely", "Matcher", "matches").
-method("ThrowableCauseMatcher", "describeMismatchSafely").
+method("ThrowableCauseMatcher", "describeMismatchSafely", 4).
 calls("ThrowableCauseMatcher", "describeMismatchSafely", "Description", "appendText").
 calls("ThrowableCauseMatcher", "describeMismatchSafely", "Matcher", "describeMismatch").
-method("ThrowableCauseMatcher", "hasCause").
+method("ThrowableCauseMatcher", "hasCause", 3).
 
 # junit4/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java
 
 class("StacktracePrintingMatcher").
-method("StacktracePrintingMatcher", "describeTo").
+method("StacktracePrintingMatcher", "describeTo", 3).
 calls("StacktracePrintingMatcher", "describeTo", "Matcher", "describeTo").
-method("StacktracePrintingMatcher", "matchesSafely").
+method("StacktracePrintingMatcher", "matchesSafely", 3).
 calls("StacktracePrintingMatcher", "matchesSafely", "Matcher", "matches").
-method("StacktracePrintingMatcher", "describeMismatchSafely").
+method("StacktracePrintingMatcher", "describeMismatchSafely", 5).
 calls("StacktracePrintingMatcher", "describeMismatchSafely", "Matcher", "describeMismatch").
 calls("StacktracePrintingMatcher", "describeMismatchSafely", "Description", "appendText").
 calls("StacktracePrintingMatcher", "describeMismatchSafely", "Description", "appendText").
-method("StacktracePrintingMatcher", "readStacktrace").
+method("StacktracePrintingMatcher", "readStacktrace", 3).
 calls("StacktracePrintingMatcher", "readStacktrace", "Throwables", "getStacktrace").
-method("StacktracePrintingMatcher", "isThrowable").
-method("StacktracePrintingMatcher", "isException").
+method("StacktracePrintingMatcher", "isThrowable", 3).
+method("StacktracePrintingMatcher", "isException", 3).
 
 # junit4/src/main/java/org/junit/internal/requests/SortingRequest.java
 
 class("SortingRequest").
-method("SortingRequest", "getRunner").
+method("SortingRequest", "getRunner", 5).
 
 # junit4/src/main/java/org/junit/internal/requests/ClassRequest.java
 
 class("ClassRequest").
-method("ClassRequest", "getRunner").
+method("ClassRequest", "getRunner", 12).
 calls("ClassRequest", "getRunner", "Lock", "lock").
 calls("ClassRequest", "getRunner", "Lock", "unlock").
 
@@ -1426,19 +1426,19 @@ calls("ClassRequest", "getRunner", "Lock", "unlock").
 # junit4/src/main/java/org/junit/internal/requests/FilterRequest.java
 
 class("FilterRequest").
-method("FilterRequest", "getRunner").
+method("FilterRequest", "getRunner", 8).
 calls("FilterRequest", "getRunner", "Filter", "apply").
 
 # junit4/src/main/java/org/junit/internal/management/FakeRuntimeMXBean.java
 
 class("FakeRuntimeMXBean").
-method("FakeRuntimeMXBean", "getInputArguments").
+method("FakeRuntimeMXBean", "getInputArguments", 3).
 calls("FakeRuntimeMXBean", "getInputArguments", "Collections", "emptyList").
 
 # junit4/src/main/java/org/junit/internal/management/ReflectiveRuntimeMXBean.java
 
 class("ReflectiveRuntimeMXBean").
-method("ReflectiveRuntimeMXBean", "getInputArguments").
+method("ReflectiveRuntimeMXBean", "getInputArguments", 11).
 calls("ReflectiveRuntimeMXBean", "getInputArguments", "Collections", "emptyList").
 
 # junit4/src/main/java/org/junit/internal/management/ThreadMXBean.java
@@ -1447,8 +1447,8 @@ calls("ReflectiveRuntimeMXBean", "getInputArguments", "Collections", "emptyList"
 # junit4/src/main/java/org/junit/internal/management/ManagementFactory.java
 
 class("ManagementFactory").
-method("ManagementFactory", "getRuntimeMXBean").
-method("ManagementFactory", "getThreadMXBean").
+method("ManagementFactory", "getRuntimeMXBean", 3).
+method("ManagementFactory", "getThreadMXBean", 3).
 
 # junit4/src/main/java/org/junit/internal/management/RuntimeMXBean.java
 
@@ -1456,58 +1456,58 @@ method("ManagementFactory", "getThreadMXBean").
 # junit4/src/main/java/org/junit/internal/management/FakeThreadMXBean.java
 
 class("FakeThreadMXBean").
-method("FakeThreadMXBean", "getThreadCpuTime").
-method("FakeThreadMXBean", "isThreadCpuTimeSupported").
+method("FakeThreadMXBean", "getThreadCpuTime", 3).
+method("FakeThreadMXBean", "isThreadCpuTimeSupported", 3).
 
 # junit4/src/main/java/org/junit/internal/management/ReflectiveThreadMXBean.java
 
 class("ReflectiveThreadMXBean").
-method("ReflectiveThreadMXBean", "getThreadCpuTime").
-method("ReflectiveThreadMXBean", "isThreadCpuTimeSupported").
+method("ReflectiveThreadMXBean", "getThreadCpuTime", 17).
+method("ReflectiveThreadMXBean", "isThreadCpuTimeSupported", 11).
 
 # junit4/src/main/java/org/junit/internal/runners/statements/InvokeMethod.java
 
 class("InvokeMethod").
-method("InvokeMethod", "evaluate").
+method("InvokeMethod", "evaluate", 3).
 calls("InvokeMethod", "evaluate", "FrameworkMethod", "invokeExplosively").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/Fail.java
 
 class("Fail").
-method("Fail", "evaluate").
+method("Fail", "evaluate", 3).
 
 # junit4/src/main/java/org/junit/internal/runners/statements/FailOnTimeout.java
 
 class("FailOnTimeout").
-method("FailOnTimeout", "builder").
-method("FailOnTimeout", "evaluate").
+method("FailOnTimeout", "builder", 3).
+method("FailOnTimeout", "evaluate", 13).
 calls("FailOnTimeout", "evaluate", "Thread", "setDaemon").
 calls("FailOnTimeout", "evaluate", "Thread", "start").
 calls("FailOnTimeout", "evaluate", "CallableStatement", "awaitStarted").
-method("FailOnTimeout", "getResult").
+method("FailOnTimeout", "getResult", 14).
 calls("FailOnTimeout", "getResult", "FutureTask", "get").
 calls("FailOnTimeout", "getResult", "FutureTask", "get").
 calls("FailOnTimeout", "getResult", "ExecutionException", "getCause").
 calls("FailOnTimeout", "getResult", "FailOnTimeout", "createTimeoutException").
-method("FailOnTimeout", "createTimeoutException").
+method("FailOnTimeout", "createTimeoutException", 16).
 calls("FailOnTimeout", "createTimeoutException", "Exception", "setStackTrace").
 calls("FailOnTimeout", "createTimeoutException", "Thread", "interrupt").
 calls("FailOnTimeout", "createTimeoutException", "Exception", "setStackTrace").
-method("FailOnTimeout", "getStackTrace").
+method("FailOnTimeout", "getStackTrace", 6).
 calls("FailOnTimeout", "getStackTrace", "Thread", "getStackTrace").
-method("FailOnTimeout", "getStuckThread").
+method("FailOnTimeout", "getStuckThread", 17).
 calls("FailOnTimeout", "getStuckThread", "List", "isEmpty").
-method("FailOnTimeout", "getThreadsInGroup").
+method("FailOnTimeout", "getThreadsInGroup", 12).
 calls("FailOnTimeout", "getThreadsInGroup", "Arrays", "asList").
 calls("FailOnTimeout", "getThreadsInGroup", "Collections", "emptyList").
-method("FailOnTimeout", "cpuTime").
+method("FailOnTimeout", "cpuTime", 9).
 calls("FailOnTimeout", "cpuTime", "ThreadMXBean", "isThreadCpuTimeSupported").
 calls("FailOnTimeout", "cpuTime", "ThreadMXBean", "getThreadCpuTime").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/ExpectException.java
 
 class("ExpectException").
-method("ExpectException", "evaluate").
+method("ExpectException", "evaluate", 18).
 calls("ExpectException", "evaluate", "Statement", "evaluate").
 calls("ExpectException", "evaluate", "Class", "isAssignableFrom").
 calls("ExpectException", "evaluate", "Class", "isAssignableFrom").
@@ -1515,36 +1515,36 @@ calls("ExpectException", "evaluate", "Class", "isAssignableFrom").
 # junit4/src/main/java/org/junit/internal/runners/statements/RunAfters.java
 
 class("RunAfters").
-method("RunAfters", "evaluate").
+method("RunAfters", "evaluate", 14).
 calls("RunAfters", "evaluate", "Statement", "evaluate").
 calls("RunAfters", "evaluate", "List", "add").
 calls("RunAfters", "evaluate", "RunAfters", "invokeMethod").
 calls("RunAfters", "evaluate", "List", "add").
 calls("RunAfters", "evaluate", "MultipleFailureException", "assertEmpty").
-method("RunAfters", "invokeMethod").
+method("RunAfters", "invokeMethod", 3).
 calls("RunAfters", "invokeMethod", "FrameworkMethod", "invokeExplosively").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/RunBefores.java
 
 class("RunBefores").
-method("RunBefores", "evaluate").
+method("RunBefores", "evaluate", 5).
 calls("RunBefores", "evaluate", "RunBefores", "invokeMethod").
 calls("RunBefores", "evaluate", "Statement", "evaluate").
-method("RunBefores", "invokeMethod").
+method("RunBefores", "invokeMethod", 3).
 calls("RunBefores", "invokeMethod", "FrameworkMethod", "invokeExplosively").
 
 # junit4/src/main/java/org/junit/internal/runners/rules/RuleMemberValidator.java
 
 class("RuleMemberValidator").
-method("RuleMemberValidator", "validate").
+method("RuleMemberValidator", "validate", 5).
 calls("RuleMemberValidator", "validate", "RuleMemberValidator", "validateMember").
-method("RuleMemberValidator", "validateMember").
+method("RuleMemberValidator", "validateMember", 4).
 calls("RuleMemberValidator", "validateMember", "RuleValidator", "validate").
-method("RuleMemberValidator", "classRuleValidatorBuilder").
-method("RuleMemberValidator", "testRuleValidatorBuilder").
-method("RuleMemberValidator", "isRuleType").
-method("RuleMemberValidator", "isTestRule").
-method("RuleMemberValidator", "isMethodRule").
+method("RuleMemberValidator", "classRuleValidatorBuilder", 3).
+method("RuleMemberValidator", "testRuleValidatorBuilder", 3).
+method("RuleMemberValidator", "isRuleType", 3).
+method("RuleMemberValidator", "isTestRule", 3).
+method("RuleMemberValidator", "isMethodRule", 3).
 
 # junit4/src/main/java/org/junit/internal/runners/rules/ValidationError.java
 
@@ -1553,10 +1553,10 @@ class("ValidationError").
 # junit4/src/main/java/org/junit/internal/runners/model/ReflectiveCallable.java
 
 class("ReflectiveCallable").
-method("ReflectiveCallable", "run").
+method("ReflectiveCallable", "run", 6).
 calls("ReflectiveCallable", "run", "ReflectiveCallable", "runReflectiveCall").
 calls("ReflectiveCallable", "run", "InvocationTargetException", "getTargetException").
-method("ReflectiveCallable", "runReflectiveCall").
+method("ReflectiveCallable", "runReflectiveCall", 1).
 
 # junit4/src/main/java/org/junit/internal/runners/model/MultipleFailureException.java
 
@@ -1565,55 +1565,55 @@ class("MultipleFailureException").
 # junit4/src/main/java/org/junit/internal/runners/model/EachTestNotifier.java
 
 class("EachTestNotifier").
-method("EachTestNotifier", "addFailure").
+method("EachTestNotifier", "addFailure", 7).
 calls("EachTestNotifier", "addFailure", "EachTestNotifier", "addMultipleFailureException").
 calls("EachTestNotifier", "addFailure", "RunNotifier", "fireTestFailure").
-method("EachTestNotifier", "addMultipleFailureException").
+method("EachTestNotifier", "addMultipleFailureException", 4).
 calls("EachTestNotifier", "addMultipleFailureException", "EachTestNotifier", "addFailure").
-method("EachTestNotifier", "addFailedAssumption").
+method("EachTestNotifier", "addFailedAssumption", 3).
 calls("EachTestNotifier", "addFailedAssumption", "RunNotifier", "fireTestAssumptionFailed").
-method("EachTestNotifier", "fireTestFinished").
+method("EachTestNotifier", "fireTestFinished", 3).
 calls("EachTestNotifier", "fireTestFinished", "RunNotifier", "fireTestFinished").
-method("EachTestNotifier", "fireTestStarted").
+method("EachTestNotifier", "fireTestStarted", 3).
 calls("EachTestNotifier", "fireTestStarted", "RunNotifier", "fireTestStarted").
-method("EachTestNotifier", "fireTestIgnored").
+method("EachTestNotifier", "fireTestIgnored", 3).
 calls("EachTestNotifier", "fireTestIgnored", "RunNotifier", "fireTestIgnored").
-method("EachTestNotifier", "fireTestSuiteStarted").
+method("EachTestNotifier", "fireTestSuiteStarted", 3).
 calls("EachTestNotifier", "fireTestSuiteStarted", "RunNotifier", "fireTestSuiteStarted").
-method("EachTestNotifier", "fireTestSuiteFinished").
+method("EachTestNotifier", "fireTestSuiteFinished", 3).
 calls("EachTestNotifier", "fireTestSuiteFinished", "RunNotifier", "fireTestSuiteFinished").
 
 # junit4/src/main/java/org/junit/experimental/max/MaxCore.java
 
 class("MaxCore").
-method("MaxCore", "forFolder").
+method("MaxCore", "forFolder", 3).
 calls("MaxCore", "forFolder", "MaxCore", "storedLocally").
-method("MaxCore", "storedLocally").
-method("MaxCore", "run").
+method("MaxCore", "storedLocally", 3).
+method("MaxCore", "run", 3).
 calls("MaxCore", "run", "MaxCore", "run").
-method("MaxCore", "run").
+method("MaxCore", "run", 3).
 calls("MaxCore", "run", "MaxCore", "run").
-method("MaxCore", "run").
+method("MaxCore", "run", 4).
 calls("MaxCore", "run", "JUnitCore", "addListener").
 calls("MaxCore", "run", "JUnitCore", "run").
-method("MaxCore", "sortRequest").
+method("MaxCore", "sortRequest", 8).
 calls("MaxCore", "sortRequest", "Collections", "sort").
 calls("MaxCore", "sortRequest", "MaxCore", "constructLeafRequest").
-method("MaxCore", "constructLeafRequest").
+method("MaxCore", "constructLeafRequest", 6).
 calls("MaxCore", "constructLeafRequest", "List", "add").
-method("MaxCore", "buildRunner").
+method("MaxCore", "buildRunner", 17).
 calls("MaxCore", "buildRunner", "Description", "toString").
 calls("MaxCore", "buildRunner", "Suite", "emptySuite").
 calls("MaxCore", "buildRunner", "Description", "toString").
 calls("MaxCore", "buildRunner", "Request", "aClass").
 calls("MaxCore", "buildRunner", "Request", "method").
-method("MaxCore", "getMalformedTestClass").
+method("MaxCore", "getMalformedTestClass", 6).
 calls("MaxCore", "getMalformedTestClass", "Class", "forName").
-method("MaxCore", "sortedLeavesForTest").
+method("MaxCore", "sortedLeavesForTest", 3).
 calls("MaxCore", "sortedLeavesForTest", "MaxCore", "findLeaves").
-method("MaxCore", "findLeaves").
+method("MaxCore", "findLeaves", 5).
 calls("MaxCore", "findLeaves", "MaxCore", "findLeaves").
-method("MaxCore", "findLeaves").
+method("MaxCore", "findLeaves", 12).
 calls("MaxCore", "findLeaves", "Description", "getChildren").
 calls("MaxCore", "findLeaves", "Description", "toString").
 calls("MaxCore", "findLeaves", "List", "add").
@@ -1627,34 +1627,34 @@ class("CouldNotReadCoreException").
 # junit4/src/main/java/org/junit/experimental/max/MaxHistory.java
 
 class("MaxHistory").
-method("MaxHistory", "forFolder").
+method("MaxHistory", "forFolder", 10).
 calls("MaxHistory", "forFolder", "File", "exists").
 calls("MaxHistory", "forFolder", "MaxHistory", "readHistory").
 calls("MaxHistory", "forFolder", "CouldNotReadCoreException", "printStackTrace").
 calls("MaxHistory", "forFolder", "File", "delete").
-method("MaxHistory", "readHistory").
+method("MaxHistory", "readHistory", 14).
 calls("MaxHistory", "readHistory", "ObjectInputStream", "close").
 calls("MaxHistory", "readHistory", "FileInputStream", "close").
-method("MaxHistory", "save").
+method("MaxHistory", "save", 5).
 calls("MaxHistory", "save", "ObjectOutputStream", "writeObject").
 calls("MaxHistory", "save", "ObjectOutputStream", "close").
-method("MaxHistory", "getFailureTimestamp").
+method("MaxHistory", "getFailureTimestamp", 3).
 calls("MaxHistory", "getFailureTimestamp", "Map", "get").
-method("MaxHistory", "putTestFailureTimestamp").
+method("MaxHistory", "putTestFailureTimestamp", 3).
 calls("MaxHistory", "putTestFailureTimestamp", "Map", "put").
-method("MaxHistory", "isNewTest").
+method("MaxHistory", "isNewTest", 3).
 calls("MaxHistory", "isNewTest", "Map", "containsKey").
-method("MaxHistory", "getTestDuration").
+method("MaxHistory", "getTestDuration", 3).
 calls("MaxHistory", "getTestDuration", "Map", "get").
-method("MaxHistory", "putTestDuration").
+method("MaxHistory", "putTestDuration", 3).
 calls("MaxHistory", "putTestDuration", "Map", "put").
-method("MaxHistory", "listener").
-method("MaxHistory", "testComparator").
+method("MaxHistory", "listener", 3).
+method("MaxHistory", "testComparator", 3).
 
 # junit4/src/main/java/org/junit/experimental/runners/Enclosed.java
 
 class("Enclosed").
-method("Enclosed", "filterAbstractClasses").
+method("Enclosed", "filterAbstractClasses", 8).
 calls("Enclosed", "filterAbstractClasses", "Modifier", "isAbstract").
 calls("Enclosed", "filterAbstractClasses", "List", "add").
 calls("Enclosed", "filterAbstractClasses", "List", "toArray").
@@ -1662,21 +1662,21 @@ calls("Enclosed", "filterAbstractClasses", "List", "toArray").
 # junit4/src/main/java/org/junit/experimental/categories/IncludeCategories.java
 
 class("IncludeCategories").
-method("IncludeCategories", "createFilter").
+method("IncludeCategories", "createFilter", 3).
 
 # junit4/src/main/java/org/junit/experimental/categories/CategoryFilterFactory.java
 
 class("CategoryFilterFactory").
-method("CategoryFilterFactory", "createFilter").
+method("CategoryFilterFactory", "createFilter", 6).
 calls("CategoryFilterFactory", "createFilter", "CategoryFilterFactory", "createFilter").
-method("CategoryFilterFactory", "createFilter").
-method("CategoryFilterFactory", "parseCategories").
+method("CategoryFilterFactory", "createFilter", 1).
+method("CategoryFilterFactory", "parseCategories", 7).
 calls("CategoryFilterFactory", "parseCategories", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/categories/ExcludeCategories.java
 
 class("ExcludeCategories").
-method("ExcludeCategories", "createFilter").
+method("ExcludeCategories", "createFilter", 3).
 
 # junit4/src/main/java/org/junit/experimental/categories/Category.java
 
@@ -1684,61 +1684,61 @@ method("ExcludeCategories", "createFilter").
 # junit4/src/main/java/org/junit/experimental/categories/CategoryValidator.java
 
 class("CategoryValidator").
-method("CategoryValidator", "validateAnnotatedMethod").
+method("CategoryValidator", "validateAnnotatedMethod", 10).
 calls("CategoryValidator", "validateAnnotatedMethod", "Annotation", "annotationType").
 calls("CategoryValidator", "validateAnnotatedMethod", "CategoryValidator", "addErrorMessage").
 calls("CategoryValidator", "validateAnnotatedMethod", "CategoryValidator", "unmodifiableList").
-method("CategoryValidator", "addErrorMessage").
+method("CategoryValidator", "addErrorMessage", 4).
 calls("CategoryValidator", "addErrorMessage", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/categories/Categories.java
 
 class("Categories").
-method("Categories", "getIncludedCategory").
+method("Categories", "getIncludedCategory", 4).
 calls("Categories", "getIncludedCategory", "Categories", "createSet").
-method("Categories", "isAnyIncluded").
-method("Categories", "getExcludedCategory").
+method("Categories", "isAnyIncluded", 4).
+method("Categories", "getExcludedCategory", 4).
 calls("Categories", "getExcludedCategory", "Categories", "createSet").
-method("Categories", "isAnyExcluded").
-method("Categories", "hasAssignableTo").
+method("Categories", "isAnyExcluded", 4).
+method("Categories", "hasAssignableTo", 7).
 calls("Categories", "hasAssignableTo", "Class", "isAssignableFrom").
-method("Categories", "createSet").
+method("Categories", "createSet", 10).
 calls("Categories", "createSet", "Collections", "emptySet").
-method("Categories", "nullableClassToSet").
+method("Categories", "nullableClassToSet", 3).
 
 # junit4/src/main/java/org/junit/experimental/results/FailureList.java
 
 class("FailureList").
-method("FailureList", "result").
+method("FailureList", "result", 10).
 calls("FailureList", "result", "RunListener", "testFailure").
 
 # junit4/src/main/java/org/junit/experimental/results/PrintableResult.java
 
 class("PrintableResult").
-method("PrintableResult", "testResult").
+method("PrintableResult", "testResult", 3).
 calls("PrintableResult", "testResult", "PrintableResult", "testResult").
-method("PrintableResult", "testResult").
-method("PrintableResult", "failureCount").
+method("PrintableResult", "testResult", 3).
+method("PrintableResult", "failureCount", 3).
 calls("PrintableResult", "failureCount", "Result", "getFailures").
-method("PrintableResult", "failures").
+method("PrintableResult", "failures", 3).
 calls("PrintableResult", "failures", "Result", "getFailures").
-method("PrintableResult", "toString").
+method("PrintableResult", "toString", 5).
 calls("PrintableResult", "toString", "ByteArrayOutputStream", "toString").
 
 # junit4/src/main/java/org/junit/experimental/results/ResultMatchers.java
 
 class("ResultMatchers").
-method("ResultMatchers", "isSuccessful").
+method("ResultMatchers", "isSuccessful", 3).
 calls("ResultMatchers", "isSuccessful", "ResultMatchers", "failureCountIs").
-method("ResultMatchers", "failureCountIs").
-method("ResultMatchers", "hasSingleFailureContaining").
-method("ResultMatchers", "hasSingleFailureMatching").
-method("ResultMatchers", "hasFailureContaining").
+method("ResultMatchers", "failureCountIs", 3).
+method("ResultMatchers", "hasSingleFailureContaining", 3).
+method("ResultMatchers", "hasSingleFailureMatching", 3).
+method("ResultMatchers", "hasFailureContaining", 3).
 
 # junit4/src/main/java/org/junit/experimental/theories/ParameterSupplier.java
 
 class("ParameterSupplier").
-method("ParameterSupplier", "getValueSources").
+method("ParameterSupplier", "getValueSources", 1).
 
 # junit4/src/main/java/org/junit/experimental/theories/Theory.java
 
@@ -1752,9 +1752,9 @@ method("ParameterSupplier", "getValueSources").
 # junit4/src/main/java/org/junit/experimental/theories/PotentialAssignment.java
 
 class("PotentialAssignment").
-method("PotentialAssignment", "forValue").
-method("PotentialAssignment", "getValue").
-method("PotentialAssignment", "getDescription").
+method("PotentialAssignment", "forValue", 3).
+method("PotentialAssignment", "getValue", 1).
+method("PotentialAssignment", "getDescription", 1).
 
 # junit4/src/main/java/org/junit/experimental/theories/ParametersSuppliedBy.java
 
@@ -1765,7 +1765,7 @@ method("PotentialAssignment", "getDescription").
 # junit4/src/main/java/org/junit/experimental/theories/ParameterSignature.java
 
 class("ParameterSignature").
-method("ParameterSignature", "buildConvertableTypesMap").
+method("ParameterSignature", "buildConvertableTypesMap", 12).
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
@@ -1775,187 +1775,187 @@ calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "p
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
 calls("ParameterSignature", "buildConvertableTypesMap", "Collections", "unmodifiableMap").
-method("ParameterSignature", "putSymmetrically").
+method("ParameterSignature", "putSymmetrically", 4).
 calls("ParameterSignature", "putSymmetrically", "Map", "put").
 calls("ParameterSignature", "putSymmetrically", "Map", "put").
-method("ParameterSignature", "signatures").
+method("ParameterSignature", "signatures", 3).
 calls("ParameterSignature", "signatures", "ParameterSignature", "signatures").
-method("ParameterSignature", "signatures").
+method("ParameterSignature", "signatures", 3).
 calls("ParameterSignature", "signatures", "ParameterSignature", "signatures").
-method("ParameterSignature", "signatures").
+method("ParameterSignature", "signatures", 6).
 calls("ParameterSignature", "signatures", "ArrayList", "add").
-method("ParameterSignature", "canAcceptValue").
-method("ParameterSignature", "canAcceptType").
-method("ParameterSignature", "canPotentiallyAcceptType").
-method("ParameterSignature", "isAssignableViaTypeConversion").
+method("ParameterSignature", "canAcceptValue", 3).
+method("ParameterSignature", "canAcceptType", 3).
+method("ParameterSignature", "canPotentiallyAcceptType", 3).
+method("ParameterSignature", "isAssignableViaTypeConversion", 8).
 calls("ParameterSignature", "isAssignableViaTypeConversion", "CONVERTABLE_TYPES_MAP", "containsKey").
 calls("ParameterSignature", "isAssignableViaTypeConversion", "Class", "isAssignableFrom").
-method("ParameterSignature", "getType").
-method("ParameterSignature", "getAnnotations").
+method("ParameterSignature", "getType", 3).
+method("ParameterSignature", "getAnnotations", 3).
 calls("ParameterSignature", "getAnnotations", "Arrays", "asList").
-method("ParameterSignature", "hasAnnotation").
-method("ParameterSignature", "findDeepAnnotation").
+method("ParameterSignature", "hasAnnotation", 3).
+method("ParameterSignature", "findDeepAnnotation", 4).
 calls("ParameterSignature", "findDeepAnnotation", "ParameterSignature", "findDeepAnnotation").
-method("ParameterSignature", "findDeepAnnotation").
+method("ParameterSignature", "findDeepAnnotation", 14).
 calls("ParameterSignature", "findDeepAnnotation", "Class", "isInstance").
 calls("ParameterSignature", "findDeepAnnotation", "Class", "cast").
 calls("ParameterSignature", "findDeepAnnotation", "Class", "cast").
-method("ParameterSignature", "getAnnotation").
+method("ParameterSignature", "getAnnotation", 7).
 calls("ParameterSignature", "getAnnotation", "Class", "isInstance").
 calls("ParameterSignature", "getAnnotation", "Class", "cast").
 
 # junit4/src/main/java/org/junit/experimental/theories/Theories.java
 
 class("Theories").
-method("Theories", "collectInitializationErrors").
+method("Theories", "collectInitializationErrors", 5).
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointFields").
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointMethods").
-method("Theories", "validateDataPointFields").
+method("Theories", "validateDataPointFields", 13).
 calls("Theories", "validateDataPointFields", "Modifier", "isStatic").
 calls("Theories", "validateDataPointFields", "List", "add").
 calls("Theories", "validateDataPointFields", "Modifier", "isPublic").
 calls("Theories", "validateDataPointFields", "List", "add").
-method("Theories", "validateDataPointMethods").
+method("Theories", "validateDataPointMethods", 13).
 calls("Theories", "validateDataPointMethods", "Modifier", "isStatic").
 calls("Theories", "validateDataPointMethods", "List", "add").
 calls("Theories", "validateDataPointMethods", "Modifier", "isPublic").
 calls("Theories", "validateDataPointMethods", "List", "add").
-method("Theories", "validateConstructor").
+method("Theories", "validateConstructor", 3).
 calls("Theories", "validateConstructor", "Theories", "validateOnlyOneConstructor").
-method("Theories", "validateTestMethods").
+method("Theories", "validateTestMethods", 14).
 calls("Theories", "validateTestMethods", "FrameworkMethod", "validatePublicVoid").
 calls("Theories", "validateTestMethods", "FrameworkMethod", "validateNoTypeParametersOnArgs").
 calls("Theories", "validateTestMethods", "FrameworkMethod", "validatePublicVoidNoArg").
 calls("Theories", "validateTestMethods", "Theories", "validateParameterSupplier").
-method("Theories", "validateParameterSupplier").
+method("Theories", "validateParameterSupplier", 11).
 calls("Theories", "validateParameterSupplier", "List", "add").
 calls("Theories", "validateParameterSupplier", "List", "add").
-method("Theories", "computeTestMethods").
+method("Theories", "computeTestMethods", 7).
 calls("Theories", "computeTestMethods", "List", "removeAll").
 calls("Theories", "computeTestMethods", "List", "addAll").
-method("Theories", "methodBlock").
+method("Theories", "methodBlock", 3).
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/ParameterizedAssertionError.java
 
 class("ParameterizedAssertionError").
-method("ParameterizedAssertionError", "equals").
-method("ParameterizedAssertionError", "hashCode").
+method("ParameterizedAssertionError", "equals", 3).
+method("ParameterizedAssertionError", "hashCode", 3).
 calls("ParameterizedAssertionError", "hashCode", "ParameterizedAssertionError", "toString").
-method("ParameterizedAssertionError", "join").
+method("ParameterizedAssertionError", "join", 3).
 calls("ParameterizedAssertionError", "join", "ParameterizedAssertionError", "join").
-method("ParameterizedAssertionError", "join").
+method("ParameterizedAssertionError", "join", 11).
 calls("ParameterizedAssertionError", "join", "Iterator", "hasNext").
 calls("ParameterizedAssertionError", "join", "StringBuilder", "append").
 calls("ParameterizedAssertionError", "join", "Iterator", "hasNext").
 calls("ParameterizedAssertionError", "join", "StringBuilder", "append").
 calls("ParameterizedAssertionError", "join", "StringBuilder", "toString").
-method("ParameterizedAssertionError", "stringValueOf").
+method("ParameterizedAssertionError", "stringValueOf", 6).
 calls("ParameterizedAssertionError", "stringValueOf", "String", "valueOf").
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/Assignments.java
 
 class("Assignments").
-method("Assignments", "allUnassigned").
+method("Assignments", "allUnassigned", 6).
 calls("Assignments", "allUnassigned", "List", "addAll").
-method("Assignments", "isComplete").
+method("Assignments", "isComplete", 3).
 calls("Assignments", "isComplete", "List", "isEmpty").
-method("Assignments", "nextUnassigned").
+method("Assignments", "nextUnassigned", 3).
 calls("Assignments", "nextUnassigned", "List", "get").
-method("Assignments", "assignNext").
+method("Assignments", "assignNext", 5).
 calls("Assignments", "assignNext", "List", "add").
-method("Assignments", "getActualValues").
-method("Assignments", "potentialsForNextUnassigned").
+method("Assignments", "getActualValues", 6).
+method("Assignments", "potentialsForNextUnassigned", 8).
 calls("Assignments", "potentialsForNextUnassigned", "List", "isEmpty").
-method("Assignments", "generateAssignmentsFromTypeAlone").
+method("Assignments", "generateAssignmentsFromTypeAlone", 12).
 calls("Assignments", "generateAssignmentsFromTypeAlone", "Class", "isEnum").
 calls("Assignments", "generateAssignmentsFromTypeAlone", "Assignments", "emptyList").
-method("Assignments", "getSupplier").
+method("Assignments", "getSupplier", 8).
 calls("Assignments", "getSupplier", "Assignments", "buildParameterSupplierFromClass").
-method("Assignments", "buildParameterSupplierFromClass").
+method("Assignments", "buildParameterSupplierFromClass", 9).
 calls("Assignments", "buildParameterSupplierFromClass", "Class", "newInstance").
-method("Assignments", "getConstructorArguments").
+method("Assignments", "getConstructorArguments", 3).
 calls("Assignments", "getConstructorArguments", "Assignments", "getActualValues").
-method("Assignments", "getMethodArguments").
+method("Assignments", "getMethodArguments", 3).
 calls("Assignments", "getMethodArguments", "Assignments", "getActualValues").
-method("Assignments", "getAllArguments").
+method("Assignments", "getAllArguments", 3).
 calls("Assignments", "getAllArguments", "Assignments", "getActualValues").
-method("Assignments", "getConstructorParameterCount").
-method("Assignments", "getArgumentStrings").
+method("Assignments", "getConstructorParameterCount", 5).
+method("Assignments", "getArgumentStrings", 6).
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/AllMembersSupplier.java
 
 class("AllMembersSupplier").
-method("AllMembersSupplier", "getValueSources").
+method("AllMembersSupplier", "getValueSources", 8).
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addSinglePointFields").
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addMultiPointFields").
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addSinglePointMethods").
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addMultiPointMethods").
-method("AllMembersSupplier", "addMultiPointMethods").
+method("AllMembersSupplier", "addMultiPointMethods", 15).
 calls("AllMembersSupplier", "addMultiPointMethods", "AllMembersSupplier", "addDataPointsValues").
-method("AllMembersSupplier", "addSinglePointMethods").
+method("AllMembersSupplier", "addSinglePointMethods", 6).
 calls("AllMembersSupplier", "addSinglePointMethods", "ParameterSignature", "canAcceptType").
 calls("AllMembersSupplier", "addSinglePointMethods", "List", "add").
-method("AllMembersSupplier", "addMultiPointFields").
+method("AllMembersSupplier", "addMultiPointFields", 5).
 calls("AllMembersSupplier", "addMultiPointFields", "AllMembersSupplier", "addDataPointsValues").
-method("AllMembersSupplier", "addSinglePointFields").
+method("AllMembersSupplier", "addSinglePointFields", 7).
 calls("AllMembersSupplier", "addSinglePointFields", "ParameterSignature", "canAcceptValue").
 calls("AllMembersSupplier", "addSinglePointFields", "List", "add").
-method("AllMembersSupplier", "addDataPointsValues").
+method("AllMembersSupplier", "addDataPointsValues", 9).
 calls("AllMembersSupplier", "addDataPointsValues", "Class", "isArray").
 calls("AllMembersSupplier", "addDataPointsValues", "AllMembersSupplier", "addArrayValues").
 calls("AllMembersSupplier", "addDataPointsValues", "AllMembersSupplier", "addIterableValues").
-method("AllMembersSupplier", "addArrayValues").
+method("AllMembersSupplier", "addArrayValues", 7).
 calls("AllMembersSupplier", "addArrayValues", "ParameterSignature", "canAcceptValue").
 calls("AllMembersSupplier", "addArrayValues", "List", "add").
-method("AllMembersSupplier", "addIterableValues").
+method("AllMembersSupplier", "addIterableValues", 10).
 calls("AllMembersSupplier", "addIterableValues", "Iterator", "hasNext").
 calls("AllMembersSupplier", "addIterableValues", "ParameterSignature", "canAcceptValue").
 calls("AllMembersSupplier", "addIterableValues", "List", "add").
-method("AllMembersSupplier", "getStaticFieldValue").
+method("AllMembersSupplier", "getStaticFieldValue", 8).
 calls("AllMembersSupplier", "getStaticFieldValue", "Field", "get").
-method("AllMembersSupplier", "isAssignableToAnyOf").
+method("AllMembersSupplier", "isAssignableToAnyOf", 7).
 calls("AllMembersSupplier", "isAssignableToAnyOf", "Class", "isAssignableFrom").
-method("AllMembersSupplier", "getDataPointsMethods").
+method("AllMembersSupplier", "getDataPointsMethods", 3).
 calls("AllMembersSupplier", "getDataPointsMethods", "TestClass", "getAnnotatedMethods").
-method("AllMembersSupplier", "getSingleDataPointFields").
+method("AllMembersSupplier", "getSingleDataPointFields", 7).
 calls("AllMembersSupplier", "getSingleDataPointFields", "Collection", "add").
-method("AllMembersSupplier", "getDataPointsFields").
+method("AllMembersSupplier", "getDataPointsFields", 7).
 calls("AllMembersSupplier", "getDataPointsFields", "Collection", "add").
-method("AllMembersSupplier", "getSingleDataPointMethods").
+method("AllMembersSupplier", "getSingleDataPointMethods", 3).
 calls("AllMembersSupplier", "getSingleDataPointMethods", "TestClass", "getAnnotatedMethods").
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/BooleanSupplier.java
 
 class("BooleanSupplier").
-method("BooleanSupplier", "getValueSources").
+method("BooleanSupplier", "getValueSources", 3).
 calls("BooleanSupplier", "getValueSources", "Arrays", "asList").
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/EnumSupplier.java
 
 class("EnumSupplier").
-method("EnumSupplier", "getValueSources").
+method("EnumSupplier", "getValueSources", 7).
 calls("EnumSupplier", "getValueSources", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/SpecificDataPointsSupplier.java
 
 class("SpecificDataPointsSupplier").
-method("SpecificDataPointsSupplier", "getSingleDataPointFields").
+method("SpecificDataPointsSupplier", "getSingleDataPointFields", 11).
 calls("SpecificDataPointsSupplier", "getSingleDataPointFields", "Arrays", "asList").
 calls("SpecificDataPointsSupplier", "getSingleDataPointFields", "List", "add").
-method("SpecificDataPointsSupplier", "getDataPointsFields").
+method("SpecificDataPointsSupplier", "getDataPointsFields", 11).
 calls("SpecificDataPointsSupplier", "getDataPointsFields", "Arrays", "asList").
 calls("SpecificDataPointsSupplier", "getDataPointsFields", "List", "add").
-method("SpecificDataPointsSupplier", "getSingleDataPointMethods").
+method("SpecificDataPointsSupplier", "getSingleDataPointMethods", 11).
 calls("SpecificDataPointsSupplier", "getSingleDataPointMethods", "Arrays", "asList").
 calls("SpecificDataPointsSupplier", "getSingleDataPointMethods", "List", "add").
-method("SpecificDataPointsSupplier", "getDataPointsMethods").
+method("SpecificDataPointsSupplier", "getDataPointsMethods", 11).
 calls("SpecificDataPointsSupplier", "getDataPointsMethods", "Arrays", "asList").
 calls("SpecificDataPointsSupplier", "getDataPointsMethods", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/theories/suppliers/TestedOnSupplier.java
 
 class("TestedOnSupplier").
-method("TestedOnSupplier", "getValueSources").
+method("TestedOnSupplier", "getValueSources", 8).
 calls("TestedOnSupplier", "getValueSources", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/theories/suppliers/TestedOn.java
@@ -1967,242 +1967,242 @@ calls("TestedOnSupplier", "getValueSources", "List", "add").
 # junit4/src/main/java/org/junit/runners/parameterized/TestWithParameters.java
 
 class("TestWithParameters").
-method("TestWithParameters", "getName").
-method("TestWithParameters", "getTestClass").
-method("TestWithParameters", "getParameters").
-method("TestWithParameters", "hashCode").
-method("TestWithParameters", "equals").
-method("TestWithParameters", "toString").
+method("TestWithParameters", "getName", 3).
+method("TestWithParameters", "getTestClass", 3).
+method("TestWithParameters", "getParameters", 3).
+method("TestWithParameters", "hashCode", 6).
+method("TestWithParameters", "equals", 13).
+method("TestWithParameters", "toString", 3).
 
 # junit4/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParametersFactory.java
 
 class("BlockJUnit4ClassRunnerWithParametersFactory").
-method("BlockJUnit4ClassRunnerWithParametersFactory", "createRunnerForTestWithParameters").
+method("BlockJUnit4ClassRunnerWithParametersFactory", "createRunnerForTestWithParameters", 3).
 
 # junit4/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParameters.java
 
 class("BlockJUnit4ClassRunnerWithParameters").
-method("BlockJUnit4ClassRunnerWithParameters", "createTest").
+method("BlockJUnit4ClassRunnerWithParameters", "createTest", 11).
 calls("BlockJUnit4ClassRunnerWithParameters", "createTest", "BlockJUnit4ClassRunnerWithParameters", "createTestUsingConstructorInjection").
 calls("BlockJUnit4ClassRunnerWithParameters", "createTest", "BlockJUnit4ClassRunnerWithParameters", "createTestUsingFieldInjection").
-method("BlockJUnit4ClassRunnerWithParameters", "createTestUsingConstructorInjection").
+method("BlockJUnit4ClassRunnerWithParameters", "createTestUsingConstructorInjection", 3).
 calls("BlockJUnit4ClassRunnerWithParameters", "createTestUsingConstructorInjection", "BlockJUnit4ClassRunnerWithParameters", "getTestClass").
-method("BlockJUnit4ClassRunnerWithParameters", "createTestUsingFieldInjection").
+method("BlockJUnit4ClassRunnerWithParameters", "createTestUsingFieldInjection", 16).
 calls("BlockJUnit4ClassRunnerWithParameters", "createTestUsingFieldInjection", "Field", "set").
-method("BlockJUnit4ClassRunnerWithParameters", "getName").
-method("BlockJUnit4ClassRunnerWithParameters", "testName").
-method("BlockJUnit4ClassRunnerWithParameters", "validateConstructor").
+method("BlockJUnit4ClassRunnerWithParameters", "getName", 3).
+method("BlockJUnit4ClassRunnerWithParameters", "testName", 3).
+method("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", 6).
 calls("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", "BlockJUnit4ClassRunnerWithParameters", "validateOnlyOneConstructor").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", "BlockJUnit4ClassRunnerWithParameters", "validateZeroArgConstructor").
-method("BlockJUnit4ClassRunnerWithParameters", "validateFields").
+method("BlockJUnit4ClassRunnerWithParameters", "validateFields", 23).
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
-method("BlockJUnit4ClassRunnerWithParameters", "classBlock").
-method("BlockJUnit4ClassRunnerWithParameters", "withBeforeParams").
-method("BlockJUnit4ClassRunnerWithParameters", "withAfterParams").
-method("BlockJUnit4ClassRunnerWithParameters", "getRunnerAnnotations").
+method("BlockJUnit4ClassRunnerWithParameters", "classBlock", 6).
+method("BlockJUnit4ClassRunnerWithParameters", "withBeforeParams", 4).
+method("BlockJUnit4ClassRunnerWithParameters", "withAfterParams", 4).
+method("BlockJUnit4ClassRunnerWithParameters", "getRunnerAnnotations", 11).
 calls("BlockJUnit4ClassRunnerWithParameters", "getRunnerAnnotations", "Annotation", "annotationType").
-method("BlockJUnit4ClassRunnerWithParameters", "getAnnotatedFieldsByParameter").
+method("BlockJUnit4ClassRunnerWithParameters", "getAnnotatedFieldsByParameter", 3).
 calls("BlockJUnit4ClassRunnerWithParameters", "getAnnotatedFieldsByParameter", "BlockJUnit4ClassRunnerWithParameters", "getTestClass").
-method("BlockJUnit4ClassRunnerWithParameters", "getInjectionType").
+method("BlockJUnit4ClassRunnerWithParameters", "getInjectionType", 7).
 calls("BlockJUnit4ClassRunnerWithParameters", "getInjectionType", "BlockJUnit4ClassRunnerWithParameters", "fieldsAreAnnotated").
-method("BlockJUnit4ClassRunnerWithParameters", "fieldsAreAnnotated").
+method("BlockJUnit4ClassRunnerWithParameters", "fieldsAreAnnotated", 3).
 calls("BlockJUnit4ClassRunnerWithParameters", "fieldsAreAnnotated", "BlockJUnit4ClassRunnerWithParameters", "getAnnotatedFieldsByParameter").
 
 # junit4/src/main/java/org/junit/runners/model/TestTimedOutException.java
 
 class("TestTimedOutException").
-method("TestTimedOutException", "getTimeout").
-method("TestTimedOutException", "getTimeUnit").
+method("TestTimedOutException", "getTimeout", 3).
+method("TestTimedOutException", "getTimeUnit", 3).
 
 # junit4/src/main/java/org/junit/runners/model/RunnerBuilder.java
 
 class("RunnerBuilder").
-method("RunnerBuilder", "runnerForClass").
-method("RunnerBuilder", "safeRunnerForClass").
+method("RunnerBuilder", "runnerForClass", 1).
+method("RunnerBuilder", "safeRunnerForClass", 6).
 calls("RunnerBuilder", "safeRunnerForClass", "RunnerBuilder", "runnerForClass").
-method("RunnerBuilder", "addParent").
+method("RunnerBuilder", "addParent", 6).
 calls("RunnerBuilder", "addParent", "Set", "add").
-method("RunnerBuilder", "removeParent").
+method("RunnerBuilder", "removeParent", 3).
 calls("RunnerBuilder", "removeParent", "Set", "remove").
-method("RunnerBuilder", "runners").
+method("RunnerBuilder", "runners", 7).
 calls("RunnerBuilder", "runners", "RunnerBuilder", "addParent").
 calls("RunnerBuilder", "runners", "RunnerBuilder", "runners").
 calls("RunnerBuilder", "runners", "RunnerBuilder", "removeParent").
-method("RunnerBuilder", "runners").
+method("RunnerBuilder", "runners", 3).
 calls("RunnerBuilder", "runners", "RunnerBuilder", "runners").
-method("RunnerBuilder", "runners").
+method("RunnerBuilder", "runners", 9).
 calls("RunnerBuilder", "runners", "List", "add").
 
 # junit4/src/main/java/org/junit/runners/model/MultipleFailureException.java
 
 class("MultipleFailureException").
-method("MultipleFailureException", "getFailures").
+method("MultipleFailureException", "getFailures", 3).
 calls("MultipleFailureException", "getFailures", "Collections", "unmodifiableList").
-method("MultipleFailureException", "getMessage").
+method("MultipleFailureException", "getMessage", 6).
 calls("MultipleFailureException", "getMessage", "StringBuilder", "append").
 calls("MultipleFailureException", "getMessage", "StringBuilder", "toString").
-method("MultipleFailureException", "printStackTrace").
+method("MultipleFailureException", "printStackTrace", 4).
 calls("MultipleFailureException", "printStackTrace", "Throwable", "printStackTrace").
-method("MultipleFailureException", "printStackTrace").
+method("MultipleFailureException", "printStackTrace", 4).
 calls("MultipleFailureException", "printStackTrace", "Throwable", "printStackTrace").
-method("MultipleFailureException", "printStackTrace").
+method("MultipleFailureException", "printStackTrace", 4).
 calls("MultipleFailureException", "printStackTrace", "Throwable", "printStackTrace").
-method("MultipleFailureException", "assertEmpty").
+method("MultipleFailureException", "assertEmpty", 9).
 calls("MultipleFailureException", "assertEmpty", "List", "isEmpty").
 calls("MultipleFailureException", "assertEmpty", "Throwables", "rethrowAsException").
 
 # junit4/src/main/java/org/junit/runners/model/TestClass.java
 
 class("TestClass").
-method("TestClass", "scanAnnotatedMembers").
+method("TestClass", "scanAnnotatedMembers", 7).
 calls("TestClass", "scanAnnotatedMembers", "TestClass", "addToAnnotationLists").
 calls("TestClass", "scanAnnotatedMembers", "TestClass", "addToAnnotationLists").
-method("TestClass", "getSortedDeclaredFields").
+method("TestClass", "getSortedDeclaredFields", 5).
 calls("TestClass", "getSortedDeclaredFields", "Arrays", "sort").
-method("TestClass", "addToAnnotationLists").
+method("TestClass", "addToAnnotationLists", 14).
 calls("TestClass", "addToAnnotationLists", "TestClass", "runsTopToBottom").
 calls("TestClass", "addToAnnotationLists", "List", "add").
 calls("TestClass", "addToAnnotationLists", "List", "add").
-method("TestClass", "makeDeeplyUnmodifiable").
+method("TestClass", "makeDeeplyUnmodifiable", 6).
 calls("TestClass", "makeDeeplyUnmodifiable", "Map", "put").
 calls("TestClass", "makeDeeplyUnmodifiable", "Collections", "unmodifiableMap").
-method("TestClass", "getAnnotatedMethods").
+method("TestClass", "getAnnotatedMethods", 5).
 calls("TestClass", "getAnnotatedMethods", "Collections", "sort").
-method("TestClass", "getAnnotatedMethods").
+method("TestClass", "getAnnotatedMethods", 3).
 calls("TestClass", "getAnnotatedMethods", "Collections", "unmodifiableList").
-method("TestClass", "getAnnotatedFields").
+method("TestClass", "getAnnotatedFields", 3).
 calls("TestClass", "getAnnotatedFields", "TestClass", "collectValues").
-method("TestClass", "getAnnotatedFields").
+method("TestClass", "getAnnotatedFields", 3).
 calls("TestClass", "getAnnotatedFields", "Collections", "unmodifiableList").
-method("TestClass", "collectValues").
+method("TestClass", "collectValues", 6).
 calls("TestClass", "collectValues", "Set", "addAll").
-method("TestClass", "getAnnotatedMembers").
+method("TestClass", "getAnnotatedMembers", 7).
 calls("TestClass", "getAnnotatedMembers", "Map", "put").
-method("TestClass", "runsTopToBottom").
-method("TestClass", "getSuperClasses").
+method("TestClass", "runsTopToBottom", 3).
+method("TestClass", "getSuperClasses", 8).
 calls("TestClass", "getSuperClasses", "List", "add").
-method("TestClass", "getJavaClass").
-method("TestClass", "getName").
+method("TestClass", "getJavaClass", 3).
+method("TestClass", "getName", 6).
 calls("TestClass", "getName", "Class", "getName").
-method("TestClass", "getOnlyConstructor").
+method("TestClass", "getOnlyConstructor", 5).
 calls("TestClass", "getOnlyConstructor", "Assert", "assertEquals").
-method("TestClass", "getAnnotations").
+method("TestClass", "getAnnotations", 6).
 calls("TestClass", "getAnnotations", "Class", "getAnnotations").
-method("TestClass", "getAnnotation").
+method("TestClass", "getAnnotation", 6).
 calls("TestClass", "getAnnotation", "Class", "getAnnotation").
-method("TestClass", "getAnnotatedFieldValues").
+method("TestClass", "getAnnotatedFieldValues", 12).
 calls("TestClass", "getAnnotatedFieldValues", "Class", "isInstance").
 calls("TestClass", "getAnnotatedFieldValues", "List", "add").
-method("TestClass", "getAnnotatedMethodValues").
+method("TestClass", "getAnnotatedMethodValues", 12).
 calls("TestClass", "getAnnotatedMethodValues", "Class", "isAssignableFrom").
 calls("TestClass", "getAnnotatedMethodValues", "List", "add").
-method("TestClass", "isPublic").
+method("TestClass", "isPublic", 3).
 calls("TestClass", "isPublic", "Modifier", "isPublic").
-method("TestClass", "isANonStaticInnerClass").
-method("TestClass", "hashCode").
-method("TestClass", "equals").
+method("TestClass", "isANonStaticInnerClass", 3).
+method("TestClass", "hashCode", 3).
+method("TestClass", "equals", 13).
 
 # junit4/src/main/java/org/junit/runners/model/FrameworkMethod.java
 
 class("FrameworkMethod").
-method("FrameworkMethod", "getMethod").
-method("FrameworkMethod", "invokeExplosively").
-method("FrameworkMethod", "getName").
+method("FrameworkMethod", "getMethod", 3).
+method("FrameworkMethod", "invokeExplosively", 3).
+method("FrameworkMethod", "getName", 3).
 calls("FrameworkMethod", "getName", "Method", "getName").
-method("FrameworkMethod", "validatePublicVoidNoArg").
+method("FrameworkMethod", "validatePublicVoidNoArg", 6).
 calls("FrameworkMethod", "validatePublicVoidNoArg", "FrameworkMethod", "validatePublicVoid").
 calls("FrameworkMethod", "validatePublicVoidNoArg", "List", "add").
-method("FrameworkMethod", "validatePublicVoid").
+method("FrameworkMethod", "validatePublicVoid", 12).
 calls("FrameworkMethod", "validatePublicVoid", "List", "add").
 calls("FrameworkMethod", "validatePublicVoid", "FrameworkMethod", "isPublic").
 calls("FrameworkMethod", "validatePublicVoid", "List", "add").
 calls("FrameworkMethod", "validatePublicVoid", "List", "add").
-method("FrameworkMethod", "getModifiers").
+method("FrameworkMethod", "getModifiers", 3).
 calls("FrameworkMethod", "getModifiers", "Method", "getModifiers").
-method("FrameworkMethod", "getReturnType").
+method("FrameworkMethod", "getReturnType", 3).
 calls("FrameworkMethod", "getReturnType", "Method", "getReturnType").
-method("FrameworkMethod", "getType").
+method("FrameworkMethod", "getType", 3).
 calls("FrameworkMethod", "getType", "FrameworkMethod", "getReturnType").
-method("FrameworkMethod", "getDeclaringClass").
+method("FrameworkMethod", "getDeclaringClass", 3).
 calls("FrameworkMethod", "getDeclaringClass", "Method", "getDeclaringClass").
-method("FrameworkMethod", "validateNoTypeParametersOnArgs").
-method("FrameworkMethod", "handlePossibleBridgeMethod").
+method("FrameworkMethod", "validateNoTypeParametersOnArgs", 3).
+method("FrameworkMethod", "handlePossibleBridgeMethod", 12).
 calls("FrameworkMethod", "handlePossibleBridgeMethod", "FrameworkMethod", "isShadowedBy").
 calls("FrameworkMethod", "handlePossibleBridgeMethod", "FrameworkMethod", "isBridgeMethod").
 calls("FrameworkMethod", "handlePossibleBridgeMethod", "List", "remove").
-method("FrameworkMethod", "isShadowedBy").
+method("FrameworkMethod", "isShadowedBy", 16).
 calls("FrameworkMethod", "isShadowedBy", "FrameworkMethod", "isStatic").
 calls("FrameworkMethod", "isShadowedBy", "FrameworkMethod", "getName").
 calls("FrameworkMethod", "isShadowedBy", "FrameworkMethod", "getParameterTypes").
-method("FrameworkMethod", "isBridgeMethod").
+method("FrameworkMethod", "isBridgeMethod", 3).
 calls("FrameworkMethod", "isBridgeMethod", "Method", "isBridge").
-method("FrameworkMethod", "equals").
-method("FrameworkMethod", "hashCode").
+method("FrameworkMethod", "equals", 6).
+method("FrameworkMethod", "hashCode", 3).
 calls("FrameworkMethod", "hashCode", "Method", "hashCode").
-method("FrameworkMethod", "producesType").
-method("FrameworkMethod", "getParameterTypes").
+method("FrameworkMethod", "producesType", 3).
+method("FrameworkMethod", "getParameterTypes", 3).
 calls("FrameworkMethod", "getParameterTypes", "Method", "getParameterTypes").
-method("FrameworkMethod", "getAnnotations").
+method("FrameworkMethod", "getAnnotations", 3).
 calls("FrameworkMethod", "getAnnotations", "Method", "getAnnotations").
-method("FrameworkMethod", "getAnnotation").
+method("FrameworkMethod", "getAnnotation", 3).
 calls("FrameworkMethod", "getAnnotation", "Method", "getAnnotation").
-method("FrameworkMethod", "toString").
+method("FrameworkMethod", "toString", 3).
 calls("FrameworkMethod", "toString", "Method", "toString").
 
 # junit4/src/main/java/org/junit/runners/model/FrameworkField.java
 
 class("FrameworkField").
-method("FrameworkField", "getName").
+method("FrameworkField", "getName", 3).
 calls("FrameworkField", "getName", "FrameworkField", "getField").
-method("FrameworkField", "getAnnotations").
+method("FrameworkField", "getAnnotations", 3).
 calls("FrameworkField", "getAnnotations", "Field", "getAnnotations").
-method("FrameworkField", "getAnnotation").
+method("FrameworkField", "getAnnotation", 3).
 calls("FrameworkField", "getAnnotation", "Field", "getAnnotation").
-method("FrameworkField", "isShadowedBy").
-method("FrameworkField", "handlePossibleBridgeMethod").
-method("FrameworkField", "isBridgeMethod").
-method("FrameworkField", "getModifiers").
+method("FrameworkField", "isShadowedBy", 3).
+method("FrameworkField", "handlePossibleBridgeMethod", 3).
+method("FrameworkField", "isBridgeMethod", 3).
+method("FrameworkField", "getModifiers", 3).
 calls("FrameworkField", "getModifiers", "Field", "getModifiers").
-method("FrameworkField", "getField").
-method("FrameworkField", "getType").
+method("FrameworkField", "getField", 3).
+method("FrameworkField", "getType", 3).
 calls("FrameworkField", "getType", "Field", "getType").
-method("FrameworkField", "getDeclaringClass").
+method("FrameworkField", "getDeclaringClass", 3).
 calls("FrameworkField", "getDeclaringClass", "Field", "getDeclaringClass").
-method("FrameworkField", "get").
+method("FrameworkField", "get", 3).
 calls("FrameworkField", "get", "Field", "get").
-method("FrameworkField", "toString").
+method("FrameworkField", "toString", 3).
 calls("FrameworkField", "toString", "Field", "toString").
 
 # junit4/src/main/java/org/junit/runners/model/FrameworkMember.java
 
 class("FrameworkMember").
-method("FrameworkMember", "isShadowedBy").
-method("FrameworkMember", "handlePossibleBridgeMethod").
-method("FrameworkMember", "isBridgeMethod").
-method("FrameworkMember", "getModifiers").
-method("FrameworkMember", "isStatic").
+method("FrameworkMember", "isShadowedBy", 1).
+method("FrameworkMember", "handlePossibleBridgeMethod", 1).
+method("FrameworkMember", "isBridgeMethod", 1).
+method("FrameworkMember", "getModifiers", 1).
+method("FrameworkMember", "isStatic", 3).
 calls("FrameworkMember", "isStatic", "Modifier", "isStatic").
-method("FrameworkMember", "isPublic").
+method("FrameworkMember", "isPublic", 3).
 calls("FrameworkMember", "isPublic", "Modifier", "isPublic").
-method("FrameworkMember", "getName").
-method("FrameworkMember", "getType").
-method("FrameworkMember", "getDeclaringClass").
+method("FrameworkMember", "getName", 1).
+method("FrameworkMember", "getType", 1).
+method("FrameworkMember", "getDeclaringClass", 1).
 
 # junit4/src/main/java/org/junit/runners/model/Statement.java
 
 class("Statement").
-method("Statement", "evaluate").
+method("Statement", "evaluate", 1).
 
 # junit4/src/main/java/org/junit/runners/model/InvalidTestClassError.java
 
 class("InvalidTestClassError").
-method("InvalidTestClassError", "createMessage").
+method("InvalidTestClassError", "createMessage", 8).
 calls("InvalidTestClassError", "createMessage", "StringBuilder", "append").
 calls("InvalidTestClassError", "createMessage", "StringBuilder", "append").
 calls("InvalidTestClassError", "createMessage", "StringBuilder", "toString").
-method("InvalidTestClassError", "getMessage").
+method("InvalidTestClassError", "getMessage", 3).
 
 # junit4/src/main/java/org/junit/runners/model/Annotatable.java
 
@@ -2210,19 +2210,19 @@ method("InvalidTestClassError", "getMessage").
 # junit4/src/main/java/org/junit/runners/model/NoGenericTypeParametersValidator.java
 
 class("NoGenericTypeParametersValidator").
-method("NoGenericTypeParametersValidator", "validate").
+method("NoGenericTypeParametersValidator", "validate", 4).
 calls("NoGenericTypeParametersValidator", "validate", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
-method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
+method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", 17).
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", "List", "add").
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnParameterizedType").
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnWildcardType").
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArrayType").
-method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnParameterizedType").
+method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnParameterizedType", 4).
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnParameterizedType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
-method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnWildcardType").
+method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnWildcardType", 6).
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnWildcardType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnWildcardType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
-method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArrayType").
+method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArrayType", 3).
 calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArrayType", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
 
 # junit4/src/main/java/org/junit/runners/model/RunnerScheduler.java
@@ -2231,70 +2231,70 @@ calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArray
 # junit4/src/main/java/org/junit/runners/model/InitializationError.java
 
 class("InitializationError").
-method("InitializationError", "getCauses").
+method("InitializationError", "getCauses", 3).
 
 # junit4/src/main/java/org/junit/runner/notification/SynchronizedRunListener.java
 
 class("SynchronizedRunListener").
-method("SynchronizedRunListener", "testRunStarted").
+method("SynchronizedRunListener", "testRunStarted", 5).
 calls("SynchronizedRunListener", "testRunStarted", "RunListener", "testRunStarted").
-method("SynchronizedRunListener", "testRunFinished").
+method("SynchronizedRunListener", "testRunFinished", 5).
 calls("SynchronizedRunListener", "testRunFinished", "RunListener", "testRunFinished").
-method("SynchronizedRunListener", "testSuiteStarted").
+method("SynchronizedRunListener", "testSuiteStarted", 5).
 calls("SynchronizedRunListener", "testSuiteStarted", "RunListener", "testSuiteStarted").
-method("SynchronizedRunListener", "testSuiteFinished").
+method("SynchronizedRunListener", "testSuiteFinished", 5).
 calls("SynchronizedRunListener", "testSuiteFinished", "RunListener", "testSuiteFinished").
-method("SynchronizedRunListener", "testStarted").
+method("SynchronizedRunListener", "testStarted", 5).
 calls("SynchronizedRunListener", "testStarted", "RunListener", "testStarted").
-method("SynchronizedRunListener", "testFinished").
+method("SynchronizedRunListener", "testFinished", 5).
 calls("SynchronizedRunListener", "testFinished", "RunListener", "testFinished").
-method("SynchronizedRunListener", "testFailure").
+method("SynchronizedRunListener", "testFailure", 5).
 calls("SynchronizedRunListener", "testFailure", "RunListener", "testFailure").
-method("SynchronizedRunListener", "testAssumptionFailure").
+method("SynchronizedRunListener", "testAssumptionFailure", 5).
 calls("SynchronizedRunListener", "testAssumptionFailure", "RunListener", "testAssumptionFailure").
-method("SynchronizedRunListener", "testIgnored").
+method("SynchronizedRunListener", "testIgnored", 5).
 calls("SynchronizedRunListener", "testIgnored", "RunListener", "testIgnored").
-method("SynchronizedRunListener", "hashCode").
+method("SynchronizedRunListener", "hashCode", 3).
 calls("SynchronizedRunListener", "hashCode", "RunListener", "hashCode").
-method("SynchronizedRunListener", "equals").
+method("SynchronizedRunListener", "equals", 10).
 calls("SynchronizedRunListener", "equals", "RunListener", "equals").
-method("SynchronizedRunListener", "toString").
+method("SynchronizedRunListener", "toString", 3).
 
 # junit4/src/main/java/org/junit/runner/notification/RunListener.java
 
 class("RunListener").
-method("RunListener", "testRunStarted").
-method("RunListener", "testRunFinished").
-method("RunListener", "testSuiteStarted").
-method("RunListener", "testSuiteFinished").
-method("RunListener", "testStarted").
-method("RunListener", "testFinished").
-method("RunListener", "testFailure").
-method("RunListener", "testAssumptionFailure").
-method("RunListener", "testIgnored").
+method("RunListener", "testRunStarted", 1).
+method("RunListener", "testRunFinished", 1).
+method("RunListener", "testSuiteStarted", 1).
+method("RunListener", "testSuiteFinished", 1).
+method("RunListener", "testStarted", 1).
+method("RunListener", "testFinished", 1).
+method("RunListener", "testFailure", 1).
+method("RunListener", "testAssumptionFailure", 1).
+method("RunListener", "testIgnored", 1).
 
 # junit4/src/main/java/org/junit/runner/notification/RunNotifier.java
 
 class("RunNotifier").
-method("RunNotifier", "addListener").
+method("RunNotifier", "addListener", 6).
 calls("RunNotifier", "addListener", "List", "add").
-method("RunNotifier", "removeListener").
+method("RunNotifier", "removeListener", 6).
 calls("RunNotifier", "removeListener", "List", "remove").
-method("RunNotifier", "wrapIfNotThreadSafe").
-method("RunNotifier", "fireTestRunStarted").
-method("RunNotifier", "fireTestRunFinished").
-method("RunNotifier", "fireTestSuiteStarted").
-method("RunNotifier", "fireTestSuiteFinished").
-method("RunNotifier", "fireTestStarted").
-method("RunNotifier", "fireTestFailure").
+method("RunNotifier", "wrapIfNotThreadSafe", 3).
+method("RunNotifier", "fireTestRunStarted", 3).
+method("RunNotifier", "fireTestRunFinished", 3).
+method("RunNotifier", "fireTestSuiteStarted", 3).
+method("RunNotifier", "fireTestSuiteFinished", 3).
+method("RunNotifier", "fireTestStarted", 6).
+method("RunNotifier", "fireTestFailure", 3).
 calls("RunNotifier", "fireTestFailure", "RunNotifier", "fireTestFailures").
-method("RunNotifier", "fireTestFailures").
+method("RunNotifier", "fireTestFailures", 5).
 calls("RunNotifier", "fireTestFailures", "List", "isEmpty").
-method("RunNotifier", "fireTestAssumptionFailed").
-method("RunNotifier", "fireTestIgnored").
-method("RunNotifier", "fireTestFinished").
-method("RunNotifier", "pleaseStop").
-method("RunNotifier", "addFirstListener").
+method("RunNotifier", "fireTestAssumptionFailed", 3).
+method("RunNotifier", "fireTestIgnored", 3).
+method("RunNotifier", "fireTestFinished", 3).
+method("RunNotifier", "pleaseStop", 3).
+method("RunNotifier", "addFirstListener", 6).
 calls("RunNotifier", "addFirstListener", "List", "add").
 
 # junit4/src/main/java/org/junit/runner/notification/package-info.java
@@ -2303,16 +2303,16 @@ calls("RunNotifier", "addFirstListener", "List", "add").
 # junit4/src/main/java/org/junit/runner/notification/Failure.java
 
 class("Failure").
-method("Failure", "getTestHeader").
+method("Failure", "getTestHeader", 3).
 calls("Failure", "getTestHeader", "Description", "getDisplayName").
-method("Failure", "getDescription").
-method("Failure", "getException").
-method("Failure", "toString").
-method("Failure", "getTrace").
+method("Failure", "getDescription", 3).
+method("Failure", "getException", 3).
+method("Failure", "toString", 3).
+method("Failure", "getTrace", 3).
 calls("Failure", "getTrace", "Throwables", "getStacktrace").
-method("Failure", "getTrimmedTrace").
+method("Failure", "getTrimmedTrace", 3).
 calls("Failure", "getTrimmedTrace", "Throwables", "getTrimmedStackTrace").
-method("Failure", "getMessage").
+method("Failure", "getMessage", 3).
 calls("Failure", "getMessage", "Failure", "getException").
 
 # junit4/src/main/java/org/junit/runner/notification/StoppedByUserException.java
@@ -2322,20 +2322,20 @@ class("StoppedByUserException").
 # junit4/src/main/java/org/junit/runner/manipulation/Sorter.java
 
 class("Sorter").
-method("Sorter", "apply").
+method("Sorter", "apply", 6).
 calls("Sorter", "apply", "Sortable", "sort").
-method("Sorter", "compare").
+method("Sorter", "compare", 3).
 calls("Sorter", "compare", "Comparator", "compare").
 
 # junit4/src/main/java/org/junit/runner/manipulation/Filter.java
 
 class("Filter").
-method("Filter", "matchMethodDescription").
-method("Filter", "shouldRun").
-method("Filter", "describe").
-method("Filter", "apply").
+method("Filter", "matchMethodDescription", 3).
+method("Filter", "shouldRun", 1).
+method("Filter", "describe", 1).
+method("Filter", "apply", 7).
 calls("Filter", "apply", "Filterable", "filter").
-method("Filter", "intersect").
+method("Filter", "intersect", 7).
 
 # junit4/src/main/java/org/junit/runner/manipulation/package-info.java
 
@@ -2353,10 +2353,10 @@ class("NoTestsRemainException").
 # junit4/src/main/java/junit/extensions/TestSetup.java
 
 class("TestSetup").
-method("TestSetup", "run").
+method("TestSetup", "run", 4).
 calls("TestSetup", "run", "TestResult", "runProtected").
-method("TestSetup", "setUp").
-method("TestSetup", "tearDown").
+method("TestSetup", "setUp", 1).
+method("TestSetup", "tearDown", 1).
 
 # junit4/src/main/java/junit/extensions/package-info.java
 
@@ -2364,41 +2364,41 @@ method("TestSetup", "tearDown").
 # junit4/src/main/java/junit/extensions/ActiveTestSuite.java
 
 class("ActiveTestSuite").
-method("ActiveTestSuite", "run").
+method("ActiveTestSuite", "run", 5).
 calls("ActiveTestSuite", "run", "ActiveTestSuite", "waitUntilFinished").
-method("ActiveTestSuite", "runTest").
+method("ActiveTestSuite", "runTest", 4).
 calls("ActiveTestSuite", "runTest", "Thread", "start").
-method("ActiveTestSuite", "waitUntilFinished").
+method("ActiveTestSuite", "waitUntilFinished", 7).
 calls("ActiveTestSuite", "waitUntilFinished", "ActiveTestSuite", "wait").
-method("ActiveTestSuite", "runFinished").
+method("ActiveTestSuite", "runFinished", 4).
 calls("ActiveTestSuite", "runFinished", "ActiveTestSuite", "notifyAll").
 
 # junit4/src/main/java/junit/extensions/TestDecorator.java
 
 class("TestDecorator").
-method("TestDecorator", "basicRun").
+method("TestDecorator", "basicRun", 3).
 calls("TestDecorator", "basicRun", "Test", "run").
-method("TestDecorator", "countTestCases").
+method("TestDecorator", "countTestCases", 3).
 calls("TestDecorator", "countTestCases", "Test", "countTestCases").
-method("TestDecorator", "run").
+method("TestDecorator", "run", 3).
 calls("TestDecorator", "run", "TestDecorator", "basicRun").
-method("TestDecorator", "toString").
+method("TestDecorator", "toString", 3).
 calls("TestDecorator", "toString", "Test", "toString").
-method("TestDecorator", "getTest").
+method("TestDecorator", "getTest", 3).
 
 # junit4/src/main/java/junit/extensions/RepeatedTest.java
 
 class("RepeatedTest").
-method("RepeatedTest", "countTestCases").
-method("RepeatedTest", "run").
+method("RepeatedTest", "countTestCases", 3).
+method("RepeatedTest", "run", 7).
 calls("RepeatedTest", "run", "TestResult", "shouldStop").
-method("RepeatedTest", "toString").
+method("RepeatedTest", "toString", 3).
 
 # junit4/src/main/java/junit/runner/Version.java
 
 class("Version").
-method("Version", "id").
-method("Version", "main").
+method("Version", "id", 3).
+method("Version", "main", 3).
 calls("Version", "main", "System.out", "println").
 
 # junit4/src/main/java/junit/runner/package-info.java
@@ -2410,28 +2410,28 @@ calls("Version", "main", "System.out", "println").
 # junit4/src/main/java/junit/runner/BaseTestRunner.java
 
 class("BaseTestRunner").
-method("BaseTestRunner", "startTest").
+method("BaseTestRunner", "startTest", 3).
 calls("BaseTestRunner", "startTest", "BaseTestRunner", "testStarted").
-method("BaseTestRunner", "setPreferences").
-method("BaseTestRunner", "getPreferences").
+method("BaseTestRunner", "setPreferences", 3).
+method("BaseTestRunner", "getPreferences", 9).
 calls("BaseTestRunner", "getPreferences", "Properties", "put").
 calls("BaseTestRunner", "getPreferences", "Properties", "put").
 calls("BaseTestRunner", "getPreferences", "BaseTestRunner", "readPreferences").
-method("BaseTestRunner", "savePreferences").
+method("BaseTestRunner", "savePreferences", 7).
 calls("BaseTestRunner", "savePreferences", "BaseTestRunner", "getPreferences").
 calls("BaseTestRunner", "savePreferences", "FileOutputStream", "close").
-method("BaseTestRunner", "setPreference").
+method("BaseTestRunner", "setPreference", 3).
 calls("BaseTestRunner", "setPreference", "BaseTestRunner", "getPreferences").
-method("BaseTestRunner", "endTest").
+method("BaseTestRunner", "endTest", 3).
 calls("BaseTestRunner", "endTest", "BaseTestRunner", "testEnded").
-method("BaseTestRunner", "addError").
+method("BaseTestRunner", "addError", 3).
 calls("BaseTestRunner", "addError", "BaseTestRunner", "testFailed").
-method("BaseTestRunner", "addFailure").
+method("BaseTestRunner", "addFailure", 3).
 calls("BaseTestRunner", "addFailure", "BaseTestRunner", "testFailed").
-method("BaseTestRunner", "testStarted").
-method("BaseTestRunner", "testEnded").
-method("BaseTestRunner", "testFailed").
-method("BaseTestRunner", "getTest").
+method("BaseTestRunner", "testStarted", 1).
+method("BaseTestRunner", "testEnded", 1).
+method("BaseTestRunner", "testFailed", 1).
+method("BaseTestRunner", "getTest", 43).
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "clearStatus").
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "runFailed").
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "runFailed").
@@ -2441,38 +2441,38 @@ calls("BaseTestRunner", "getTest", "BaseTestRunner", "runFailed").
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "runFailed").
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "runFailed").
 calls("BaseTestRunner", "getTest", "BaseTestRunner", "clearStatus").
-method("BaseTestRunner", "elapsedTimeAsString").
+method("BaseTestRunner", "elapsedTimeAsString", 3).
 calls("BaseTestRunner", "elapsedTimeAsString", "NumberFormat", "getInstance").
-method("BaseTestRunner", "processArguments").
+method("BaseTestRunner", "processArguments", 23).
 calls("BaseTestRunner", "processArguments", "BaseTestRunner", "setLoading").
 calls("BaseTestRunner", "processArguments", "System.out", "println").
-method("BaseTestRunner", "setLoading").
-method("BaseTestRunner", "extractClassName").
+method("BaseTestRunner", "setLoading", 3).
+method("BaseTestRunner", "extractClassName", 6).
 calls("BaseTestRunner", "extractClassName", "String", "startsWith").
 calls("BaseTestRunner", "extractClassName", "String", "substring").
-method("BaseTestRunner", "truncate").
-method("BaseTestRunner", "runFailed").
-method("BaseTestRunner", "loadSuiteClass").
+method("BaseTestRunner", "truncate", 6).
+method("BaseTestRunner", "runFailed", 1).
+method("BaseTestRunner", "loadSuiteClass", 3).
 calls("BaseTestRunner", "loadSuiteClass", "Class", "forName").
-method("BaseTestRunner", "clearStatus").
-method("BaseTestRunner", "useReloadingTestSuiteLoader").
-method("BaseTestRunner", "getPreferencesFile").
-method("BaseTestRunner", "readPreferences").
+method("BaseTestRunner", "clearStatus", 1).
+method("BaseTestRunner", "useReloadingTestSuiteLoader", 3).
+method("BaseTestRunner", "getPreferencesFile", 4).
+method("BaseTestRunner", "readPreferences", 15).
 calls("BaseTestRunner", "readPreferences", "BaseTestRunner", "setPreferences").
 calls("BaseTestRunner", "readPreferences", "BaseTestRunner", "getPreferences").
 calls("BaseTestRunner", "readPreferences", "InputStream", "close").
-method("BaseTestRunner", "getPreference").
+method("BaseTestRunner", "getPreference", 3).
 calls("BaseTestRunner", "getPreference", "BaseTestRunner", "getPreferences").
-method("BaseTestRunner", "getPreference").
-method("BaseTestRunner", "getFilteredTrace").
+method("BaseTestRunner", "getPreference", 11).
+method("BaseTestRunner", "getFilteredTrace", 3).
 calls("BaseTestRunner", "getFilteredTrace", "BaseTestRunner", "getFilteredTrace").
-method("BaseTestRunner", "getFilteredTrace").
+method("BaseTestRunner", "getFilteredTrace", 18).
 calls("BaseTestRunner", "getFilteredTrace", "BaseTestRunner", "showStackRaw").
 calls("BaseTestRunner", "getFilteredTrace", "BaseTestRunner", "filterLine").
 calls("BaseTestRunner", "getFilteredTrace", "PrintWriter", "println").
 calls("BaseTestRunner", "getFilteredTrace", "StringWriter", "toString").
-method("BaseTestRunner", "showStackRaw").
-method("BaseTestRunner", "filterLine").
+method("BaseTestRunner", "showStackRaw", 3).
+method("BaseTestRunner", "filterLine", 8).
 
 # junit4/src/main/java/junit/framework/Test.java
 
@@ -2480,92 +2480,92 @@ method("BaseTestRunner", "filterLine").
 # junit4/src/main/java/junit/framework/TestSuite.java
 
 class("TestSuite").
-method("TestSuite", "createTest").
+method("TestSuite", "createTest", 24).
 calls("TestSuite", "createTest", "TestSuite", "warning").
 calls("TestSuite", "createTest", "TestSuite", "warning").
 calls("TestSuite", "createTest", "TestSuite", "warning").
 calls("TestSuite", "createTest", "TestSuite", "warning").
-method("TestSuite", "getTestConstructor").
+method("TestSuite", "getTestConstructor", 6).
 calls("TestSuite", "getTestConstructor", "Class", "getConstructor").
 calls("TestSuite", "getTestConstructor", "Class", "getConstructor").
-method("TestSuite", "warning").
-method("TestSuite", "addTestsFromTestCase").
+method("TestSuite", "warning", 3).
+method("TestSuite", "addTestsFromTestCase", 21).
 calls("TestSuite", "addTestsFromTestCase", "TestSuite", "getTestConstructor").
 calls("TestSuite", "addTestsFromTestCase", "TestSuite", "addTest").
 calls("TestSuite", "addTestsFromTestCase", "Modifier", "isPublic").
 calls("TestSuite", "addTestsFromTestCase", "TestSuite", "addTest").
 calls("TestSuite", "addTestsFromTestCase", "TestSuite", "addTestMethod").
 calls("TestSuite", "addTestsFromTestCase", "TestSuite", "addTest").
-method("TestSuite", "testCaseForClass").
+method("TestSuite", "testCaseForClass", 7).
 calls("TestSuite", "testCaseForClass", "TestSuite", "warning").
-method("TestSuite", "addTest").
+method("TestSuite", "addTest", 3).
 calls("TestSuite", "addTest", "Vector", "add").
-method("TestSuite", "addTestSuite").
+method("TestSuite", "addTestSuite", 3).
 calls("TestSuite", "addTestSuite", "TestSuite", "addTest").
-method("TestSuite", "countTestCases").
-method("TestSuite", "getName").
-method("TestSuite", "run").
+method("TestSuite", "countTestCases", 6).
+method("TestSuite", "getName", 3).
+method("TestSuite", "run", 7).
 calls("TestSuite", "run", "TestResult", "shouldStop").
 calls("TestSuite", "run", "TestSuite", "runTest").
-method("TestSuite", "runTest").
+method("TestSuite", "runTest", 3).
 calls("TestSuite", "runTest", "Test", "run").
-method("TestSuite", "setName").
-method("TestSuite", "testAt").
+method("TestSuite", "setName", 3).
+method("TestSuite", "testAt", 3).
 calls("TestSuite", "testAt", "Vector", "get").
-method("TestSuite", "testCount").
+method("TestSuite", "testCount", 3).
 calls("TestSuite", "testCount", "Vector", "size").
-method("TestSuite", "tests").
+method("TestSuite", "tests", 3).
 calls("TestSuite", "tests", "Vector", "elements").
-method("TestSuite", "toString").
+method("TestSuite", "toString", 6).
 calls("TestSuite", "toString", "TestSuite", "getName").
-method("TestSuite", "addTestMethod").
+method("TestSuite", "addTestMethod", 14).
 calls("TestSuite", "addTestMethod", "List", "contains").
 calls("TestSuite", "addTestMethod", "TestSuite", "isPublicTestMethod").
 calls("TestSuite", "addTestMethod", "TestSuite", "isTestMethod").
 calls("TestSuite", "addTestMethod", "TestSuite", "addTest").
 calls("TestSuite", "addTestMethod", "List", "add").
 calls("TestSuite", "addTestMethod", "TestSuite", "addTest").
-method("TestSuite", "isPublicTestMethod").
-method("TestSuite", "isTestMethod").
+method("TestSuite", "isPublicTestMethod", 3).
+method("TestSuite", "isTestMethod", 3).
 
 # junit4/src/main/java/junit/framework/JUnit4TestAdapter.java
 
 class("JUnit4TestAdapter").
-method("JUnit4TestAdapter", "countTestCases").
+method("JUnit4TestAdapter", "countTestCases", 3).
 calls("JUnit4TestAdapter", "countTestCases", "Runner", "testCount").
-method("JUnit4TestAdapter", "run").
+method("JUnit4TestAdapter", "run", 3).
 calls("JUnit4TestAdapter", "run", "Runner", "run").
-method("JUnit4TestAdapter", "getTests").
+method("JUnit4TestAdapter", "getTests", 3).
 calls("JUnit4TestAdapter", "getTests", "JUnit4TestAdapterCache", "asTestList").
-method("JUnit4TestAdapter", "getTestClass").
-method("JUnit4TestAdapter", "getDescription").
+method("JUnit4TestAdapter", "getTestClass", 3).
+method("JUnit4TestAdapter", "getDescription", 4).
 calls("JUnit4TestAdapter", "getDescription", "JUnit4TestAdapter", "removeIgnored").
-method("JUnit4TestAdapter", "removeIgnored").
+method("JUnit4TestAdapter", "removeIgnored", 12).
 calls("JUnit4TestAdapter", "removeIgnored", "JUnit4TestAdapter", "isIgnored").
 calls("JUnit4TestAdapter", "removeIgnored", "Description", "isEmpty").
 calls("JUnit4TestAdapter", "removeIgnored", "Description", "addChild").
-method("JUnit4TestAdapter", "isIgnored").
-method("JUnit4TestAdapter", "toString").
+method("JUnit4TestAdapter", "isIgnored", 3).
+method("JUnit4TestAdapter", "toString", 3).
 calls("JUnit4TestAdapter", "toString", "Class", "getName").
-method("JUnit4TestAdapter", "filter").
+method("JUnit4TestAdapter", "filter", 3).
 calls("JUnit4TestAdapter", "filter", "Filter", "apply").
-method("JUnit4TestAdapter", "sort").
+method("JUnit4TestAdapter", "sort", 3).
 calls("JUnit4TestAdapter", "sort", "Sorter", "apply").
 
 # junit4/src/main/java/junit/framework/TestCase.java
 
 class("TestCase").
-method("TestCase", "countTestCases").
-method("TestCase", "createResult").
-method("TestCase", "run").
+method("TestCase", "countTestCases", 3).
+method("TestCase", "createResult", 3).
+method("TestCase", "run", 5).
 calls("TestCase", "run", "TestCase", "run").
-method("TestCase", "run").
+method("TestCase", "run", 3).
 calls("TestCase", "run", "TestResult", "run").
-method("TestCase", "runBare").
+method("TestCase", "runBare", 18).
 calls("TestCase", "runBare", "TestCase", "setUp").
 calls("TestCase", "runBare", "TestCase", "runTest").
 calls("TestCase", "runBare", "TestCase", "tearDown").
-method("TestCase", "runTest").
+method("TestCase", "runTest", 19).
 calls("TestCase", "runTest", "TestCase", "assertNotNull").
 calls("TestCase", "runTest", "TestCase", "fail").
 calls("TestCase", "runTest", "Modifier", "isPublic").
@@ -2574,102 +2574,102 @@ calls("TestCase", "runTest", "Method", "invoke").
 calls("TestCase", "runTest", "InvocationTargetException", "fillInStackTrace").
 calls("TestCase", "runTest", "InvocationTargetException", "getTargetException").
 calls("TestCase", "runTest", "IllegalAccessException", "fillInStackTrace").
-method("TestCase", "assertTrue").
+method("TestCase", "assertTrue", 3).
 calls("TestCase", "assertTrue", "Assert", "assertTrue").
-method("TestCase", "assertTrue").
+method("TestCase", "assertTrue", 3).
 calls("TestCase", "assertTrue", "Assert", "assertTrue").
-method("TestCase", "assertFalse").
+method("TestCase", "assertFalse", 3).
 calls("TestCase", "assertFalse", "Assert", "assertFalse").
-method("TestCase", "assertFalse").
+method("TestCase", "assertFalse", 3).
 calls("TestCase", "assertFalse", "Assert", "assertFalse").
-method("TestCase", "fail").
+method("TestCase", "fail", 3).
 calls("TestCase", "fail", "Assert", "fail").
-method("TestCase", "fail").
+method("TestCase", "fail", 3).
 calls("TestCase", "fail", "Assert", "fail").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertEquals").
+method("TestCase", "assertEquals", 3).
 calls("TestCase", "assertEquals", "Assert", "assertEquals").
-method("TestCase", "assertNotNull").
+method("TestCase", "assertNotNull", 3).
 calls("TestCase", "assertNotNull", "Assert", "assertNotNull").
-method("TestCase", "assertNotNull").
+method("TestCase", "assertNotNull", 3).
 calls("TestCase", "assertNotNull", "Assert", "assertNotNull").
-method("TestCase", "assertNull").
+method("TestCase", "assertNull", 3).
 calls("TestCase", "assertNull", "Assert", "assertNull").
-method("TestCase", "assertNull").
+method("TestCase", "assertNull", 3).
 calls("TestCase", "assertNull", "Assert", "assertNull").
-method("TestCase", "assertSame").
+method("TestCase", "assertSame", 3).
 calls("TestCase", "assertSame", "Assert", "assertSame").
-method("TestCase", "assertSame").
+method("TestCase", "assertSame", 3).
 calls("TestCase", "assertSame", "Assert", "assertSame").
-method("TestCase", "assertNotSame").
+method("TestCase", "assertNotSame", 3).
 calls("TestCase", "assertNotSame", "Assert", "assertNotSame").
-method("TestCase", "assertNotSame").
+method("TestCase", "assertNotSame", 3).
 calls("TestCase", "assertNotSame", "Assert", "assertNotSame").
-method("TestCase", "failSame").
+method("TestCase", "failSame", 3).
 calls("TestCase", "failSame", "Assert", "failSame").
-method("TestCase", "failNotSame").
+method("TestCase", "failNotSame", 3).
 calls("TestCase", "failNotSame", "Assert", "failNotSame").
-method("TestCase", "failNotEquals").
+method("TestCase", "failNotEquals", 3).
 calls("TestCase", "failNotEquals", "Assert", "failNotEquals").
-method("TestCase", "format").
+method("TestCase", "format", 3).
 calls("TestCase", "format", "Assert", "format").
-method("TestCase", "setUp").
-method("TestCase", "tearDown").
-method("TestCase", "toString").
-method("TestCase", "getName").
-method("TestCase", "setName").
+method("TestCase", "setUp", 1).
+method("TestCase", "tearDown", 1).
+method("TestCase", "toString", 3).
+method("TestCase", "getName", 3).
+method("TestCase", "setName", 3).
 
 # junit4/src/main/java/junit/framework/ComparisonCompactor.java
 
 class("ComparisonCompactor").
-method("ComparisonCompactor", "compact").
+method("ComparisonCompactor", "compact", 10).
 calls("ComparisonCompactor", "compact", "Assert", "format").
 calls("ComparisonCompactor", "compact", "ComparisonCompactor", "findCommonPrefix").
 calls("ComparisonCompactor", "compact", "ComparisonCompactor", "findCommonSuffix").
 calls("ComparisonCompactor", "compact", "Assert", "format").
-method("ComparisonCompactor", "compactString").
-method("ComparisonCompactor", "findCommonPrefix").
-method("ComparisonCompactor", "findCommonSuffix").
-method("ComparisonCompactor", "computeCommonPrefix").
-method("ComparisonCompactor", "computeCommonSuffix").
-method("ComparisonCompactor", "areStringsEqual").
+method("ComparisonCompactor", "compactString", 10).
+method("ComparisonCompactor", "findCommonPrefix", 8).
+method("ComparisonCompactor", "findCommonSuffix", 9).
+method("ComparisonCompactor", "computeCommonPrefix", 3).
+method("ComparisonCompactor", "computeCommonSuffix", 4).
+method("ComparisonCompactor", "areStringsEqual", 3).
 calls("ComparisonCompactor", "areStringsEqual", "String", "equals").
 
 # junit4/src/main/java/junit/framework/package-info.java
@@ -2678,138 +2678,138 @@ calls("ComparisonCompactor", "areStringsEqual", "String", "equals").
 # junit4/src/main/java/junit/framework/TestResult.java
 
 class("TestResult").
-method("TestResult", "addError").
+method("TestResult", "addError", 5).
 calls("TestResult", "addError", "List", "add").
 calls("TestResult", "addError", "TestListener", "addError").
-method("TestResult", "addFailure").
+method("TestResult", "addFailure", 5).
 calls("TestResult", "addFailure", "List", "add").
 calls("TestResult", "addFailure", "TestListener", "addFailure").
-method("TestResult", "addListener").
+method("TestResult", "addListener", 3).
 calls("TestResult", "addListener", "List", "add").
-method("TestResult", "removeListener").
+method("TestResult", "removeListener", 3).
 calls("TestResult", "removeListener", "List", "remove").
-method("TestResult", "cloneListeners").
+method("TestResult", "cloneListeners", 5).
 calls("TestResult", "cloneListeners", "List", "addAll").
-method("TestResult", "endTest").
+method("TestResult", "endTest", 4).
 calls("TestResult", "endTest", "TestListener", "endTest").
-method("TestResult", "errorCount").
+method("TestResult", "errorCount", 3).
 calls("TestResult", "errorCount", "List", "size").
-method("TestResult", "errors").
+method("TestResult", "errors", 3).
 calls("TestResult", "errors", "Collections", "enumeration").
-method("TestResult", "failureCount").
+method("TestResult", "failureCount", 3).
 calls("TestResult", "failureCount", "List", "size").
-method("TestResult", "failures").
+method("TestResult", "failures", 3).
 calls("TestResult", "failures", "Collections", "enumeration").
-method("TestResult", "run").
+method("TestResult", "run", 6).
 calls("TestResult", "run", "TestResult", "startTest").
 calls("TestResult", "run", "TestResult", "runProtected").
 calls("TestResult", "run", "TestResult", "endTest").
-method("TestResult", "runCount").
-method("TestResult", "runProtected").
+method("TestResult", "runCount", 3).
+method("TestResult", "runProtected", 10).
 calls("TestResult", "runProtected", "Protectable", "protect").
 calls("TestResult", "runProtected", "TestResult", "addFailure").
 calls("TestResult", "runProtected", "TestResult", "addError").
-method("TestResult", "shouldStop").
-method("TestResult", "startTest").
+method("TestResult", "shouldStop", 3).
+method("TestResult", "startTest", 8).
 calls("TestResult", "startTest", "TestListener", "startTest").
-method("TestResult", "stop").
-method("TestResult", "wasSuccessful").
+method("TestResult", "stop", 3).
+method("TestResult", "wasSuccessful", 3).
 
 # junit4/src/main/java/junit/framework/ComparisonFailure.java
 
 class("ComparisonFailure").
-method("ComparisonFailure", "getMessage").
-method("ComparisonFailure", "getActual").
-method("ComparisonFailure", "getExpected").
+method("ComparisonFailure", "getMessage", 3).
+method("ComparisonFailure", "getActual", 3).
+method("ComparisonFailure", "getExpected", 3).
 
 # junit4/src/main/java/junit/framework/Assert.java
 
 class("Assert").
-method("Assert", "assertTrue").
+method("Assert", "assertTrue", 5).
 calls("Assert", "assertTrue", "Assert", "fail").
-method("Assert", "assertTrue").
+method("Assert", "assertTrue", 3).
 calls("Assert", "assertTrue", "Assert", "assertTrue").
-method("Assert", "assertFalse").
+method("Assert", "assertFalse", 3).
 calls("Assert", "assertFalse", "Assert", "assertTrue").
-method("Assert", "assertFalse").
+method("Assert", "assertFalse", 3).
 calls("Assert", "assertFalse", "Assert", "assertFalse").
-method("Assert", "fail").
-method("Assert", "fail").
+method("Assert", "fail", 6).
+method("Assert", "fail", 3).
 calls("Assert", "fail", "Assert", "fail").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 9).
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 10).
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 8).
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 8).
 calls("Assert", "assertEquals", "Assert", "failNotEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertEquals").
+method("Assert", "assertEquals", 3).
 calls("Assert", "assertEquals", "Assert", "assertEquals").
-method("Assert", "assertNotNull").
+method("Assert", "assertNotNull", 3).
 calls("Assert", "assertNotNull", "Assert", "assertNotNull").
-method("Assert", "assertNotNull").
+method("Assert", "assertNotNull", 3).
 calls("Assert", "assertNotNull", "Assert", "assertTrue").
-method("Assert", "assertNull").
+method("Assert", "assertNull", 5).
 calls("Assert", "assertNull", "Assert", "assertNull").
-method("Assert", "assertNull").
+method("Assert", "assertNull", 3).
 calls("Assert", "assertNull", "Assert", "assertTrue").
-method("Assert", "assertSame").
+method("Assert", "assertSame", 6).
 calls("Assert", "assertSame", "Assert", "failNotSame").
-method("Assert", "assertSame").
+method("Assert", "assertSame", 3).
 calls("Assert", "assertSame", "Assert", "assertSame").
-method("Assert", "assertNotSame").
+method("Assert", "assertNotSame", 5).
 calls("Assert", "assertNotSame", "Assert", "failSame").
-method("Assert", "assertNotSame").
+method("Assert", "assertNotSame", 3).
 calls("Assert", "assertNotSame", "Assert", "assertNotSame").
-method("Assert", "failSame").
+method("Assert", "failSame", 4).
 calls("Assert", "failSame", "Assert", "fail").
-method("Assert", "failNotSame").
+method("Assert", "failNotSame", 4).
 calls("Assert", "failNotSame", "Assert", "fail").
-method("Assert", "failNotEquals").
+method("Assert", "failNotEquals", 3).
 calls("Assert", "failNotEquals", "Assert", "fail").
-method("Assert", "format").
+method("Assert", "format", 7).
 
 # junit4/src/main/java/junit/framework/TestFailure.java
 
 class("TestFailure").
-method("TestFailure", "failedTest").
-method("TestFailure", "thrownException").
-method("TestFailure", "toString").
-method("TestFailure", "trace").
+method("TestFailure", "failedTest", 3).
+method("TestFailure", "thrownException", 3).
+method("TestFailure", "toString", 3).
+method("TestFailure", "trace", 3).
 calls("TestFailure", "trace", "Throwables", "getStacktrace").
-method("TestFailure", "exceptionMessage").
+method("TestFailure", "exceptionMessage", 3).
 calls("TestFailure", "exceptionMessage", "TestFailure", "thrownException").
-method("TestFailure", "isFailure").
+method("TestFailure", "isFailure", 3).
 
 # junit4/src/main/java/junit/framework/TestListener.java
 
@@ -2820,24 +2820,24 @@ method("TestFailure", "isFailure").
 # junit4/src/main/java/junit/framework/AssertionFailedError.java
 
 class("AssertionFailedError").
-method("AssertionFailedError", "defaultString").
+method("AssertionFailedError", "defaultString", 3).
 
 # junit4/src/main/java/junit/framework/JUnit4TestAdapterCache.java
 
 class("JUnit4TestAdapterCache").
-method("JUnit4TestAdapterCache", "getDefault").
-method("JUnit4TestAdapterCache", "asTest").
+method("JUnit4TestAdapterCache", "getDefault", 3).
+method("JUnit4TestAdapterCache", "asTest", 10).
 calls("JUnit4TestAdapterCache", "asTest", "Description", "isSuite").
 calls("JUnit4TestAdapterCache", "asTest", "JUnit4TestAdapterCache", "createTest").
 calls("JUnit4TestAdapterCache", "asTest", "JUnit4TestAdapterCache", "containsKey").
 calls("JUnit4TestAdapterCache", "asTest", "JUnit4TestAdapterCache", "put").
 calls("JUnit4TestAdapterCache", "asTest", "JUnit4TestAdapterCache", "get").
-method("JUnit4TestAdapterCache", "createTest").
+method("JUnit4TestAdapterCache", "createTest", 10).
 calls("JUnit4TestAdapterCache", "createTest", "Description", "isTest").
 calls("JUnit4TestAdapterCache", "createTest", "TestSuite", "addTest").
-method("JUnit4TestAdapterCache", "getNotifier").
+method("JUnit4TestAdapterCache", "getNotifier", 5).
 calls("JUnit4TestAdapterCache", "getNotifier", "RunNotifier", "addListener").
-method("JUnit4TestAdapterCache", "asTestList").
+method("JUnit4TestAdapterCache", "asTestList", 10).
 calls("JUnit4TestAdapterCache", "asTestList", "Description", "isTest").
 calls("JUnit4TestAdapterCache", "asTestList", "Arrays", "asList").
 calls("JUnit4TestAdapterCache", "asTestList", "List", "add").
@@ -2845,42 +2845,42 @@ calls("JUnit4TestAdapterCache", "asTestList", "List", "add").
 # junit4/src/main/java/junit/framework/JUnit4TestCaseFacade.java
 
 class("JUnit4TestCaseFacade").
-method("JUnit4TestCaseFacade", "toString").
+method("JUnit4TestCaseFacade", "toString", 3).
 calls("JUnit4TestCaseFacade", "toString", "JUnit4TestCaseFacade", "getDescription").
-method("JUnit4TestCaseFacade", "countTestCases").
-method("JUnit4TestCaseFacade", "run").
-method("JUnit4TestCaseFacade", "getDescription").
+method("JUnit4TestCaseFacade", "countTestCases", 3).
+method("JUnit4TestCaseFacade", "run", 3).
+method("JUnit4TestCaseFacade", "getDescription", 3).
 
 # junit4/src/main/java/junit/textui/ResultPrinter.java
 
 class("ResultPrinter").
-method("ResultPrinter", "print").
+method("ResultPrinter", "print", 6).
 calls("ResultPrinter", "print", "ResultPrinter", "printHeader").
 calls("ResultPrinter", "print", "ResultPrinter", "printErrors").
 calls("ResultPrinter", "print", "ResultPrinter", "printFailures").
 calls("ResultPrinter", "print", "ResultPrinter", "printFooter").
-method("ResultPrinter", "printWaitPrompt").
+method("ResultPrinter", "printWaitPrompt", 4).
 calls("ResultPrinter", "printWaitPrompt", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printWaitPrompt", "ResultPrinter", "getWriter").
-method("ResultPrinter", "printHeader").
+method("ResultPrinter", "printHeader", 4).
 calls("ResultPrinter", "printHeader", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printHeader", "ResultPrinter", "getWriter").
-method("ResultPrinter", "printErrors").
+method("ResultPrinter", "printErrors", 3).
 calls("ResultPrinter", "printErrors", "ResultPrinter", "printDefects").
-method("ResultPrinter", "printFailures").
+method("ResultPrinter", "printFailures", 3).
 calls("ResultPrinter", "printFailures", "ResultPrinter", "printDefects").
-method("ResultPrinter", "printDefects").
+method("ResultPrinter", "printDefects", 12).
 calls("ResultPrinter", "printDefects", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printDefects", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printDefects", "ResultPrinter", "printDefect").
-method("ResultPrinter", "printDefect").
+method("ResultPrinter", "printDefect", 4).
 calls("ResultPrinter", "printDefect", "ResultPrinter", "printDefectHeader").
 calls("ResultPrinter", "printDefect", "ResultPrinter", "printDefectTrace").
-method("ResultPrinter", "printDefectHeader").
+method("ResultPrinter", "printDefectHeader", 3).
 calls("ResultPrinter", "printDefectHeader", "ResultPrinter", "getWriter").
-method("ResultPrinter", "printDefectTrace").
+method("ResultPrinter", "printDefectTrace", 3).
 calls("ResultPrinter", "printDefectTrace", "ResultPrinter", "getWriter").
-method("ResultPrinter", "printFooter").
+method("ResultPrinter", "printFooter", 12).
 calls("ResultPrinter", "printFooter", "TestResult", "wasSuccessful").
 calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
@@ -2889,15 +2889,15 @@ calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "printFooter", "ResultPrinter", "getWriter").
-method("ResultPrinter", "elapsedTimeAsString").
+method("ResultPrinter", "elapsedTimeAsString", 3).
 calls("ResultPrinter", "elapsedTimeAsString", "NumberFormat", "getInstance").
-method("ResultPrinter", "getWriter").
-method("ResultPrinter", "addError").
+method("ResultPrinter", "getWriter", 3).
+method("ResultPrinter", "addError", 3).
 calls("ResultPrinter", "addError", "ResultPrinter", "getWriter").
-method("ResultPrinter", "addFailure").
+method("ResultPrinter", "addFailure", 3).
 calls("ResultPrinter", "addFailure", "ResultPrinter", "getWriter").
-method("ResultPrinter", "endTest").
-method("ResultPrinter", "startTest").
+method("ResultPrinter", "endTest", 1).
+method("ResultPrinter", "startTest", 7).
 calls("ResultPrinter", "startTest", "ResultPrinter", "getWriter").
 calls("ResultPrinter", "startTest", "ResultPrinter", "getWriter").
 
@@ -2907,41 +2907,41 @@ calls("ResultPrinter", "startTest", "ResultPrinter", "getWriter").
 # junit4/src/main/java/junit/textui/TestRunner.java
 
 class("TestRunner").
-method("TestRunner", "run").
+method("TestRunner", "run", 3).
 calls("TestRunner", "run", "TestRunner", "run").
-method("TestRunner", "run").
+method("TestRunner", "run", 4).
 calls("TestRunner", "run", "TestRunner", "doRun").
-method("TestRunner", "runAndWait").
+method("TestRunner", "runAndWait", 4).
 calls("TestRunner", "runAndWait", "TestRunner", "doRun").
-method("TestRunner", "testFailed").
-method("TestRunner", "testStarted").
-method("TestRunner", "testEnded").
-method("TestRunner", "createTestResult").
-method("TestRunner", "doRun").
+method("TestRunner", "testFailed", 1).
+method("TestRunner", "testStarted", 1).
+method("TestRunner", "testEnded", 1).
+method("TestRunner", "createTestResult", 3).
+method("TestRunner", "doRun", 3).
 calls("TestRunner", "doRun", "TestRunner", "doRun").
-method("TestRunner", "doRun").
+method("TestRunner", "doRun", 11).
 calls("TestRunner", "doRun", "TestResult", "addListener").
 calls("TestRunner", "doRun", "Test", "run").
 calls("TestRunner", "doRun", "ResultPrinter", "print").
 calls("TestRunner", "doRun", "TestRunner", "pause").
-method("TestRunner", "pause").
+method("TestRunner", "pause", 9).
 calls("TestRunner", "pause", "ResultPrinter", "printWaitPrompt").
 calls("TestRunner", "pause", "System.in", "read").
-method("TestRunner", "main").
+method("TestRunner", "main", 12).
 calls("TestRunner", "main", "TestResult", "wasSuccessful").
 calls("TestRunner", "main", "System", "exit").
 calls("TestRunner", "main", "System", "exit").
 calls("TestRunner", "main", "System.err", "println").
 calls("TestRunner", "main", "System", "exit").
-method("TestRunner", "start").
+method("TestRunner", "start", 37).
 calls("TestRunner", "start", "System.err", "println").
 calls("TestRunner", "start", "String", "equals").
 calls("TestRunner", "start", "String", "equals").
 calls("TestRunner", "start", "TestRunner", "runSingleMethod").
 calls("TestRunner", "start", "TestRunner", "doRun").
-method("TestRunner", "runSingleMethod").
+method("TestRunner", "runSingleMethod", 5).
 calls("TestRunner", "runSingleMethod", "TestRunner", "doRun").
-method("TestRunner", "runFailed").
+method("TestRunner", "runFailed", 4).
 calls("TestRunner", "runFailed", "System.err", "println").
 calls("TestRunner", "runFailed", "System", "exit").
-method("TestRunner", "setPrinter").
+method("TestRunner", "setPrinter", 3).
