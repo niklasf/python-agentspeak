@@ -35,6 +35,9 @@ class AstBaseVisitor(object):
     def visit_list(self, ast_list):
         pass
 
+    def visit_linked_list(self, ast_linked_list):
+        pass
+
     def visit_rule(self, ast_rule):
         pass
 
@@ -117,6 +120,19 @@ class AstList(AstNode):
 
     def __str__(self):
         return "[%s]" % (", ".join(str(term) for term in self.terms), )
+
+
+class AstLinkedList(AstNode):
+    def __init__(self):
+        super(AstLinkedList, self).__init__()
+        self.head = None
+        self.tail = None
+
+    def accept(self, visitor):
+        return visitor.visit_linked_list(self)
+
+    def __str__(self):
+        return "[%s|%s]" % (self.head, self.tail)
 
 
 class AstRule(AstNode):
@@ -441,7 +457,16 @@ def parse_list(tok, tokens, log):
         tok, term = parse_and_expr(tok, tokens, log)
         ast_list.terms.append(term)
 
-        if tok.lexeme == ",":
+        if tok.lexeme == "|":
+            if len(ast_list.terms) > 1:
+                raise log.error("do not mix ',' and '|' in list notation",
+                                loc=tok.loc, extra_locs=[ast_list.loc])
+            ast_linked_list = AstLinkedList()
+            ast_linked_list.loc = ast_list.loc
+            ast_linked_list.head = term
+            tok, ast_linked_list.tail = parse_linked_list_tail(tok, tokens, log)
+            return tok, ast_linked_list
+        elif tok.lexeme == ",":
             tok = next(tokens)
             continue
         elif tok.lexeme != "]":
@@ -449,6 +474,26 @@ def parse_list(tok, tokens, log):
                             loc=tok.loc, extra_locs=[ast_list.loc])
 
     return next(tokens), ast_list
+
+
+def parse_linked_list_tail(tok, tokens, log):
+    if tok.lexeme != "|":
+        raise log.error("expected '|' before linked list tail, got '%s'", tok.lexeme, loc=tok.loc)
+
+    tok = next(tokens)
+    tok, term = parse_and_expr(tok, tokens, log)
+
+    if tok.lexeme == "|":
+        ast_linked_list = AstLinkedList()
+        ast_linked_list.loc = tok.loc
+        ast_linked_list.head = term
+        tok, ast_linked_list.tail = parse_linked_list_tail(tok, tokens, log)
+        return tok, ast_linked_list
+    elif tok.lexeme == "]":
+        return next(tokens), term
+    else:
+        raise log.error("expected ']' or '|' followed by another term, got '%s'",
+                        tok.lexeme, loc=tok.loc)
 
 
 def parse_atom(tok, tokens, log):
