@@ -342,7 +342,7 @@ def is_list(term):
     """
     Checks if the given term is a list (represented by a Python tuple).
     """
-    return isinstance(term, tuple)
+    return isinstance(term, (tuple, LinkedList))
 
 
 def is_literal(term):
@@ -669,6 +669,89 @@ class Literal(object):
 
     def __hash__(self):
         return hash((self.functor, self.args, self.annots))
+
+
+class LinkedList(object):
+    def __init__(self, head, tail):
+        self.head = head
+        self.tail = tail
+
+    def unify(self, right, scope, stack):
+        right = evaluate(right, scope)
+
+        if isinstance(right, Var):
+            return right.unify(self, scope, stack)
+        elif isinstance(right, tuple):
+            if len(right) < 1:
+                return False
+            if self.head != right[0]:
+                return False
+            return unify(self.tail, right[1:], scope, stack)
+        else:
+            try:
+                return (unify(self.head, right.head, scope, stack) and
+                        unify(self.tail, right.tail, scope, stack))
+            except AttributeError:
+                return False
+
+    def is_ground(self, scope):
+        return is_ground(self.head, scope) and is_ground(self.tail, scope)
+
+    def grounded(self, scope):
+        return LinkedList(grounded(self.head), grounded(self.tail))
+
+    def freeze(self, scope, memo):
+        return LinkedList(
+            freeze(self.head, scope, memo),
+            freeze(self.tail, scope, memo))
+
+    def __bool__(self):
+        return True
+
+    __nonzero__ = __bool__
+
+    def __len__(self):
+        return 1 + len(self.tail)
+
+    def pyson_repr(self):
+        builder = []
+        builder.append("[")
+        builder.append(pyson_repr(self.head))
+        builder.append("|")
+        builder.append(pyson_repr(self.tail))
+        builder.append("]")
+        return "".join(builder)
+
+    __str__ = pyson_repr
+
+    def __repr__(self):
+        return "LinkedList(%s, %s)" % (self.head, self.tail)
+
+    def __iter__(self):
+        yield self.head
+        for item in self.tail:
+            yield item
+
+    def __eq__(self, other):
+        return not self.__ne__(other)
+
+    def __ne__(self, other):
+        return not is_list(other) or tuple(self) != tuple(other)
+
+    def __lt__(self, other):
+        return tuple(self) < tuple(other) if is_list(other) else NotImplemented
+
+    def __le__(self, other):
+        return tuple(self) <= tuple(other) if is_list(other) else NotImplemented
+
+    def __gt__(self, other):
+        return tuple(self) > tuple(other) if is_list(other) else NotImplemented
+
+    def __ge__(self, other):
+        return tuple(self) >= tuple(other) if is_list(other) else NotImplemented
+
+    def __hash__(self, other):
+        return hash(tuple(self))
 
 
 def deref(term, scope):

@@ -51,6 +51,11 @@ class BuildTermVisitor:
     def visit_list(self, ast_list):
         return tuple(t.accept(self) for t in ast_list.terms)
 
+    def visit_linked_list(self, ast_linked_list):
+        return pyson.LinkedList(
+            ast_linked_list.head.accept(self),
+            ast_linked_list.tail.accept(self))
+
     def visit_unary_op(self, ast_unary_op):
         return pyson.UnaryExpr(
             ast_unary_op.operator.value,

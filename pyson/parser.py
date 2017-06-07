@@ -1245,6 +1245,11 @@ class TermFoldVisitor(object):
         ast_list.terms = [term.accept(self) for term in ast_list.terms]
         return ast_list
 
+    def visit_linked_list(self, ast_linked_list):
+        ast_linked_list.head = ast_linked_list.head.accept(self)
+        ast_linked_list.tail = ast_linked_list.tail.accept(self)
+        return ast_linked_list
+
 
 class LogicalFoldVisitor(BooleanFoldVisitor):
 
