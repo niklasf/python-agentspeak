@@ -438,7 +438,7 @@ def parse_list(tok, tokens, log):
     tok = next(tokens)
 
     while tok.lexeme != "]":
-        tok, term = parse_term(tok, tokens, log)
+        tok, term = parse_and_expr(tok, tokens, log)
         ast_list.terms.append(term)
 
         if tok.lexeme == ",":
