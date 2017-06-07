@@ -682,11 +682,9 @@ class LinkedList(object):
         if isinstance(right, Var):
             return right.unify(self, scope, stack)
         elif isinstance(right, tuple):
-            if len(right) < 1:
-                return False
-            if self.head != right[0]:
-                return False
-            return unify(self.tail, right[1:], scope, stack)
+            return (len(right) >= 1 and
+                    unify(self.head, right[0], scope, stack) and
+                    unify(self.tail, right[1:], scope, stack))
         else:
             try:
                 return (unify(self.head, right.head, scope, stack) and
@@ -750,7 +748,7 @@ class LinkedList(object):
     def __ge__(self, other):
         return tuple(self) >= tuple(other) if is_list(other) else NotImplemented
 
-    def __hash__(self, other):
+    def __hash__(self):
         return hash(tuple(self))
 
 
