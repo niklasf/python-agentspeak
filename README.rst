@@ -47,5 +47,6 @@ pyson should be mostly equivalent to Jason_.
 * Standard library does not yet contain introspective and plan-manipulation
   actions.
 * Jason 2.0 fork join operators not yet supported.
+* Literals are only comparable if they have the same signature.
 
 .. _Jason: http://jason.sourceforge.net/
