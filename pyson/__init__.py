@@ -709,7 +709,7 @@ class LinkedList(object):
         return is_ground(self.head, scope) and is_ground(self.tail, scope)
 
     def grounded(self, scope):
-        return LinkedList(grounded(self.head), grounded(self.tail))
+        return LinkedList(grounded(self.head, scope), grounded(self.tail, scope))
 
     def freeze(self, scope, memo):
         return LinkedList(
