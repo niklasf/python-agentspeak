@@ -762,7 +762,10 @@ class LinkedList(object):
         return tuple(self) >= tuple(other) if is_list(other) else NotImplemented
 
     def __hash__(self):
-        return hash(tuple(self))
+        try:
+            return hash(tuple(self))
+        except TypeError:
+            return hash((self.head, self.tail))
 
 
 def deref(term, scope):
@@ -872,6 +875,8 @@ def _zip_specs(specs, args, scope):
             arg = int(arg)
         elif spec is pyson_str:
             arg = pyson_str(arg)
+        elif spec is tuple:
+            arg = tuple(arg)
         elif not isinstance(arg, spec):
             raise PysonError("spec '%s' does not match '%s'" % (spec, type(arg)))
 
