@@ -86,7 +86,9 @@ class LogFormatter(logging.Formatter):
             b.append("%s:%d:%d: " % (loc.filename, loc.lineno, loc.startcol + 1))
 
         # Add error level.
-        if record.levelno >= logging.ERROR:
+        if record.levelno >= logging.CRITICAL:
+            b.append(colorama.Fore.RED + "critical: " + colorama.Fore.Reset)
+        elif record.levelno >= logging.ERROR:
             b.append(colorama.Fore.RED + "error: " + colorama.Fore.RESET)
         elif record.levelno >= logging.WARNING:
             b.append(colorama.Fore.MAGENTA + "warning: " + colorama.Fore.RESET)
