@@ -163,6 +163,17 @@ class Log(object):
         self.num_errors = 0
         self.num_warnings = 0
 
+    def exception(self, msg, *args, **kwargs):
+        loc = kwargs.get("loc", None)
+        extra_locs = kwargs.get("extra_locs", ())
+
+        self.num_errors += 1
+        self.logger.exception(msg, *args, extra={"loc": loc, "extra_locs": extra_locs})
+        if self.max_errors is not None and self.num_errors >= self.max_errors:
+            raise AggregatedError(self.num_errors, self.num_warnings)
+        else:
+            return AggregatedError(self.num_errors, self.num_warnings)
+
     def error(self, msg, *args, **kwargs):
         loc = kwargs.get("loc", None)
         extra_locs = kwargs.get("extra_locs", ())

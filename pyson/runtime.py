@@ -470,6 +470,10 @@ class Agent:
             log = pyson.Log(LOGGER)
             raise log.error("%s @ %s", err, instr.f,
                             loc=instr.loc, extra_locs=instr.extra_locs)
+        except:
+            log = pyson.Log(LOGGER)
+            raise log.exception("exception @ %s", instr.f,
+                                loc=instr.loc, extra_locs=instr.extra_locs)
 
         return True
 
