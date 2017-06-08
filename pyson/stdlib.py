@@ -77,8 +77,8 @@ def _broadcast(agent, term, intention):
 
     # Prepare message.
     message = pyson.freeze(term.args[1], intention.scope, {})
-    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
-    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+    tagged_message = message.with_annotation(
+        pyson.Literal("source", (pyson.Literal(agent.name), )))
 
     # Broadcast.
     for receiver in agent.env.agents.values():
@@ -120,8 +120,8 @@ def _send(agent, term, intention):
 
     # Prepare message.
     message = pyson.freeze(term.args[2], intention.scope, {})
-    source_tag = frozenset([pyson.Literal("source", (pyson.Literal(agent.name), ))])
-    tagged_message = pyson.Literal(message.functor, message.args, source_tag)
+    tagged_message = message.with_annotation(
+        pyson.Literal("source", (pyson.Literal(agent.name), )))
 
     # Broadcast.
     for receiver in receiving_agents:
