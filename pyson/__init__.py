@@ -74,7 +74,7 @@ class LogFormatter(logging.Formatter):
     logger.
     """
 
-    def format(self, record):
+    def formatMessage(self, record):
         b = []
 
         if record.levelno >= logging.INFO:
@@ -98,7 +98,7 @@ class LogFormatter(logging.Formatter):
             b.append(colorama.Style.BRIGHT + "debug: " + colorama.Style.NORMAL)
 
         # Add log message.
-        b.append(super(LogFormatter, self).format(record))
+        b.append(super(LogFormatter, self).formatMessage(record))
         b.append(colorama.Style.NORMAL)
 
         # Add source annotation.
