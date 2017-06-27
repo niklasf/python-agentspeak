@@ -28,7 +28,7 @@ def walk_klass(klass):
 
 
 def walk_method(klass, method, scope):
-    print("method(\"%s\", \"%s\", %d)." % (klass.name, method.name, loc(method)))
+    print("method(\"%s\", \"%s\", %d, %d)." % (klass.name, method.name, loc(method), complexity(method)))
 
     arg_scope = {}
     for parameter in method.parameters:
@@ -154,6 +154,48 @@ def loc(node):
         return 1
     else:
         raise RuntimeError("can not count loc of %s" % node)
+
+
+def complexity(node):
+    # evaluated recursively, so that the value for the method
+    # is the actual cyclomatic complexity.
+    if isinstance(node, javalang.tree.MethodDeclaration):
+        c = 1
+        if node.body:
+            c += sum(complexity(stmt) for stmt in node.body)
+        return c
+    elif isinstance(node, javalang.tree.IfStatement):
+        c = 1
+        if node.then_statement:
+            c += complexity(node.then_statement)
+        if node.else_statement:
+            c += complexity(node.else_statement)
+        return c
+    elif isinstance(node, javalang.tree.BlockStatement):
+        return sum(complexity(stmt) for stmt in node.statements)
+    elif isinstance(node, javalang.tree.TryStatement):
+        c = 0
+        if node.block:
+            c += sum(complexity(stmt) for stmt in node.block)
+        if node.catches:
+            for catch in node.catches:
+                c += 1 + sum(complexity(stmt) for stmt in catch.block)
+        if node.finally_block:
+            c += sum(complexity(stmt) for stmt in node.finally_block)
+        return c
+    elif isinstance(node, javalang.tree.SwitchStatement):
+        c = 0
+        for case in node.cases:
+            c += sum(complexity(stmt) for stmt in case.statements)
+        return c
+    elif isinstance(node, (javalang.tree.ForStatement,
+                           javalang.tree.WhileStatement,
+                           javalang.tree.DoStatement)):
+        return 1 + complexity(node.body)
+    elif isinstance(node, javalang.tree.SynchronizedStatement):
+        return sum(complexity(stmt) for stmt in node.block)
+    else:
+        return 0
 
 
 if __name__ == "__main__":

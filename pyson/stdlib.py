@@ -50,8 +50,6 @@ import pyson.optimizer
 #   - .fail_goal
 #   - .intend
 #   - .succeed_goal
-# * Misc
-#   - .abolish
 #   - .add_anot
 #   - .at
 #   - .create_agent
@@ -260,7 +258,6 @@ def _findall(agent, term, intention):
     result = []
 
     memo = {}
-
     for _ in query.execute(agent, intention):
         result.append(pyson.freeze(pattern, intention.scope, memo))
 
@@ -282,6 +279,20 @@ def _count(agent, term, intention):
 
     if pyson.unify(count, term.args[1], intention.scope, intention.stack):
         yield
+
+
+@actions.add(".abolish", 1)
+# TODO: Inform optimizer.
+def _abolish(agent, term, intention):
+    memo = {}
+    pattern = pyson.freeze(term.args[0], intention.scope, memo)
+    group = agent.beliefs[pattern.literal_group()]
+
+    for old_belief in list(group):
+        if pyson.unifies_annotated(old_belief, pattern):
+            group.remove(old_belief)
+
+    yield
 
 
 @actions.add(".date", 3)
@@ -330,10 +341,10 @@ def _wait(agent, term, intention):
 def _range_2(agent, term, intention):
     choicepoint = object()
 
-    for i in range(int(pyson.grounded(term.args[1], intention.scope))):
+    for i in range(int(pyson.grounded(term.args[0], intention.scope))):
         intention.stack.append(choicepoint)
 
-        if pyson.unify(term.args[0], i, intention.scope, intention.stack):
+        if pyson.unify(term.args[1], i, intention.scope, intention.stack):
             yield
 
         pyson.reroll(intention.scope, intention.stack, choicepoint)
