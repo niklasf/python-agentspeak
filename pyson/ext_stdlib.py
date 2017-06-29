@@ -45,6 +45,9 @@ def _csv(agent, term, intention, _files={}):
 
     memo = {}
     txt = ",".join(pyson_str(pyson.freeze(t, intention.scope, memo)) for t in term.args)
-    print(txt, file=f, flush=True)
+
+    f.write(txt)
+    f.write("\n")
+    f.flush()
 
     yield
