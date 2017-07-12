@@ -13,6 +13,11 @@ from pyson import pyson_str
 actions = pyson.Actions(pyson.stdlib.actions)
 
 
+def step(agent):
+    agent.run()
+    return agent
+
+
 class Counter:
     def __init__(self, name, value=0):
         self.name = name
@@ -85,7 +90,12 @@ class Agent(pyson.runtime.Agent):
         yield
 
 
+# Minimal wrapper for Spark experiment
 class Environment(pyson.runtime.Environment):
+    pass
+
+
+class _Environment(pyson.runtime.Environment):
     def __init__(self):
         self.process_pool = multiprocessing.Pool()
         self.rdd = collections.defaultdict(list)
