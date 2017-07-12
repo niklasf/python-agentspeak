@@ -309,9 +309,9 @@ class Agent:
         self.env = env
         self.name = name
 
-        self.beliefs = collections.defaultdict(lambda: set()) if beliefs is None else beliefs
-        self.rules = collections.defaultdict(lambda: []) if rules is None else rules
-        self.plans = collections.defaultdict(lambda: []) if plans is None else plans
+        self.beliefs = collections.defaultdict(set) if beliefs is None else beliefs
+        self.rules = collections.defaultdict(list) if rules is None else rules
+        self.plans = collections.defaultdict(list) if plans is None else plans
 
         self.intentions = collections.deque()
 
