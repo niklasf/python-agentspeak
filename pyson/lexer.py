@@ -148,7 +148,7 @@ class TokenType(enum.Enum):
 
 
 RE_START_COMMENT = re.compile(r"/\*")
-RE_END_COMMENT = re.compile(r".*\*/")
+RE_END_COMMENT = re.compile(r".*?\*/")
 
 
 def tokenize(sourcefile, log, firstline=1):
