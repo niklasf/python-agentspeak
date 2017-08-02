@@ -742,7 +742,7 @@ class BuildInstructionsVisitor:
         self.add_instr(functools.partial(push_query, query))
         test_instr = self.add_instr(next_or_fail)
 
-        tail = Instruction(noop)
+        tail = Instruction(pop_query)
 
         if ast_if_then_else.if_body:
             if_tail = ast_if_then_else.if_body.accept(self)
@@ -760,10 +760,10 @@ class BuildInstructionsVisitor:
             test_instr.failure = tail
 
         self.tail = tail
-        return self.add_instr(pop_query)
+        return self.tail
 
     def visit_while(self, ast_while):
-        tail = Instruction(noop)
+        tail = Instruction(pop_choicepoint)
 
         query = ast_while.condition.accept(BuildQueryVisitor(self.variables, self.actions, self.log))
         while_head = self.add_instr(functools.partial(push_query, query))
@@ -779,9 +779,7 @@ class BuildInstructionsVisitor:
         while_tail.success = while_head
 
         self.tail = tail
-        self.add_instr(pop_choicepoint)
-        self.add_instr(pop_query)
-        return self.tail
+        return self.add_instr(pop_query)
 
     def visit_body(self, ast_body):
         for formula in ast_body.formulas:
