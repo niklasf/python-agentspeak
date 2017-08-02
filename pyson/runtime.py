@@ -22,8 +22,8 @@ import sys
 import collections
 import copy
 import functools
-import time
 import os.path
+import time
 
 import pyson
 import pyson.parser
@@ -437,7 +437,7 @@ class Agent:
 
             # Wait until.
             if intention.wait_until:
-                if intention.wait_until < time.time():
+                if intention.wait_until < self.env.time():
                     intention.wait_until = None
                 else:
                     continue
@@ -586,6 +586,9 @@ class Environment:
 
         return agents
 
+    def time(self):
+        return time.time()
+
     def run_agent(self, agent):
         more_work = True
         while more_work:
@@ -593,7 +596,7 @@ class Environment:
 
             # Wait.
             if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
-                time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - time.time())
+                time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - self.time())
                 more_work = True
 
     def run(self):
@@ -603,6 +606,10 @@ class Environment:
             for agent in self.agents.values():
                 if agent.step():
                     maybe_more_work = True
+
+        print("no more work")
+        for agent in self.agents.values():
+            print(any(intention_stack[-1].wait_until for intention_stack in agent.intentions))
 
     def shutdown(self):
         sys.exit(1)

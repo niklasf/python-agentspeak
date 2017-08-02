@@ -18,7 +18,25 @@ PERCEPT_TAG = frozenset([pyson.Literal("source", (pyson.Literal("percept"), ))])
 
 
 class Environment(pyson.runtime.Environment):
-    pass
+    def time(self):
+        return asyncio.get_event_loop().time()
+
+    def run(self):
+        super(Environment, self).run()
+        self.dispatch_wait_until()
+
+    def dispatch_wait_until(self):
+        earliest = None
+        for agent in self.agents.values():
+            for intention_stack in agent.intentions:
+                wait = intention_stack[-1].wait_until
+                if wait and (not earliest or wait < earliest):
+                    earliest = wait
+
+        if earliest:
+            print("waiting until", earliest)
+            loop = asyncio.get_event_loop()
+            loop.call_at(earliest, self.run)
 
 
 class Agent(pyson.runtime.Agent, asyncio.Protocol):

@@ -23,7 +23,6 @@ import pyson
 import pyson.runtime
 import colorama
 import random
-import time
 import datetime
 import collections
 
@@ -329,7 +328,7 @@ def _time(agent, term, intention):
 @pyson.optimizer.all_bound
 def _wait(agent, term, intention):
     millis = pyson.grounded(term.args[0], intention.scope)
-    intention.wait_until = time.time() + millis / 1000
+    intention.wait_until = agent.env.time() + millis / 1000
     yield
 
 

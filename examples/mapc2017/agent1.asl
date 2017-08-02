@@ -6,5 +6,7 @@
   .dump.
 
 +step(Step) <-
-  .print("Step:", Step);
+  .print("before wait");
+  .wait(1000);
+  .print("after wait");
   .skip.
