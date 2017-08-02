@@ -498,8 +498,8 @@ class Environment:
         return name
 
     def build_agent_from_ast(self, source, ast_agent, actions, agent_cls=Agent):
-        # This function is also called by the optimizer
-        
+        # This function is also called by the optimizer.
+
         log = pyson.Log(LOGGER, 3)
         agent = agent_cls(self, self._make_name(source.name))
 
@@ -760,7 +760,7 @@ class BuildInstructionsVisitor:
             test_instr.failure = tail
 
         self.tail = tail
-        return self.tail
+        return self.add_instr(pop_query)
 
     def visit_while(self, ast_while):
         tail = Instruction(noop)
@@ -780,6 +780,7 @@ class BuildInstructionsVisitor:
 
         self.tail = tail
         self.add_instr(pop_choicepoint)
+        self.add_instr(pop_query)
         return self.tail
 
     def visit_body(self, ast_body):
