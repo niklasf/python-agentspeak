@@ -607,10 +607,6 @@ class Environment:
                 if agent.step():
                     maybe_more_work = True
 
-        print("no more work")
-        for agent in self.agents.values():
-            print(any(intention_stack[-1].wait_until for intention_stack in agent.intentions))
-
     def shutdown(self):
         sys.exit(1)
 

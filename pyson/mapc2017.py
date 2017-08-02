@@ -34,7 +34,6 @@ class Environment(pyson.runtime.Environment):
                     earliest = wait
 
         if earliest:
-            print("waiting until", earliest)
             loop = asyncio.get_event_loop()
             loop.call_at(earliest, self.run)
 
