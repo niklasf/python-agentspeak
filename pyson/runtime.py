@@ -497,11 +497,11 @@ class Environment:
             i += 1
         return name
 
-    def build_agent_from_ast(self, source, ast_agent, actions, agent_cls=Agent):
+    def build_agent_from_ast(self, source, ast_agent, actions, agent_cls=Agent, name=None):
         # This function is also called by the optimizer.
 
         log = pyson.Log(LOGGER, 3)
-        agent = agent_cls(self, self._make_name(source.name))
+        agent = agent_cls(self, self._make_name(name or source.name))
 
         # Add rules to agent prototype.
         for ast_rule in ast_agent.rules:
@@ -547,20 +547,20 @@ class Environment:
         self.agents[agent.name] = agent
         return ast_agent, agent
 
-    def _build_agent(self, source, actions, agent_cls=Agent):
+    def _build_agent(self, source, actions, agent_cls=Agent, name=None):
         # Parse source.
         log = pyson.Log(LOGGER, 3)
         tokens = pyson.lexer.TokenStream(source, log)
         ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
         log.throw()
 
-        return self.build_agent_from_ast(source, ast_agent, actions, agent_cls)
+        return self.build_agent_from_ast(source, ast_agent, actions, agent_cls, name)
 
-    def build_agent(self, source, actions, agent_cls=Agent):
-        _, agent = self._build_agent(source, actions, agent_cls)
+    def build_agent(self, source, actions, agent_cls=Agent, name=None):
+        _, agent = self._build_agent(source, actions, agent_cls, name)
         return agent
 
-    def build_agents(self, source, n, actions, agent_cls=Agent):
+    def build_agents(self, source, n, actions, agent_cls=Agent, name=None):
         if n <= 0:
             return []
 
@@ -571,7 +571,7 @@ class Environment:
         agents = [prototype_agent]
 
         while len(agents) < n:
-            agent = agent_cls(self, self._make_name(source.name),
+            agent = agent_cls(self, self._make_name(name or source.name),
                 copy.copy(prototype_agent.beliefs),
                 copy.copy(prototype_agent.rules),
                 copy.copy(prototype_agent.plans))

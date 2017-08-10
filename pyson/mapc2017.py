@@ -44,10 +44,13 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self.action_id = None
         self.simulation_step = None
 
-    def connect(self, name, password, host="localhost", port=12300):
+    def connect(self, username, password, host="localhost", port=12300):
         self.action_id = None
-        self.name = name
+        self.username = username
         self.password = password
+
+        if self.name != username:
+            LOGGER.warning("username %r does not equal agent name %r", username, self.name)
 
         loop = asyncio.get_event_loop()
         return loop.create_connection(lambda: self, host, port)
@@ -115,7 +118,7 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
 
         # Authenticate
         message = etree.Element("message")
-        etree.SubElement(message, "auth-request", username=self.name, password=self.password)
+        etree.SubElement(message, "auth-request", username=self.username, password=self.password)
         self.send_message(message)
 
     def connection_lost(self, exc):

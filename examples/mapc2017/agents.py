@@ -13,17 +13,17 @@ async def main():
     env = pyson.mapc2017.Environment()
 
     with open("agent1.asl") as source:
-        agent1 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent1 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA1")
     with open("agent1.asl") as source:
-        agent2 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent2 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA2")
     with open("agent1.asl") as source:
-        agent3 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent3 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA3")
     with open("agent1.asl") as source:
-        agent4 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent4 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA4")
     with open("agent1.asl") as source:
-        agent5 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent5 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA5")
     with open("agent1.asl") as source:
-        agent6 = env.build_agent(source, pyson.mapc2017.actions, agent_cls=pyson.mapc2017.Agent)
+        agent6 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA6")
 
     await agent1.connect("agentA1", "1")
     #await agent2.connect("agentA2", "1")
