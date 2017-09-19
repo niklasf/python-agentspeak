@@ -3,6 +3,8 @@ import logging
 
 from lxml import etree
 
+from heapq import heapify, heappop
+
 import pyson
 import pyson.runtime
 import pyson.ext_stdlib
@@ -176,21 +178,33 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                       pyson.runtime.Intention())
 
     def _replace_beliefs(self, group, beliefs):
-        for old_belief in list(self.beliefs[group]):
-            for new_belief in beliefs:
-                if pyson.unifies(new_belief, old_belief):
-                    break
-            else:
+        old_beliefs = list(self.beliefs[group])
+        new_beliefs = beliefs
+        heapify(old_beliefs)
+        heapify(new_beliefs)
+        while len(old_beliefs) > 0 and len(new_beliefs) > 0:
+            old_belief = old_beliefs[0]
+            new_belief = new_beliefs[0]
+            if old_belief == new_belief:
+                heappop(old_beliefs)
+                heappop(new_beliefs)
+            elif old_belief < new_belief:
                 self.call(pyson.Trigger.removal, pyson.GoalType.belief, old_belief,
                           pyson.runtime.Intention())
-
-        for new_belief in beliefs:
-            for old_belief in self.beliefs[group]:
-                if pyson.unifies(new_belief, old_belief):
-                    break
-            else:
+                heappop(old_beliefs)
+            elif old_belief > new_belief:
                 self.call(pyson.Trigger.addition, pyson.GoalType.belief, new_belief,
                           pyson.runtime.Intention())
+                heappop(new_beliefs)
+
+        while len(old_beliefs) > 0:
+            self.call(pyson.Trigger.removal, pyson.GoalType.belief, old_beliefs[0],
+                      pyson.runtime.Intention())
+            heappop(old_beliefs)
+        while len(new_beliefs) > 0:
+            self.call(pyson.Trigger.addition, pyson.GoalType.belief, new_beliefs[0],
+                      pyson.runtime.Intention())
+            heappop(new_beliefs)
 
     def handle_auth_response(self, response):
         if response.get("result") != "ok":
@@ -246,6 +260,14 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         self._set_belief("lon", float(self_data.get("lon")))
         self._set_belief("routeLength", int(self_data.get("routeLength", 0)))
 
+        route = []
+        for wp in self_data.findall("./route"):
+            route.append(
+                pyson.Literal("wp", (
+                    int(wp.get("i")), float(wp.get("lat")), float(wp.get("lon")),
+                    PERCEPT_TAG)))
+        self._set_belief("route", tuple(route))
+
         self._set_belief("money", int(req.find("team").get("money")))
 
         action = self_data.find("action")
@@ -265,8 +287,6 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
                     item.get("name"), int(item.get("amount"))),
                     PERCEPT_TAG))
         self._replace_beliefs(("item", 2), carried_items)
-
-        # TODO: Waypoints
 
         # Update entities.
         entities = []
@@ -343,26 +363,63 @@ class Agent(pyson.runtime.Agent, asyncio.Protocol):
         for node in req.findall("resourceNode"):
             resource_nodes.append(
                 pyson.Literal("resourceNode", (
-                    node.get("name"), float(workshop.get("lat")), float(workshop.get("lon")), node.get("resource")),
+                    node.get("name"), float(node.get("lat")), float(node.get("lon")), node.get("resource")),
                     PERCEPT_TAG))
         self._replace_beliefs(("resourceNode", 4), resource_nodes)
 
         # Update job percepts.
         jobs = []
         auctions = []
+        missions = []
+        posteds = []
         for job in req.findall("job"):
             required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
                              for item in job.findall("required"))
-
-            # TODO: Auctions
 
             jobs.append(
                 pyson.Literal("job", (
                     job.get("id"), job.get("storage"), int(job.get("reward")),
                     int(job.get("start")),int(job.get("end")), required),
                     PERCEPT_TAG))
-        self._replace_beliefs(("jobs", 5), jobs)
-        self._replace_beliefs(("jobs", 9), auctions)
+
+        for auction in req.findall("auction"):
+            required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
+                             for item in auction.findall("required"))
+
+            reward = int(auction.get("reward"))
+            auctions.append(
+                pyson.Literal("auction", (
+                    auction.get("id"), auction.get("storage"), reward,
+                    int(auction.get("start")),int(auction.get("end")), int(auction.get("fine")),
+                    int(auction.get("lowestBid", str(reward + 1))), int(auction.get("auctionTime")), required),
+                    PERCEPT_TAG))
+
+        for mission in req.findall("mission"):
+            required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
+                             for item in mission.findall("required"))
+
+            missions.append(
+                pyson.Literal("mission", (
+                    mission.get("id"), mission.get("storage"), int(mission.get("reward")),
+                    int(mission.get("start")), int(mission.get("end")), int(mission.get("fine")),
+                    int(mission.get("lowestBid")), 0, required),
+                    PERCEPT_TAG))
+
+        for posted in req.findall("posted"):
+            required = tuple(pyson.Literal("required", (item.get("name"), int(item.get("amount"))))
+                             for item in posted.findall("required"))
+
+            posteds.append(
+                pyson.Literal("job", (
+                    posted.get("id"), posted.get("storage"), int(posted.get("reward")),
+                    int(posted.get("start")),int(posted.get("end")), required),
+                    PERCEPT_TAG))
+
+        self._replace_beliefs(("job", 5), jobs)
+        self._replace_beliefs(("auction", 9), auctions)
+        self._replace_beliefs(("mission", 9), missions)
+        self._replace_beliefs(("posted", 5), posteds)
+
 
         # Update step.
         self._set_belief("timestamp", int(message.get("timestamp")))

@@ -365,14 +365,17 @@ class Agent:
                 for _ in plan.context.execute(self, intention):
                     intention.head_term = frozen
                     intention.instr = plan.body
-                    if delayed or not self.intentions:
-                        new_intention_stack = collections.deque()
-                        new_intention_stack.append(intention)
-                        self.intentions.append(new_intention_stack)
-                    else:
-                        intention.calling_term = term
-                        self.intentions[0].append(intention)
+                    intention.calling_term = term
 
+                    if not delayed and self.intentions:
+                        for intention_stack in self.intentions:
+                            if intention_stack[-1] == calling_intention:
+                                intention_stack.append(intention)
+                                return True
+
+                    new_intention_stack = collections.deque()
+                    new_intention_stack.append(intention)
+                    self.intentions.append(new_intention_stack)
                     return True
 
         if goal_type == pyson.GoalType.achievement:
