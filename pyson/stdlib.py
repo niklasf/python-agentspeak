@@ -26,7 +26,7 @@ import random
 import datetime
 import collections
 
-from pyson import pyson_str
+from pyson import pyson_str, Literal
 
 import pyson.optimizer
 
@@ -67,8 +67,13 @@ def _broadcast(agent, term, intention):
         return
     if ilf.functor == "tell":
         goal_type = pyson.GoalType.belief
+        trigger = pyson.Trigger.addition
+    elif ilf.functor == "untell":
+        goal_type = pyson.GoalType.belief
+        trigger = pyson.Trigger.removal
     elif ilf.functor == "achieve":
         goal_type = pyson.GoalType.achievement
+        trigger = pyson.Trigger.addition
     else:
         raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
 
@@ -82,8 +87,7 @@ def _broadcast(agent, term, intention):
         if receiver == agent:
             continue
 
-        receiver.call(pyson.Trigger.addition, goal_type,
-                      tagged_message, pyson.runtime.Intention())
+        receiver.call(trigger, goal_type, tagged_message, pyson.runtime.Intention())
 
     yield
 
@@ -94,10 +98,9 @@ def _send(agent, term, intention):
     receivers = pyson.grounded(term.args[0], intention.scope)
     if not pyson.is_list(receivers):
         receivers = [receivers]
-
     receiving_agents = []
     for receiver in receivers:
-        if receiver.is_atom():
+        if pyson.is_atom(receiver):
             receiving_agents.append(agent.env.agents[receiver.functor])
         else:
             receiving_agents.append(agent.env.agents[receiver])
@@ -108,12 +111,17 @@ def _send(agent, term, intention):
         return
     if ilf.functor == "tell":
         goal_type = pyson.GoalType.belief
+        trigger = pyson.Trigger.addition
+    elif ilf.functor == "untell":
+        goal_type = pyson.GoalType.belief
+        trigger = pyson.Trigger.removal
     elif ilf.functor == "achieve":
         goal_type = pyson.GoalType.achievement
+        trigger = pyson.Trigger.addition
     else:
         raise pyson.PysonError("unknown illocutionary force: %s" % ilf)
 
-    # TODO: untell, unachieve, askOne, askAll, tellHow, untellHow, askHow
+    # TODO: unachieve, askOne, askAll, tellHow, untellHow, askHow
 
     # Prepare message.
     message = pyson.freeze(term.args[2], intention.scope, {})
@@ -122,8 +130,7 @@ def _send(agent, term, intention):
 
     # Broadcast.
     for receiver in receiving_agents:
-        receiver.call(pyson.Trigger.addition, goal_type,
-                      tagged_message, pyson.runtime.Intention())
+        receiver.call(trigger, goal_type, tagged_message, pyson.runtime.Intention())
 
     yield
 
@@ -165,7 +172,7 @@ def _fail(agent, term, intention):
 @actions.add(".my_name", 1)
 @pyson.optimizer.function_like
 def _my_name(agent, term, intention):
-    if pyson.unify(term.args[0], agent.name, intention.scope, intention.stack):
+    if pyson.unify(term.args[0], Literal(agent.name), intention.scope, intention.stack):
         yield
 
 

@@ -661,21 +661,29 @@ class Literal(object):
         return not is_literal(other) or self.functor != other.functor or self.args != other.args or self.annots != other.annots
 
     def __lt__(self, other):
+        if is_literal(other) and self.is_atom() and other.is_atom():
+            return self.functor < other.functor
         if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
             return NotImplemented
         return self.args < other.args
 
     def __le__(self, other):
+        if is_literal(other) and self.is_atom() and other.is_atom():
+            return self.functor <= other.functor
         if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
             return NotImplemented
         return self.args <= other.args
 
     def __gt__(self, other):
+        if is_literal(other) and self.is_atom() and other.is_atom():
+            return self.functor > other.functor
         if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
             return NotImplemented
         return self.args > other.args
 
     def __ge__(self, other):
+        if is_literal(other) and self.is_atom() and other.is_atom():
+            return self.functor >= other.functor
         if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
             return NotImplemented
         return self.args >= other.args
@@ -873,6 +881,8 @@ def _zip_specs(specs, args, scope):
             pass
         elif spec is int:
             arg = int(arg)
+        elif spec is float:
+            arg = float(arg)
         elif spec is pyson_str:
             arg = pyson_str(arg)
         elif spec is tuple:
