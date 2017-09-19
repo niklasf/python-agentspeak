@@ -1,4 +1,6 @@
-{include("snapshot.asl")}
+// {include("snapshot_junit4.asl")}
+{include("snapshot_GameController.asl")}
+// {include("snapshot_mapdb.asl")}
 
 calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) & C1 \== C2.
 
@@ -9,6 +11,10 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 +!longest(Class, Method) <-
     .findall(m(Loc, C, M), method(C, M, Loc, _), L);
     .max(L, m(Loc, Class, Method)).
+
++!shortest(Class, Method) <-
+    .findall(m(Loc, C, M), method(C, M, Loc, _), L);
+    .min(L, m(Loc, Class, Method)).
 
 +!most_dependent(Class, Method) <-
     for (method(CallerClass, CallerMethod, _, _)) {
@@ -57,21 +63,26 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     }
     -method(Class, Method, Loc, Complexity).
 
-+!work(R) : R > 0.666 <-
-    !most_complex(Class, Method);
-    .print("extract method", Class, "::", Method);
-    !extract_method(Class, Method).
+//                 Move  Extract  Inline
+// junit4           356      222     235
+// GameController    22       12       3
+// mapdb            229      104     100
 
-+!work(R) : R > 0.5 <-
-    !longest(Class, Method);
-    .print("extract method", Class, "::", Method);
-    !extract_method(Class, Method).
-
-+!work(R) <-
++!work(R) : R > 12 + 3 <-
     !most_dependent(Class, Method);
     calls(Class, Method, C, M);
     .print("move method", C, "::", M, "-->", Class);
     !move_method(C, M, Class).
+
++!work(R) : R > 3 <-
+    !most_complex(Class, Method);
+    .print("extract method", Class, "::", Method);
+    !extract_method(Class, Method).
+
++!work(R) <-
+    !shortest(Class, Method);
+    .print("inline method", Class, "::", Method);
+    !inline_method(Class, Method).
 
 +!stats(Day) <-
     .sum(Loc, method(_, _, Loc, _), TotalLoc);
@@ -85,7 +96,7 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 
 +!start <-
     for (.range(365, Day)) {
-        .random(R);
+        .randint(0, 22 + 12 + 3, R);
         !work(R);
         !stats(Day);
     }.
