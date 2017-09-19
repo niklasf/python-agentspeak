@@ -1,6 +1,6 @@
 // {include("snapshot_junit4.asl")}
-{include("snapshot_GameController.asl")}
-// {include("snapshot_mapdb.asl")}
+// {include("snapshot_GameController.asl")}
+{include("snapshot_mapdb.asl")}
 
 calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) & C1 \== C2.
 
@@ -68,13 +68,13 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 // GameController    22       12       3
 // mapdb            229      104     100
 
-+!work(R) : R > 12 + 3 <-
++!work(R) : R > 104 + 100 <-
     !most_dependent(Class, Method);
     calls(Class, Method, C, M);
     .print("move method", C, "::", M, "-->", Class);
     !move_method(C, M, Class).
 
-+!work(R) : R > 3 <-
++!work(R) : R > 100 <-
     !most_complex(Class, Method);
     .print("extract method", Class, "::", Method);
     !extract_method(Class, Method).
@@ -96,7 +96,7 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 
 +!start <-
     for (.range(365, Day)) {
-        .randint(0, 22 + 12 + 3, R);
+        .randint(0, 229 + 104 + 100, R);
         !work(R);
         !stats(Day);
     }.
