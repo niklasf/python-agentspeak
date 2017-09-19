@@ -2,6 +2,7 @@ import javalang
 import javalang.tree
 import collections
 import glob2
+import sys
 
 
 def merge_declaration(decl, scope):
@@ -76,12 +77,13 @@ def walk_statement(klass, method, stmt, scope):
     elif isinstance(stmt, javalang.tree.SynchronizedStatement):
         walk_block(klass, method, stmt.block, scope)
     elif isinstance(stmt, javalang.tree.TryStatement):
-        assert not stmt.resources
         if stmt.block:
             walk_block(klass, method, stmt.block, scope)
         if stmt.catches:
             for catch in stmt.catches:
-                assert len(catch.parameter.types) == 1
+                # Latest Java can catch multiple exception types in one
+                # statement
+                #assert len(catch.parameter.types) == 1
                 s = collections.ChainMap({}, scope)
                 s[catch.parameter.name] = catch.parameter.types[0]
                 walk_block(klass, method, catch.block, s)
@@ -91,6 +93,8 @@ def walk_statement(klass, method, stmt, scope):
         walk_expression(klass, method, stmt.expression, scope)
         for case in stmt.cases:
             walk_block(klass, method, case.statements, scope)
+    elif isinstance(stmt, javalang.tree.Statement):
+        pass  # lone semicolon
     else:
         raise RuntimeError("unknown stmt %s" % stmt)
 
@@ -124,7 +128,6 @@ def loc(node):
     elif isinstance(node, javalang.tree.BlockStatement):
         return sum(loc(stmt) for stmt in node.statements)
     elif isinstance(node, javalang.tree.TryStatement):
-        assert not node.resources
         s = 1
         if node.block:
             s += sum(loc(stmt) for stmt in node.block)
@@ -152,8 +155,10 @@ def loc(node):
                            javalang.tree.BreakStatement,
                            javalang.tree.ContinueStatement)):
         return 1
+    elif isinstance(node, javalang.tree.Statement):
+        return 0  # lone semicolon
     else:
-        raise RuntimeError("can not count loc of %s" % node)
+        raise RuntimeError("can not count loc of %s" % (node, ))
 
 
 def complexity(node):
@@ -199,7 +204,8 @@ def complexity(node):
 
 
 if __name__ == "__main__":
-    for src in glob2.glob("junit4/src/main/**/*.java"):
+    #for src in glob2.glob(sys.argv[1] + "/src/main/**/*.java"):
+    for src in glob2.glob(sys.argv[1] + "/src/**/*.java"):
         print()
         print("#", src)
         print()
