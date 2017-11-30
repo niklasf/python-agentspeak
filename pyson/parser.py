@@ -928,7 +928,7 @@ def parse_agent(filename, tokens, log, included_files, directive=None):
                     raise log.error("expected '}' to close include directive, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[include_loc])
 
                 # Resolve included path.
-                include = os.path.normpath(os.path.join(filename, include))
+                include = os.path.join(os.path.dirname(filename), include)
 
                 # Parse included file.
                 if include in included_files:
