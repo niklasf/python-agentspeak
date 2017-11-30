@@ -162,9 +162,9 @@ class Creator(Developer, pyson.runtime.Agent):
 
     actions = pyson.Actions(actions)
 
-    def __init__(self, beliefs, rules, plans, name):
+    def __init__(self, env, name, beliefs=None, rules=None, plans=None):
         Developer.__init__(self, name)
-        pyson.runtime.Agent.__init__(self, beliefs, rules, plans)
+        pyson.runtime.Agent.__init__(self, env, name, beliefs, rules, plans)
         self.days = 6
 
     @actions.add(".do_work")
@@ -362,7 +362,7 @@ for i in range(NUM_CREATORS):
     developers.append(env.build_agent(
         open("creator.asl"),
         Creator.actions,
-        lambda b, r, p: Creator(b, r, p, "creator%d" % i)))
+        Creator))
 
 for i in range(NUM_MAINTAINERS):
     developers.append(Maintainer("maintainer%d" % i))
