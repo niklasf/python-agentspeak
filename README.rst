@@ -1,4 +1,4 @@
-pyson - JASON-style AgentSpeak for Python
+pyson - Jason-style AgentSpeak for Python
 =========================================
 
 Setup
