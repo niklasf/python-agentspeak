@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import sys
 import errno
+import os.path
 
 import pyson
 import pyson.lexer
@@ -894,7 +895,8 @@ def parse_plan(tok, tokens, log):
     return tok, plan
 
 
-def parse_agent(tokens, log, included_files, directive=None):
+def parse_agent(filename, tokens, log, included_files, directive=None):
+    included_files = included_files | frozenset([os.path.normpath(filename)])
     agent = AstAgent()
     last_plan = None
 
@@ -925,6 +927,10 @@ def parse_agent(tokens, log, included_files, directive=None):
                 if tok.lexeme != "}":
                     raise log.error("expected '}' to close include directive, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[include_loc])
 
+                # Resolve included path.
+                include = os.path.normpath(os.path.join(filename, include))
+
+                # Parse included file.
                 if include in included_files:
                     log.error("infinite recursive include: '%s'", include, loc=include_loc)
                 else:
@@ -937,7 +943,7 @@ def parse_agent(tokens, log, included_files, directive=None):
                             raise
                     else:
                         included_tokens = pyson.lexer.TokenStream(included_file, 1)
-                        included_agent = parse(included_tokens, log, included_files | frozenset(include))
+                        included_agent = parse(include, included_tokens, log, included_files)
                         agent.beliefs += included_agent.beliefs
                         agent.rules += included_agent.rules
                         agent.goals += included_agent.goals
@@ -950,7 +956,7 @@ def parse_agent(tokens, log, included_files, directive=None):
                 if tok.lexeme != "}":
                     raise log.error("expected '}' after begin, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[begin_loc])
                 log.warning("directives are ignored as of yet", loc=sub_directive.loc)
-                sub_agent = parse(tokens, log, included_files, sub_directive)
+                sub_agent = parse(filename, tokens, log, included_files, sub_directive)
                 agent.beliefs += sub_agent.beliefs
                 agent.rules += sub_agent.rules
                 agent.goals += sub_agent.goals
@@ -994,13 +1000,6 @@ def parse_agent(tokens, log, included_files, directive=None):
             agent.plans.append(last_plan)
         else:
             log.error("unexpected token: '%s'", tok.lexeme, loc=tok.loc)
-
-
-def parse(tokens, log, included_files, directive=None):
-    try:
-        return parse_agent(tokens, log, included_files, directive=directive)
-    except StopIteration:
-        raise log.error("unexpected end of file '%s'", source.name, loc=tokens.peek() and tokens.peek().loc)
 
 
 class FindVariablesVisitor(object):
@@ -1379,9 +1378,9 @@ def validate(ast_agent, log):
     return ast_agent
 
 
-def parse(tokens, log, included_files, directive=None):
+def parse(filename, tokens, log, included_files=frozenset(), directive=None):
     try:
-        return parse_agent(tokens, log, included_files, directive=directive)
+        return parse_agent(filename, tokens, log, included_files, directive=directive)
     except StopIteration:
         raise log.error("unexpected end of file", loc=tokens.peek() and tokens.peek().loc)
 
@@ -1390,7 +1389,7 @@ def main(source, hook):
     log = pyson.Log(pyson.get_logger(__name__), 3)
 
     tokens = pyson.lexer.TokenStream(source, log, 1)
-    agent = parse(tokens, log, frozenset(source.name))
+    agent = parse(source.name, tokens, log)
 
     log.throw()
 
@@ -1417,7 +1416,7 @@ def repl(hook):
             while tokens:
                 token_stream = iter(tokens)
                 try:
-                    agent = parse_agent(token_stream, log, frozenset())
+                    agent = parse_agent("<stdin>", token_stream, log, frozenset())
                 except StopIteration:
                     log.throw()
                     break

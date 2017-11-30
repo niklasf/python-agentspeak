@@ -1853,7 +1853,7 @@ _LOGGER = pyson.get_logger(__name__)
 def build_agent_optimized(env, source, actions, agent_cls=pyson.runtime.Agent):
     log = pyson.Log(_LOGGER, 3)
     tokens = pyson.lexer.TokenStream(source, log)
-    ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
+    ast_agent = pyson.parser.parse(source.name, tokens, log)
     ast_agent = InferenceCallback.apply(ast_agent, log, pyson.stdlib.actions)
     log.throw()
 

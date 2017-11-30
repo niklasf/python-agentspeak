@@ -554,7 +554,7 @@ class Environment:
         # Parse source.
         log = pyson.Log(LOGGER, 3)
         tokens = pyson.lexer.TokenStream(source, log)
-        ast_agent = pyson.parser.parse(tokens, log, frozenset(source.name))
+        ast_agent = pyson.parser.parse(source.name, tokens, log)
         log.throw()
 
         return self.build_agent_from_ast(source, ast_agent, actions, agent_cls, name)

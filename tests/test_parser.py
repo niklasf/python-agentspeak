@@ -13,7 +13,7 @@ class ParserTest(unittest.TestCase):
         src = pyson.StringSource("<test>", "+!plan <- ?true.")
         log = pyson.Log(pyson.get_logger(__name__), 3)
         tokens = pyson.lexer.TokenStream(src, log)
-        pyson.parser.parse(tokens, log, frozenset())
+        pyson.parser.parse("<test>", tokens, log, frozenset())
 
         with self.assertRaises(pyson.AggregatedError):
             log.throw()
@@ -22,7 +22,7 @@ class ParserTest(unittest.TestCase):
         src = pyson.StringSource("<test>", "rule(X + 1) :- true.")
         log = pyson.Log(pyson.get_logger(__name__), 3)
         tokens = pyson.lexer.TokenStream(src, log)
-        pyson.parser.parse(tokens, log, frozenset())
+        pyson.parser.parse("<test>", tokens, log, frozenset())
 
         with self.assertRaises(pyson.AggregatedError):
             log.throw()
@@ -33,7 +33,7 @@ class ParserTest(unittest.TestCase):
         tokens = pyson.lexer.TokenStream(src, log)
 
         with self.assertRaises(pyson.AggregatedError):
-            pyson.parser.parse(tokens, log, frozenset())
+            pyson.parser.parse("<test>", tokens, log, frozenset())
 
     def test_unify_return_value(self):
         src = pyson.StringSource("<test>", "+!p <- (X = 2) + 1 > 0.")
@@ -41,7 +41,7 @@ class ParserTest(unittest.TestCase):
         tokens = pyson.lexer.TokenStream(src, log)
 
         with self.assertRaises(pyson.AggregatedError):
-            pyson.parser.parse(tokens, log, frozenset())
+            pyson.parser.parse("<test>", tokens, log, frozenset())
             log.throw()
 
 
