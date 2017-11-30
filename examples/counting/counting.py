@@ -26,17 +26,7 @@ with open(os.path.join(os.path.dirname(__file__), "counting.asl")) as source:
 t2 = time.time()
 print(t2 - t1, end=" ")
 
-
-# Run
-
-def run():
-    more_work = True
-    while more_work:
-        more_work = False
-        for agent in agents:
-            more_work |= agent.step(env)
-
-run()
+env.run()
 
 t3 = time.time()
 print(t3 - t2, t3 - t1)

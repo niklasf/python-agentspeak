@@ -582,7 +582,7 @@ class Environment:
             for ast_goal in ast_agent.goals:
                 term = ast_goal.atom.accept(BuildTermVisitor({}))
                 agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
-                           term, {}, delayed=True)
+                           term, Intention(), delayed=True)
 
             agents.append(agent)
             self.agents[agent.name] = agent
