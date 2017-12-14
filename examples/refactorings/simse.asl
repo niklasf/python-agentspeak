@@ -69,7 +69,7 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 !start.
 
 +!start <-
-    for (.range(365, Day)) {
+    for (.range(365 * 4, Day)) {
         .randint(0, 1125 + 256 + 388, W);
         !work(W);
         !stats(Day);
@@ -80,7 +80,9 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     !refactor(R).
 
 +!work(W) : W > 1125 <-
-    !bugfix.
+    true.
+    // !bugfix.
+
 
 +!work(W) <-
     !add_feature.
@@ -92,6 +94,48 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     AverageComplexity = TotalComplexity / MethodCount;
     .csv(Day, TotalLoc, AverageComplexity);
     .print("day", Day, "loc", TotalLoc, "complexity", AverageComplexity).
+
++!add_feature <-
+    .print("Add feature!!!!!!");
+    .geometric(1 / 4.01, NumClasses);
+    for (.range(NumClasses, I)) {
+        !new_class(Class);
+        .min([NumClasses, 12], SplitIntoClasses);
+        .geometric(1 / (12.94 / SplitIntoClasses), NumMethods);
+        for (.range(NumMethods, J)) {
+            .geometric(1 / 5.16, Loc);
+            Complexity = 2.5 * Loc / 5.16;
+            !new_method(Class, Method, Loc, Complexity);
+
+            .geometric(1 / 1.23, NOI);
+            for (.range(NOI, K)) {
+                !random_method(CalleeClass, CalleeMethod);
+                +calls(Class, Method, CalleeClass, CalleeMethod);
+            }
+
+            /* .geometric(1 / 1.23, NII); // TODO
+            for (.range(NII, L)) {
+                !random_method(CallerClass, CallerMethod);
+                +calls(CallerClass, CallerMethod, Class, Method);
+            } */
+        }
+    }.
+
++!new_class(Class) <-
+    // choose a random class name
+    .randint(0, 999999, Suffix);
+    .concat("NewClass", Suffix, Class);
+    +class(Class).
+    // .print("Added class", Class).
+
++!new_method(Class, Method, Loc, Complexity) <-
+    // choose a random method name
+    .randint(0, 999999, Suffix);
+    .concat("NewMethod", Suffix, Method);
+    +method(Class, Method, Loc, Complexity).
+    // .print("Added method", Class, "::", Method).
+
++!random_method(Class, Method) : method(Class, Method, _, _) <- true. // TODO
 
 //                 Move  Extract  Inline
 // junit4           356      222     235
