@@ -51,3 +51,10 @@ def _csv(agent, term, intention, _files={}):
     f.flush()
 
     yield
+
+try:
+    import numpy
+except ImportError:
+    pass
+else:
+    actions.add_function(".geometric", (float, ), numpy.random.geometric)
