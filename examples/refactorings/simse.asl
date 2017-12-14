@@ -1,6 +1,6 @@
-// {include("snapshot_junit4.asl")}
-// {include("snapshot_GameController.asl")}
-{include("snapshot_mapdb.asl")}
+{include("snapshot_junit4.asl")}
+{include("snapshot_GameController.asl")}
+// {include("snapshot_mapdb.asl")}
 
 calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) & C1 \== C2.
 
@@ -63,26 +63,27 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     }
     -method(Class, Method, Loc, Complexity).
 
-//                 Move  Extract  Inline
-// junit4           356      222     235
-// GameController    22       12       3
-// mapdb            229      104     100
+// Work    Feature  Bugfix  Reverse Eng
+// junit4     1125     256          388
 
-+!work(R) : R > 104 + 100 <-
-    !most_dependent(Class, Method);
-    calls(Class, Method, C, M);
-    .print("move method", C, "::", M, "-->", Class);
-    !move_method(C, M, Class).
+!start.
 
-+!work(R) : R > 100 <-
-    !most_complex(Class, Method);
-    .print("extract method", Class, "::", Method);
-    !extract_method(Class, Method).
++!start <-
+    for (.range(365, Day)) {
+        .randint(0, 1125 + 256 + 388, W);
+        !work(W);
+        !stats(Day);
+    }.
 
-+!work(R) <-
-    !shortest(Class, Method);
-    .print("inline method", Class, "::", Method);
-    !inline_method(Class, Method).
++!work(W) : W > 1125 + 256 <-
+    .randint(0, 356 + 222 + 235, R);
+    !refactor(R).
+
++!work(W) : W > 1125 <-
+    !bugfix.
+
++!work(W) <-
+    !add_feature.
 
 +!stats(Day) <-
     .sum(Loc, method(_, _, Loc, _), TotalLoc);
@@ -92,11 +93,24 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     .csv(Day, TotalLoc, AverageComplexity);
     .print("day", Day, "loc", TotalLoc, "complexity", AverageComplexity).
 
-!start.
+//                 Move  Extract  Inline
+// junit4           356      222     235
+// GameController    22       12       3
+// mapdb            229      104     100
 
-+!start <-
-    for (.range(365, Day)) {
-        .randint(0, 229 + 104 + 100, R);
-        !work(R);
-        !stats(Day);
-    }.
+/* TODO: Optimize performance
++!refactor(R) : R > 222 + 235 <-
+    !most_dependent(Class, Method);
+    calls(Class, Method, C, M);
+    .print("move method", C, "::", M, "-->", Class);
+    !move_method(C, M, Class). */
+
++!refactor(R) : R > 235 <-
+    !most_complex(Class, Method);
+    .print("extract method", Class, "::", Method);
+    !extract_method(Class, Method).
+
++!refactor(R) <-
+    !shortest(Class, Method);
+    .print("inline method", Class, "::", Method);
+    !inline_method(Class, Method).
