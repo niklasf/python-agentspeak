@@ -240,13 +240,16 @@ if __name__ == "__main__":
 
     for commit in repo.iter_commits(reverse=True):
         for changed in commit.stats.files:
-            if not fnmatch.fnmatch(changed, "/src/**/*.java") and not "src/test" in changed:
+            if not fnmatch.fnmatch(changed, "/src/**/*.java") or "src/test" in changed:
                 continue
 
             if commit.stats.files[changed]["insertions"]:
                 contents = repo.git.show("{}:{}".format(commit.hexsha, changed))
-                parsed = javalang.parse.parse(contents)
-                visitor.walk_compilation_unit(parsed, commit.author.email)
+                try:
+                    parsed = javalang.parse.parse(contents)
+                    visitor.walk_compilation_unit(parsed, commit.author.email)
+                except javalang.parser.JavaSyntaxError:
+                    print("java syntax error:", commit.hexsha, changed, file=sys.stderr)
 
     visitor.final_pass = True
 
