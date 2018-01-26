@@ -3,6 +3,8 @@ import javalang.tree
 import collections
 import glob2
 import sys
+import git
+import fnmatch
 
 
 def merge_declaration(decl, scope):
@@ -11,19 +13,35 @@ def merge_declaration(decl, scope):
 
 
 class Visitor:
-    def walk_compilation_unit(self, unit):
+    def __init__(self):
+        self.current_author = None
+
+        self.final_pass = False
+        self.method_authors = {}
+
+    def walk_compilation_unit(self, unit, author):
+        self.current_author = author
+
         for decl in unit.types:
             if isinstance(decl, javalang.tree.ClassDeclaration):
                 self.walk_klass(decl)
 
     def visit_klass(self, klass):
-        print("class(\"%s\")." % klass.name)
+        if self.final_pass:
+            print("class(\"%s\")." % klass.name)
 
     def visit_inner_klass(self, klass):
-        print("# Skipping inner class %s" % klass.name, file=sys.stderr)
+        if self.final_pass:
+            print("# Skipping inner class %s" % klass.name, file=sys.stderr)
 
     def visit_method(self, klass, method):
-        print("method(\"%s\", \"%s\", %d, %d)." % (klass.name, method.name, loc(method), complexity(method)))
+        ident = (klass.name, method.name)
+        if ident not in self.method_authors:
+            self.method_authors[ident] = self.current_author
+
+        if self.final_pass:
+            print("method(\"%s\", \"%s\", %d, %d, \"%s\")." % (klass.name, method.name, loc(method), complexity(method), self.method_authors[ident]))
+            return True
 
     def visit_calls(self, klass, method, qualifier, member):
         print("calls(\"%s\", \"%s\", \"%s\", \"%s\")." % (
@@ -41,7 +59,7 @@ class Visitor:
             self.walk_method(klass, method, scope)
 
     def walk_method(self, klass, method, scope):
-        self.visit_method(klass, method)
+        relevant = self.visit_method(klass, method)
 
         arg_scope = {}
         for parameter in method.parameters:
@@ -49,7 +67,7 @@ class Visitor:
 
         scope = collections.ChainMap(arg_scope, scope)
 
-        if method.body:
+        if relevant and method.body:
             self.walk_block(klass, method, method.body, scope)
 
     def walk_block(self, klass, method, stmts, scope):
@@ -216,11 +234,28 @@ def complexity(node):
 
 
 if __name__ == "__main__":
-    #for src in glob2.glob(sys.argv[1] + "/src/main/**/*.java"):
+    repo = git.Repo(sys.argv[1])
+
     visitor = Visitor()
+
+    for commit in repo.iter_commits(reverse=True):
+        for changed in commit.stats.files:
+            if not fnmatch.fnmatch(changed, "/src/**/*.java") and not "src/test" in changed:
+                continue
+
+            if commit.stats.files[changed]["insertions"]:
+                contents = repo.git.show("{}:{}".format(commit.hexsha, changed))
+                parsed = javalang.parse.parse(contents)
+                visitor.walk_compilation_unit(parsed, commit.author.email)
+
+    visitor.final_pass = True
+
     for src in glob2.glob(sys.argv[1] + "/src/**/*.java"):
+        if "src/test" in src:
+            continue
+
         print()
         print("#", src)
         print()
         with open(src) as f:
-            visitor.walk_compilation_unit(javalang.parse.parse(f.read()))
+            visitor.walk_compilation_unit(javalang.parse.parse(f.read()), repo.head.commit.author.email)
