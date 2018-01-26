@@ -19,6 +19,9 @@ class Visitor:
     def visit_klass(self, klass):
         print("class(\"%s\")." % klass.name)
 
+    def visit_inner_klass(self, klass):
+        print("# Skipping inner class %s" % klass.name, file=sys.stderr)
+
     def visit_method(self, klass, method):
         print("method(\"%s\", \"%s\", %d, %d)." % (klass.name, method.name, loc(method), complexity(method)))
 
@@ -102,6 +105,8 @@ class Visitor:
                 self.walk_block(klass, method, case.statements, scope)
         elif isinstance(stmt, javalang.tree.Statement):
             pass  # lone semicolon
+        elif isinstance(stmt, javalang.tree.ClassDeclaration):
+            self.visit_inner_klass(stmt)
         else:
             raise RuntimeError("unknown stmt %s" % stmt)
 
@@ -118,7 +123,9 @@ class Visitor:
 
 
 def loc(node):
-    if isinstance(node, javalang.tree.MethodDeclaration):
+    if isinstance(node, javalang.tree.ClassDeclaration):
+        return 2 + sum(loc(method) for method in node.methods)
+    elif isinstance(node, javalang.tree.MethodDeclaration):
         if node.body:
             return 2 + sum(loc(stmt) for stmt in node.body)
         else:
