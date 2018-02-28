@@ -240,7 +240,9 @@ if __name__ == "__main__":
 
     for commit in repo.iter_commits(reverse=True):
         for changed in commit.stats.files:
-            if not fnmatch.fnmatch(changed, "/src/**/*.java") or "src/test" in changed:
+            changed = changed.lstrip("/")
+
+            if not fnmatch.fnmatch(changed, "src/**/*.java") or "src/test" in changed:
                 continue
 
             if commit.stats.files[changed]["insertions"]:
