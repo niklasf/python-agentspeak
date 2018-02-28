@@ -2,20 +2,20 @@
 # GameController/src/teamcomm/PluginLoader.java
 
 class("PluginLoader").
-method("PluginLoader", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("PluginLoader", "enablePlugins", 3, 1, "Thomas.Roefer@dfki.de").
-method("PluginLoader", "disablePlugins", 3, 1, "Thomas.Roefer@dfki.de").
-method("PluginLoader", "getMessageClass", 4, 1, "Thomas.Roefer@dfki.de").
-method("PluginLoader", "createRobotDetailFrame", 11, 3, "Thomas.Roefer@dfki.de").
+method("PluginLoader", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("PluginLoader", "enablePlugins", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("PluginLoader", "disablePlugins", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("PluginLoader", "getMessageClass", 4, 1, "fthielke@fb3.uni-bremen.de").
+method("PluginLoader", "createRobotDetailFrame", 11, 3, "fthielke@fb3.uni-bremen.de").
 calls("PluginLoader", "createRobotDetailFrame", "Class", "getConstructor").
 calls("PluginLoader", "createRobotDetailFrame", "NoSuchMethodException", "printStackTrace").
 calls("PluginLoader", "createRobotDetailFrame", "Log", "error").
-method("PluginLoader", "getCommonDrawings", 3, 1, "Thomas.Roefer@dfki.de").
+method("PluginLoader", "getCommonDrawings", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("PluginLoader", "getCommonDrawings", "PluginLoader", "getDrawings").
-method("PluginLoader", "getDrawings", 4, 1, "Thomas.Roefer@dfki.de").
-method("PluginLoader", "update", 3, 1, "Thomas.Roefer@dfki.de").
+method("PluginLoader", "getDrawings", 4, 1, "fthielke@fb3.uni-bremen.de").
+method("PluginLoader", "update", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("PluginLoader", "update", "PluginLoader", "update").
-method("PluginLoader", "update", 34, 11, "Thomas.Roefer@dfki.de").
+method("PluginLoader", "update", 34, 11, "fthielke@fb3.uni-bremen.de").
 calls("PluginLoader", "update", "Iterator", "hasNext").
 calls("PluginLoader", "update", "Iterator", "remove").
 calls("PluginLoader", "update", "Iterator", "remove").
@@ -26,7 +26,7 @@ calls("PluginLoader", "update", "File", "isDirectory").
 calls("PluginLoader", "update", "LinkedList", "addLast").
 calls("PluginLoader", "update", "List", "add").
 calls("PluginLoader", "update", "PluginLoader", "scanJar").
-method("PluginLoader", "scanJar", 49, 15, "Thomas.Roefer@dfki.de").
+method("PluginLoader", "scanJar", 49, 15, "fthielke@fb3.uni-bremen.de").
 calls("PluginLoader", "scanJar", "Enumeration", "hasMoreElements").
 calls("PluginLoader", "scanJar", "JarEntry", "getName").
 calls("PluginLoader", "scanJar", "Set", "add").
@@ -45,12 +45,12 @@ calls("PluginLoader", "scanJar", "Log", "error").
 # GameController/src/teamcomm/Config.java
 
 class("Config").
-method("Config", "getInstance", 6, 2, "Thomas.Roefer@dfki.de").
-method("Config", "get", 3, 1, "Thomas.Roefer@dfki.de").
+method("Config", "getInstance", 6, 2, "fthielke@fb3.uni-bremen.de").
+method("Config", "get", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Config", "get", "HashMap", "get").
-method("Config", "set", 3, 1, "Thomas.Roefer@dfki.de").
+method("Config", "set", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Config", "set", "HashMap", "put").
-method("Config", "flush", 9, 3, "Thomas.Roefer@dfki.de").
+method("Config", "flush", 9, 3, "fthielke@fb3.uni-bremen.de").
 calls("Config", "flush", "HashMap", "isEmpty").
 calls("Config", "flush", "stream", "writeObject").
 calls("Config", "flush", "stream", "flush").
@@ -99,29 +99,29 @@ calls("TeamCommunicationMonitor", "main", "Logger", "getInstance").
 calls("TeamCommunicationMonitor", "main", "GameControlDataReceiver", "join").
 calls("TeamCommunicationMonitor", "main", "SPLStandardMessageReceiverTCM", "join").
 calls("TeamCommunicationMonitor", "main", "System", "exit").
-method("TeamCommunicationMonitor", "parseArgs", 27, 4, "Thomas.Roefer@dfki.de").
+method("TeamCommunicationMonitor", "parseArgs", 27, 4, "fthielke@fb3.uni-bremen.de").
 calls("TeamCommunicationMonitor", "parseArgs", "System.out", "println").
 calls("TeamCommunicationMonitor", "parseArgs", "System", "exit").
 calls("TeamCommunicationMonitor", "parseArgs", "league.leagueDirectory", "equalsIgnoreCase").
 method("TeamCommunicationMonitor", "shutdown", 6, 1, "Thomas.Roefer@dfki.de").
 calls("TeamCommunicationMonitor", "shutdown", "Object", "notifyAll").
-method("TeamCommunicationMonitor", "switchToGSV", 6, 1, "Thomas.Roefer@dfki.de").
+method("TeamCommunicationMonitor", "switchToGSV", 6, 1, "fthielke@fb3.uni-bremen.de").
 calls("TeamCommunicationMonitor", "switchToGSV", "Object", "notifyAll").
-method("TeamCommunicationMonitor", "switchToTCM", 6, 1, "Thomas.Roefer@dfki.de").
+method("TeamCommunicationMonitor", "switchToTCM", 6, 1, "fthielke@fb3.uni-bremen.de").
 calls("TeamCommunicationMonitor", "switchToTCM", "Object", "notifyAll").
 
 # GameController/src/controller/EventHandler.java
 
 class("EventHandler").
-method("EventHandler", "getInstance", 6, 2, "Thomas.Roefer@dfki.de").
-method("EventHandler", "setGUI", 3, 1, "Thomas.Roefer@dfki.de").
-method("EventHandler", "register", 10, 3, "Thomas.Roefer@dfki.de").
+method("EventHandler", "getInstance", 6, 2, "simont@tzi.de").
+method("EventHandler", "setGUI", 3, 1, "simont@tzi.de").
+method("EventHandler", "register", 10, 3, "simont@tzi.de").
 calls("EventHandler", "register", "EventQueue", "isDispatchThread").
 calls("EventHandler", "register", "GCAction", "isLegal").
 calls("EventHandler", "register", "GCAction", "perform").
 calls("EventHandler", "register", "EventHandler", "update").
 calls("EventHandler", "register", "EventQueue", "invokeLater").
-method("EventHandler", "update", 18, 5, "Thomas.Roefer@dfki.de").
+method("EventHandler", "update", 18, 5, "simont@tzi.de").
 calls("EventHandler", "update", "Sender", "send").
 calls("EventHandler", "update", "GCGUI", "update").
 
@@ -129,7 +129,7 @@ calls("EventHandler", "update", "GCGUI", "update").
 
 class("Clock").
 method("Clock", "getInstance", 6, 2, "Thomas.Roefer@dfki.de").
-method("Clock", "start", 9, 3, "Thomas.Roefer@dfki.de").
+method("Clock", "start", 9, 3, "simont@tzi.de").
 calls("Clock", "start", "Thread", "isInterrupted").
 calls("Clock", "start", "ActionBoard.clock", "actionPerformed").
 calls("Clock", "start", "Thread", "sleep").
@@ -223,22 +223,22 @@ calls("GameController", "main", "System", "exit").
 # GameController/src/common/TotalScaleLayout.java
 
 class("TotalScaleLayout").
-method("TotalScaleLayout", "add", 4, 1, "Thomas.Roefer@dfki.de").
+method("TotalScaleLayout", "add", 4, 1, "simont@tzi.de").
 calls("TotalScaleLayout", "add", "Container", "add").
 calls("TotalScaleLayout", "add", "LinkedList", "add").
-method("TotalScaleLayout", "addLayoutComponent", 1, 1, "Thomas.Roefer@dfki.de").
-method("TotalScaleLayout", "removeLayoutComponent", 7, 3, "Thomas.Roefer@dfki.de").
+method("TotalScaleLayout", "addLayoutComponent", 1, 1, "simont@tzi.de").
+method("TotalScaleLayout", "removeLayoutComponent", 7, 3, "simont@tzi.de").
 calls("TotalScaleLayout", "removeLayoutComponent", "LinkedList", "remove").
-method("TotalScaleLayout", "preferredLayoutSize", 3, 1, "Thomas.Roefer@dfki.de").
-method("TotalScaleLayout", "minimumLayoutSize", 3, 1, "Thomas.Roefer@dfki.de").
-method("TotalScaleLayout", "layoutContainer", 5, 2, "Thomas.Roefer@dfki.de").
+method("TotalScaleLayout", "preferredLayoutSize", 3, 1, "simont@tzi.de").
+method("TotalScaleLayout", "minimumLayoutSize", 3, 1, "simont@tzi.de").
+method("TotalScaleLayout", "layoutContainer", 5, 2, "simont@tzi.de").
 calls("TotalScaleLayout", "layoutContainer", "comp.comp", "setBounds").
 
 # GameController/src/common/ApplicationLock.java
 
 class("ApplicationLock").
-method("ApplicationLock", "acquire", 6, 1, "Thomas.Roefer@dfki.de").
-method("ApplicationLock", "release", 11, 4, "Thomas.Roefer@dfki.de").
+method("ApplicationLock", "acquire", 6, 1, "simont@tzi.de").
+method("ApplicationLock", "release", 11, 4, "simont@tzi.de").
 calls("ApplicationLock", "release", "FileLock", "isValid").
 calls("ApplicationLock", "release", "FileLock", "release").
 calls("ApplicationLock", "release", "FileOutputStream", "close").
@@ -248,29 +248,29 @@ calls("ApplicationLock", "release", "FileChannel", "close").
 # GameController/src/common/Log.java
 
 class("Log").
-method("Log", "init", 16, 8, "Thomas.Roefer@dfki.de").
+method("Log", "init", 16, 8, "simont@tzi.de").
 calls("Log", "init", "Log", "error").
 calls("Log", "init", "Log", "toFile").
-method("Log", "toFile", 7, 2, "Thomas.Roefer@dfki.de").
+method("Log", "toFile", 7, 2, "simont@tzi.de").
 calls("Log", "toFile", "instance.file", "write").
 calls("Log", "toFile", "instance.file", "flush").
 calls("Log", "toFile", "Log", "error").
 method("Log", "setNextMessage", 3, 1, "Thomas.Roefer@dfki.de").
-method("Log", "state", 15, 3, "Thomas.Roefer@dfki.de").
+method("Log", "state", 15, 3, "simont@tzi.de").
 calls("Log", "state", "instance.states", "isEmpty").
 calls("Log", "state", "Log", "toFile").
 calls("Log", "state", "instance.states", "add").
 calls("Log", "state", "Log", "toFile").
-method("Log", "goBack", 29, 12, "Thomas.Roefer@dfki.de").
+method("Log", "goBack", 29, 12, "simont@tzi.de").
 calls("Log", "goBack", "instance.states", "removeLast").
 calls("Log", "goBack", "Class", "getField").
-method("Log", "getLast", 10, 3, "Thomas.Roefer@dfki.de").
-method("Log", "error", 11, 3, "Thomas.Roefer@dfki.de").
+method("Log", "getLast", 10, 3, "simont@tzi.de").
+method("Log", "error", 11, 3, "yuzong@tzi.de").
 calls("Log", "error", "System.err", "println").
 calls("Log", "error", "instance.errorFile", "write").
 calls("Log", "error", "instance.errorFile", "flush").
 calls("Log", "error", "System.err", "println").
-method("Log", "close", 6, 2, "Thomas.Roefer@dfki.de").
+method("Log", "close", 6, 2, "simont@tzi.de").
 calls("Log", "close", "instance.errorFile", "close").
 calls("Log", "close", "instance.file", "close").
 
@@ -281,7 +281,7 @@ class("SPLPenaltyShootout").
 # GameController/src/data/GameControlData.java
 
 class("GameControlData").
-method("GameControlData", "toByteArray", 25, 3, "Thomas.Roefer@dfki.de").
+method("GameControlData", "toByteArray", 25, 3, "simont@tzi.de").
 calls("GameControlData", "toByteArray", "ByteBuffer", "order").
 calls("GameControlData", "toByteArray", "ByteBuffer", "put").
 calls("GameControlData", "toByteArray", "ByteBuffer", "putShort").
@@ -298,7 +298,7 @@ calls("GameControlData", "toByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "toByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "toByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "toByteArray", "ByteBuffer", "put").
-method("GameControlData", "getTrueDataAsByteArray", 20, 2, "Thomas.Roefer@dfki.de").
+method("GameControlData", "getTrueDataAsByteArray", 20, 2, "fthielke@fb3.uni-bremen.de").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "order").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "put").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "putShort").
@@ -314,7 +314,7 @@ calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "putShort").
 calls("GameControlData", "getTrueDataAsByteArray", "ByteBuffer", "put").
-method("GameControlData", "toByteArray7", 22, 2, "Thomas.Roefer@dfki.de").
+method("GameControlData", "toByteArray7", 22, 2, "dseifert@fumanoids.de").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "order").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "put").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "putInt").
@@ -330,11 +330,11 @@ calls("GameControlData", "toByteArray7", "ByteBuffer", "put").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "put").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "put").
 calls("GameControlData", "toByteArray7", "ByteBuffer", "put").
-method("GameControlData", "fromByteArray", 23, 3, "Thomas.Roefer@dfki.de").
+method("GameControlData", "fromByteArray", 23, 3, "simont@tzi.de").
 calls("GameControlData", "fromByteArray", "ByteBuffer", "order").
 calls("GameControlData", "fromByteArray", "ByteBuffer", "get").
 calls("GameControlData", "fromByteArray", "TeamInfo", "fromByteArray").
-method("GameControlData", "toString", 79, 1, "Thomas.Roefer@dfki.de").
+method("GameControlData", "toString", 79, 1, "yuzong@tzi.de").
 
 # GameController/src/data/SPLMixedTeam.java
 
@@ -347,20 +347,20 @@ class("HL").
 # GameController/src/data/PlayerInfo.java
 
 class("PlayerInfo").
-method("PlayerInfo", "toByteArray", 7, 1, "Thomas.Roefer@dfki.de").
+method("PlayerInfo", "toByteArray", 7, 1, "simont@tzi.de").
 calls("PlayerInfo", "toByteArray", "ByteBuffer", "order").
 calls("PlayerInfo", "toByteArray", "ByteBuffer", "put").
 calls("PlayerInfo", "toByteArray", "ByteBuffer", "put").
 calls("PlayerInfo", "toByteArray", "ByteBuffer", "array").
-method("PlayerInfo", "toByteArray7", 7, 1, "Thomas.Roefer@dfki.de").
+method("PlayerInfo", "toByteArray7", 7, 1, "dseifert@fumanoids.de").
 calls("PlayerInfo", "toByteArray7", "ByteBuffer", "order").
 calls("PlayerInfo", "toByteArray7", "ByteBuffer", "putShort").
 calls("PlayerInfo", "toByteArray7", "ByteBuffer", "putShort").
 calls("PlayerInfo", "toByteArray7", "ByteBuffer", "array").
-method("PlayerInfo", "fromByteArray", 5, 1, "Thomas.Roefer@dfki.de").
+method("PlayerInfo", "fromByteArray", 5, 1, "simont@tzi.de").
 calls("PlayerInfo", "fromByteArray", "ByteBuffer", "order").
-method("PlayerInfo", "getPenaltyName", 53, 2, "Thomas.Roefer@dfki.de").
-method("PlayerInfo", "toString", 7, 1, "Thomas.Roefer@dfki.de").
+method("PlayerInfo", "getPenaltyName", 53, 2, "muehlenb@tzi.de").
+method("PlayerInfo", "toString", 7, 1, "yuzong@tzi.de").
 
 # GameController/src/data/HLAdult.java
 
@@ -372,7 +372,7 @@ class("AdvancedData").
 method("AdvancedData", "clone", 12, 3, "Thomas.Roefer@dfki.de").
 calls("AdvancedData", "clone", "System.out", "println").
 calls("AdvancedData", "clone", "System.out", "println").
-method("AdvancedData", "getSide", 3, 1, "Thomas.Roefer@dfki.de").
+method("AdvancedData", "getSide", 3, 1, "simont@tzi.de").
 method("AdvancedData", "getTime", 3, 1, "Thomas.Roefer@dfki.de").
 method("AdvancedData", "getSecondsSince", 3, 1, "Thomas.Roefer@dfki.de").
 method("AdvancedData", "getRemainingSeconds", 3, 1, "Thomas.Roefer@dfki.de").
@@ -387,23 +387,23 @@ method("AdvancedData", "resetPenalties", 20, 8, "Thomas.Roefer@dfki.de").
 calls("AdvancedData", "resetPenalties", "AdvancedData", "resetPenaltyTimes").
 calls("AdvancedData", "resetPenalties", "ArrayList", "get").
 method("AdvancedData", "getRemainingPenaltyTime", 8, 2, "Thomas.Roefer@dfki.de").
-method("AdvancedData", "getNumberOfRobotsInPlay", 8, 3, "Thomas.Roefer@dfki.de").
+method("AdvancedData", "getNumberOfRobotsInPlay", 8, 3, "yuzong@tzi.de").
 method("AdvancedData", "getSecondaryTime", 30, 8, "Thomas.Roefer@dfki.de").
 calls("AdvancedData", "getSecondaryTime", "AdvancedData", "getRemainingSeconds").
 calls("AdvancedData", "getSecondaryTime", "AdvancedData", "getRemainingSeconds").
 calls("AdvancedData", "getSecondaryTime", "AdvancedData", "getRemainingSeconds").
 calls("AdvancedData", "getSecondaryTime", "AdvancedData", "getRemainingPauseTime").
-method("AdvancedData", "updateCoachMessages", 17, 5, "Thomas.Roefer@dfki.de").
+method("AdvancedData", "updateCoachMessages", 17, 5, "seba@informatik.uni-bremen.de").
 calls("AdvancedData", "updateCoachMessages", "Log", "toFile").
 calls("AdvancedData", "updateCoachMessages", "ArrayList", "remove").
 method("AdvancedData", "updatePenalties", 9, 5, "Thomas.Roefer@dfki.de").
-method("AdvancedData", "addToPenaltyQueue", 3, 1, "Thomas.Roefer@dfki.de").
+method("AdvancedData", "addToPenaltyQueue", 3, 1, "dseifert@fumanoids.de").
 calls("AdvancedData", "addToPenaltyQueue", "ArrayList", "get").
 
 # GameController/src/data/Teams.java
 
 class("Teams").
-method("Teams", "getLeagueIndex", 8, 3, "Thomas.Roefer@dfki.de").
+method("Teams", "getLeagueIndex", 8, 3, "yuzong@tzi.de").
 calls("Teams", "getLeagueIndex", "Log", "error").
 method("Teams", "readTeams", 33, 9, "Thomas.Roefer@dfki.de").
 calls("Teams", "readTeams", "Log", "error").
@@ -411,15 +411,15 @@ calls("Teams", "readTeams", "String", "trim").
 calls("Teams", "readTeams", "Log", "error").
 calls("Teams", "readTeams", "Log", "error").
 calls("Teams", "readTeams", "BufferedReader", "close").
-method("Teams", "getNames", 12, 4, "Thomas.Roefer@dfki.de").
+method("Teams", "getNames", 12, 4, "simont@tzi.de").
 calls("Teams", "getNames", "Teams", "readTeams").
-method("Teams", "readIcon", 17, 4, "Thomas.Roefer@dfki.de").
+method("Teams", "readIcon", 17, 4, "simont@tzi.de").
 calls("Teams", "readIcon", "Log", "error").
 calls("Teams", "readIcon", "Graphics", "setColor").
 calls("Teams", "readIcon", "Graphics", "fillRect").
-method("Teams", "getIconPath", 8, 3, "Thomas.Roefer@dfki.de").
+method("Teams", "getIconPath", 8, 3, "fthielke@fb3.uni-bremen.de").
 calls("Teams", "getIconPath", "File", "exists").
-method("Teams", "getIcon", 10, 3, "Thomas.Roefer@dfki.de").
+method("Teams", "getIcon", 10, 3, "simont@tzi.de").
 calls("Teams", "getIcon", "Teams", "readTeams").
 calls("Teams", "getIcon", "Teams", "readIcon").
 method("Teams", "getColors", 7, 2, "Thomas.Roefer@dfki.de").
@@ -432,7 +432,7 @@ class("HLTeen").
 # GameController/src/data/GameControlReturnData.java
 
 class("GameControlReturnData").
-method("GameControlReturnData", "toByteArray", 10, 1, "Thomas.Roefer@dfki.de").
+method("GameControlReturnData", "toByteArray", 10, 1, "simont@tzi.de").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "order").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "put").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "put").
@@ -440,18 +440,18 @@ calls("GameControlReturnData", "toByteArray", "ByteBuffer", "put").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "put").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "put").
 calls("GameControlReturnData", "toByteArray", "ByteBuffer", "array").
-method("GameControlReturnData", "fromByteArray", 32, 4, "Thomas.Roefer@dfki.de").
+method("GameControlReturnData", "fromByteArray", 32, 4, "simont@tzi.de").
 calls("GameControlReturnData", "fromByteArray", "ByteBuffer", "order").
 calls("GameControlReturnData", "fromByteArray", "ByteBuffer", "get").
 
 # GameController/src/data/TrueDataRequest.java
 
 class("TrueDataRequest").
-method("TrueDataRequest", "createRequest", 6, 1, "Thomas.Roefer@dfki.de").
-method("TrueDataRequest", "fromByteArray", 8, 1, "Thomas.Roefer@dfki.de").
+method("TrueDataRequest", "createRequest", 6, 1, "fthielke@fb3.uni-bremen.de").
+method("TrueDataRequest", "fromByteArray", 8, 1, "fthielke@fb3.uni-bremen.de").
 calls("TrueDataRequest", "fromByteArray", "ByteBuffer", "order").
 calls("TrueDataRequest", "fromByteArray", "ByteBuffer", "get").
-method("TrueDataRequest", "toByteArray", 7, 1, "Thomas.Roefer@dfki.de").
+method("TrueDataRequest", "toByteArray", 7, 1, "fthielke@fb3.uni-bremen.de").
 calls("TrueDataRequest", "toByteArray", "ByteBuffer", "order").
 calls("TrueDataRequest", "toByteArray", "ByteBuffer", "put").
 calls("TrueDataRequest", "toByteArray", "ByteBuffer", "put").
@@ -460,7 +460,7 @@ calls("TrueDataRequest", "toByteArray", "ByteBuffer", "array").
 # GameController/src/data/Rules.java
 
 class("Rules").
-method("Rules", "getLeagueRules", 7, 3, "Thomas.Roefer@dfki.de").
+method("Rules", "getLeagueRules", 7, 3, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/data/SPL.java
 
@@ -469,7 +469,7 @@ class("SPL").
 # GameController/src/data/TeamInfo.java
 
 class("TeamInfo").
-method("TeamInfo", "toByteArray", 15, 2, "Thomas.Roefer@dfki.de").
+method("TeamInfo", "toByteArray", 15, 2, "simont@tzi.de").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "order").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "put").
@@ -481,7 +481,7 @@ calls("TeamInfo", "toByteArray", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray", "ByteBuffer", "array").
-method("TeamInfo", "toByteArray7", 11, 2, "Thomas.Roefer@dfki.de").
+method("TeamInfo", "toByteArray7", 11, 2, "dseifert@fumanoids.de").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "order").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "put").
@@ -489,18 +489,18 @@ calls("TeamInfo", "toByteArray7", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "put").
 calls("TeamInfo", "toByteArray7", "ByteBuffer", "array").
-method("TeamInfo", "fromByteArray", 13, 2, "Thomas.Roefer@dfki.de").
+method("TeamInfo", "fromByteArray", 13, 2, "simont@tzi.de").
 calls("TeamInfo", "fromByteArray", "ByteBuffer", "order").
 calls("TeamInfo", "fromByteArray", "ByteBuffer", "get").
 calls("TeamInfo", "fromByteArray", "PlayerInfo", "fromByteArray").
-method("TeamInfo", "getTeamColorName", 26, 1, "Thomas.Roefer@dfki.de").
-method("TeamInfo", "toString", 15, 2, "Thomas.Roefer@dfki.de").
+method("TeamInfo", "getTeamColorName", 26, 1, "muehlenb@tzi.de").
+method("TeamInfo", "toString", 15, 2, "yuzong@tzi.de").
 
 # GameController/src/data/SPLStandardMessage.java
 
 class("SPLStandardMessage").
-method("SPLStandardMessage", "createFrom", 40, 1, "Thomas.Roefer@dfki.de").
-method("SPLStandardMessage", "toByteArray", 31, 2, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessage", "createFrom", 40, 1, "fthielke@fb3.uni-bremen.de").
+method("SPLStandardMessage", "toByteArray", 31, 2, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "order").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "put").
@@ -528,7 +528,7 @@ calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "putShort").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLStandardMessage", "toByteArray", "ByteBuffer", "array").
-method("SPLStandardMessage", "fromByteArray", 134, 23, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessage", "fromByteArray", 134, 23, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessage", "fromByteArray", "ByteBuffer", "order").
 calls("SPLStandardMessage", "fromByteArray", "ByteBuffer", "get").
 calls("SPLStandardMessage", "fromByteArray", "List", "add").
@@ -550,7 +550,7 @@ calls("SPLStandardMessage", "fromByteArray", "List", "add").
 # GameController/src/data/SPLCoachMessage.java
 
 class("SPLCoachMessage").
-method("SPLCoachMessage", "toByteArray", 10, 1, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessage", "toByteArray", 10, 1, "seba@informatik.uni-bremen.de").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "order").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "put").
@@ -558,34 +558,34 @@ calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "put").
 calls("SPLCoachMessage", "toByteArray", "ByteBuffer", "array").
-method("SPLCoachMessage", "fromByteArray", 26, 5, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessage", "fromByteArray", 26, 5, "seba@informatik.uni-bremen.de").
 calls("SPLCoachMessage", "fromByteArray", "ByteBuffer", "order").
 calls("SPLCoachMessage", "fromByteArray", "ByteBuffer", "get").
 calls("SPLCoachMessage", "fromByteArray", "ByteBuffer", "get").
-method("SPLCoachMessage", "getRemainingTimeToSend", 4, 1, "Thomas.Roefer@dfki.de").
-method("SPLCoachMessage", "generateSendIntervallForSPLCoachMessage", 3, 1, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessage", "getRemainingTimeToSend", 4, 1, "seba@informatik.uni-bremen.de").
+method("SPLCoachMessage", "generateSendIntervallForSPLCoachMessage", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/eventrecorder/EventRecorder.java
 
 class("EventRecorder").
-method("EventRecorder", "getLastTeamData", 3, 1, "Thomas.Roefer@dfki.de").
-method("EventRecorder", "main", 13, 2, "Thomas.Roefer@dfki.de").
+method("EventRecorder", "getLastTeamData", 3, 1, "muehlenb@tzi.de").
+method("EventRecorder", "main", 13, 2, "andre@phire.de").
 calls("EventRecorder", "main", "System", "setProperty").
 calls("EventRecorder", "main", "JOptionPane", "showMessageDialog").
 calls("EventRecorder", "main", "System", "exit").
 calls("EventRecorder", "main", "GameControlDataReceiver", "addListener").
 calls("EventRecorder", "main", "GameControlDataReceiver", "start").
-method("EventRecorder", "updateGameData", 32, 10, "Thomas.Roefer@dfki.de").
+method("EventRecorder", "updateGameData", 32, 10, "andre@phire.de").
 calls("EventRecorder", "updateGameData", "ActionHistory", "execute").
 calls("EventRecorder", "updateGameData", "ActionHistory", "execute").
-method("EventRecorder", "capitalize", 10, 2, "Thomas.Roefer@dfki.de").
+method("EventRecorder", "capitalize", 10, 2, "muehlenb@tzi.de").
 calls("EventRecorder", "capitalize", "StringBuffer", "append").
 calls("EventRecorder", "capitalize", "StringBuffer", "toString").
-method("EventRecorder", "cleanExit", 7, 2, "Thomas.Roefer@dfki.de").
+method("EventRecorder", "cleanExit", 7, 2, "andre@phire.de").
 calls("EventRecorder", "cleanExit", "GameControlDataReceiver", "interrupt").
 calls("EventRecorder", "cleanExit", "GameControlDataReceiver", "join").
 calls("EventRecorder", "cleanExit", "System", "exit").
-method("EventRecorder", "setLogPenalty", 3, 1, "Thomas.Roefer@dfki.de").
+method("EventRecorder", "setLogPenalty", 3, 1, "muehlenb@tzi.de").
 
 # GameController/src/analyzer/LogAnalyzer.java
 
@@ -598,17 +598,17 @@ calls("LogAnalyzer", "load", "LinkedList", "add").
 # GameController/src/analyzer/GUI.java
 
 class("GUI").
-method("GUI", "updateList", 6, 2, "Thomas.Roefer@dfki.de").
+method("GUI", "updateList", 6, 2, "yuzong@tzi.de").
 calls("GUI", "updateList", "ListSelectionModel", "clearSelection").
 calls("GUI", "updateList", "DefaultListModel", "removeAllElements").
 calls("GUI", "updateList", "DefaultListModel", "addElement").
-method("GUI", "clean", 13, 4, "Thomas.Roefer@dfki.de").
+method("GUI", "clean", 13, 4, "yuzong@tzi.de").
 calls("GUI", "clean", "File", "isDirectory").
 calls("GUI", "clean", "File", "mkdir").
 calls("GUI", "clean", "log.file", "renameTo").
 calls("GUI", "clean", "LogAnalyzer", "load").
 calls("GUI", "clean", "GUI", "updateList").
-method("GUI", "analyze", 25, 6, "Thomas.Roefer@dfki.de").
+method("GUI", "analyze", 25, 6, "yuzong@tzi.de").
 calls("GUI", "analyze", "LogAnalyzer.stats", "createNewFile").
 calls("GUI", "analyze", "LogAnalyzer.writer", "write").
 calls("GUI", "analyze", "Log", "error").
@@ -617,32 +617,32 @@ calls("GUI", "analyze", "LogAnalyzer.writer", "flush").
 calls("GUI", "analyze", "LogAnalyzer.writer", "close").
 calls("GUI", "analyze", "Log", "error").
 calls("GUI", "analyze", "JOptionPane", "showMessageDialog").
-method("GUI", "valueChanged", 8, 2, "Thomas.Roefer@dfki.de").
+method("GUI", "valueChanged", 8, 2, "yuzong@tzi.de").
 calls("GUI", "valueChanged", "JLabel", "setText").
 calls("GUI", "valueChanged", "JLabel", "setText").
 
 # GameController/src/analyzer/LogInfo.java
 
 class("LogInfo").
-method("LogInfo", "isRealLog", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "isRealVersion", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "isRealLeague", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "isRealTeam", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "isRealDuration", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "getInfo", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogInfo", "toString", 3, 1, "Thomas.Roefer@dfki.de").
+method("LogInfo", "isRealLog", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "isRealVersion", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "isRealLeague", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "isRealTeam", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "isRealDuration", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "getInfo", 3, 1, "yuzong@tzi.de").
+method("LogInfo", "toString", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/analyzer/Parser.java
 
 class("Parser").
-method("Parser", "info", 72, 19, "Thomas.Roefer@dfki.de").
+method("Parser", "info", 72, 19, "yuzong@tzi.de").
 calls("Parser", "info", "String", "startsWith").
 calls("Parser", "info", "String", "startsWith").
 calls("Parser", "info", "String", "startsWith").
 calls("Parser", "info", "log.lines", "set").
 calls("Parser", "info", "String", "contains").
 calls("Parser", "info", "String", "startsWith").
-method("Parser", "statistic", 69, 16, "Thomas.Roefer@dfki.de").
+method("Parser", "statistic", 69, 16, "yuzong@tzi.de").
 calls("Parser", "statistic", "String", "startsWith").
 calls("Parser", "statistic", "Log", "error").
 calls("Parser", "statistic", "String", "startsWith").
@@ -660,9 +660,9 @@ class("SPLStandardMessagePackage").
 # GameController/src/teamcomm/net/SPLStandardMessageReceiver.java
 
 class("SPLStandardMessageReceiver").
-method("SPLStandardMessageReceiver", "processPackets", 3, 1, "Thomas.Roefer@dfki.de").
-method("SPLStandardMessageReceiver", "handleMessage", 1, 1, "Thomas.Roefer@dfki.de").
-method("SPLStandardMessageReceiver", "run", 15, 4, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiver", "processPackets", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("SPLStandardMessageReceiver", "handleMessage", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("SPLStandardMessageReceiver", "run", 15, 4, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiver", "run", "ReceiverThread", "start").
 calls("SPLStandardMessageReceiver", "run", "SPLStandardMessageReceiver", "isInterrupted").
 calls("SPLStandardMessageReceiver", "run", "Logger", "getInstance").
@@ -670,25 +670,25 @@ calls("SPLStandardMessageReceiver", "run", "SPLStandardMessageReceiver", "handle
 calls("SPLStandardMessageReceiver", "run", "Thread", "yield").
 calls("SPLStandardMessageReceiver", "run", "ReceiverThread", "interrupt").
 calls("SPLStandardMessageReceiver", "run", "ReceiverThread", "join").
-method("SPLStandardMessageReceiver", "addToPackageQueue", 3, 1, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiver", "addToPackageQueue", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiver", "addToPackageQueue", "LinkedBlockingQueue", "add").
-method("SPLStandardMessageReceiver", "clearPackageQueue", 6, 2, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiver", "clearPackageQueue", 6, 2, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiver", "clearPackageQueue", "LinkedBlockingQueue", "clear").
 calls("SPLStandardMessageReceiver", "clearPackageQueue", "Thread", "sleep").
-method("SPLStandardMessageReceiver", "getTeamport", 3, 1, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiver", "getTeamport", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/net/GameControlDataReceiver.java
 
 class("GameControlDataReceiver").
-method("GameControlDataReceiver", "addListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("GameControlDataReceiver", "addListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameControlDataReceiver", "addListener", "EventListenerList", "add").
-method("GameControlDataReceiver", "removeListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("GameControlDataReceiver", "removeListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameControlDataReceiver", "removeListener", "EventListenerList", "remove").
-method("GameControlDataReceiver", "fireEvent", 10, 4, "Thomas.Roefer@dfki.de").
+method("GameControlDataReceiver", "fireEvent", 10, 4, "fthielke@fb3.uni-bremen.de").
 calls("GameControlDataReceiver", "fireEvent", "GameControlDataEventListener", "gameControlDataChanged").
 calls("GameControlDataReceiver", "fireEvent", "GameControlDataEventListener", "gameControlDataTimeout").
-method("GameControlDataReceiver", "requestTrueData", 4, 1, "Thomas.Roefer@dfki.de").
-method("GameControlDataReceiver", "run", 31, 10, "Thomas.Roefer@dfki.de").
+method("GameControlDataReceiver", "requestTrueData", 4, 1, "fthielke@fb3.uni-bremen.de").
+method("GameControlDataReceiver", "run", 31, 10, "fthielke@fb3.uni-bremen.de").
 calls("GameControlDataReceiver", "run", "GameControlDataReceiver", "isInterrupted").
 calls("GameControlDataReceiver", "run", "DatagramSocket", "receive").
 calls("GameControlDataReceiver", "run", "ByteBuffer", "rewind").
@@ -703,12 +703,12 @@ calls("GameControlDataReceiver", "run", "DatagramSocket", "close").
 # GameController/src/teamcomm/net/SPLStandardMessageReceiverTCM.java
 
 class("SPLStandardMessageReceiverTCM").
-method("SPLStandardMessageReceiverTCM", "getInstance", 10, 3, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiverTCM", "getInstance", 10, 3, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiverTCM", "getInstance", "JOptionPane", "showMessageDialog").
 calls("SPLStandardMessageReceiverTCM", "getInstance", "System", "exit").
-method("SPLStandardMessageReceiverTCM", "processPackets", 3, 1, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiverTCM", "processPackets", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiverTCM", "processPackets", "LogReplayer", "getInstance").
-method("SPLStandardMessageReceiverTCM", "handleMessage", 26, 6, "Thomas.Roefer@dfki.de").
+method("SPLStandardMessageReceiverTCM", "handleMessage", 26, 6, "fthielke@fb3.uni-bremen.de").
 calls("SPLStandardMessageReceiverTCM", "handleMessage", "SPLStandardMessage", "fromByteArray").
 calls("SPLStandardMessageReceiverTCM", "handleMessage", "Log", "error").
 calls("SPLStandardMessageReceiverTCM", "handleMessage", "GameState", "getInstance").
@@ -717,20 +717,20 @@ calls("SPLStandardMessageReceiverTCM", "handleMessage", "Log", "error").
 # GameController/src/teamcomm/data/AdvancedMessage.java
 
 class("AdvancedMessage").
-method("AdvancedMessage", "display", 1, 1, "Thomas.Roefer@dfki.de").
-method("AdvancedMessage", "init", 1, 1, "Thomas.Roefer@dfki.de").
+method("AdvancedMessage", "display", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("AdvancedMessage", "init", 1, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/data/GameState.java
 
 class("GameState").
-method("GameState", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("GameState", "shutdown", 3, 1, "Thomas.Roefer@dfki.de").
+method("GameState", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("GameState", "shutdown", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "shutdown", "ScheduledFuture", "cancel").
-method("GameState", "reset", 12, 1, "Thomas.Roefer@dfki.de").
+method("GameState", "reset", 12, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "reset", "Map", "clear").
 calls("GameState", "reset", "HashMap", "clear").
 calls("GameState", "reset", "GameState", "sendEvents").
-method("GameState", "gameControlDataChanged", 71, 17, "Thomas.Roefer@dfki.de").
+method("GameState", "gameControlDataChanged", 71, 17, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "gameControlDataChanged", "Map", "put").
 calls("GameState", "gameControlDataChanged", "Map", "put").
 calls("GameState", "gameControlDataChanged", "RobotState", "setPenalty").
@@ -745,19 +745,19 @@ calls("GameState", "gameControlDataChanged", "Logger", "getInstance").
 calls("GameState", "gameControlDataChanged", "Logger", "getInstance").
 calls("GameState", "gameControlDataChanged", "Logger", "getInstance").
 calls("GameState", "gameControlDataChanged", "GameState", "sendEvents").
-method("GameState", "gameControlDataTimeout", 24, 6, "Thomas.Roefer@dfki.de").
+method("GameState", "gameControlDataTimeout", 24, 6, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "gameControlDataTimeout", "LogReplayer", "getInstance").
 calls("GameState", "gameControlDataTimeout", "Entry", "getValue").
 calls("GameState", "gameControlDataTimeout", "Logger", "getInstance").
 calls("GameState", "gameControlDataTimeout", "GameState", "sendEvents").
-method("GameState", "receiveMessage", 46, 12, "Thomas.Roefer@dfki.de").
+method("GameState", "receiveMessage", 46, 12, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "receiveMessage", "PluginLoader", "getInstance").
 calls("GameState", "receiveMessage", "HashMap", "put").
 calls("GameState", "receiveMessage", "Map", "put").
 calls("GameState", "receiveMessage", "Collection", "add").
 calls("GameState", "receiveMessage", "RobotState", "registerMessage").
 calls("GameState", "receiveMessage", "GameState", "sendEvents").
-method("GameState", "sendEvents", 57, 16, "Thomas.Roefer@dfki.de").
+method("GameState", "sendEvents", 57, 16, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "sendEvents", "Collection", "add").
 calls("GameState", "sendEvents", "GameState", "fireEvent").
 calls("GameState", "sendEvents", "Collection", "add").
@@ -768,54 +768,54 @@ calls("GameState", "sendEvents", "Collection", "add").
 calls("GameState", "sendEvents", "GameState", "fireEvent").
 calls("GameState", "sendEvents", "Collection", "add").
 calls("GameState", "sendEvents", "GameState", "fireEvent").
-method("GameState", "fireEvent", 4, 2, "Thomas.Roefer@dfki.de").
+method("GameState", "fireEvent", 4, 2, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "fireEvent", "TeamEventListener", "teamChanged").
-method("GameState", "getTeamColor", 64, 16, "Thomas.Roefer@dfki.de").
-method("GameState", "getLastGameControlData", 3, 1, "Thomas.Roefer@dfki.de").
-method("GameState", "getTeamName", 26, 6, "Thomas.Roefer@dfki.de").
-method("GameState", "isMirrored", 3, 1, "Thomas.Roefer@dfki.de").
-method("GameState", "setMirrored", 6, 2, "Thomas.Roefer@dfki.de").
+method("GameState", "getTeamColor", 64, 16, "fthielke@fb3.uni-bremen.de").
+method("GameState", "getLastGameControlData", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("GameState", "getTeamName", 26, 6, "fthielke@fb3.uni-bremen.de").
+method("GameState", "isMirrored", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("GameState", "setMirrored", 6, 2, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "setMirrored", "GameState", "sendEvents").
-method("GameState", "outputSide", 3, 1, "Thomas.Roefer@dfki.de").
-method("GameState", "addListener", 4, 1, "Thomas.Roefer@dfki.de").
+method("GameState", "outputSide", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("GameState", "addListener", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "addListener", "EventListenerList", "add").
 calls("GameState", "addListener", "GameState", "sendEvents").
-method("GameState", "removeListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("GameState", "removeListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("GameState", "removeListener", "EventListenerList", "remove").
 
 # GameController/src/teamcomm/data/RobotState.java
 
 class("RobotState").
-method("RobotState", "registerMessage", 17, 4, "Thomas.Roefer@dfki.de").
+method("RobotState", "registerMessage", 17, 4, "fthielke@fb3.uni-bremen.de").
 calls("RobotState", "registerMessage", "LinkedList", "addFirst").
 calls("RobotState", "registerMessage", "RobotStateEventListener", "robotStateChanged").
 calls("RobotState", "registerMessage", "RobotStateEventListener", "connectionStatusChanged").
-method("RobotState", "getAddress", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getLastMessage", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getMessagesPerSecond", 9, 2, "Thomas.Roefer@dfki.de").
+method("RobotState", "getAddress", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getLastMessage", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getMessagesPerSecond", 9, 2, "fthielke@fb3.uni-bremen.de").
 calls("RobotState", "getMessagesPerSecond", "ListIterator", "remove").
-method("RobotState", "updateConnectionStatus", 9, 3, "Thomas.Roefer@dfki.de").
+method("RobotState", "updateConnectionStatus", 9, 3, "fthielke@fb3.uni-bremen.de").
 calls("RobotState", "updateConnectionStatus", "RobotStateEventListener", "connectionStatusChanged").
-method("RobotState", "getConnectionStatus", 8, 3, "Thomas.Roefer@dfki.de").
-method("RobotState", "getMessageCount", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getIllegalMessageCount", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getIllegalMessageRatio", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getTeamNumber", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getPlayerNumber", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "getPenalty", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "setPenalty", 3, 1, "Thomas.Roefer@dfki.de").
-method("RobotState", "addListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("RobotState", "getConnectionStatus", 8, 3, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getMessageCount", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getIllegalMessageCount", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getIllegalMessageRatio", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getTeamNumber", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getPlayerNumber", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "getPenalty", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "setPenalty", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotState", "addListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotState", "addListener", "EventListenerList", "add").
-method("RobotState", "removeListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("RobotState", "removeListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotState", "removeListener", "EventListenerList", "remove").
 
 # GameController/src/teamcomm/gui/View3DCanvas.java
 
 class("View3DCanvas").
-method("View3DCanvas", "init", 4, 1, "Thomas.Roefer@dfki.de").
+method("View3DCanvas", "init", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DCanvas", "init", "View3DCanvas", "updateDrawingsMenu").
-method("View3DCanvas", "getCanvas", 3, 1, "Thomas.Roefer@dfki.de").
-method("View3DCanvas", "updateDrawingsMenu", 26, 8, "Thomas.Roefer@dfki.de").
+method("View3DCanvas", "getCanvas", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("View3DCanvas", "updateDrawingsMenu", 26, 8, "fthielke@fb3.uni-bremen.de").
 calls("View3DCanvas", "updateDrawingsMenu", "JMenu", "removeAll").
 calls("View3DCanvas", "updateDrawingsMenu", "String", "equals").
 calls("View3DCanvas", "updateDrawingsMenu", "HashMap", "put").
@@ -824,8 +824,8 @@ calls("View3DCanvas", "updateDrawingsMenu", "JCheckBoxMenuItem", "addItemListene
 calls("View3DCanvas", "updateDrawingsMenu", "JMenu", "add").
 calls("View3DCanvas", "updateDrawingsMenu", "JMenu", "add").
 calls("View3DCanvas", "updateDrawingsMenu", "JMenu", "remove").
-method("View3DCanvas", "getDrawingsMenu", 3, 1, "Thomas.Roefer@dfki.de").
-method("View3DCanvas", "teamChanged", 20, 5, "Thomas.Roefer@dfki.de").
+method("View3DCanvas", "getDrawingsMenu", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("View3DCanvas", "teamChanged", 20, 5, "fthielke@fb3.uni-bremen.de").
 calls("View3DCanvas", "teamChanged", "drawings", "clear").
 calls("View3DCanvas", "teamChanged", "drawings", "addAll").
 calls("View3DCanvas", "teamChanged", "drawings", "addAll").
@@ -836,7 +836,7 @@ calls("View3DCanvas", "teamChanged", "View3DCanvas", "updateDrawingsMenu").
 # GameController/src/teamcomm/gui/RobotDetailFrameDefault.java
 
 class("RobotDetailFrameDefault").
-method("RobotDetailFrameDefault", "init", 19, 1, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrameDefault", "init", 19, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotDetailFrameDefault", "init", "RobotDetailFrameDefault", "setContentPane").
 calls("RobotDetailFrameDefault", "init", "JPanel", "setBorder").
 calls("RobotDetailFrameDefault", "init", "JPanel", "setLayout").
@@ -851,10 +851,10 @@ calls("RobotDetailFrameDefault", "init", "JPanel", "add").
 calls("RobotDetailFrameDefault", "init", "JPanel", "add").
 calls("RobotDetailFrameDefault", "init", "RobotDetailFrameDefault", "update").
 calls("RobotDetailFrameDefault", "init", "RobotDetailFrameDefault", "setResizable").
-method("RobotDetailFrameDefault", "robotStateChanged", 5, 2, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrameDefault", "robotStateChanged", 5, 2, "fthielke@fb3.uni-bremen.de").
 calls("RobotDetailFrameDefault", "robotStateChanged", "RobotDetailFrameDefault", "isVisible").
 calls("RobotDetailFrameDefault", "robotStateChanged", "SwingUtilities", "invokeLater").
-method("RobotDetailFrameDefault", "update", 176, 38, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrameDefault", "update", 176, 38, "fthielke@fb3.uni-bremen.de").
 calls("RobotDetailFrameDefault", "update", "StringBuilder", "append").
 calls("RobotDetailFrameDefault", "update", "StringBuilder", "append").
 calls("RobotDetailFrameDefault", "update", "StringBuilder", "append").
@@ -919,30 +919,30 @@ calls("RobotDetailFrameDefault", "update", "JPanel", "add").
 calls("RobotDetailFrameDefault", "update", "JPanel", "remove").
 calls("RobotDetailFrameDefault", "update", "JPanel", "remove").
 calls("RobotDetailFrameDefault", "update", "RobotDetailFrameDefault", "pack").
-method("RobotDetailFrameDefault", "connectionStatusChanged", 1, 1, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrameDefault", "connectionStatusChanged", 1, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/TeamLogoLoader.java
 
 class("TeamLogoLoader").
-method("TeamLogoLoader", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("TeamLogoLoader", "getTeamLogo", 30, 7, "Thomas.Roefer@dfki.de").
+method("TeamLogoLoader", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("TeamLogoLoader", "getTeamLogo", 30, 7, "fthielke@fb3.uni-bremen.de").
 calls("TeamLogoLoader", "getTeamLogo", "Graphics", "drawImage").
 calls("TeamLogoLoader", "getTeamLogo", "Graphics", "dispose").
 calls("TeamLogoLoader", "getTeamLogo", "Map", "put").
-method("TeamLogoLoader", "getTeamLogoTexture", 18, 4, "Thomas.Roefer@dfki.de").
+method("TeamLogoLoader", "getTeamLogoTexture", 18, 4, "fthielke@fb3.uni-bremen.de").
 calls("TeamLogoLoader", "getTeamLogoTexture", "TextureLoader", "getInstance").
-method("TeamLogoLoader", "getTeamLogoIcon", 4, 1, "Thomas.Roefer@dfki.de").
-method("TeamLogoLoader", "getScaledTeamLogoIcon", 9, 2, "Thomas.Roefer@dfki.de").
-method("TeamLogoLoader", "getScaledSemiTransparentTeamLogoIcon", 17, 4, "Thomas.Roefer@dfki.de").
+method("TeamLogoLoader", "getTeamLogoIcon", 4, 1, "fthielke@fb3.uni-bremen.de").
+method("TeamLogoLoader", "getScaledTeamLogoIcon", 9, 2, "fthielke@fb3.uni-bremen.de").
+method("TeamLogoLoader", "getScaledSemiTransparentTeamLogoIcon", 17, 4, "fthielke@fb3.uni-bremen.de").
 calls("TeamLogoLoader", "getScaledSemiTransparentTeamLogoIcon", "BufferedImage", "setRGB").
 calls("TeamLogoLoader", "getScaledSemiTransparentTeamLogoIcon", "Map", "put").
-method("TeamLogoLoader", "getTeamLogoPanelIcon", 10, 3, "Thomas.Roefer@dfki.de").
+method("TeamLogoLoader", "getTeamLogoPanelIcon", 10, 3, "fthielke@fb3.uni-bremen.de").
 calls("TeamLogoLoader", "getTeamLogoPanelIcon", "Map", "put").
 
 # GameController/src/teamcomm/gui/MainWindow.java
 
 class("MainWindow").
-method("MainWindow", "initialize", 33, 1, "Thomas.Roefer@dfki.de").
+method("MainWindow", "initialize", 33, 1, "fthielke@fb3.uni-bremen.de").
 calls("MainWindow", "initialize", "MainWindow", "getRootPane").
 calls("MainWindow", "initialize", "MainWindow", "setLocationByPlatform").
 calls("MainWindow", "initialize", "MainWindow", "setDefaultCloseOperation").
@@ -964,7 +964,7 @@ calls("MainWindow", "initialize", "MainWindow", "setPreferredSize").
 calls("MainWindow", "initialize", "MainWindow", "pack").
 calls("MainWindow", "initialize", "MainWindow", "setVisible").
 calls("MainWindow", "initialize", "GameState", "getInstance").
-method("MainWindow", "createFileMenu", 18, 1, "Thomas.Roefer@dfki.de").
+method("MainWindow", "createFileMenu", 18, 1, "fthielke@fb3.uni-bremen.de").
 calls("MainWindow", "createFileMenu", "JMenuItem", "addActionListener").
 calls("MainWindow", "createFileMenu", "JMenuItem", "setAccelerator").
 calls("MainWindow", "createFileMenu", "JMenu", "add").
@@ -975,20 +975,20 @@ calls("MainWindow", "createFileMenu", "JMenuItem", "addActionListener").
 calls("MainWindow", "createFileMenu", "JMenu", "add").
 calls("MainWindow", "createFileMenu", "JMenuItem", "addActionListener").
 calls("MainWindow", "createFileMenu", "JMenu", "add").
-method("MainWindow", "createViewMenu", 8, 1, "Thomas.Roefer@dfki.de").
+method("MainWindow", "createViewMenu", 8, 1, "fthielke@fb3.uni-bremen.de").
 calls("MainWindow", "createViewMenu", "JCheckBoxMenuItem", "addItemListener").
 calls("MainWindow", "createViewMenu", "JMenu", "add").
 calls("MainWindow", "createViewMenu", "JMenu", "add").
-method("MainWindow", "terminate", 4, 1, "Thomas.Roefer@dfki.de").
+method("MainWindow", "terminate", 4, 1, "felix@felix-VirtualBox").
 calls("MainWindow", "terminate", "GameState", "getInstance").
 calls("MainWindow", "terminate", "View3DCanvas", "terminate").
-method("MainWindow", "teamChanged", 3, 1, "Thomas.Roefer@dfki.de").
+method("MainWindow", "teamChanged", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("MainWindow", "teamChanged", "SwingUtilities", "invokeLater").
 
 # GameController/src/teamcomm/gui/View3DGSV.java
 
 class("View3DGSV").
-method("View3DGSV", "init", 28, 7, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "init", 28, 7, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "init", "GLAutoDrawable", "getGL").
 calls("View3DGSV", "init", "Drawing", "getClass").
 calls("View3DGSV", "init", "Drawing", "getClass").
@@ -999,10 +999,10 @@ calls("View3DGSV", "init", "camera", "addRadius").
 calls("View3DGSV", "init", "camera", "shiftToBottom").
 calls("View3DGSV", "init", "GameState", "getInstance").
 calls("View3DGSV", "init", "System.err", "println").
-method("View3DGSV", "reshape", 9, 2, "Thomas.Roefer@dfki.de").
-method("View3DGSV", "terminate", 4, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "reshape", 9, 2, "fthielke@fb3.uni-bremen.de").
+method("View3DGSV", "terminate", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "terminate", "SwingUtilities", "invokeLater").
-method("View3DGSV", "draw", 143, 19, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "draw", 143, 19, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "draw", "View3DGSV", "switchTo2D").
 calls("View3DGSV", "draw", "Image", "drawImage2DCover").
 calls("View3DGSV", "draw", "Image", "drawImage2DContain").
@@ -1034,12 +1034,12 @@ calls("View3DGSV", "draw", "GLU", "gluDisk").
 calls("View3DGSV", "draw", "GL2", "glPopMatrix").
 calls("View3DGSV", "draw", "GLU", "gluDeleteQuadric").
 calls("View3DGSV", "draw", "View3DGSV", "switchTo3D").
-method("View3DGSV", "drawTextCenter", 3, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "drawTextCenter", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "drawTextCenter", "View3DGSV", "drawText").
-method("View3DGSV", "drawText", 4, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "drawText", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "drawText", "TextRenderer", "setColor").
 calls("View3DGSV", "drawText", "TextRenderer", "draw").
-method("View3DGSV", "switchTo2D", 12, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "switchTo2D", 12, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "switchTo2D", "GL2", "glMatrixMode").
 calls("View3DGSV", "switchTo2D", "GL2", "glPushMatrix").
 calls("View3DGSV", "switchTo2D", "GL2", "glLoadIdentity").
@@ -1049,22 +1049,22 @@ calls("View3DGSV", "switchTo2D", "GL2", "glLoadIdentity").
 calls("View3DGSV", "switchTo2D", "GL2", "glDisable").
 calls("View3DGSV", "switchTo2D", "GL2", "glDisable").
 calls("View3DGSV", "switchTo2D", "GL2", "glDisable").
-method("View3DGSV", "switchTo3D", 8, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "switchTo3D", 8, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3DGSV", "switchTo3D", "GL2", "glEnable").
 calls("View3DGSV", "switchTo3D", "GL2", "glEnable").
 calls("View3DGSV", "switchTo3D", "GL2", "glEnable").
 calls("View3DGSV", "switchTo3D", "GL2", "glMatrixMode").
 calls("View3DGSV", "switchTo3D", "GL2", "glPopMatrix").
 calls("View3DGSV", "switchTo3D", "GL2", "glMatrixMode").
-method("View3DGSV", "formatTime", 3, 1, "Thomas.Roefer@dfki.de").
+method("View3DGSV", "formatTime", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/View3D.java
 
 class("View3D").
-method("View3D", "terminate", 4, 1, "Thomas.Roefer@dfki.de").
+method("View3D", "terminate", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "terminate", "GameState", "getInstance").
 calls("View3D", "terminate", "AnimatorBase", "stop").
-method("View3D", "init", 47, 4, "Thomas.Roefer@dfki.de").
+method("View3D", "init", 47, 4, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "init", "GL2", "glClearDepth").
 calls("View3D", "init", "GL2", "glDepthFunc").
 calls("View3D", "init", "GL2", "glEnable").
@@ -1100,11 +1100,11 @@ calls("View3D", "init", "List", "addAll").
 calls("View3D", "init", "Collections", "sort").
 calls("View3D", "init", "Drawing", "initialize").
 calls("View3D", "init", "GameState", "getInstance").
-method("View3D", "dispose", 1, 1, "Thomas.Roefer@dfki.de").
-method("View3D", "display", 5, 1, "Thomas.Roefer@dfki.de").
+method("View3D", "dispose", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("View3D", "display", 5, 1, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "display", "GL2", "glClear").
 calls("View3D", "display", "View3D", "draw").
-method("View3D", "draw", 46, 13, "Thomas.Roefer@dfki.de").
+method("View3D", "draw", 46, 13, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "draw", "GL2", "glLoadIdentity").
 calls("View3D", "draw", "Camera", "positionCamera").
 calls("View3D", "draw", "Iterator", "hasNext").
@@ -1117,10 +1117,10 @@ calls("View3D", "draw", "Log", "error").
 calls("View3D", "draw", "Camera", "flip").
 calls("View3D", "draw", "Log", "error").
 calls("View3D", "draw", "Camera", "flip").
-method("View3D", "reshape", 8, 2, "Thomas.Roefer@dfki.de").
+method("View3D", "reshape", 8, 2, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "reshape", "GLAutoDrawable", "getGL").
 calls("View3D", "reshape", "Camera", "setupFrustum").
-method("View3D", "teamChanged", 15, 3, "Thomas.Roefer@dfki.de").
+method("View3D", "teamChanged", 15, 3, "fthielke@fb3.uni-bremen.de").
 calls("View3D", "teamChanged", "Set", "clear").
 calls("View3D", "teamChanged", "Set", "addAll").
 calls("View3D", "teamChanged", "Set", "clear").
@@ -1129,64 +1129,64 @@ calls("View3D", "teamChanged", "Set", "addAll").
 # GameController/src/teamcomm/gui/RobotPanel.java
 
 class("RobotPanel").
-method("RobotPanel", "robotStateChanged", 5, 2, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "robotStateChanged", 5, 2, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "robotStateChanged", "RobotPanel", "isVisible").
 calls("RobotPanel", "robotStateChanged", "RobotPanel", "update").
-method("RobotPanel", "connectionStatusChanged", 14, 2, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "connectionStatusChanged", 14, 2, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "connectionStatusChanged", "RobotPanel", "isVisible").
 calls("RobotPanel", "connectionStatusChanged", "RobotState", "getConnectionStatus").
 calls("RobotPanel", "connectionStatusChanged", "JLabel", "setIcon").
 calls("RobotPanel", "connectionStatusChanged", "JLabel", "setIcon").
 calls("RobotPanel", "connectionStatusChanged", "JLabel", "setIcon").
-method("RobotPanel", "update", 4, 1, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "update", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "update", "SwingUtilities", "invokeLater").
-method("RobotPanel", "setTeamLogoVisible", 7, 2, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "setTeamLogoVisible", 7, 2, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "setTeamLogoVisible", "SwingUtilities", "invokeLater").
 calls("RobotPanel", "setTeamLogoVisible", "SwingUtilities", "invokeLater").
-method("RobotPanel", "dispose", 4, 1, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "dispose", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "dispose", "RobotState", "removeListener").
 calls("RobotPanel", "dispose", "RobotDetailFrame", "destroy").
-method("RobotPanel", "getRobotAddress", 3, 1, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "getRobotAddress", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotPanel", "getRobotAddress", "RobotState", "getAddress").
-method("RobotPanel", "loadIcons", 11, 4, "Thomas.Roefer@dfki.de").
+method("RobotPanel", "loadIcons", 11, 4, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/RobotDetailFrame.java
 
 class("RobotDetailFrame").
-method("RobotDetailFrame", "init", 1, 1, "Thomas.Roefer@dfki.de").
-method("RobotDetailFrame", "destroy", 4, 1, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrame", "init", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("RobotDetailFrame", "destroy", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotDetailFrame", "destroy", "RobotDetailFrame", "setVisible").
 calls("RobotDetailFrame", "destroy", "RobotState", "removeListener").
-method("RobotDetailFrame", "dispose", 4, 1, "Thomas.Roefer@dfki.de").
+method("RobotDetailFrame", "dispose", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("RobotDetailFrame", "dispose", "RobotState", "removeListener").
 
 # GameController/src/teamcomm/gui/Camera.java
 
 class("Camera").
-method("Camera", "flip", 4, 1, "Thomas.Roefer@dfki.de").
+method("Camera", "flip", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("Camera", "flip", "GL2", "glRotatef").
-method("Camera", "addTheta", 10, 3, "Thomas.Roefer@dfki.de").
-method("Camera", "addPhi", 10, 3, "Thomas.Roefer@dfki.de").
-method("Camera", "addRadius", 10, 3, "Thomas.Roefer@dfki.de").
-method("Camera", "setupFrustum", 7, 1, "Thomas.Roefer@dfki.de").
+method("Camera", "addTheta", 10, 3, "fthielke@fb3.uni-bremen.de").
+method("Camera", "addPhi", 10, 3, "fthielke@fb3.uni-bremen.de").
+method("Camera", "addRadius", 10, 3, "fthielke@fb3.uni-bremen.de").
+method("Camera", "setupFrustum", 7, 1, "fthielke@fb3.uni-bremen.de").
 calls("Camera", "setupFrustum", "GL2", "glMatrixMode").
 calls("Camera", "setupFrustum", "GL2", "glLoadIdentity").
 calls("Camera", "setupFrustum", "GLU", "gluPerspective").
 calls("Camera", "setupFrustum", "GL2", "glMatrixMode").
-method("Camera", "positionCamera", 6, 1, "Thomas.Roefer@dfki.de").
+method("Camera", "positionCamera", 6, 1, "fthielke@fb3.uni-bremen.de").
 calls("Camera", "positionCamera", "GL2", "glTranslatef").
 calls("Camera", "positionCamera", "GL2", "glRotatef").
 calls("Camera", "positionCamera", "GL2", "glRotatef").
 calls("Camera", "positionCamera", "GL2", "glTranslatef").
-method("Camera", "turnTowardsCamera", 4, 1, "Thomas.Roefer@dfki.de").
+method("Camera", "turnTowardsCamera", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("Camera", "turnTowardsCamera", "GL2", "glRotatef").
 calls("Camera", "turnTowardsCamera", "GL2", "glRotatef").
-method("Camera", "shiftToBottom", 3, 1, "Thomas.Roefer@dfki.de").
+method("Camera", "shiftToBottom", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/LogReplayFrame.java
 
 class("LogReplayFrame").
-method("LogReplayFrame", "logReplayStatus", 64, 13, "Thomas.Roefer@dfki.de").
+method("LogReplayFrame", "logReplayStatus", 64, 13, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayFrame", "logReplayStatus", "JButton", "setEnabled").
 calls("LogReplayFrame", "logReplayStatus", "JButton", "setEnabled").
 calls("LogReplayFrame", "logReplayStatus", "JButton", "setEnabled").
@@ -1212,7 +1212,7 @@ calls("LogReplayFrame", "logReplayStatus", "StringBuilder", "append").
 calls("LogReplayFrame", "logReplayStatus", "JLabel", "setText").
 calls("LogReplayFrame", "logReplayStatus", "JButton", "setEnabled").
 calls("LogReplayFrame", "logReplayStatus", "JLabel", "setText").
-method("LogReplayFrame", "logReplayStarted", 11, 1, "Thomas.Roefer@dfki.de").
+method("LogReplayFrame", "logReplayStarted", 11, 1, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayFrame", "logReplayStarted", "JButton", "setEnabled").
 calls("LogReplayFrame", "logReplayStarted", "JButton", "setEnabled").
 calls("LogReplayFrame", "logReplayStarted", "JButton", "setEnabled").
@@ -1222,33 +1222,33 @@ calls("LogReplayFrame", "logReplayStarted", "JLabel", "setText").
 calls("LogReplayFrame", "logReplayStarted", "JLabel", "setText").
 calls("LogReplayFrame", "logReplayStarted", "LogReplayFrame", "setLocationRelativeTo").
 calls("LogReplayFrame", "logReplayStarted", "LogReplayFrame", "setVisible").
-method("LogReplayFrame", "logReplayEnded", 3, 1, "Thomas.Roefer@dfki.de").
+method("LogReplayFrame", "logReplayEnded", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayFrame", "logReplayEnded", "LogReplayFrame", "setVisible").
 
 # GameController/src/teamcomm/net/logging/Logger.java
 
 class("Logger").
-method("Logger", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("Logger", "enableLogging", 7, 2, "Thomas.Roefer@dfki.de").
+method("Logger", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Logger", "enableLogging", 7, 2, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "enableLogging", "Logger", "createLogfile").
 calls("Logger", "enableLogging", "System.out", "println").
-method("Logger", "disableLogging", 7, 2, "Thomas.Roefer@dfki.de").
+method("Logger", "disableLogging", 7, 2, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "disableLogging", "Logger", "closeLogfile").
 calls("Logger", "disableLogging", "System.out", "println").
-method("Logger", "createLogfile", 3, 1, "Thomas.Roefer@dfki.de").
+method("Logger", "createLogfile", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "createLogfile", "Logger", "createLogfile").
-method("Logger", "createLogfile", 15, 3, "Thomas.Roefer@dfki.de").
+method("Logger", "createLogfile", 15, 3, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "createLogfile", "Logger", "closeLogfile").
-method("Logger", "closeLogfile", 19, 6, "Thomas.Roefer@dfki.de").
+method("Logger", "closeLogfile", 19, 6, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "closeLogfile", "LogReplayer", "getInstance").
 calls("Logger", "closeLogfile", "ObjectOutputStream", "close").
 calls("Logger", "closeLogfile", "Log", "error").
 calls("Logger", "closeLogfile", "File", "delete").
-method("Logger", "log", 3, 1, "Thomas.Roefer@dfki.de").
+method("Logger", "log", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "log", "Logger", "log").
-method("Logger", "log", 3, 1, "Thomas.Roefer@dfki.de").
+method("Logger", "log", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "log", "Logger", "log").
-method("Logger", "log", 31, 8, "Thomas.Roefer@dfki.de").
+method("Logger", "log", 31, 8, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "log", "Log", "error").
 calls("Logger", "log", "ObjectOutputStream", "writeLong").
 calls("Logger", "log", "ObjectOutputStream", "writeBoolean").
@@ -1256,7 +1256,7 @@ calls("Logger", "log", "ObjectOutputStream", "writeInt").
 calls("Logger", "log", "ObjectOutputStream", "writeObject").
 calls("Logger", "log", "Log", "error").
 calls("Logger", "log", "Logger", "closeLogfile").
-method("Logger", "getIDForClass", 6, 2, "Thomas.Roefer@dfki.de").
+method("Logger", "getIDForClass", 6, 2, "fthielke@fb3.uni-bremen.de").
 calls("Logger", "getIDForClass", "Class", "equals").
 
 # GameController/src/teamcomm/net/logging/LogReplayEventListener.java
@@ -1265,27 +1265,27 @@ calls("Logger", "getIDForClass", "Class", "equals").
 # GameController/src/teamcomm/net/logging/LogReplayTask.java
 
 class("LogReplayTask").
-method("LogReplayTask", "close", 8, 3, "Thomas.Roefer@dfki.de").
+method("LogReplayTask", "close", 8, 3, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayTask", "close", "ObjectInputStream", "close").
-method("LogReplayTask", "isPaused", 5, 1, "Thomas.Roefer@dfki.de").
-method("LogReplayTask", "setPlaybackSpeed", 5, 1, "Thomas.Roefer@dfki.de").
-method("LogReplayTask", "run", 38, 9, "Thomas.Roefer@dfki.de").
+method("LogReplayTask", "isPaused", 5, 1, "fthielke@fb3.uni-bremen.de").
+method("LogReplayTask", "setPlaybackSpeed", 5, 1, "fthielke@fb3.uni-bremen.de").
+method("LogReplayTask", "run", 38, 9, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayTask", "run", "LogReplayTask", "isPaused").
 calls("LogReplayTask", "run", "LogReplayTask", "handleObject").
 calls("LogReplayTask", "run", "LogReplayTask", "next").
 calls("LogReplayTask", "run", "LogReplayTask", "handleObject").
 calls("LogReplayTask", "run", "LogReplayTask", "prev").
 calls("LogReplayTask", "run", "LogReplayEventListener", "logReplayStatus").
-method("LogReplayTask", "prev", 10, 3, "Thomas.Roefer@dfki.de").
+method("LogReplayTask", "prev", 10, 3, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayTask", "prev", "Deque", "isEmpty").
 calls("LogReplayTask", "prev", "Deque", "push").
-method("LogReplayTask", "next", 31, 9, "Thomas.Roefer@dfki.de").
+method("LogReplayTask", "next", 31, 9, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayTask", "next", "ObjectInputStream", "readBoolean").
 calls("LogReplayTask", "next", "ObjectInputStream", "close").
 calls("LogReplayTask", "next", "Log", "error").
 calls("LogReplayTask", "next", "ObjectInputStream", "close").
 calls("LogReplayTask", "next", "Deque", "push").
-method("LogReplayTask", "handleObject", 17, 4, "Thomas.Roefer@dfki.de").
+method("LogReplayTask", "handleObject", 17, 4, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayTask", "handleObject", "SPLStandardMessageReceiverTCM", "getInstance").
 calls("LogReplayTask", "handleObject", "GameState", "getInstance").
 calls("LogReplayTask", "handleObject", "GameState", "getInstance").
@@ -1297,27 +1297,27 @@ class("LogReplayEvent").
 # GameController/src/teamcomm/net/logging/LogReplayer.java
 
 class("LogReplayer").
-method("LogReplayer", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogReplayer", "open", 14, 4, "Thomas.Roefer@dfki.de").
+method("LogReplayer", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("LogReplayer", "open", 14, 4, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayer", "open", "ScheduledFuture", "cancel").
 calls("LogReplayer", "open", "LogReplayTask", "close").
 calls("LogReplayer", "open", "LogReplayEventListener", "logReplayEnded").
 calls("LogReplayer", "open", "SPLStandardMessageReceiverTCM", "getInstance").
 calls("LogReplayer", "open", "GameState", "getInstance").
 calls("LogReplayer", "open", "LogReplayEventListener", "logReplayStarted").
-method("LogReplayer", "isReplaying", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogReplayer", "isPaused", 3, 1, "Thomas.Roefer@dfki.de").
-method("LogReplayer", "setPlaybackSpeed", 5, 2, "Thomas.Roefer@dfki.de").
+method("LogReplayer", "isReplaying", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("LogReplayer", "isPaused", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("LogReplayer", "setPlaybackSpeed", 5, 2, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayer", "setPlaybackSpeed", "LogReplayTask", "setPlaybackSpeed").
-method("LogReplayer", "close", 12, 3, "Thomas.Roefer@dfki.de").
+method("LogReplayer", "close", 12, 3, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayer", "close", "ScheduledFuture", "cancel").
 calls("LogReplayer", "close", "LogReplayTask", "close").
 calls("LogReplayer", "close", "LogReplayEventListener", "logReplayEnded").
 calls("LogReplayer", "close", "SPLStandardMessageReceiverTCM", "getInstance").
 calls("LogReplayer", "close", "GameState", "getInstance").
-method("LogReplayer", "addListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("LogReplayer", "addListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayer", "addListener", "EventListenerList", "add").
-method("LogReplayer", "removeListener", 3, 1, "Thomas.Roefer@dfki.de").
+method("LogReplayer", "removeListener", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("LogReplayer", "removeListener", "EventListenerList", "remove").
 
 # GameController/src/teamcomm/data/event/GameControlDataEventListener.java
@@ -1348,8 +1348,8 @@ class("GameControlDataEvent").
 # GameController/src/teamcomm/gui/drawings/TextureLoader.java
 
 class("TextureLoader").
-method("TextureLoader", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("TextureLoader", "loadTexture", 36, 5, "Thomas.Roefer@dfki.de").
+method("TextureLoader", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("TextureLoader", "loadTexture", 36, 5, "fthielke@fb3.uni-bremen.de").
 calls("TextureLoader", "loadTexture", "Map", "put").
 calls("TextureLoader", "loadTexture", "ByteBuffer", "order").
 calls("TextureLoader", "loadTexture", "ByteBuffer", "putInt").
@@ -1368,31 +1368,31 @@ calls("TextureLoader", "loadTexture", "Map", "put").
 # GameController/src/teamcomm/gui/drawings/Static.java
 
 class("Static").
-method("Static", "draw", 1, 1, "Thomas.Roefer@dfki.de").
+method("Static", "draw", 1, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/Drawing.java
 
 class("Drawing").
-method("Drawing", "setActive", 4, 1, "Thomas.Roefer@dfki.de").
+method("Drawing", "setActive", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("Drawing", "setActive", "Config", "getInstance").
-method("Drawing", "isActive", 3, 1, "Thomas.Roefer@dfki.de").
-method("Drawing", "getTeamNumber", 3, 1, "Thomas.Roefer@dfki.de").
-method("Drawing", "setTeamNumber", 3, 1, "Thomas.Roefer@dfki.de").
-method("Drawing", "initialize", 12, 3, "Thomas.Roefer@dfki.de").
+method("Drawing", "isActive", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Drawing", "getTeamNumber", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Drawing", "setTeamNumber", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Drawing", "initialize", 12, 3, "fthielke@fb3.uni-bremen.de").
 calls("Drawing", "initialize", "Drawing", "init").
 calls("Drawing", "initialize", "Drawing", "setActive").
 calls("Drawing", "initialize", "Drawing", "setActive").
-method("Drawing", "init", 1, 1, "Thomas.Roefer@dfki.de").
-method("Drawing", "hasAlpha", 1, 1, "Thomas.Roefer@dfki.de").
-method("Drawing", "getPriority", 1, 1, "Thomas.Roefer@dfki.de").
+method("Drawing", "init", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("Drawing", "hasAlpha", 1, 1, "fthielke@fb3.uni-bremen.de").
+method("Drawing", "getPriority", 1, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/RoSi2Loader.java
 
 class("RoSi2Loader").
-method("RoSi2Loader", "getInstance", 3, 1, "Thomas.Roefer@dfki.de").
-method("RoSi2Loader", "cacheModels", 3, 1, "Thomas.Roefer@dfki.de").
+method("RoSi2Loader", "getInstance", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RoSi2Loader", "cacheModels", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Loader", "cacheModels", "RoSi2Loader", "cacheModels").
-method("RoSi2Loader", "cacheModels", 27, 8, "Thomas.Roefer@dfki.de").
+method("RoSi2Loader", "cacheModels", 27, 8, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Loader", "cacheModels", "Iterator", "hasNext").
 calls("RoSi2Loader", "cacheModels", "Map", "containsKey").
 calls("RoSi2Loader", "cacheModels", "Iterator", "remove").
@@ -1400,9 +1400,9 @@ calls("RoSi2Loader", "cacheModels", "Set", "isEmpty").
 calls("RoSi2Loader", "cacheModels", "Map", "put").
 calls("RoSi2Loader", "cacheModels", "Map", "put").
 calls("RoSi2Loader", "cacheModels", "Set", "addAll").
-method("RoSi2Loader", "loadModel", 3, 1, "Thomas.Roefer@dfki.de").
+method("RoSi2Loader", "loadModel", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Loader", "loadModel", "RoSi2Loader", "loadModel").
-method("RoSi2Loader", "loadModel", 36, 8, "Thomas.Roefer@dfki.de").
+method("RoSi2Loader", "loadModel", 36, 8, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Loader", "loadModel", "Map", "put").
 calls("RoSi2Loader", "loadModel", "Map", "put").
 calls("RoSi2Loader", "loadModel", "Map", "put").
@@ -1417,28 +1417,28 @@ calls("RoSi2Loader", "loadModel", "Map", "get").
 # GameController/src/teamcomm/gui/drawings/PerPlayer.java
 
 class("PerPlayer").
-method("PerPlayer", "draw", 1, 1, "Thomas.Roefer@dfki.de").
+method("PerPlayer", "draw", 1, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/RoSi2Element.java
 
 class("RoSi2Element").
-method("RoSi2Element", "getName", 3, 1, "Thomas.Roefer@dfki.de").
-method("RoSi2Element", "findElement", 14, 4, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getName", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("RoSi2Element", "findElement", 14, 4, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "findElement", "LinkedList", "isEmpty").
 calls("RoSi2Element", "findElement", "String", "equals").
 calls("RoSi2Element", "findElement", "LinkedList", "addAll").
-method("RoSi2Element", "findElements", 19, 5, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "findElements", 19, 5, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "findElements", "Collection", "isEmpty").
 calls("RoSi2Element", "findElements", "LinkedList", "isEmpty").
 calls("RoSi2Element", "findElements", "List", "add").
 calls("RoSi2Element", "findElements", "Set", "remove").
 calls("RoSi2Element", "findElements", "Set", "isEmpty").
 calls("RoSi2Element", "findElements", "LinkedList", "addAll").
-method("RoSi2Element", "instantiate", 3, 1, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "instantiate", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "instantiate", "RoSi2Element", "instantiate").
-method("RoSi2Element", "instantiate", 3, 1, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "instantiate", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "instantiate", "RoSi2Element", "instantiate").
-method("RoSi2Element", "instantiate", 257, 55, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "instantiate", 257, 55, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "instantiate", "Map", "containsKey").
 calls("RoSi2Element", "instantiate", "Map", "put").
 calls("RoSi2Element", "instantiate", "List", "add").
@@ -1468,27 +1468,27 @@ calls("RoSi2Element", "instantiate", "DecimalFormat", "setParseIntegerOnly").
 calls("RoSi2Element", "instantiate", "Character", "isWhitespace").
 calls("RoSi2Element", "instantiate", "Character", "isWhitespace").
 calls("RoSi2Element", "instantiate", "LinkedList", "add").
-method("RoSi2Element", "getColor", 53, 12, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getColor", 53, 12, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getColor", "String", "length").
 calls("RoSi2Element", "getColor", "String", "startsWith").
 calls("RoSi2Element", "getColor", "String", "startsWith").
-method("RoSi2Element", "hexDigit", 10, 3, "Thomas.Roefer@dfki.de").
-method("RoSi2Element", "getLength", 27, 7, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "hexDigit", 10, 3, "fthielke@fb3.uni-bremen.de").
+method("RoSi2Element", "getLength", 27, 7, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getLength", "RoSi2Element", "getFloatAndUnit").
-method("RoSi2Element", "getUnit", 19, 2, "Thomas.Roefer@dfki.de").
-method("RoSi2Element", "getAngle", 15, 4, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getUnit", 19, 2, "fthielke@fb3.uni-bremen.de").
+method("RoSi2Element", "getAngle", 15, 4, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getAngle", "RoSi2Element", "getFloatAndUnit").
-method("RoSi2Element", "getFloatAndUnit", 19, 3, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getFloatAndUnit", 19, 3, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getFloatAndUnit", "DecimalFormat", "setGroupingUsed").
 calls("RoSi2Element", "getFloatAndUnit", "DecimalFormatSymbols", "setDecimalSeparator").
 calls("RoSi2Element", "getFloatAndUnit", "DecimalFormat", "setDecimalFormatSymbols").
-method("RoSi2Element", "getAttributeValue", 52, 12, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getAttributeValue", 52, 12, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getAttributeValue", "StringBuilder", "append").
 calls("RoSi2Element", "getAttributeValue", "StringBuilder", "append").
 calls("RoSi2Element", "getAttributeValue", "StringBuilder", "append").
 calls("RoSi2Element", "getAttributeValue", "StringBuilder", "append").
 calls("RoSi2Element", "getAttributeValue", "StringBuilder", "toString").
-method("RoSi2Element", "parseFile", 75, 20, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "parseFile", 75, 20, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "parseFile", "XMLInputFactory", "setProperty").
 calls("RoSi2Element", "parseFile", "XMLInputFactory", "setProperty").
 calls("RoSi2Element", "parseFile", "Deque", "addFirst").
@@ -1517,23 +1517,23 @@ calls("RoSi2Element", "parseFile", "Deque", "removeFirst").
 calls("RoSi2Element", "parseFile", "Deque", "pollFirst").
 calls("RoSi2Element", "parseFile", "cur.tag", "equals").
 calls("RoSi2Element", "parseFile", "Deque", "getFirst").
-method("RoSi2Element", "getXmlAttribute", 10, 3, "Thomas.Roefer@dfki.de").
+method("RoSi2Element", "getXmlAttribute", 10, 3, "fthielke@fb3.uni-bremen.de").
 calls("RoSi2Element", "getXmlAttribute", "Attribute", "getValue").
 
 # GameController/src/teamcomm/gui/drawings/Image.java
 
 class("Image").
-method("Image", "drawImage", 4, 1, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage", "Image", "drawImage").
-method("Image", "drawImage", 3, 1, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage", "Image", "drawImage").
-method("Image", "drawImage2D", 3, 1, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage2D", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage2D", "Image", "drawImage").
-method("Image", "drawImage2DCover", 3, 1, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage2DCover", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage2DCover", "Image", "drawImage2D").
-method("Image", "drawImage2DContain", 5, 1, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage2DContain", 5, 1, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage2DContain", "Image", "drawImage2D").
-method("Image", "drawImage", 27, 3, "Thomas.Roefer@dfki.de").
+method("Image", "drawImage", 27, 3, "fthielke@fb3.uni-bremen.de").
 calls("Image", "drawImage", "GL2", "glColorMaterial").
 calls("Image", "drawImage", "GL2", "glMaterialfv").
 calls("Image", "drawImage", "GL2", "glMaterialf").
@@ -1559,9 +1559,9 @@ calls("Image", "drawImage", "GL2", "glDisable").
 # GameController/src/teamcomm/gui/drawings/Text.java
 
 class("Text").
-method("Text", "drawText", 3, 1, "Thomas.Roefer@dfki.de").
+method("Text", "drawText", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Text", "drawText", "Text", "drawText").
-method("Text", "drawText", 10, 2, "Thomas.Roefer@dfki.de").
+method("Text", "drawText", 10, 2, "fthielke@fb3.uni-bremen.de").
 calls("Text", "drawText", "TextRenderer", "begin3DRendering").
 calls("Text", "drawText", "TextRenderer", "setColor").
 calls("Text", "drawText", "TextRenderer", "draw3D").
@@ -1570,32 +1570,32 @@ calls("Text", "drawText", "TextRenderer", "end3DRendering").
 # GameController/src/teamcomm/gui/drawings/common/Field.java
 
 class("Field").
-method("Field", "init", 3, 1, "Thomas.Roefer@dfki.de").
+method("Field", "init", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Field", "init", "RoSi2Loader", "getInstance").
-method("Field", "draw", 5, 1, "Thomas.Roefer@dfki.de").
+method("Field", "draw", 5, 1, "fthielke@fb3.uni-bremen.de").
 calls("Field", "draw", "GL2", "glDepthFunc").
 calls("Field", "draw", "GL2", "glCallList").
 calls("Field", "draw", "GL2", "glDepthFunc").
-method("Field", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("Field", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("Field", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Field", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/PlayerNumber.java
 
 class("PlayerNumber").
-method("PlayerNumber", "draw", 14, 3, "Thomas.Roefer@dfki.de").
+method("PlayerNumber", "draw", 14, 3, "fthielke@fb3.uni-bremen.de").
 calls("PlayerNumber", "draw", "GL2", "glPushMatrix").
 calls("PlayerNumber", "draw", "GL2", "glTranslatef").
 calls("PlayerNumber", "draw", "GL2", "glTranslatef").
 calls("PlayerNumber", "draw", "Camera", "turnTowardsCamera").
 calls("PlayerNumber", "draw", "Text", "drawText").
 calls("PlayerNumber", "draw", "GL2", "glPopMatrix").
-method("PlayerNumber", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("PlayerNumber", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("PlayerNumber", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("PlayerNumber", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/GameControllerInfo.java
 
 class("GameControllerInfo").
-method("GameControllerInfo", "draw", 69, 5, "Thomas.Roefer@dfki.de").
+method("GameControllerInfo", "draw", 69, 5, "fthielke@fb3.uni-bremen.de").
 calls("GameControllerInfo", "draw", "GL2", "glPushMatrix").
 calls("GameControllerInfo", "draw", "GL2", "glTranslatef").
 calls("GameControllerInfo", "draw", "Camera", "turnTowardsCamera").
@@ -1606,17 +1606,17 @@ calls("GameControllerInfo", "draw", "Text", "drawText").
 calls("GameControllerInfo", "draw", "Text", "drawText").
 calls("GameControllerInfo", "draw", "Text", "drawText").
 calls("GameControllerInfo", "draw", "GL2", "glPopMatrix").
-method("GameControllerInfo", "getColor", 6, 2, "Thomas.Roefer@dfki.de").
-method("GameControllerInfo", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("GameControllerInfo", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("GameControllerInfo", "getColor", 6, 2, "fthielke@fb3.uni-bremen.de").
+method("GameControllerInfo", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("GameControllerInfo", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/Player.java
 
 class("Player").
-method("Player", "getModelName", 25, 1, "Thomas.Roefer@dfki.de").
-method("Player", "init", 3, 1, "Thomas.Roefer@dfki.de").
+method("Player", "getModelName", 25, 1, "fthielke@fb3.uni-bremen.de").
+method("Player", "init", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Player", "init", "RoSi2Loader", "getInstance").
-method("Player", "draw", 19, 4, "Thomas.Roefer@dfki.de").
+method("Player", "draw", 19, 4, "fthielke@fb3.uni-bremen.de").
 calls("Player", "draw", "GL2", "glPushMatrix").
 calls("Player", "draw", "GL2", "glTranslatef").
 calls("Player", "draw", "GL2", "glRotatef").
@@ -1626,26 +1626,26 @@ calls("Player", "draw", "GL2", "glTranslatef").
 calls("Player", "draw", "GL2", "glRotatef").
 calls("Player", "draw", "GL2", "glCallList").
 calls("Player", "draw", "GL2", "glPopMatrix").
-method("Player", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("Player", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("Player", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Player", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/FieldSmall.java
 
 class("FieldSmall").
-method("FieldSmall", "init", 4, 1, "Thomas.Roefer@dfki.de").
+method("FieldSmall", "init", 4, 1, "fthielke@fb3.uni-bremen.de").
 calls("FieldSmall", "init", "RoSi2Loader", "getInstance").
 calls("FieldSmall", "init", "FieldSmall", "setActive").
-method("FieldSmall", "draw", 5, 1, "Thomas.Roefer@dfki.de").
+method("FieldSmall", "draw", 5, 1, "fthielke@fb3.uni-bremen.de").
 calls("FieldSmall", "draw", "GL2", "glDepthFunc").
 calls("FieldSmall", "draw", "GL2", "glCallList").
 calls("FieldSmall", "draw", "GL2", "glDepthFunc").
-method("FieldSmall", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("FieldSmall", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("FieldSmall", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("FieldSmall", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/PlayerTarget.java
 
 class("PlayerTarget").
-method("PlayerTarget", "draw", 42, 3, "Thomas.Roefer@dfki.de").
+method("PlayerTarget", "draw", 42, 3, "fthielke@fb3.uni-bremen.de").
 calls("PlayerTarget", "draw", "GL2", "glColor3f").
 calls("PlayerTarget", "draw", "GL2", "glNormal3f").
 calls("PlayerTarget", "draw", "GL2", "glBegin").
@@ -1675,15 +1675,15 @@ calls("PlayerTarget", "draw", "GL2", "glVertex2f").
 calls("PlayerTarget", "draw", "GL2", "glVertex2f").
 calls("PlayerTarget", "draw", "GL2", "glEnd").
 calls("PlayerTarget", "draw", "GL2", "glPopMatrix").
-method("PlayerTarget", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("PlayerTarget", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("PlayerTarget", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("PlayerTarget", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/teamcomm/gui/drawings/common/Ball.java
 
 class("Ball").
-method("Ball", "init", 3, 1, "Thomas.Roefer@dfki.de").
+method("Ball", "init", 3, 1, "fthielke@fb3.uni-bremen.de").
 calls("Ball", "init", "RoSi2Loader", "getInstance").
-method("Ball", "draw", 42, 3, "Thomas.Roefer@dfki.de").
+method("Ball", "draw", 42, 3, "fthielke@fb3.uni-bremen.de").
 calls("Ball", "draw", "GL2", "glPushMatrix").
 calls("Ball", "draw", "GL2", "glTranslatef").
 calls("Ball", "draw", "GL2", "glRotatef").
@@ -1711,17 +1711,17 @@ calls("Ball", "draw", "GLU", "gluCylinder").
 calls("Ball", "draw", "GLU", "gluDeleteQuadric").
 calls("Ball", "draw", "GL2", "glDisable").
 calls("Ball", "draw", "GL2", "glPopMatrix").
-method("Ball", "hasAlpha", 3, 1, "Thomas.Roefer@dfki.de").
-method("Ball", "getPriority", 3, 1, "Thomas.Roefer@dfki.de").
+method("Ball", "hasAlpha", 3, 1, "fthielke@fb3.uni-bremen.de").
+method("Ball", "getPriority", 3, 1, "fthielke@fb3.uni-bremen.de").
 
 # GameController/src/controller/ui/StartInput.java
 
 class("StartInput").
-method("StartInput", "showAvailableTeams", 12, 3, "Thomas.Roefer@dfki.de").
+method("StartInput", "showAvailableTeams", 12, 3, "seba@informatik.uni-bremen.de").
 calls("StartInput", "showAvailableTeams", "StartInput", "setTeamIcon").
-method("StartInput", "getShortTeams", 17, 5, "Thomas.Roefer@dfki.de").
+method("StartInput", "getShortTeams", 17, 5, "yuzong@tzi.de").
 calls("StartInput", "getShortTeams", "Arrays", "sort").
-method("StartInput", "setTeamIcon", 18, 3, "Thomas.Roefer@dfki.de").
+method("StartInput", "setTeamIcon", 18, 3, "simont@tzi.de").
 calls("StartInput", "setTeamIcon", "Graphics", "drawImage").
 calls("StartInput", "setTeamIcon", "Graphics", "dispose").
 method("StartInput", "startEnabling", 3, 1, "Thomas.Roefer@dfki.de").
@@ -1729,15 +1729,15 @@ calls("StartInput", "startEnabling", "JButton", "setEnabled").
 method("StartInput", "getImage", 14, 4, "Thomas.Roefer@dfki.de").
 calls("StartInput", "getImage", "HashMap", "put").
 calls("StartInput", "getImage", "HashMap", "get").
-method("StartInput", "switchTeamColor", 6, 1, "Thomas.Roefer@dfki.de").
+method("StartInput", "switchTeamColor", 6, 1, "bhuman@dennisschuerholz.de").
 calls("StartInput", "switchTeamColor", "StartInput", "updateTeamColorIndicator").
-method("StartInput", "updateTeamColorIndicator", 4, 1, "Thomas.Roefer@dfki.de").
-method("StartInput", "reloadTeamColor", 23, 6, "Thomas.Roefer@dfki.de").
+method("StartInput", "updateTeamColorIndicator", 4, 1, "bhuman@dennisschuerholz.de").
+method("StartInput", "reloadTeamColor", 23, 6, "bhuman@dennisschuerholz.de").
 calls("StartInput", "reloadTeamColor", "StartInput", "switchTeamColor").
 calls("StartInput", "reloadTeamColor", "StartInput", "updateTeamColorIndicator").
 calls("StartInput", "reloadTeamColor", "StartInput", "updateTeamColorIndicator").
 method("StartInput", "updateBackgrounds", 5, 2, "Thomas.Roefer@dfki.de").
-method("StartInput", "fromColorName", 24, 1, "Thomas.Roefer@dfki.de").
+method("StartInput", "fromColorName", 24, 1, "bhuman@dennisschuerholz.de").
 
 # GameController/src/controller/ui/GCGUI.java
 
@@ -1745,14 +1745,14 @@ method("StartInput", "fromColorName", 24, 1, "Thomas.Roefer@dfki.de").
 # GameController/src/controller/ui/BackgroundImage.java
 
 class("BackgroundImage").
-method("BackgroundImage", "horizontalflip", 9, 1, "Thomas.Roefer@dfki.de").
+method("BackgroundImage", "horizontalflip", 9, 1, "andre@phire.de").
 calls("BackgroundImage", "horizontalflip", "Graphics2D", "drawImage").
 calls("BackgroundImage", "horizontalflip", "Graphics2D", "dispose").
 
 # GameController/src/controller/ui/GUI.java
 
 class("GUI").
-method("GUI", "update", 24, 3, "Thomas.Roefer@dfki.de").
+method("GUI", "update", 24, 3, "simont@tzi.de").
 calls("GUI", "update", "GUI", "updateClock").
 calls("GUI", "update", "GUI", "updateHalf").
 calls("GUI", "update", "GUI", "updateColor").
@@ -1772,7 +1772,7 @@ calls("GUI", "update", "GUI", "updateUndo").
 calls("GUI", "update", "GUI", "repaint").
 method("GUI", "paint", 4, 1, "Thomas.Roefer@dfki.de").
 calls("GUI", "paint", "GUI", "updateFonts").
-method("GUI", "updateClock", 28, 5, "Thomas.Roefer@dfki.de").
+method("GUI", "updateClock", 28, 5, "simont@tzi.de").
 calls("GUI", "updateClock", "JLabel", "setText").
 calls("GUI", "updateClock", "JLabel", "setText").
 calls("GUI", "updateClock", "JLabel", "setForeground").
@@ -1785,7 +1785,7 @@ calls("GUI", "updateClock", "ImageButton", "setImage").
 calls("GUI", "updateClock", "ImageButton", "setVisible").
 calls("GUI", "updateClock", "ImageButton", "setVisible").
 calls("GUI", "updateClock", "ImageButton", "setVisible").
-method("GUI", "updateHalf", 18, 4, "Thomas.Roefer@dfki.de").
+method("GUI", "updateHalf", 18, 4, "simont@tzi.de").
 calls("GUI", "updateHalf", "JToggleButton", "setEnabled").
 calls("GUI", "updateHalf", "JToggleButton", "setEnabled").
 calls("GUI", "updateHalf", "JToggleButton", "setEnabled").
@@ -1796,8 +1796,8 @@ calls("GUI", "updateHalf", "JToggleButton", "setSelected").
 calls("GUI", "updateHalf", "JToggleButton", "setSelected").
 calls("GUI", "updateHalf", "JToggleButton", "setSelected").
 calls("GUI", "updateHalf", "JToggleButton", "setSelected").
-method("GUI", "updateColor", 9, 3, "Thomas.Roefer@dfki.de").
-method("GUI", "updateState", 25, 1, "Thomas.Roefer@dfki.de").
+method("GUI", "updateColor", 9, 3, "simont@tzi.de").
+method("GUI", "updateState", 25, 1, "simont@tzi.de").
 calls("GUI", "updateState", "JToggleButton", "setEnabled").
 calls("GUI", "updateState", "JToggleButton", "setEnabled").
 calls("GUI", "updateState", "JToggleButton", "setEnabled").
@@ -1809,10 +1809,10 @@ calls("GUI", "updateState", "JToggleButton", "setSelected").
 calls("GUI", "updateState", "JToggleButton", "setSelected").
 calls("GUI", "updateState", "JToggleButton", "setSelected").
 calls("GUI", "updateState", "GUI", "highlight").
-method("GUI", "updateGoal", 6, 2, "Thomas.Roefer@dfki.de").
-method("GUI", "updateKickoff", 14, 4, "Thomas.Roefer@dfki.de").
-method("GUI", "updatePushes", 12, 4, "Thomas.Roefer@dfki.de").
-method("GUI", "updateRobots", 97, 22, "Thomas.Roefer@dfki.de").
+method("GUI", "updateGoal", 6, 2, "simont@tzi.de").
+method("GUI", "updateKickoff", 14, 4, "simont@tzi.de").
+method("GUI", "updatePushes", 12, 4, "simont@tzi.de").
+method("GUI", "updateRobots", 97, 22, "simont@tzi.de").
 calls("GUI", "updateRobots", "GUI", "highlight").
 calls("GUI", "updateRobots", "GUI", "highlight").
 calls("GUI", "updateRobots", "GUI", "highlight").
@@ -1820,21 +1820,21 @@ calls("GUI", "updateRobots", "GUI", "highlight").
 calls("GUI", "updateRobots", "GUI", "highlight").
 calls("GUI", "updateRobots", "GUI", "highlight").
 calls("GUI", "updateRobots", "GUI", "highlight").
-method("GUI", "updateTimeOut", 12, 3, "Thomas.Roefer@dfki.de").
+method("GUI", "updateTimeOut", 12, 3, "simont@tzi.de").
 calls("GUI", "updateTimeOut", "GUI", "highlight").
 calls("GUI", "updateTimeOut", "GUI", "highlight").
-method("GUI", "updateRefereeTimeout", 4, 1, "Thomas.Roefer@dfki.de").
+method("GUI", "updateRefereeTimeout", 4, 1, "seba@informatik.uni-bremen.de").
 calls("GUI", "updateRefereeTimeout", "JToggleButton", "setSelected").
 calls("GUI", "updateRefereeTimeout", "JToggleButton", "setEnabled").
-method("GUI", "updateGlobalStuck", 10, 3, "Thomas.Roefer@dfki.de").
-method("GUI", "updateDropBall", 3, 1, "Thomas.Roefer@dfki.de").
+method("GUI", "updateGlobalStuck", 10, 3, "simont@tzi.de").
+method("GUI", "updateDropBall", 3, 1, "yuzong@tzi.de").
 calls("GUI", "updateDropBall", "JButton", "setEnabled").
-method("GUI", "updateOut", 4, 2, "Thomas.Roefer@dfki.de").
-method("GUI", "updatePenaltiesSPL", 36, 5, "Thomas.Roefer@dfki.de").
-method("GUI", "updatePenaltiesHL", 17, 1, "Thomas.Roefer@dfki.de").
-method("GUI", "updateUndo", 19, 4, "Thomas.Roefer@dfki.de").
+method("GUI", "updateOut", 4, 2, "simont@tzi.de").
+method("GUI", "updatePenaltiesSPL", 36, 5, "yuzong@tzi.de").
+method("GUI", "updatePenaltiesHL", 17, 1, "yuzong@tzi.de").
+method("GUI", "updateUndo", 19, 4, "simont@tzi.de").
 calls("GUI", "updateUndo", "JButton", "setVisible").
-method("GUI", "updateFonts", 53, 10, "Thomas.Roefer@dfki.de").
+method("GUI", "updateFonts", 53, 10, "simont@tzi.de").
 calls("GUI", "updateFonts", "JLabel", "setFont").
 calls("GUI", "updateFonts", "JLabel", "setFont").
 calls("GUI", "updateFonts", "JToggleButton", "setFont").
@@ -1850,7 +1850,7 @@ calls("GUI", "updateFonts", "JToggleButton", "setFont").
 calls("GUI", "updateFonts", "JToggleButton", "setFont").
 calls("GUI", "updateFonts", "JButton", "setFont").
 calls("GUI", "updateFonts", "JButton", "setFont").
-method("GUI", "highlight", 7, 2, "Thomas.Roefer@dfki.de").
+method("GUI", "highlight", 7, 2, "simont@tzi.de").
 calls("GUI", "highlight", "AbstractButton", "setBackground").
 calls("GUI", "highlight", "AbstractButton", "setOpaque").
 calls("GUI", "highlight", "AbstractButton", "setBorderPainted").
@@ -1859,16 +1859,16 @@ method("GUI", "formatTime", 5, 1, "Thomas.Roefer@dfki.de").
 # GameController/src/controller/ui/KeyboardListener.java
 
 class("KeyboardListener").
-method("KeyboardListener", "dispatchKeyEvent", 15, 4, "Thomas.Roefer@dfki.de").
+method("KeyboardListener", "dispatchKeyEvent", 15, 4, "simont@tzi.de").
 calls("KeyboardListener", "dispatchKeyEvent", "KeyboardListener", "pressed").
-method("KeyboardListener", "pressed", 104, 12, "Thomas.Roefer@dfki.de").
+method("KeyboardListener", "pressed", 104, 12, "simont@tzi.de").
 calls("KeyboardListener", "pressed", "GCAction", "actionPerformed").
 
 # GameController/src/controller/net/SPLCoachMessageReceiver.java
 
 class("SPLCoachMessageReceiver").
-method("SPLCoachMessageReceiver", "getInstance", 9, 3, "Thomas.Roefer@dfki.de").
-method("SPLCoachMessageReceiver", "run", 16, 5, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessageReceiver", "getInstance", 9, 3, "seba@informatik.uni-bremen.de").
+method("SPLCoachMessageReceiver", "run", 16, 5, "seba@informatik.uni-bremen.de").
 calls("SPLCoachMessageReceiver", "run", "SPLCoachMessageReceiver", "isInterrupted").
 calls("SPLCoachMessageReceiver", "run", "DatagramSocket", "receive").
 calls("SPLCoachMessageReceiver", "run", "ByteBuffer", "rewind").
@@ -1882,22 +1882,22 @@ calls("SPLCoachMessageReceiver", "run", "DatagramSocket", "close").
 # GameController/src/controller/net/RobotWatcher.java
 
 class("RobotWatcher").
-method("RobotWatcher", "update", 27, 7, "Thomas.Roefer@dfki.de").
-method("RobotWatcher", "updateRobotOnlineStatus", 24, 8, "Thomas.Roefer@dfki.de").
-method("RobotWatcher", "updateCoach", 3, 1, "Thomas.Roefer@dfki.de").
+method("RobotWatcher", "update", 27, 7, "simont@tzi.de").
+method("RobotWatcher", "updateRobotOnlineStatus", 24, 8, "simont@tzi.de").
+method("RobotWatcher", "updateCoach", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/net/TrueDataSender.java
 
 class("TrueDataSender").
-method("TrueDataSender", "initialize", 7, 2, "Thomas.Roefer@dfki.de").
-method("TrueDataSender", "getInstance", 7, 2, "Thomas.Roefer@dfki.de").
-method("TrueDataSender", "putOnBlacklist", 9, 2, "Thomas.Roefer@dfki.de").
+method("TrueDataSender", "initialize", 7, 2, "fthielke@fb3.uni-bremen.de").
+method("TrueDataSender", "getInstance", 7, 2, "fthielke@fb3.uni-bremen.de").
+method("TrueDataSender", "putOnBlacklist", 9, 2, "fthielke@fb3.uni-bremen.de").
 calls("TrueDataSender", "putOnBlacklist", "Set", "add").
 calls("TrueDataSender", "putOnBlacklist", "Set", "contains").
 calls("TrueDataSender", "putOnBlacklist", "Set", "remove").
 calls("TrueDataSender", "putOnBlacklist", "Log", "error").
-method("TrueDataSender", "send", 5, 1, "Thomas.Roefer@dfki.de").
-method("TrueDataSender", "run", 30, 7, "Thomas.Roefer@dfki.de").
+method("TrueDataSender", "send", 5, 1, "fthielke@fb3.uni-bremen.de").
+method("TrueDataSender", "run", 30, 7, "fthielke@fb3.uni-bremen.de").
 calls("TrueDataSender", "run", "TrueDataRequestReceiver", "start").
 calls("TrueDataSender", "run", "TrueDataSender", "isInterrupted").
 calls("TrueDataSender", "run", "AdvancedData", "updateTimes").
@@ -1913,9 +1913,9 @@ calls("TrueDataSender", "run", "TrueDataRequestReceiver", "join").
 # GameController/src/controller/net/GameControlReturnDataReceiver.java
 
 class("GameControlReturnDataReceiver").
-method("GameControlReturnDataReceiver", "initialize", 7, 2, "Thomas.Roefer@dfki.de").
-method("GameControlReturnDataReceiver", "getInstance", 7, 2, "Thomas.Roefer@dfki.de").
-method("GameControlReturnDataReceiver", "run", 17, 5, "Thomas.Roefer@dfki.de").
+method("GameControlReturnDataReceiver", "initialize", 7, 2, "bhuman@dennisschuerholz.de").
+method("GameControlReturnDataReceiver", "getInstance", 7, 2, "seba@informatik.uni-bremen.de").
+method("GameControlReturnDataReceiver", "run", 17, 5, "seba@informatik.uni-bremen.de").
 calls("GameControlReturnDataReceiver", "run", "GameControlReturnDataReceiver", "isInterrupted").
 calls("GameControlReturnDataReceiver", "run", "DatagramSocket", "receive").
 calls("GameControlReturnDataReceiver", "run", "TrueDataSender", "getInstance").
@@ -1928,9 +1928,9 @@ calls("GameControlReturnDataReceiver", "run", "DatagramSocket", "close").
 # GameController/src/controller/net/Sender.java
 
 class("Sender").
-method("Sender", "initialize", 7, 2, "Thomas.Roefer@dfki.de").
-method("Sender", "getInstance", 7, 2, "Thomas.Roefer@dfki.de").
-method("Sender", "send", 35, 8, "Thomas.Roefer@dfki.de").
+method("Sender", "initialize", 7, 2, "simont@tzi.de").
+method("Sender", "getInstance", 7, 2, "simont@tzi.de").
+method("Sender", "send", 35, 8, "simont@tzi.de").
 calls("Sender", "send", "StringBuilder", "append").
 calls("Sender", "send", "StringBuilder", "append").
 calls("Sender", "send", "StringBuilder", "append").
@@ -1939,7 +1939,7 @@ calls("Sender", "send", "teamcomm.net.logging.Logger", "getInstance").
 calls("Sender", "send", "teamcomm.net.logging.Logger", "getInstance").
 calls("Sender", "send", "teamcomm.net.logging.Logger", "getInstance").
 calls("Sender", "send", "TrueDataSender", "getInstance").
-method("Sender", "run", 33, 8, "Thomas.Roefer@dfki.de").
+method("Sender", "run", 33, 8, "simont@tzi.de").
 calls("Sender", "run", "Sender", "isInterrupted").
 calls("Sender", "run", "AdvancedData", "updateTimes").
 calls("Sender", "run", "teamcomm.net.logging.Logger", "getInstance").
@@ -1956,16 +1956,16 @@ calls("Sender", "run", "DatagramSocket", "close").
 # GameController/src/controller/action/GCAction.java
 
 class("GCAction").
-method("GCAction", "actionPerformed", 3, 1, "Thomas.Roefer@dfki.de").
+method("GCAction", "actionPerformed", 3, 1, "simont@tzi.de").
 calls("GCAction", "actionPerformed", "EventHandler", "getInstance").
-method("GCAction", "perform", 1, 1, "Thomas.Roefer@dfki.de").
-method("GCAction", "performOn", 1, 1, "Thomas.Roefer@dfki.de").
-method("GCAction", "isLegal", 1, 1, "Thomas.Roefer@dfki.de").
+method("GCAction", "perform", 1, 1, "simont@tzi.de").
+method("GCAction", "performOn", 1, 1, "simont@tzi.de").
+method("GCAction", "isLegal", 1, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ActionBoard.java
 
 class("ActionBoard").
-method("ActionBoard", "init", 57, 7, "Thomas.Roefer@dfki.de").
+method("ActionBoard", "init", 57, 7, "simont@tzi.de").
 
 # GameController/src/controller/action/ActionType.java
 
@@ -1973,56 +1973,56 @@ method("ActionBoard", "init", 57, 7, "Thomas.Roefer@dfki.de").
 # GameController/src/controller/action/ui/DropBall.java
 
 class("DropBall").
-method("DropBall", "perform", 5, 1, "Thomas.Roefer@dfki.de").
+method("DropBall", "perform", 5, 1, "yuzong@tzi.de").
 calls("DropBall", "perform", "Log", "setNextMessage").
 calls("DropBall", "perform", "ActionBoard.ready", "perform").
-method("DropBall", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("DropBall", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/Testmode.java
 
 class("Testmode").
-method("Testmode", "perform", 4, 1, "Thomas.Roefer@dfki.de").
+method("Testmode", "perform", 4, 1, "simont@tzi.de").
 calls("Testmode", "perform", "Log", "toFile").
-method("Testmode", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Testmode", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/RefereeTimeout.java
 
 class("RefereeTimeout").
-method("RefereeTimeout", "perform", 25, 5, "Thomas.Roefer@dfki.de").
+method("RefereeTimeout", "perform", 25, 5, "seba@informatik.uni-bremen.de").
 calls("RefereeTimeout", "perform", "Log", "setNextMessage").
 calls("RefereeTimeout", "perform", "AdvancedData", "addTimeInCurrentState").
 calls("RefereeTimeout", "perform", "ActionBoard.initial", "perform").
 calls("RefereeTimeout", "perform", "Log", "setNextMessage").
 calls("RefereeTimeout", "perform", "ActionBoard.ready", "perform").
-method("RefereeTimeout", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("RefereeTimeout", "isLegal", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/action/ui/ClockPause.java
 
 class("ClockPause").
-method("ClockPause", "perform", 21, 4, "Thomas.Roefer@dfki.de").
+method("ClockPause", "perform", 21, 4, "simont@tzi.de").
 calls("ClockPause", "perform", "ActionBoard.clock", "isClockRunning").
 calls("ClockPause", "perform", "Log", "state").
 calls("ClockPause", "perform", "Log", "state").
-method("ClockPause", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("ClockPause", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/IncGameClock.java
 
 class("IncGameClock").
-method("IncGameClock", "perform", 4, 1, "Thomas.Roefer@dfki.de").
+method("IncGameClock", "perform", 4, 1, "seba@informatik.uni-bremen.de").
 calls("IncGameClock", "perform", "Log", "state").
-method("IncGameClock", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("IncGameClock", "isLegal", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/action/ui/Undo.java
 
 class("Undo").
-method("Undo", "perform", 8, 2, "Thomas.Roefer@dfki.de").
+method("Undo", "perform", 8, 2, "simont@tzi.de").
 calls("Undo", "perform", "Log", "toFile").
-method("Undo", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Undo", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/Goal.java
 
 class("Goal").
-method("Goal", "perform", 23, 4, "Thomas.Roefer@dfki.de").
+method("Goal", "perform", 23, 4, "simont@tzi.de").
 calls("Goal", "perform", "Log", "setNextMessage").
 calls("Goal", "perform", "ActionBoard.secondHalf", "perform").
 calls("Goal", "perform", "ActionBoard.finish", "perform").
@@ -2030,64 +2030,64 @@ calls("Goal", "perform", "ActionBoard.ready", "perform").
 calls("Goal", "perform", "Log", "setNextMessage").
 calls("Goal", "perform", "ActionBoard.finish", "perform").
 calls("Goal", "perform", "Log", "state").
-method("Goal", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Goal", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/KickOff.java
 
 class("KickOff").
-method("KickOff", "perform", 10, 3, "Thomas.Roefer@dfki.de").
+method("KickOff", "perform", 10, 3, "simont@tzi.de").
 calls("KickOff", "perform", "Log", "state").
-method("KickOff", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("KickOff", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/Quit.java
 
 class("Quit").
-method("Quit", "perform", 5, 2, "Thomas.Roefer@dfki.de").
+method("Quit", "perform", 5, 2, "simont@tzi.de").
 calls("Quit", "perform", "Clock", "getInstance").
-method("Quit", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Quit", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/TimeOut.java
 
 class("TimeOut").
-method("TimeOut", "perform", 27, 5, "Thomas.Roefer@dfki.de").
+method("TimeOut", "perform", 27, 5, "simont@tzi.de").
 calls("TimeOut", "perform", "Log", "setNextMessage").
 calls("TimeOut", "perform", "ActionBoard.initial", "perform").
 calls("TimeOut", "perform", "Log", "setNextMessage").
 calls("TimeOut", "perform", "ActionBoard.ready", "perform").
-method("TimeOut", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("TimeOut", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/Out.java
 
 class("Out").
-method("Out", "perform", 5, 1, "Thomas.Roefer@dfki.de").
+method("Out", "perform", 5, 1, "simont@tzi.de").
 calls("Out", "perform", "Log", "state").
-method("Out", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Out", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/CancelUndo.java
 
 class("CancelUndo").
-method("CancelUndo", "perform", 1, 1, "Thomas.Roefer@dfki.de").
-method("CancelUndo", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("CancelUndo", "perform", 1, 1, "simont@tzi.de").
+method("CancelUndo", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/ClockReset.java
 
 class("ClockReset").
-method("ClockReset", "perform", 7, 1, "Thomas.Roefer@dfki.de").
+method("ClockReset", "perform", 7, 1, "simont@tzi.de").
 calls("ClockReset", "perform", "Log", "state").
-method("ClockReset", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("ClockReset", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/GlobalStuck.java
 
 class("GlobalStuck").
-method("GlobalStuck", "perform", 6, 1, "Thomas.Roefer@dfki.de").
+method("GlobalStuck", "perform", 6, 1, "simont@tzi.de").
 calls("GlobalStuck", "perform", "Log", "setNextMessage").
 calls("GlobalStuck", "perform", "ActionBoard.ready", "perform").
-method("GlobalStuck", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("GlobalStuck", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/Robot.java
 
 class("Robot").
-method("Robot", "perform", 42, 9, "Thomas.Roefer@dfki.de").
+method("Robot", "perform", 42, 9, "simont@tzi.de").
 calls("Robot", "perform", "ArrayList", "isEmpty").
 calls("Robot", "perform", "ArrayList", "remove").
 calls("Robot", "perform", "Log", "state").
@@ -2095,77 +2095,77 @@ calls("Robot", "perform", "EventHandler", "getInstance").
 calls("Robot", "perform", "AdvancedData", "addToPenaltyQueue").
 calls("Robot", "perform", "Log", "state").
 calls("Robot", "perform", "Log", "state").
-method("Robot", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
-method("Robot", "isCoach", 3, 1, "Thomas.Roefer@dfki.de").
+method("Robot", "isLegal", 3, 1, "simont@tzi.de").
+method("Robot", "isCoach", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/action/net/SPLCoachMessageReceived.java
 
 class("SPLCoachMessageReceived").
-method("SPLCoachMessageReceived", "perform", 8, 2, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessageReceived", "perform", 8, 2, "seba@informatik.uni-bremen.de").
 calls("SPLCoachMessageReceived", "perform", "RobotWatcher", "updateCoach").
 calls("SPLCoachMessageReceived", "perform", "data.splCoachMessageQueue", "add").
-method("SPLCoachMessageReceived", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("SPLCoachMessageReceived", "isLegal", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/action/net/Manual.java
 
 class("Manual").
-method("Manual", "perform", 14, 4, "Thomas.Roefer@dfki.de").
+method("Manual", "perform", 14, 4, "simont@tzi.de").
 calls("Manual", "perform", "Log", "state").
 calls("Manual", "perform", "Log", "state").
-method("Manual", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Manual", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/clock/ClockTick.java
 
 class("ClockTick").
-method("ClockTick", "perform", 20, 6, "Thomas.Roefer@dfki.de").
+method("ClockTick", "perform", 20, 6, "simont@tzi.de").
 calls("ClockTick", "perform", "ActionBoard.set", "perform").
 calls("ClockTick", "perform", "ActionBoard.secondHalf", "perform").
 calls("ClockTick", "perform", "ActionBoard.penaltyShoot", "perform").
 calls("ClockTick", "perform", "AdvancedData", "updateCoachMessages").
 calls("ClockTick", "perform", "AdvancedData", "updatePenalties").
-method("ClockTick", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
-method("ClockTick", "isClockRunning", 4, 1, "Thomas.Roefer@dfki.de").
+method("ClockTick", "isLegal", 3, 1, "simont@tzi.de").
+method("ClockTick", "isClockRunning", 4, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/half/PenaltyShoot.java
 
 class("PenaltyShoot").
-method("PenaltyShoot", "perform", 13, 3, "Thomas.Roefer@dfki.de").
+method("PenaltyShoot", "perform", 13, 3, "simont@tzi.de").
 calls("PenaltyShoot", "perform", "AdvancedData", "resetPenalties").
 calls("PenaltyShoot", "perform", "Log", "state").
-method("PenaltyShoot", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("PenaltyShoot", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/half/SecondHalf.java
 
 class("SecondHalf").
-method("SecondHalf", "perform", 11, 2, "Thomas.Roefer@dfki.de").
+method("SecondHalf", "perform", 11, 2, "simont@tzi.de").
 calls("SecondHalf", "perform", "FirstHalf", "changeSide").
 calls("SecondHalf", "perform", "Log", "state").
-method("SecondHalf", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("SecondHalf", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/half/SecondHalfOvertime.java
 
 class("SecondHalfOvertime").
-method("SecondHalfOvertime", "perform", 10, 2, "Thomas.Roefer@dfki.de").
+method("SecondHalfOvertime", "perform", 10, 2, "yuzong@tzi.de").
 calls("SecondHalfOvertime", "perform", "FirstHalf", "changeSide").
 calls("SecondHalfOvertime", "perform", "Log", "state").
-method("SecondHalfOvertime", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("SecondHalfOvertime", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/half/FirstHalfOvertime.java
 
 class("FirstHalfOvertime").
-method("FirstHalfOvertime", "perform", 10, 2, "Thomas.Roefer@dfki.de").
+method("FirstHalfOvertime", "perform", 10, 2, "yuzong@tzi.de").
 calls("FirstHalfOvertime", "perform", "FirstHalf", "changeSide").
 calls("FirstHalfOvertime", "perform", "Log", "state").
-method("FirstHalfOvertime", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("FirstHalfOvertime", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/half/FirstHalf.java
 
 class("FirstHalf").
-method("FirstHalf", "perform", 11, 2, "Thomas.Roefer@dfki.de").
+method("FirstHalf", "perform", 11, 2, "simont@tzi.de").
 calls("FirstHalf", "perform", "FirstHalf", "changeSide").
 calls("FirstHalf", "perform", "Log", "state").
-method("FirstHalf", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
-method("FirstHalf", "changeSide", 28, 4, "Thomas.Roefer@dfki.de").
+method("FirstHalf", "isLegal", 3, 1, "simont@tzi.de").
+method("FirstHalf", "changeSide", 28, 4, "simont@tzi.de").
 calls("FirstHalf", "changeSide", "AdvancedData", "resetPenalties").
 
 # GameController/src/controller/action/ui/penalty/BallContact.java
@@ -2187,54 +2187,54 @@ method("MotionInSet", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
 # GameController/src/controller/action/ui/penalty/CoachMotion.java
 
 class("CoachMotion").
-method("CoachMotion", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("CoachMotion", "performOn", 6, 1, "seba@informatik.uni-bremen.de").
 calls("CoachMotion", "performOn", "Log", "state").
-method("CoachMotion", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("CoachMotion", "isLegal", 3, 1, "seba@informatik.uni-bremen.de").
 
 # GameController/src/controller/action/ui/penalty/Substitute.java
 
 class("Substitute").
-method("Substitute", "performOn", 9, 2, "Thomas.Roefer@dfki.de").
+method("Substitute", "performOn", 9, 2, "yuzong@tzi.de").
 calls("Substitute", "performOn", "AdvancedData", "addToPenaltyQueue").
 calls("Substitute", "performOn", "Log", "state").
-method("Substitute", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Substitute", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/BallManipulation.java
 
 class("BallManipulation").
-method("BallManipulation", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("BallManipulation", "performOn", 6, 1, "yuzong@tzi.de").
 calls("BallManipulation", "performOn", "BallManipulation", "handleRepeatedPenalty").
 calls("BallManipulation", "performOn", "Log", "state").
-method("BallManipulation", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("BallManipulation", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/PickUpHL.java
 
 class("PickUpHL").
-method("PickUpHL", "performOn", 8, 2, "Thomas.Roefer@dfki.de").
+method("PickUpHL", "performOn", 8, 2, "yuzong@tzi.de").
 calls("PickUpHL", "performOn", "PickUpHL", "handleRepeatedPenalty").
 calls("PickUpHL", "performOn", "Log", "state").
-method("PickUpHL", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("PickUpHL", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/Inactive.java
 
 class("Inactive").
-method("Inactive", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("Inactive", "performOn", 6, 1, "simont@tzi.de").
 calls("Inactive", "performOn", "Inactive", "handleRepeatedPenalty").
 calls("Inactive", "performOn", "Log", "state").
-method("Inactive", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Inactive", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/Pushing.java
 
 class("Pushing").
-method("Pushing", "performOn", 7, 1, "Thomas.Roefer@dfki.de").
+method("Pushing", "performOn", 7, 1, "simont@tzi.de").
 calls("Pushing", "performOn", "Pushing", "handleRepeatedPenalty").
 calls("Pushing", "performOn", "Log", "state").
-method("Pushing", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Pushing", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/ServiceHL.java
 
 class("ServiceHL").
-method("ServiceHL", "performOn", 12, 2, "Thomas.Roefer@dfki.de").
+method("ServiceHL", "performOn", 12, 2, "dseifert@fumanoids.de").
 calls("ServiceHL", "performOn", "ServiceHL", "handleRepeatedPenalty").
 calls("ServiceHL", "performOn", "Log", "state").
 calls("ServiceHL", "performOn", "ServiceHL", "handleRepeatedPenalty").
@@ -2243,34 +2243,34 @@ calls("ServiceHL", "performOn", "Log", "state").
 # GameController/src/controller/action/ui/penalty/Defender.java
 
 class("Defender").
-method("Defender", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("Defender", "performOn", 6, 1, "simont@tzi.de").
 calls("Defender", "performOn", "Defender", "handleRepeatedPenalty").
 calls("Defender", "performOn", "Log", "state").
-method("Defender", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Defender", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/Defense.java
 
 class("Defense").
-method("Defense", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("Defense", "performOn", 6, 1, "yuzong@tzi.de").
 calls("Defense", "performOn", "Defense", "handleRepeatedPenalty").
 calls("Defense", "performOn", "Log", "state").
-method("Defense", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Defense", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/Penalty.java
 
 class("Penalty").
 method("Penalty", "perform", 5, 2, "Thomas.Roefer@dfki.de").
-method("Penalty", "handleRepeatedPenalty", 7, 2, "Thomas.Roefer@dfki.de").
+method("Penalty", "handleRepeatedPenalty", 7, 2, "bhuman@dennisschuerholz.de").
 calls("Penalty", "handleRepeatedPenalty", "Penalty", "containsState").
-method("Penalty", "containsState", 10, 4, "Thomas.Roefer@dfki.de").
+method("Penalty", "containsState", 10, 4, "bhuman@dennisschuerholz.de").
 
 # GameController/src/controller/action/ui/penalty/Leaving.java
 
 class("Leaving").
-method("Leaving", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("Leaving", "performOn", 6, 1, "simont@tzi.de").
 calls("Leaving", "performOn", "Leaving", "handleRepeatedPenalty").
 calls("Leaving", "performOn", "Log", "state").
-method("Leaving", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Leaving", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/KickOffGoal.java
 
@@ -2283,63 +2283,63 @@ method("KickOffGoal", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
 # GameController/src/controller/action/ui/penalty/PickUp.java
 
 class("PickUp").
-method("PickUp", "performOn", 8, 2, "Thomas.Roefer@dfki.de").
+method("PickUp", "performOn", 8, 2, "simont@tzi.de").
 calls("PickUp", "performOn", "Log", "state").
-method("PickUp", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("PickUp", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/penalty/Attack.java
 
 class("Attack").
-method("Attack", "performOn", 6, 1, "Thomas.Roefer@dfki.de").
+method("Attack", "performOn", 6, 1, "yuzong@tzi.de").
 calls("Attack", "performOn", "Attack", "handleRepeatedPenalty").
 calls("Attack", "performOn", "Log", "state").
-method("Attack", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Attack", "isLegal", 3, 1, "yuzong@tzi.de").
 
 # GameController/src/controller/action/ui/state/Set.java
 
 class("Set").
-method("Set", "perform", 39, 12, "Thomas.Roefer@dfki.de").
+method("Set", "perform", 39, 12, "simont@tzi.de").
 calls("Set", "perform", "AdvancedData", "resetPenaltyTimes").
 calls("Set", "perform", "AdvancedData", "addTimeInCurrentState").
 calls("Set", "perform", "FirstHalf", "changeSide").
 calls("Set", "perform", "AdvancedData", "addToPenaltyQueue").
 calls("Set", "perform", "Log", "state").
-method("Set", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Set", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/state/Play.java
 
 class("Play").
-method("Play", "perform", 11, 3, "Thomas.Roefer@dfki.de").
+method("Play", "perform", 11, 3, "simont@tzi.de").
 calls("Play", "perform", "AdvancedData", "addTimeInCurrentState").
 calls("Play", "perform", "Log", "state").
-method("Play", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Play", "isLegal", 3, 1, "simont@tzi.de").
 method("Play", "bothTeamsHavePlayers", 9, 3, "Thomas.Roefer@dfki.de").
 
 # GameController/src/controller/action/ui/state/Initial.java
 
 class("Initial").
-method("Initial", "perform", 11, 3, "Thomas.Roefer@dfki.de").
+method("Initial", "perform", 11, 3, "simont@tzi.de").
 calls("Initial", "perform", "AdvancedData", "resetPenaltyTimes").
 calls("Initial", "perform", "Log", "state").
-method("Initial", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Initial", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/state/Finish.java
 
 class("Finish").
-method("Finish", "perform", 12, 3, "Thomas.Roefer@dfki.de").
+method("Finish", "perform", 12, 3, "simont@tzi.de").
 calls("Finish", "perform", "AdvancedData", "resetPenaltyTimes").
 calls("Finish", "perform", "AdvancedData", "addTimeInCurrentState").
 calls("Finish", "perform", "Log", "state").
-method("Finish", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Finish", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/controller/action/ui/state/Ready.java
 
 class("Ready").
-method("Ready", "perform", 14, 4, "Thomas.Roefer@dfki.de").
+method("Ready", "perform", 14, 4, "simont@tzi.de").
 calls("Ready", "perform", "AdvancedData", "resetPenaltyTimes").
 calls("Ready", "perform", "AdvancedData", "addTimeInCurrentState").
 calls("Ready", "perform", "Log", "state").
-method("Ready", "isLegal", 3, 1, "Thomas.Roefer@dfki.de").
+method("Ready", "isLegal", 3, 1, "simont@tzi.de").
 
 # GameController/src/eventrecorder/data/DataModel.java
 
@@ -2351,97 +2351,97 @@ class("DataModel").
 # GameController/src/eventrecorder/data/LogEntry.java
 
 class("LogEntry").
-method("LogEntry", "set", 5, 1, "Thomas.Roefer@dfki.de").
+method("LogEntry", "set", 5, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/EntryChangeTextAction.java
 
 class("EntryChangeTextAction").
-method("EntryChangeTextAction", "executeAction", 4, 1, "Thomas.Roefer@dfki.de").
-method("EntryChangeTextAction", "undoAction", 4, 1, "Thomas.Roefer@dfki.de").
+method("EntryChangeTextAction", "executeAction", 4, 1, "andre@phire.de").
+method("EntryChangeTextAction", "undoAction", 4, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/ActionHistory.java
 
 class("ActionHistory").
-method("ActionHistory", "execute", 11, 3, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "execute", 11, 3, "andre@phire.de").
 calls("ActionHistory", "execute", "Action", "executeAction").
 calls("ActionHistory", "execute", "Action", "shouldBeAddedToHistory").
 calls("ActionHistory", "execute", "CircularLiFoBuffer", "push").
 calls("ActionHistory", "execute", "ActionHistory", "notifyGUI").
 calls("ActionHistory", "execute", "System.out", "println").
-method("ActionHistory", "undo", 12, 3, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "undo", 12, 3, "andre@phire.de").
 calls("ActionHistory", "undo", "CircularLiFoBuffer", "isEmpty").
 calls("ActionHistory", "undo", "System.out", "println").
 calls("ActionHistory", "undo", "Action", "undoAction").
 calls("ActionHistory", "undo", "ActionHistory", "notifyGUI").
-method("ActionHistory", "redo", 12, 3, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "redo", 12, 3, "andre@phire.de").
 calls("ActionHistory", "redo", "CircularLiFoBuffer", "hasNext").
 calls("ActionHistory", "redo", "System.out", "println").
 calls("ActionHistory", "redo", "Action", "executeAction").
 calls("ActionHistory", "redo", "ActionHistory", "notifyGUI").
-method("ActionHistory", "notifyGUI", 3, 1, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "notifyGUI", 3, 1, "andre@phire.de").
 calls("ActionHistory", "notifyGUI", "EventRecorder.gui", "actionWasExecuted").
-method("ActionHistory", "undoPossible", 3, 1, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "undoPossible", 3, 1, "andre@phire.de").
 calls("ActionHistory", "undoPossible", "CircularLiFoBuffer", "isEmpty").
-method("ActionHistory", "redoPossible", 3, 1, "Thomas.Roefer@dfki.de").
+method("ActionHistory", "redoPossible", 3, 1, "andre@phire.de").
 calls("ActionHistory", "redoPossible", "CircularLiFoBuffer", "hasNext").
 
 # GameController/src/eventrecorder/action/EntryChangeTimeAction.java
 
 class("EntryChangeTimeAction").
-method("EntryChangeTimeAction", "executeAction", 5, 1, "Thomas.Roefer@dfki.de").
-method("EntryChangeTimeAction", "undoAction", 5, 1, "Thomas.Roefer@dfki.de").
+method("EntryChangeTimeAction", "executeAction", 5, 1, "andre@phire.de").
+method("EntryChangeTimeAction", "undoAction", 5, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/Action.java
 
 class("Action").
-method("Action", "executeAction", 1, 1, "Thomas.Roefer@dfki.de").
-method("Action", "undoAction", 1, 1, "Thomas.Roefer@dfki.de").
-method("Action", "getAffectedLogEntry", 3, 1, "Thomas.Roefer@dfki.de").
-method("Action", "shouldBeAddedToHistory", 3, 1, "Thomas.Roefer@dfki.de").
+method("Action", "executeAction", 1, 1, "andre@phire.de").
+method("Action", "undoAction", 1, 1, "andre@phire.de").
+method("Action", "getAffectedLogEntry", 3, 1, "andre@phire.de").
+method("Action", "shouldBeAddedToHistory", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/EntryDeleteAction.java
 
 class("EntryDeleteAction").
-method("EntryDeleteAction", "executeAction", 4, 1, "Thomas.Roefer@dfki.de").
-method("EntryDeleteAction", "undoAction", 4, 1, "Thomas.Roefer@dfki.de").
+method("EntryDeleteAction", "executeAction", 4, 1, "andre@phire.de").
+method("EntryDeleteAction", "undoAction", 4, 1, "andre@phire.de").
 calls("EntryDeleteAction", "undoAction", "EventRecorder.model.logEntries", "add").
 
 # GameController/src/eventrecorder/action/CircularLiFoBuffer.java
 
 class("CircularLiFoBuffer").
-method("CircularLiFoBuffer", "get", 3, 1, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "push", 11, 3, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "peek", 6, 2, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "pop", 13, 3, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "popForward", 12, 3, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "isEmpty", 3, 1, "Thomas.Roefer@dfki.de").
-method("CircularLiFoBuffer", "hasNext", 3, 1, "Thomas.Roefer@dfki.de").
+method("CircularLiFoBuffer", "get", 3, 1, "andre@phire.de").
+method("CircularLiFoBuffer", "push", 11, 3, "andre@phire.de").
+method("CircularLiFoBuffer", "peek", 6, 2, "andre@phire.de").
+method("CircularLiFoBuffer", "pop", 13, 3, "andre@phire.de").
+method("CircularLiFoBuffer", "popForward", 12, 3, "andre@phire.de").
+method("CircularLiFoBuffer", "isEmpty", 3, 1, "andre@phire.de").
+method("CircularLiFoBuffer", "hasNext", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/EntryTypeChangeAction.java
 
 class("EntryTypeChangeAction").
-method("EntryTypeChangeAction", "executeAction", 4, 1, "Thomas.Roefer@dfki.de").
-method("EntryTypeChangeAction", "undoAction", 4, 1, "Thomas.Roefer@dfki.de").
+method("EntryTypeChangeAction", "executeAction", 4, 1, "andre@phire.de").
+method("EntryTypeChangeAction", "undoAction", 4, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/EntryCreateAction.java
 
 class("EntryCreateAction").
-method("EntryCreateAction", "executeAction", 4, 1, "Thomas.Roefer@dfki.de").
+method("EntryCreateAction", "executeAction", 4, 1, "andre@phire.de").
 calls("EntryCreateAction", "executeAction", "EventRecorder.model.logEntries", "add").
-method("EntryCreateAction", "undoAction", 7, 2, "Thomas.Roefer@dfki.de").
+method("EntryCreateAction", "undoAction", 7, 2, "andre@phire.de").
 
 # GameController/src/eventrecorder/action/TitleChangeAction.java
 
 class("TitleChangeAction").
-method("TitleChangeAction", "executeAction", 5, 1, "Thomas.Roefer@dfki.de").
-method("TitleChangeAction", "undoAction", 5, 1, "Thomas.Roefer@dfki.de").
+method("TitleChangeAction", "executeAction", 5, 1, "andre@phire.de").
+method("TitleChangeAction", "undoAction", 5, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/gui/MainFrame.java
 
 class("MainFrame").
-method("MainFrame", "setupShortCuts", 5, 1, "Thomas.Roefer@dfki.de").
+method("MainFrame", "setupShortCuts", 5, 1, "andre@phire.de").
 calls("MainFrame", "setupShortCuts", "KeyboardFocusManager", "addKeyEventDispatcher").
-method("MainFrame", "updateTimeAndButtons", 25, 4, "Thomas.Roefer@dfki.de").
+method("MainFrame", "updateTimeAndButtons", 25, 4, "andre@phire.de").
 calls("MainFrame", "updateTimeAndButtons", "JLabel", "setText").
 calls("MainFrame", "updateTimeAndButtons", "JLabel", "revalidate").
 calls("MainFrame", "updateTimeAndButtons", "JLabel", "repaint").
@@ -2457,19 +2457,19 @@ calls("MainFrame", "updateTimeAndButtons", "JPanel", "add").
 calls("MainFrame", "updateTimeAndButtons", "JPanel", "setBackground").
 calls("MainFrame", "updateTimeAndButtons", "JPanel", "revalidate").
 calls("MainFrame", "updateTimeAndButtons", "JPanel", "repaint").
-method("MainFrame", "saveBeforeExit", 11, 3, "Thomas.Roefer@dfki.de").
+method("MainFrame", "saveBeforeExit", 11, 3, "andre@phire.de").
 calls("MainFrame", "saveBeforeExit", "MainFrame", "saveAs").
-method("MainFrame", "saveAs", 20, 4, "Thomas.Roefer@dfki.de").
+method("MainFrame", "saveAs", 20, 4, "andre@phire.de").
 calls("MainFrame", "saveAs", "JFileChooser", "setSelectedFile").
 calls("MainFrame", "saveAs", "JFileChooser", "showSaveDialog").
 calls("MainFrame", "saveAs", "BufferedWriter", "write").
 calls("MainFrame", "saveAs", "BufferedWriter", "close").
 calls("MainFrame", "saveAs", "Preferences", "put").
 calls("MainFrame", "saveAs", "JOptionPane", "showMessageDialog").
-method("MainFrame", "setUIFont", 9, 3, "Thomas.Roefer@dfki.de").
+method("MainFrame", "setUIFont", 9, 3, "andre@phire.de").
 calls("MainFrame", "setUIFont", "java", "hasMoreElements").
 calls("MainFrame", "setUIFont", "UIManager", "put").
-method("MainFrame", "actionWasExecuted", 19, 5, "Thomas.Roefer@dfki.de").
+method("MainFrame", "actionWasExecuted", 19, 5, "andre@phire.de").
 calls("MainFrame", "actionWasExecuted", "ImageButton", "setEnabled").
 calls("MainFrame", "actionWasExecuted", "ImageButton", "setEnabled").
 calls("MainFrame", "actionWasExecuted", "Action", "getClass").
@@ -2488,46 +2488,46 @@ class("MenuBar").
 # GameController/src/eventrecorder/gui/EntryPanel.java
 
 class("EntryPanel").
-method("EntryPanel", "getTimeField", 3, 1, "Thomas.Roefer@dfki.de").
-method("EntryPanel", "getTextField", 3, 1, "Thomas.Roefer@dfki.de").
+method("EntryPanel", "getTimeField", 3, 1, "andre@phire.de").
+method("EntryPanel", "getTextField", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/gui/TimeField.java
 
 class("TimeField").
-method("TimeField", "makeVisibleInScrollPane", 10, 1, "Thomas.Roefer@dfki.de").
+method("TimeField", "makeVisibleInScrollPane", 10, 1, "andre@phire.de").
 calls("TimeField", "makeVisibleInScrollPane", "LogEntryTable", "getParent").
 calls("TimeField", "makeVisibleInScrollPane", "LogEntryTable", "getParent").
 calls("TimeField", "makeVisibleInScrollPane", "JComponent", "scrollRectToVisible").
-method("TimeField", "executeChangeAction", 7, 2, "Thomas.Roefer@dfki.de").
+method("TimeField", "executeChangeAction", 7, 2, "andre@phire.de").
 calls("TimeField", "executeChangeAction", "EventRecorder.history", "execute").
-method("TimeField", "getLogEntry", 3, 1, "Thomas.Roefer@dfki.de").
+method("TimeField", "getLogEntry", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/gui/ImageToggleButton.java
 
 class("ImageToggleButton").
-method("ImageToggleButton", "setActivated", 5, 1, "Thomas.Roefer@dfki.de").
+method("ImageToggleButton", "setActivated", 5, 1, "andre@phire.de").
 calls("ImageToggleButton", "setActivated", "ImageToggleButton", "setSelected").
 calls("ImageToggleButton", "setActivated", "ImageToggleButton", "setIcon").
-method("ImageToggleButton", "isActivated", 3, 1, "Thomas.Roefer@dfki.de").
+method("ImageToggleButton", "isActivated", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/gui/ImageButton.java
 
 class("ImageButton").
-method("ImageButton", "setEnabled", 4, 1, "Thomas.Roefer@dfki.de").
+method("ImageButton", "setEnabled", 4, 1, "andre@phire.de").
 calls("ImageButton", "setEnabled", "ImageButton", "setIcon").
 
 # GameController/src/eventrecorder/gui/LogEntryTable.java
 
 class("LogEntryTable").
-method("LogEntryTable", "createLogEntryTable", 11, 2, "Thomas.Roefer@dfki.de").
+method("LogEntryTable", "createLogEntryTable", 11, 2, "andre@phire.de").
 calls("LogEntryTable", "createLogEntryTable", "LogEntryTable", "removeAll").
 calls("LogEntryTable", "createLogEntryTable", "EntryPanel", "getTimeField").
 calls("LogEntryTable", "createLogEntryTable", "EntryPanel", "getTextField").
 calls("LogEntryTable", "createLogEntryTable", "LogEntryTable", "add").
 calls("LogEntryTable", "createLogEntryTable", "LogEntryTable", "revalidate").
 calls("LogEntryTable", "createLogEntryTable", "LogEntryTable", "repaint").
-method("LogEntryTable", "getIdByLogEntry", 7, 3, "Thomas.Roefer@dfki.de").
-method("LogEntryTable", "entryActionWasExecuted", 62, 13, "Thomas.Roefer@dfki.de").
+method("LogEntryTable", "getIdByLogEntry", 7, 3, "andre@phire.de").
+method("LogEntryTable", "entryActionWasExecuted", 62, 13, "andre@phire.de").
 calls("LogEntryTable", "entryActionWasExecuted", "EntryPanel", "getTimeField").
 calls("LogEntryTable", "entryActionWasExecuted", "EntryPanel", "getTimeField").
 calls("LogEntryTable", "entryActionWasExecuted", "EntryPanel", "getTimeField").
@@ -2551,15 +2551,15 @@ calls("LogEntryTable", "entryActionWasExecuted", "LogEntryTable", "createLogEntr
 # GameController/src/eventrecorder/gui/TextField.java
 
 class("TextField").
-method("TextField", "executeChangeAction", 7, 2, "Thomas.Roefer@dfki.de").
+method("TextField", "executeChangeAction", 7, 2, "andre@phire.de").
 calls("TextField", "executeChangeAction", "EventRecorder.history", "execute").
-method("TextField", "makeVisibleInScrollPane", 10, 1, "Thomas.Roefer@dfki.de").
+method("TextField", "makeVisibleInScrollPane", 10, 1, "andre@phire.de").
 calls("TextField", "makeVisibleInScrollPane", "LogEntryTable", "getParent").
 calls("TextField", "makeVisibleInScrollPane", "LogEntryTable", "getParent").
 calls("TextField", "makeVisibleInScrollPane", "JComponent", "scrollRectToVisible").
-method("TextField", "getLogEntry", 3, 1, "Thomas.Roefer@dfki.de").
+method("TextField", "getLogEntry", 3, 1, "andre@phire.de").
 
 # GameController/src/eventrecorder/export/MarkDownExporter.java
 
 class("MarkDownExporter").
-method("MarkDownExporter", "toMarkDown", 19, 6, "Thomas.Roefer@dfki.de").
+method("MarkDownExporter", "toMarkDown", 19, 6, "andre@phire.de").
