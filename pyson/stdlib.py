@@ -353,6 +353,7 @@ def _wait(agent, term, intention):
     if not (event is None or pyson.is_string(event)):
         raise pyson.PysonError("expected event for .wait to be a string")
 
+    # Event.
     if event is not None:
         # Parse event.
         if not event.endswith("."):
@@ -365,12 +366,15 @@ def _wait(agent, term, intention):
 
         # Build term.
         event = ast_event.accept(pyson.runtime.BuildEventVisitor(log))
-        print(event)
 
-        # TODO: Support events
-        raise pyson.PysonError("waiting for events is not yet supported")
+    # Timeout.
+    if millis is None:
+        until = None
+    else:
+        until = agent.env.time() + millis / 1000
 
-    intention.waiter = pyson.runtime.Waiter(until=until)
+    # Create waiter.
+    intention.waiter = pyson.runtime.Waiter(event=event, until=until)
     yield
 
 

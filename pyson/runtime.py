@@ -316,7 +316,8 @@ class Event:
 
 
 class Waiter:
-    def __init__(self, until=None):
+    def __init__(self, event=None, until=None):
+        self.event = event
         self.until = until
 
     def poll(self, env):
@@ -377,6 +378,7 @@ class Agent:
         self.plans[(plan.trigger, plan.goal_type, plan.head.functor, len(plan.head.args))].append(plan)
 
     def call(self, trigger, goal_type, term, calling_intention, delayed=False):
+        # Modify beliefs.
         if goal_type == pyson.GoalType.belief:
             if trigger == pyson.Trigger.addition:
                 self.add_belief(term, calling_intention.scope)
@@ -385,15 +387,33 @@ class Agent:
                 if not found:
                     return True
 
+        # Freeze with caller scope.
         frozen = pyson.freeze(term, calling_intention.scope, {})
 
         if not isinstance(frozen, pyson.Literal):
             raise PysonError("expected literal")
 
+        # Wake up waiting intentions.
+        for intention_stack in self.intentions:
+            if not intention_stack:
+                continue
+            intention = intention_stack[-1]
+
+            if not intention.waiter or not intention.waiter.event:
+                continue
+            event = intention.waiter.event
+
+            if event.trigger != triger or event.goal_type != goal_type:
+                continue
+
+            if pyson.unifies_annotated(event.head, frozen):
+                intention.waiter = None
+
         applicable_plans = self.plans[(trigger, goal_type, frozen.functor, len(frozen.args))]
         choicepoint = object()
         intention = Intention()
 
+        # Find matching plan.
         for plan in applicable_plans:
             for _ in pyson.unify_annotated(plan.head, frozen, intention.scope, intention.stack):
                 for _ in plan.context.execute(self, intention):
