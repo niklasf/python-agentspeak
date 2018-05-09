@@ -347,8 +347,13 @@ def _wait(agent, term, intention):
             millis = None
             event = args[0]
 
-    until = millis is not None and agent.env.time() + millis / 1000
+    # Type checks.
+    if not (millis is None or pyson.is_number(millis)):
+        raise pyson.PysonError("expected timeout for .wait to be numeric")
+    if not (event is None or pyson.is_string(event)):
+        raise pyson.PysonError("expected event for .wait to be a string")
 
+    # TODO: Support events
     if event is not None:
         raise pyson.PysonError("waiting for events is not yet supported")
 
