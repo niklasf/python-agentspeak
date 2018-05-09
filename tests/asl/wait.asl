@@ -1,17 +1,14 @@
-!keep_waiting.
-!finish.
+!alpha.
+!beta.
 
-+!keep_waiting : done <-
-  .print("Done!").
++!alpha <-
+  .print("Waiting on beta");
+  .wait("+done(beta)", 500);
+  +done(alpha);
+  .print("Alpha done").
 
-+!keep_waiting <-
-  .random(R);
-  .print("Gonna wait", R, "secs");
-  .wait(R * 100);
-  !!keep_waiting.
-
-+!finish <-
-  .print("Gonna add done in 5 secs");
-  .wait(500);
-  +done;
-  .print("Added done").
++!beta <-
+  .print("Waiting on alpha");
+  .wait("+done(alpha)");
+  +done(beta);
+  .print("Beta done").
