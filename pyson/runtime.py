@@ -289,6 +289,13 @@ class Plan:
         return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head)
 
 
+class Waiter:
+    def __init__(self, until=None):
+        self.until = until
+
+    def poll(self, env):
+        return self.until is None or self.until < env.time()
+
 class Intention:
     def __init__(self):
         self.instr = None
@@ -301,7 +308,7 @@ class Intention:
         self.query_stack = collections.deque()
         self.choicepoint_stack = collections.deque()
 
-        self.wait_until = None
+        self.waiter = None
 
 
 class Agent:
@@ -314,6 +321,7 @@ class Agent:
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
 
         self.intentions = collections.deque()
+        self.waiters = collections.deque()
 
     def dump(self):
         LOGGER.info("Belief base")
@@ -431,6 +439,12 @@ class Agent:
 
         return False
 
+    def shortest_deadline(self):
+        try:
+            return min(intention[-1].waiter.until for intention in self.intentions if intention and intention[-1].waiter)
+        except ValueError:
+            return None
+
     def step(self):
         while self.intentions and not self.intentions[0]:
             self.intentions.popleft()
@@ -438,10 +452,10 @@ class Agent:
         for intention_stack in self.intentions:
             intention = intention_stack[-1]
 
-            # Wait until.
-            if intention.wait_until:
-                if intention.wait_until < self.env.time():
-                    intention.wait_until = None
+            # Suspended / waiting.
+            if intention.waiter is not None:
+                if intention.waiter.poll(self.env):
+                    intention.waiter = None
                 else:
                     continue
 
@@ -597,10 +611,14 @@ class Environment:
         while more_work:
             more_work = agent.step()
 
-            # Wait.
-            if not more_work and any(intention_stack[-1].wait_until for intention_stack in agent.intentions):
-                time.sleep(min(intention_stack[-1].wait_until for intention_stack in agent.intentions) - self.time())
-                more_work = True
+            if not more_work:
+                # Sleep until the next deadline.
+                wait_until = agent.shortest_deadline()
+                if wait_until:
+                    time.sleep(wait_until - self.time())
+                    more_work = True
+                else:
+                    more_work = False
 
     def run(self):
         maybe_more_work = True

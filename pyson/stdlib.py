@@ -335,7 +335,7 @@ def _time(agent, term, intention):
 @pyson.optimizer.all_bound
 def _wait(agent, term, intention):
     millis = pyson.grounded(term.args[0], intention.scope)
-    intention.wait_until = agent.env.time() + millis / 1000
+    intention.waiter = pyson.runtime.Waiter(until=agent.env.time() + millis / 1000)
     yield
 
 
