@@ -1,5 +1,6 @@
 !alpha.
 !beta.
+!gamma.
 
 +!alpha <-
   .print("Waiting on beta");
@@ -12,3 +13,7 @@
   .wait("+done(alpha)");
   +done(beta);
   .print("Beta done").
+
++!gamma <-
+  .wait("+done(X)");
+  .print("Someone is done").
