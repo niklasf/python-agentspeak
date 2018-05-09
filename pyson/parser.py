@@ -252,9 +252,7 @@ class AstPlan(AstNode):
             builder.append(str(annotation))
             builder.append("\n")
 
-        builder.append(self.trigger.value)
-        builder.append(self.goal_type.value)
-        builder.append(str(self.head))
+        builder.append(str(self.event))
 
         if self.context:
             builder.append(" : ")
