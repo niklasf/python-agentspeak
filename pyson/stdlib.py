@@ -31,6 +31,9 @@ from pyson import pyson_str, Literal
 import pyson.optimizer
 
 
+LOGGER = pyson.get_logger(__name__)
+
+
 # TODO:
 # * Plan Library Manipulation
 #   - .add_plan
@@ -358,7 +361,7 @@ def _wait(agent, term, intention):
         # Parse event.
         if not event.endswith("."):
             event += "."
-        log = pyson.Log(pyson.get_logger(__name__), 1)
+        log = pyson.Log(LOGGER, 1)
         tokens = pyson.lexer.TokenStream(pyson.StringSource("<.wait>", event), log)
         tok, ast_event = pyson.parser.parse_event(tokens.next(), tokens, log)
         if tok.lexeme != ".":

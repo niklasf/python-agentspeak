@@ -348,7 +348,6 @@ class Agent:
         self.plans = collections.defaultdict(lambda: []) if plans is None else plans
 
         self.intentions = collections.deque()
-        self.waiters = collections.deque()
 
     def dump(self):
         LOGGER.info("Belief base")
@@ -485,12 +484,14 @@ class Agent:
 
         return False
 
+    def waiters(self):
+        return (intention[-1].waiter for intention in self.intentions
+                if intention and intention[-1].waiter)
+
     def shortest_deadline(self):
-        try:
-            return min(intention[-1].waiter.until for intention in self.intentions
-                       if intention and intention[-1].waiter and intention[-1].waiter.until is not None)
-        except ValueError:
-            return None
+        deadlines = [waiter.until for waiter in self.waiters() if waiter.until is not None]
+        if deadlines:
+            return min(deadlines)
 
     def step(self):
         while self.intentions and not self.intentions[0]:
@@ -666,6 +667,12 @@ class Environment:
                     more_work = True
                 else:
                     more_work = False
+
+            if not more_work:
+                # Warn for deadlocks.
+                for waiter in agent.waiters():
+                    if waiter.event:
+                        LOGGER.warning("agent '%s' is waiting for %s, but it will not happen", agent.name, waiter.event)
 
     def run(self):
         maybe_more_work = True
