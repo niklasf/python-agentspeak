@@ -321,7 +321,7 @@ class Waiter:
         self.until = until
 
     def poll(self, env):
-        return self.until is None or self.until < env.time()
+        return self.until is not None and self.until < env.time()
 
 class Intention:
     def __init__(self):
@@ -403,7 +403,7 @@ class Agent:
                 continue
             event = intention.waiter.event
 
-            if event.trigger != triger or event.goal_type != goal_type:
+            if event.trigger != trigger or event.goal_type != goal_type:
                 continue
 
             if pyson.unifies_annotated(event.head, frozen):
@@ -487,7 +487,8 @@ class Agent:
 
     def shortest_deadline(self):
         try:
-            return min(intention[-1].waiter.until for intention in self.intentions if intention and intention[-1].waiter)
+            return min(intention[-1].waiter.until for intention in self.intentions
+                       if intention and intention[-1].waiter and intention[-1].waiter.until is not None)
         except ValueError:
             return None
 
