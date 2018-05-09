@@ -353,11 +353,18 @@ def _wait(agent, term, intention):
     if not (event is None or pyson.is_string(event)):
         raise pyson.PysonError("expected event for .wait to be a string")
 
-    # Parse event.
     if event is not None:
+        # Parse event.
+        if not event.endswith("."):
+            event += "."
         log = pyson.Log(pyson.get_logger(__name__), 1)
         tokens = pyson.lexer.TokenStream(pyson.StringSource("<.wait>", event), log)
-        event = pyson.parser.parse_event(tokens.next(), tokens, log)
+        tok, ast_event = pyson.parser.parse_event(tokens.next(), tokens, log)
+        if tok.lexeme != ".":
+            raise log.error("expected no further tokens after event for .wait, got: '%s'", tok.lexeme, loc=tok.loc)
+
+        # Build term.
+        event = ast_event.accept(pyson.runtime.BuildEventVisitor(log))
         print(event)
 
         # TODO: Support events
