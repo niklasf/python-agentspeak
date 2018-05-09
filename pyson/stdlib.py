@@ -332,10 +332,27 @@ def _time(agent, term, intention):
 
 
 @actions.add(".wait", 1)
+@actions.add(".wait", 2)
 @pyson.optimizer.all_bound
 def _wait(agent, term, intention):
-    millis = pyson.grounded(term.args[0], intention.scope)
-    intention.waiter = pyson.runtime.Waiter(until=agent.env.time() + millis / 1000)
+    # Handle optional arguments.
+    args = [pyson.grounded(arg, intention.scope) for arg in term.args]
+    if len(args) == 2:
+        event, millis = args
+    else:
+        if pyson.is_number(args[0]):
+            millis = args[0]
+            event = None
+        else:
+            millis = None
+            event = args[0]
+
+    until = millis is not None and agent.env.time() + millis / 1000
+
+    if event is not None:
+        raise pyson.PysonError("waiting for events is not yet supported")
+
+    intention.waiter = pyson.runtime.Waiter(until=until)
     yield
 
 
