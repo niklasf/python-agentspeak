@@ -882,7 +882,7 @@ def parse_event(tok, tokens, log):
     event = AstEvent()
 
     if not tok.token.trigger:
-        raise log.error("expected plan trigger, got '%'", tok.lexeme, loc=tok.loc)
+        raise log.error("expected plan trigger, got '%s'", tok.lexeme, loc=tok.loc)
     event.loc = tok.loc
     event.trigger = tok.token.trigger
     tok = next(tokens)
@@ -1329,9 +1329,13 @@ class ConstFoldVisitor(object):
         ast_body.formulas = [formula.accept(self) for formula in ast_body.formulas]
         return ast_body
 
+    def visit_event(self, ast_event):
+        ast_event.head = ast_event.head.accept(TermFoldVisitor(self.log))
+        return ast_event
+
     def visit_plan(self, ast_plan):
         ast_plan.annotations = [annotation.accept(TermFoldVisitor(self.log)) for annotation in ast_plan.annotations]
-        ast_plan.event.head = ast_plan.event.head.accept(TermFoldVisitor(self.log))
+        ast_plan.event = ast_plan.event.accept(self)
         ast_plan.context = ast_plan.context.accept(LogicalFoldVisitor(self.log)) if ast_plan.context else None
         ast_plan.body = ast_plan.body.accept(self) if ast_plan.body else None
         return ast_plan

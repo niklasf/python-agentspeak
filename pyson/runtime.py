@@ -148,6 +148,22 @@ class BuildQueryVisitor:
         return TermQuery(ast_variable.accept(BuildTermVisitor(self.variables)))
 
 
+class BuildEventVisitor(BuildTermVisitor):
+    def __init__(self, log):
+        super(BuildEventVisitor, self).__init__({})
+        self.log = log
+
+    def visit_event(self, ast_event):
+        ast_event = ast_event.accept(pyson.parser.ConstFoldVisitor(self.log))
+        return Event(ast_event.trigger, ast_event.goal_type, ast_event.head.accept(self))
+
+    def visit_unary_op(self, op):
+        raise self.log.error("event is supposed to be unifiable, but contains non-const expression", loc=op.loc)
+
+    def visit_binary_op(self, op):
+        raise self.log.error("event is supposed to be unifiable, but contains non-const expression", loc=op.loc)
+
+
 class TrueQuery:
     def execute(self, agent, intention):
         yield
@@ -286,6 +302,16 @@ class Plan:
         self.body = body
 
     def name(self):
+        return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head)
+
+
+class Event:
+    def __init__(self, trigger, goal_type, head):
+        self.trigger = trigger
+        self.goal_type = goal_type
+        self.head = head
+
+    def __str__(self):
         return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head)
 
 
