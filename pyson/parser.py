@@ -63,6 +63,9 @@ class AstBaseVisitor(object):
     def visit_plan(self, ast_plan):
         pass
 
+    def visit_event(self, ast_event):
+        pass
+
     def visit_body(self, ast_body):
         pass
 
@@ -231,9 +234,7 @@ class AstPlan(AstNode):
     def __init__(self):
         super(AstPlan, self).__init__()
         self.annotations = []
-        self.trigger = None
-        self.goal_type = None
-        self.head = None
+        self.event = None
         self.context = None
         self.body = None
 
@@ -263,6 +264,24 @@ class AstPlan(AstNode):
             builder.append(" <-\n")
             builder.append(pyson.util.indent(str(self.body)))
 
+        return "".join(builder)
+
+
+class AstEvent(AstNode):
+    def __init__(self):
+        super(AstEvent, self).__init__()
+        self.trigger = None
+        self.goal_type = None
+        self.head = None
+
+    def accept(self, visitor):
+        return visitor.visit_event(self)
+
+    def __str__(self):
+        builder = []
+        builder.append(self.trigger.value)
+        builder.append(self.goal_type.value)
+        builder.append(str(self.head))
         return "".join(builder)
 
 
@@ -859,6 +878,25 @@ def parse_plan_body(tok, tokens, log):
     return tok, body
 
 
+def parse_event(tok, tokens, log):
+    event = AstEvent()
+
+    if not tok.token.trigger:
+        raise log.error("expected plan trigger, got '%'", tok.lexeme, loc=tok.loc)
+    event.loc = tok.loc
+    event.trigger = tok.token.trigger
+    tok = next(tokens)
+
+    if tok.token.goal_type:
+        event.goal_type = tok.token.goal_type
+        tok = next(tokens)
+    else:
+        event.goal_type = GoalType.belief
+
+    tok, event.head = parse_literal(tok, tokens, log)
+    return tok, event
+
+
 def parse_plan(tok, tokens, log):
     plan = AstPlan()
 
@@ -867,19 +905,9 @@ def parse_plan(tok, tokens, log):
         tok, annotation = parse_literal(tok, tokens, log)
         plan.annotations.append(annotation)
 
-    if not tok.token.trigger:
-        raise log.error("expected plan trigger, got '%s'", tok.lexeme, loc=tok.loc)
-    plan.trigger = tok.token.trigger
-    tok = next(tokens)
-
-    if tok.token.goal_type:
-        plan.goal_type = tok.token.goal_type
-        tok = next(tokens)
-    else:
-        plan.goal_type = GoalType.belief
-
-    plan.loc = tok.loc
-    tok, plan.head = parse_literal(tok, tokens, log)
+    tok, event = parse_event(tok, tokens, log)
+    plan.event = event
+    plan.loc = event.loc
 
     if tok.lexeme == ":":
         tok = next(tokens)
@@ -1303,7 +1331,7 @@ class ConstFoldVisitor(object):
 
     def visit_plan(self, ast_plan):
         ast_plan.annotations = [annotation.accept(TermFoldVisitor(self.log)) for annotation in ast_plan.annotations]
-        ast_plan.head = ast_plan.head.accept(TermFoldVisitor(self.log))
+        ast_plan.event.head = ast_plan.event.head.accept(TermFoldVisitor(self.log))
         ast_plan.context = ast_plan.context.accept(LogicalFoldVisitor(self.log)) if ast_plan.context else None
         ast_plan.body = ast_plan.body.accept(self) if ast_plan.body else None
         return ast_plan
@@ -1366,13 +1394,13 @@ def validate(ast_agent, log):
             log.error("rule head is supposed to be unifiable, but contains non-const expression", loc=op.loc, extra_locs=[rule.loc])
 
     for plan in ast_agent.plans:
-        for op in plan.head.accept(FindOpVisitor()):
+        for op in plan.event.head.accept(FindOpVisitor()):
             log.error("plan head is supposed to be unifiable, but contains non-const expression", loc=op.loc, extra_locs=[plan.loc])
 
         for annotation in plan.annotations:
             log.warning("plan annotations are ignored as of yet", loc=annotation.loc, extra_locs=[plan.loc])
 
-        if plan.goal_type != GoalType.belief and plan.trigger == Trigger.removal:
+        if plan.event.goal_type != GoalType.belief and plan.event.trigger == Trigger.removal:
             log.warning("recovery plans are ignored as of yet", loc=plan.loc)
 
     return ast_agent

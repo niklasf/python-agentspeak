@@ -531,7 +531,7 @@ class Environment:
         for ast_plan in ast_agent.plans:
             variables = {}
 
-            head = ast_plan.head.accept(BuildTermVisitor(variables))
+            head = ast_plan.event.head.accept(BuildTermVisitor(variables))
 
             if ast_plan.context:
                 context = ast_plan.context.accept(BuildQueryVisitor(variables, actions, log))
@@ -543,7 +543,7 @@ class Environment:
             if ast_plan.body:
                 ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
 
-            plan = Plan(ast_plan.trigger, ast_plan.goal_type, head, context, body)
+            plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body)
             agent.add_plan(plan)
 
         # Add beliefs to agent prototype.
