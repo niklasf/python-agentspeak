@@ -668,12 +668,6 @@ class Environment:
                 else:
                     more_work = False
 
-            if not more_work:
-                # Warn for deadlocks.
-                for waiter in agent.waiters():
-                    if waiter.event:
-                        LOGGER.warning("agent '%s' is waiting for %s, but it will not happen", agent.name, waiter.event)
-
     def run(self):
         maybe_more_work = True
         while maybe_more_work:
