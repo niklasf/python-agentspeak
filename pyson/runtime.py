@@ -676,7 +676,7 @@ class Environment:
 
             if not maybe_more_work:
                 deadlines = (agent.shortest_deadline() for agent in self.agents.values())
-                deadlines = filter(lambda d: d is not None, deadlines)
+                deadlines = [deadline for deadline in deadlines if deadline is not None]
                 if deadlines:
                     time.sleep(min(deadlines) - self.time())
                     maybe_more_work = True
