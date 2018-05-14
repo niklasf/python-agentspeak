@@ -665,8 +665,6 @@ class Environment:
                 if wait_until:
                     time.sleep(wait_until - self.time())
                     more_work = True
-                else:
-                    more_work = False
 
     def run(self):
         maybe_more_work = True
@@ -674,6 +672,13 @@ class Environment:
             maybe_more_work = False
             for agent in self.agents.values():
                 if agent.step():
+                    maybe_more_work = True
+
+            if not maybe_more_work:
+                deadlines = (agent.shortest_deadline() for agent in self.agents.values())
+                deadlines = filter(lambda d: d is not None, deadlines)
+                if deadlines:
+                    time.sleep(min(deadlines) - self.time())
                     maybe_more_work = True
 
     def shutdown(self):
