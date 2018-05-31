@@ -132,6 +132,22 @@ class Visitor:
             raise RuntimeError("unknown stmt %s" % stmt)
 
     def walk_expression(self, klass, method, expression, scope):
+        if isinstance(expression, javalang.tree.TernaryExpression):
+            self.walk_expression(klass, method, expression.condition, scope)
+            self.walk_expression(klass, method, expression.if_true, scope)
+            self.walk_expression(klass, method, expression.if_false, scope)
+        elif isinstance(expression, javalang.tree.Assignment):
+            self.walk_expression(klass, method, expression.expressionl, scope)
+            self.walk_expression(klass, method, expression.value, scope)
+        elif isinstance(expression, javalang.tree.BinaryOperation):
+            self.walk_expression(klass, method, expression.operandl, scope)
+            self.walk_expression(klass, method, expression.operandr, scope)
+        elif isinstance(expression, javalang.tree.Cast):
+            self.walk_expression(klass, method, expression.expression, scope)
+        elif isinstance(expression, javalang.tree.Invocation):
+            for argument in expression.arguments:
+                self.walk_expression(klass, method, argument, scope)
+
         if isinstance(expression, javalang.tree.MethodInvocation):
             if not expression.qualifier:
                 qualifier = klass.name
@@ -141,9 +157,18 @@ class Visitor:
                 qualifier = expression.qualifier
 
             self.visit_calls(klass, method, qualifier, expression.member)
+        elif isinstance(expression, javalang.tree.ExplicitConstructorInvocation):
+            self.visit_calls(klass, method, klass.name, klass.name)
         elif isinstance(expression, javalang.tree.SuperMethodInvocation):
             parent = klass.extends.name if klass.extends else "Object"
+            if parent[0].islower():
+                return
             self.visit_calls(klass, method, parent, expression.member)
+        elif isinstance(expression, javalang.tree.SuperConstructorInvocation):
+            parent = klass.extends.name if klass.extends else "Object"
+            if parent[0].islower():
+                return
+            self.visit_calls(klass, method, parent, parent)
 
 
 def loc(node):
