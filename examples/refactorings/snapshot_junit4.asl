@@ -531,6 +531,7 @@ calls("BlockJUnit4ClassRunner", "getChildren", "BlockJUnit4ClassRunner", "comput
 method("BlockJUnit4ClassRunner", "computeTestMethods", 3, 1, "kbeck").
 calls("BlockJUnit4ClassRunner", "computeTestMethods", "BlockJUnit4ClassRunner", "getTestClass").
 method("BlockJUnit4ClassRunner", "collectInitializationErrors", 9, 1, "kbeck").
+calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "ParentRunner", "collectInitializationErrors").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validatePublicConstructor").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateNoNonStaticInnerClass").
 calls("BlockJUnit4ClassRunner", "collectInitializationErrors", "BlockJUnit4ClassRunner", "validateConstructor").
@@ -1925,6 +1926,7 @@ class("Theories").
 method("Theories", "Theories", 3, 0, "dsaff").
 method("Theories", "Theories", 3, 0, "dsaff").
 method("Theories", "collectInitializationErrors", 5, 1, "dsaff").
+calls("Theories", "collectInitializationErrors", "BlockJUnit4ClassRunner", "collectInitializationErrors").
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointFields").
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointMethods").
 method("Theories", "validateDataPointFields", 13, 5, "dsaff").
@@ -2122,6 +2124,7 @@ method("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", 6, 2, "mai
 calls("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", "BlockJUnit4ClassRunnerWithParameters", "validateOnlyOneConstructor").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateConstructor", "BlockJUnit4ClassRunnerWithParameters", "validateZeroArgConstructor").
 method("BlockJUnit4ClassRunnerWithParameters", "validateFields", 23, 7, "mail@stefan-birkner.de").
+calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "BlockJUnit4ClassRunner", "validateFields").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
 calls("BlockJUnit4ClassRunnerWithParameters", "validateFields", "List", "add").
@@ -2513,6 +2516,7 @@ method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
 method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
 method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
 method("ActiveTestSuite", "run", 5, 1, "dsaff").
+calls("ActiveTestSuite", "run", "TestSuite", "run").
 calls("ActiveTestSuite", "run", "ActiveTestSuite", "waitUntilFinished").
 method("ActiveTestSuite", "runTest", 4, 1, "dsaff").
 calls("ActiveTestSuite", "runTest", "Thread", "start").
@@ -2542,6 +2546,7 @@ method("RepeatedTest", "RepeatedTest", 7, 0, "dsaff").
 method("RepeatedTest", "countTestCases", 3, 1, "dsaff").
 method("RepeatedTest", "run", 7, 3, "dsaff").
 calls("RepeatedTest", "run", "TestResult", "shouldStop").
+calls("RepeatedTest", "run", "TestDecorator", "run").
 method("RepeatedTest", "toString", 3, 1, "dsaff").
 
 # junit4/src/main/java/junit/runner/Version.java
@@ -2680,6 +2685,7 @@ method("TestSuite", "tests", 3, 1, "dsaff").
 calls("TestSuite", "tests", "Vector", "elements").
 method("TestSuite", "toString", 6, 2, "dsaff").
 calls("TestSuite", "toString", "TestSuite", "getName").
+calls("TestSuite", "toString", "Object", "toString").
 method("TestSuite", "addTestMethod", 14, 4, "dsaff").
 calls("TestSuite", "addTestMethod", "List", "contains").
 calls("TestSuite", "addTestMethod", "TestSuite", "isPublicTestMethod").

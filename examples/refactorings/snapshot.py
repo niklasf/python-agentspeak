@@ -141,6 +141,9 @@ class Visitor:
                 qualifier = expression.qualifier
 
             self.visit_calls(klass, method, qualifier, expression.member)
+        elif isinstance(expression, javalang.tree.SuperMethodInvocation):
+            parent = klass.extends.name if klass.extends else "Object"
+            self.visit_calls(klass, method, parent, expression.member)
 
 
 def loc(node):
@@ -254,8 +257,9 @@ if __name__ == "__main__":
                 try:
                     parsed = javalang.parse.parse(contents)
                     visitor.walk_compilation_unit(parsed, commit.author.email)
-                except javalang.parser.JavaSyntaxError:
-                    print("java syntax error:", commit.hexsha, changed, file=sys.stderr)
+                except javalang.parser.JavaSyntaxError as err:
+                    short_sha = repo.git.rev_parse("--short", commit.hexsha)
+                    print("java syntax error: %s %s (%s)" % (short_sha, changed, err), file=sys.stderr)
 
     visitor.final_pass = True
 
