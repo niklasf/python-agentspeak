@@ -8,6 +8,10 @@
 # junit4/src/main/java/org/junit/AssumptionViolatedException.java
 
 class("AssumptionViolatedException").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
 
 # junit4/src/main/java/org/junit/After.java
 
@@ -24,6 +28,7 @@ class("AssumptionViolatedException").
 # junit4/src/main/java/org/junit/ComparisonFailure.java
 
 class("ComparisonFailure").
+method("ComparisonFailure", "ComparisonFailure", 5, 0, "dsaff").
 method("ComparisonFailure", "getMessage", 3, 1, "dsaff").
 method("ComparisonFailure", "getActual", 3, 1, "dsaff").
 method("ComparisonFailure", "getExpected", 3, 1, "dsaff").
@@ -31,6 +36,7 @@ method("ComparisonFailure", "getExpected", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/TestCouldNotBeSkippedException.java
 
 class("TestCouldNotBeSkippedException").
+method("TestCouldNotBeSkippedException", "TestCouldNotBeSkippedException", 3, 0, "kcooney@google.com").
 
 # junit4/src/main/java/org/junit/AfterClass.java
 
@@ -41,6 +47,7 @@ class("TestCouldNotBeSkippedException").
 # junit4/src/main/java/org/junit/Assert.java
 
 class("Assert").
+method("Assert", "Assert", 1, 0, "dsaff").
 method("Assert", "assertTrue", 5, 2, "dsaff").
 calls("Assert", "assertTrue", "Assert", "fail").
 method("Assert", "assertTrue", 3, 1, "dsaff").
@@ -184,6 +191,7 @@ calls("Assert", "expectThrows", "AssertionError", "initCause").
 # junit4/src/main/java/org/junit/Assume.java
 
 class("Assume").
+method("Assume", "Assume", 1, 0, "charlie@yandex-team.ru").
 method("Assume", "assumeTrue", 3, 1, "dsaff").
 calls("Assume", "assumeTrue", "Assume", "assumeThat").
 method("Assume", "assumeFalse", 3, 1, "matthew@farwell.co.uk").
@@ -222,6 +230,13 @@ method("RealSystem", "out", 3, 1, "kbeck").
 # junit4/src/main/java/org/junit/internal/AssumptionViolatedException.java
 
 class("AssumptionViolatedException").
+method("AssumptionViolatedException", "AssumptionViolatedException", 9, 0, "kbeck").
+calls("AssumptionViolatedException", "AssumptionViolatedException", "AssumptionViolatedException", "initCause").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 3, 0, "kbeck").
+method("AssumptionViolatedException", "AssumptionViolatedException", 4, 0, "kbeck").
+calls("AssumptionViolatedException", "AssumptionViolatedException", "AssumptionViolatedException", "initCause").
 method("AssumptionViolatedException", "getMessage", 3, 1, "kbeck").
 calls("AssumptionViolatedException", "getMessage", "StringDescription", "asString").
 method("AssumptionViolatedException", "describeTo", 16, 5, "kbeck").
@@ -235,12 +250,14 @@ calls("AssumptionViolatedException", "describeTo", "Description", "appendDescrip
 # junit4/src/main/java/org/junit/internal/Checks.java
 
 class("Checks").
+method("Checks", "Checks", 1, 0, "kcooney@google.com").
 method("Checks", "notNull", 6, 2, "kcooney@google.com").
 method("Checks", "notNull", 6, 2, "kcooney@google.com").
 
 # junit4/src/main/java/org/junit/internal/Classes.java
 
 class("Classes").
+method("Classes", "Classes", 1, 0, "charlie@yandex-team.ru").
 method("Classes", "getClass", 3, 1, "noel.yap+github.com@gmail.com").
 calls("Classes", "getClass", "Classes", "getClass").
 method("Classes", "getClass", 4, 1, "noel.yap+github.com@gmail.com").
@@ -249,6 +266,7 @@ calls("Classes", "getClass", "Class", "forName").
 # junit4/src/main/java/org/junit/internal/Throwables.java
 
 class("Throwables").
+method("Throwables", "Throwables", 1, 0, "kcooney@google.com").
 method("Throwables", "rethrowAsException", 4, 1, "kcooney@google.com").
 calls("Throwables", "rethrowAsException", "Throwables", "Throwables").
 method("Throwables", "rethrow", 3, 1, "kcooney@google.com").
@@ -287,6 +305,8 @@ calls("Throwables", "isMatchingMethod", "String", "startsWith").
 # junit4/src/main/java/org/junit/internal/InexactComparisonCriteria.java
 
 class("InexactComparisonCriteria").
+method("InexactComparisonCriteria", "InexactComparisonCriteria", 3, 0, "dsaff").
+method("InexactComparisonCriteria", "InexactComparisonCriteria", 3, 0, "dsaff").
 method("InexactComparisonCriteria", "assertElementsEqual", 7, 2, "saff@dhcp-172-31-197-71.cam.corp.google.com").
 calls("InexactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals").
 calls("InexactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals").
@@ -322,6 +342,7 @@ calls("ExactComparisonCriteria", "assertElementsEqual", "Assert", "assertEquals"
 # junit4/src/main/java/org/junit/internal/MethodSorter.java
 
 class("MethodSorter").
+method("MethodSorter", "MethodSorter", 1, 0, "jesse.glick@oracle.com").
 method("MethodSorter", "getDeclaredMethods", 8, 2, "jesse.glick@oracle.com").
 calls("MethodSorter", "getDeclaredMethods", "Arrays", "sort").
 method("MethodSorter", "getSorter", 6, 2, "matthew@farwell.co.uk").
@@ -330,6 +351,9 @@ calls("MethodSorter", "getSorter", "FixMethodOrder", "value").
 # junit4/src/main/java/org/junit/internal/ArrayComparisonFailure.java
 
 class("ArrayComparisonFailure").
+method("ArrayComparisonFailure", "ArrayComparisonFailure", 6, 0, "dsaff").
+calls("ArrayComparisonFailure", "ArrayComparisonFailure", "ArrayComparisonFailure", "initCause").
+calls("ArrayComparisonFailure", "ArrayComparisonFailure", "ArrayComparisonFailure", "addDimension").
 method("ArrayComparisonFailure", "addDimension", 3, 1, "dsaff").
 calls("ArrayComparisonFailure", "addDimension", "List", "add").
 method("ArrayComparisonFailure", "getCause", 3, 1, "aishahalim@gmail.com").
@@ -348,6 +372,8 @@ calls("ArrayComparisonFailure", "toString", "ArrayComparisonFailure", "getMessag
 # junit4/src/main/java/org/junit/internal/TextListener.java
 
 class("TextListener").
+method("TextListener", "TextListener", 3, 0, "dsaff").
+method("TextListener", "TextListener", 3, 0, "dsaff").
 method("TextListener", "testRunFinished", 5, 1, "dsaff").
 calls("TextListener", "testRunFinished", "TextListener", "printHeader").
 calls("TextListener", "testRunFinished", "TextListener", "printFailures").
@@ -385,6 +411,7 @@ calls("TextListener", "elapsedTimeAsString", "NumberFormat", "getInstance").
 # junit4/src/main/java/org/junit/experimental/ParallelComputer.java
 
 class("ParallelComputer").
+method("ParallelComputer", "ParallelComputer", 4, 0, "saff@redredrobot.home").
 method("ParallelComputer", "classes", 3, 1, "saff@redredrobot.home").
 method("ParallelComputer", "methods", 3, 1, "saff@redredrobot.home").
 method("ParallelComputer", "parallelize", 6, 2, "saff@dhcp-172-31-197-71.cam.corp.google.com").
@@ -394,14 +421,20 @@ method("ParallelComputer", "getRunner", 4, 1, "saff@redredrobot.home").
 # junit4/src/main/java/org/junit/runners/JUnit4.java
 
 class("JUnit4").
+method("JUnit4", "JUnit4", 3, 0, "dsaff").
 
 # junit4/src/main/java/org/junit/runners/AllTests.java
 
 class("AllTests").
+method("AllTests", "AllTests", 3, 0, "dsaff").
 
 # junit4/src/main/java/org/junit/runners/ParentRunner.java
 
 class("ParentRunner").
+method("ParentRunner", "ParentRunner", 4, 0, "dsaff").
+calls("ParentRunner", "ParentRunner", "ParentRunner", "validate").
+method("ParentRunner", "ParentRunner", 4, 0, "dsaff").
+calls("ParentRunner", "ParentRunner", "ParentRunner", "validate").
 method("ParentRunner", "createTestClass", 3, 1, "craig@motlin.com").
 method("ParentRunner", "getChildren", 1, 1, "dsaff").
 method("ParentRunner", "describeChild", 1, 1, "dsaff").
@@ -484,6 +517,8 @@ method("ParentRunner", "setScheduler", 3, 1, "saff@redredrobot.home").
 # junit4/src/main/java/org/junit/runners/BlockJUnit4ClassRunner.java
 
 class("BlockJUnit4ClassRunner").
+method("BlockJUnit4ClassRunner", "BlockJUnit4ClassRunner", 3, 0, "kbeck").
+method("BlockJUnit4ClassRunner", "BlockJUnit4ClassRunner", 3, 0, "kbeck").
 method("BlockJUnit4ClassRunner", "runChild", 13, 3, "kbeck").
 calls("BlockJUnit4ClassRunner", "runChild", "BlockJUnit4ClassRunner", "isIgnored").
 calls("BlockJUnit4ClassRunner", "runChild", "RunNotifier", "fireTestIgnored").
@@ -558,6 +593,9 @@ calls("BlockJUnit4ClassRunner", "getTimeout", "Test", "timeout").
 # junit4/src/main/java/org/junit/runners/Parameterized.java
 
 class("Parameterized").
+method("Parameterized", "Parameterized", 3, 0, "dsaff").
+method("Parameterized", "Parameterized", 4, 0, "dsaff").
+calls("Parameterized", "Parameterized", "Parameterized", "validateBeforeParamAndAfterParamMethods").
 method("Parameterized", "validateBeforeParamAndAfterParamMethods", 8, 2, "panchenko@users.noreply.github.com").
 calls("Parameterized", "validateBeforeParamAndAfterParamMethods", "Parameterized", "validatePublicStaticVoidMethods").
 calls("Parameterized", "validateBeforeParamAndAfterParamMethods", "Parameterized", "validatePublicStaticVoidMethods").
@@ -569,6 +607,11 @@ calls("Parameterized", "validatePublicStaticVoidMethods", "List", "add").
 # junit4/src/main/java/org/junit/runners/Suite.java
 
 class("Suite").
+method("Suite", "Suite", 3, 0, "dsaff").
+method("Suite", "Suite", 3, 0, "dsaff").
+method("Suite", "Suite", 3, 0, "dsaff").
+method("Suite", "Suite", 3, 0, "dsaff").
+method("Suite", "Suite", 4, 0, "dsaff").
 method("Suite", "emptySuite", 6, 2, "saff@redredrobot.local").
 method("Suite", "getAnnotatedClasses", 7, 2, "dsaff").
 calls("Suite", "getAnnotatedClasses", "SuiteClasses", "value").
@@ -584,6 +627,7 @@ calls("Suite", "runChild", "Runner", "run").
 # junit4/src/main/java/org/junit/rules/ExpectedException.java
 
 class("ExpectedException").
+method("ExpectedException", "ExpectedException", 1, 0, "dsaff").
 method("ExpectedException", "none", 3, 1, "saff@redredrobot.home").
 method("ExpectedException", "handleAssertionErrors", 3, 1, "mail@stefan-birkner.de").
 method("ExpectedException", "handleAssumptionViolatedExceptions", 3, 1, "mail@stefan-birkner.de").
@@ -612,6 +656,7 @@ calls("ExpectedException", "missingExceptionMessage", "ExpectedException", "form
 # junit4/src/main/java/org/junit/rules/RuleChain.java
 
 class("RuleChain").
+method("RuleChain", "RuleChain", 3, 0, "mail@stefan-birkner.de").
 method("RuleChain", "emptyRuleChain", 3, 1, "mail@stefan-birkner.de").
 method("RuleChain", "outerRule", 3, 1, "mail@stefan-birkner.de").
 calls("RuleChain", "outerRule", "RuleChain", "emptyRuleChain").
@@ -688,6 +733,9 @@ method("TestWatchman", "finished", 1, 1, "saff@redredrobot.home").
 # junit4/src/main/java/org/junit/rules/TemporaryFolder.java
 
 class("TemporaryFolder").
+method("TemporaryFolder", "TemporaryFolder", 3, 0, "shs@google.com").
+method("TemporaryFolder", "TemporaryFolder", 4, 0, "shs@google.com").
+method("TemporaryFolder", "TemporaryFolder", 4, 0, "shs@google.com").
 method("TemporaryFolder", "builder", 3, 1, "narendra.pathai@gmail.com").
 method("TemporaryFolder", "before", 3, 1, "saff@new-host-3.home").
 calls("TemporaryFolder", "before", "TemporaryFolder", "create").
@@ -719,6 +767,7 @@ calls("TemporaryFolder", "recursiveDelete", "File", "delete").
 # junit4/src/main/java/org/junit/rules/RunRules.java
 
 class("RunRules").
+method("RunRules", "RunRules", 3, 0, "kcooney@google.com").
 method("RunRules", "evaluate", 3, 1, "kcooney@google.com").
 calls("RunRules", "evaluate", "Statement", "evaluate").
 method("RunRules", "applyAll", 5, 2, "kcooney@google.com").
@@ -729,6 +778,8 @@ method("RunRules", "applyAll", 5, 2, "kcooney@google.com").
 # junit4/src/main/java/org/junit/rules/Stopwatch.java
 
 class("Stopwatch").
+method("Stopwatch", "Stopwatch", 3, 0, "kcooney@google.com").
+method("Stopwatch", "Stopwatch", 3, 0, "kcooney@google.com").
 method("Stopwatch", "runtime", 3, 1, "tibor17@lycos.com").
 calls("Stopwatch", "runtime", "TimeUnit", "convert").
 method("Stopwatch", "succeeded", 1, 1, "tibor17@lycos.com").
@@ -758,6 +809,9 @@ method("ExpectedExceptionMatcherBuilder", "cast", 3, 1, "mail@marcphilipp.de").
 # junit4/src/main/java/org/junit/rules/Timeout.java
 
 class("Timeout").
+method("Timeout", "Timeout", 3, 0, "dsaff").
+method("Timeout", "Timeout", 5, 0, "dsaff").
+method("Timeout", "Timeout", 5, 0, "dsaff").
 method("Timeout", "builder", 3, 1, "kcooney@google.com").
 method("Timeout", "millis", 3, 1, "tibor17@lycos.com").
 method("Timeout", "seconds", 3, 1, "tibor17@lycos.com").
@@ -790,6 +844,8 @@ method("ExternalResource", "after", 1, 1, "saff@new-host-3.home").
 # junit4/src/main/java/org/junit/rules/DisableOnDebug.java
 
 class("DisableOnDebug").
+method("DisableOnDebug", "DisableOnDebug", 3, 0, "doug@neverfear.org").
+method("DisableOnDebug", "DisableOnDebug", 4, 0, "doug@neverfear.org").
 method("DisableOnDebug", "apply", 7, 2, "doug@neverfear.org").
 calls("DisableOnDebug", "apply", "TestRule", "apply").
 method("DisableOnDebug", "isDebugging", 11, 4, "doug@neverfear.org").
@@ -799,6 +855,8 @@ method("DisableOnDebug", "isDebugging", 3, 1, "doug@neverfear.org").
 # junit4/src/main/java/org/junit/runner/Result.java
 
 class("Result").
+method("Result", "Result", 7, 0, "kcooney@google.com").
+method("Result", "Result", 7, 0, "kcooney@google.com").
 method("Result", "getRunCount", 3, 1, "dsaff").
 calls("Result", "getRunCount", "AtomicInteger", "get").
 method("Result", "getFailureCount", 3, 1, "dsaff").
@@ -852,6 +910,8 @@ calls("Runner", "testCount", "Runner", "getDescription").
 # junit4/src/main/java/org/junit/runner/Description.java
 
 class("Description").
+method("Description", "Description", 3, 0, "dsaff").
+method("Description", "Description", 12, 0, "dsaff").
 method("Description", "createSuiteDescription", 3, 1, "dsaff").
 method("Description", "createSuiteDescription", 3, 1, "dsaff").
 method("Description", "createTestDescription", 3, 1, "dsaff").
@@ -959,6 +1019,7 @@ method("JUnitCore", "defaultComputer", 3, 1, "kbeck").
 # junit4/src/main/java/org/junit/runner/JUnitCommandLineParseResult.java
 
 class("JUnitCommandLineParseResult").
+method("JUnitCommandLineParseResult", "JUnitCommandLineParseResult", 1, 0, "noel.yap+github.com@gmail.com").
 method("JUnitCommandLineParseResult", "getFilterSpecs", 3, 1, "kcooney@google.com").
 calls("JUnitCommandLineParseResult", "getFilterSpecs", "Collections", "unmodifiableList").
 method("JUnitCommandLineParseResult", "getClasses", 3, 1, "noel.yap+github.com@gmail.com").
@@ -992,6 +1053,7 @@ calls("JUnitCommandLineParseResult", "applyFilterSpecs", "JUnitCommandLineParseR
 # junit4/src/main/java/org/junit/runner/FilterFactoryParams.java
 
 class("FilterFactoryParams").
+method("FilterFactoryParams", "FilterFactoryParams", 7, 0, "noel.yap+github.com@gmail.com").
 method("FilterFactoryParams", "getArgs", 3, 1, "noel.yap+github.com@gmail.com").
 method("FilterFactoryParams", "getTopLevelDescription", 3, 1, "kcooney@google.com").
 
@@ -1058,6 +1120,7 @@ calls("JUnitMatchers", "isException", "StacktracePrintingMatcher", "isException"
 # junit4/src/main/java/org/junit/internal/runners/MethodValidator.java
 
 class("MethodValidator").
+method("MethodValidator", "MethodValidator", 3, 0, "dsaff").
 method("MethodValidator", "validateInstanceMethods", 9, 2, "dsaff").
 calls("MethodValidator", "validateInstanceMethods", "MethodValidator", "validateTestMethods").
 calls("MethodValidator", "validateInstanceMethods", "MethodValidator", "validateTestMethods").
@@ -1091,6 +1154,7 @@ class("FailedBefore").
 # junit4/src/main/java/org/junit/internal/runners/TestClass.java
 
 class("TestClass").
+method("TestClass", "TestClass", 3, 0, "dsaff").
 method("TestClass", "getTestMethods", 3, 1, "dsaff").
 calls("TestClass", "getTestMethods", "TestClass", "getAnnotatedMethods").
 method("TestClass", "getBefores", 3, 1, "dsaff").
@@ -1118,6 +1182,7 @@ calls("TestClass", "getName", "Class", "getName").
 # junit4/src/main/java/org/junit/internal/runners/SuiteMethod.java
 
 class("SuiteMethod").
+method("SuiteMethod", "SuiteMethod", 3, 0, "dsaff").
 method("SuiteMethod", "testFromSuiteMethod", 13, 3, "dsaff").
 calls("SuiteMethod", "testFromSuiteMethod", "Modifier", "isStatic").
 calls("SuiteMethod", "testFromSuiteMethod", "InvocationTargetException", "getCause").
@@ -1125,6 +1190,7 @@ calls("SuiteMethod", "testFromSuiteMethod", "InvocationTargetException", "getCau
 # junit4/src/main/java/org/junit/internal/runners/TestMethod.java
 
 class("TestMethod").
+method("TestMethod", "TestMethod", 4, 0, "dsaff").
 method("TestMethod", "isIgnored", 3, 1, "dsaff").
 method("TestMethod", "getTimeout", 8, 2, "dsaff").
 method("TestMethod", "getExpectedException", 8, 2, "dsaff").
@@ -1145,6 +1211,7 @@ calls("TestMethod", "invoke", "Method", "invoke").
 # junit4/src/main/java/org/junit/internal/runners/MethodRoadie.java
 
 class("MethodRoadie").
+method("MethodRoadie", "MethodRoadie", 6, 0, "dsaff").
 method("MethodRoadie", "run", 16, 3, "dsaff").
 calls("MethodRoadie", "run", "TestMethod", "isIgnored").
 calls("MethodRoadie", "run", "RunNotifier", "fireTestIgnored").
@@ -1183,6 +1250,8 @@ calls("MethodRoadie", "addFailure", "RunNotifier", "fireTestFailure").
 # junit4/src/main/java/org/junit/internal/runners/JUnit4ClassRunner.java
 
 class("JUnit4ClassRunner").
+method("JUnit4ClassRunner", "JUnit4ClassRunner", 5, 0, "dsaff").
+calls("JUnit4ClassRunner", "JUnit4ClassRunner", "JUnit4ClassRunner", "validate").
 method("JUnit4ClassRunner", "getTestMethods", 3, 1, "dsaff").
 calls("JUnit4ClassRunner", "getTestMethods", "TestClass", "getTestMethods").
 method("JUnit4ClassRunner", "validate", 5, 1, "dsaff").
@@ -1224,11 +1293,15 @@ method("JUnit4ClassRunner", "getTestClass", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/runners/InitializationError.java
 
 class("InitializationError").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
 method("InitializationError", "getCauses", 3, 1, "dsaff").
 
 # junit4/src/main/java/org/junit/internal/runners/ClassRoadie.java
 
 class("ClassRoadie").
+method("ClassRoadie", "ClassRoadie", 6, 0, "dsaff").
 method("ClassRoadie", "runUnprotected", 3, 1, "dsaff").
 calls("ClassRoadie", "runUnprotected", "Runnable", "run").
 method("ClassRoadie", "addFailure", 3, 1, "dsaff").
@@ -1249,6 +1322,9 @@ calls("ClassRoadie", "runAfters", "ClassRoadie", "addFailure").
 # junit4/src/main/java/org/junit/internal/runners/JUnit38ClassRunner.java
 
 class("JUnit38ClassRunner").
+method("JUnit38ClassRunner", "JUnit38ClassRunner", 3, 0, "dsaff").
+method("JUnit38ClassRunner", "JUnit38ClassRunner", 4, 0, "dsaff").
+calls("JUnit38ClassRunner", "JUnit38ClassRunner", "JUnit38ClassRunner", "setTest").
 method("JUnit38ClassRunner", "run", 5, 1, "dsaff").
 calls("JUnit38ClassRunner", "run", "TestResult", "addListener").
 calls("JUnit38ClassRunner", "run", "JUnit38ClassRunner", "getTest").
@@ -1278,6 +1354,8 @@ method("JUnit38ClassRunner", "getTest", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/runners/ErrorReportingRunner.java
 
 class("ErrorReportingRunner").
+method("ErrorReportingRunner", "ErrorReportingRunner", 3, 0, "dsaff").
+method("ErrorReportingRunner", "ErrorReportingRunner", 11, 0, "dsaff").
 method("ErrorReportingRunner", "getDescription", 6, 2, "dsaff").
 calls("ErrorReportingRunner", "getDescription", "Description", "addChild").
 method("ErrorReportingRunner", "run", 4, 2, "dsaff").
@@ -1300,6 +1378,7 @@ calls("ErrorReportingRunner", "runCause", "RunNotifier", "fireTestFinished").
 # junit4/src/main/java/org/junit/internal/builders/AnnotatedBuilder.java
 
 class("AnnotatedBuilder").
+method("AnnotatedBuilder", "AnnotatedBuilder", 3, 0, "dsaff").
 method("AnnotatedBuilder", "runnerForClass", 8, 3, "dsaff").
 calls("AnnotatedBuilder", "runnerForClass", "AnnotatedBuilder", "buildRunner").
 method("AnnotatedBuilder", "getEnclosingClassForNonStaticMemberClass", 7, 2, "stefan.bechtold@me.com").
@@ -1311,6 +1390,7 @@ calls("AnnotatedBuilder", "buildRunner", "Class", "getConstructor").
 # junit4/src/main/java/org/junit/internal/builders/IgnoredClassRunner.java
 
 class("IgnoredClassRunner").
+method("IgnoredClassRunner", "IgnoredClassRunner", 3, 0, "dsaff").
 method("IgnoredClassRunner", "run", 3, 1, "dsaff").
 calls("IgnoredClassRunner", "run", "RunNotifier", "fireTestIgnored").
 method("IgnoredClassRunner", "getDescription", 3, 1, "dsaff").
@@ -1339,6 +1419,8 @@ method("JUnit4Builder", "runnerForClass", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/builders/AllDefaultPossibilitiesBuilder.java
 
 class("AllDefaultPossibilitiesBuilder").
+method("AllDefaultPossibilitiesBuilder", "AllDefaultPossibilitiesBuilder", 3, 0, "dsaff").
+method("AllDefaultPossibilitiesBuilder", "AllDefaultPossibilitiesBuilder", 3, 0, "dsaff").
 method("AllDefaultPossibilitiesBuilder", "runnerForClass", 9, 3, "dsaff").
 method("AllDefaultPossibilitiesBuilder", "junit4Builder", 3, 1, "dsaff").
 method("AllDefaultPossibilitiesBuilder", "junit3Builder", 3, 1, "dsaff").
@@ -1359,6 +1441,8 @@ method("NullBuilder", "runnerForClass", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/matchers/TypeSafeMatcher.java
 
 class("TypeSafeMatcher").
+method("TypeSafeMatcher", "TypeSafeMatcher", 3, 0, "dsaff").
+method("TypeSafeMatcher", "TypeSafeMatcher", 3, 0, "dsaff").
 method("TypeSafeMatcher", "matchesSafely", 1, 1, "dsaff").
 method("TypeSafeMatcher", "findExpectedType", 8, 4, "dsaff").
 calls("TypeSafeMatcher", "findExpectedType", "TypeSafeMatcher", "isMatchesSafelyMethod").
@@ -1369,6 +1453,7 @@ method("TypeSafeMatcher", "matches", 3, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java
 
 class("ThrowableMessageMatcher").
+method("ThrowableMessageMatcher", "ThrowableMessageMatcher", 3, 0, "mail@marcphilipp.de").
 method("ThrowableMessageMatcher", "describeTo", 4, 1, "mail@marcphilipp.de").
 calls("ThrowableMessageMatcher", "describeTo", "Description", "appendText").
 calls("ThrowableMessageMatcher", "describeTo", "Description", "appendDescriptionOf").
@@ -1382,6 +1467,7 @@ method("ThrowableMessageMatcher", "hasMessage", 3, 1, "mail@marcphilipp.de").
 # junit4/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java
 
 class("ThrowableCauseMatcher").
+method("ThrowableCauseMatcher", "ThrowableCauseMatcher", 3, 0, "mail@marcphilipp.de").
 method("ThrowableCauseMatcher", "describeTo", 4, 1, "mail@marcphilipp.de").
 calls("ThrowableCauseMatcher", "describeTo", "Description", "appendText").
 calls("ThrowableCauseMatcher", "describeTo", "Description", "appendDescriptionOf").
@@ -1395,6 +1481,7 @@ method("ThrowableCauseMatcher", "hasCause", 3, 1, "mail@marcphilipp.de").
 # junit4/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java
 
 class("StacktracePrintingMatcher").
+method("StacktracePrintingMatcher", "StacktracePrintingMatcher", 3, 0, "mail@marcphilipp.de").
 method("StacktracePrintingMatcher", "describeTo", 3, 1, "mail@marcphilipp.de").
 calls("StacktracePrintingMatcher", "describeTo", "Matcher", "describeTo").
 method("StacktracePrintingMatcher", "matchesSafely", 3, 1, "mail@marcphilipp.de").
@@ -1411,11 +1498,14 @@ method("StacktracePrintingMatcher", "isException", 3, 1, "mail@marcphilipp.de").
 # junit4/src/main/java/org/junit/internal/requests/SortingRequest.java
 
 class("SortingRequest").
+method("SortingRequest", "SortingRequest", 4, 0, "dsaff").
 method("SortingRequest", "getRunner", 5, 1, "dsaff").
 
 # junit4/src/main/java/org/junit/internal/requests/ClassRequest.java
 
 class("ClassRequest").
+method("ClassRequest", "ClassRequest", 4, 0, "dsaff").
+method("ClassRequest", "ClassRequest", 3, 0, "dsaff").
 method("ClassRequest", "getRunner", 12, 3, "dsaff").
 calls("ClassRequest", "getRunner", "Lock", "lock").
 calls("ClassRequest", "getRunner", "Lock", "unlock").
@@ -1426,6 +1516,7 @@ calls("ClassRequest", "getRunner", "Lock", "unlock").
 # junit4/src/main/java/org/junit/internal/requests/FilterRequest.java
 
 class("FilterRequest").
+method("FilterRequest", "FilterRequest", 4, 0, "dsaff").
 method("FilterRequest", "getRunner", 8, 2, "dsaff").
 calls("FilterRequest", "getRunner", "Filter", "apply").
 
@@ -1438,6 +1529,7 @@ calls("FakeRuntimeMXBean", "getInputArguments", "Collections", "emptyList").
 # junit4/src/main/java/org/junit/internal/management/ReflectiveRuntimeMXBean.java
 
 class("ReflectiveRuntimeMXBean").
+method("ReflectiveRuntimeMXBean", "ReflectiveRuntimeMXBean", 4, 0, "kcooney@users.noreply.github.com").
 method("ReflectiveRuntimeMXBean", "getInputArguments", 11, 6, "kcooney@users.noreply.github.com").
 calls("ReflectiveRuntimeMXBean", "getInputArguments", "Collections", "emptyList").
 
@@ -1462,23 +1554,28 @@ method("FakeThreadMXBean", "isThreadCpuTimeSupported", 3, 1, "kcooney@users.nore
 # junit4/src/main/java/org/junit/internal/management/ReflectiveThreadMXBean.java
 
 class("ReflectiveThreadMXBean").
+method("ReflectiveThreadMXBean", "ReflectiveThreadMXBean", 4, 0, "kcooney@users.noreply.github.com").
 method("ReflectiveThreadMXBean", "getThreadCpuTime", 17, 6, "kcooney@users.noreply.github.com").
 method("ReflectiveThreadMXBean", "isThreadCpuTimeSupported", 11, 6, "kcooney@users.noreply.github.com").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/InvokeMethod.java
 
 class("InvokeMethod").
+method("InvokeMethod", "InvokeMethod", 4, 0, "dsaff").
 method("InvokeMethod", "evaluate", 3, 1, "kbeck").
 calls("InvokeMethod", "evaluate", "FrameworkMethod", "invokeExplosively").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/Fail.java
 
 class("Fail").
+method("Fail", "Fail", 3, 0, "dsaff").
 method("Fail", "evaluate", 3, 1, "dsaff").
 
 # junit4/src/main/java/org/junit/internal/runners/statements/FailOnTimeout.java
 
 class("FailOnTimeout").
+method("FailOnTimeout", "FailOnTimeout", 3, 0, "kbeck").
+method("FailOnTimeout", "FailOnTimeout", 6, 0, "kbeck").
 method("FailOnTimeout", "builder", 3, 1, "kcooney@google.com").
 method("FailOnTimeout", "evaluate", 13, 2, "kbeck").
 calls("FailOnTimeout", "evaluate", "Thread", "setDaemon").
@@ -1507,6 +1604,7 @@ calls("FailOnTimeout", "cpuTime", "ThreadMXBean", "getThreadCpuTime").
 # junit4/src/main/java/org/junit/internal/runners/statements/ExpectException.java
 
 class("ExpectException").
+method("ExpectException", "ExpectException", 4, 0, "kbeck").
 method("ExpectException", "evaluate", 18, 6, "kbeck").
 calls("ExpectException", "evaluate", "Statement", "evaluate").
 calls("ExpectException", "evaluate", "Class", "isAssignableFrom").
@@ -1515,6 +1613,7 @@ calls("ExpectException", "evaluate", "Class", "isAssignableFrom").
 # junit4/src/main/java/org/junit/internal/runners/statements/RunAfters.java
 
 class("RunAfters").
+method("RunAfters", "RunAfters", 5, 0, "kbeck").
 method("RunAfters", "evaluate", 14, 4, "kbeck").
 calls("RunAfters", "evaluate", "Statement", "evaluate").
 calls("RunAfters", "evaluate", "List", "add").
@@ -1527,6 +1626,7 @@ calls("RunAfters", "invokeMethod", "FrameworkMethod", "invokeExplosively").
 # junit4/src/main/java/org/junit/internal/runners/statements/RunBefores.java
 
 class("RunBefores").
+method("RunBefores", "RunBefores", 5, 0, "kbeck").
 method("RunBefores", "evaluate", 5, 2, "kbeck").
 calls("RunBefores", "evaluate", "RunBefores", "invokeMethod").
 calls("RunBefores", "evaluate", "Statement", "evaluate").
@@ -1536,6 +1636,7 @@ calls("RunBefores", "invokeMethod", "FrameworkMethod", "invokeExplosively").
 # junit4/src/main/java/org/junit/internal/runners/rules/RuleMemberValidator.java
 
 class("RuleMemberValidator").
+method("RuleMemberValidator", "RuleMemberValidator", 5, 0, "rowan.hill@softwire.com").
 method("RuleMemberValidator", "validate", 5, 2, "rowan.hill@softwire.com").
 calls("RuleMemberValidator", "validate", "RuleMemberValidator", "validateMember").
 method("RuleMemberValidator", "validateMember", 4, 2, "rowan.hill@softwire.com").
@@ -1549,6 +1650,7 @@ method("RuleMemberValidator", "isMethodRule", 3, 1, "rowan.hill@softwire.com").
 # junit4/src/main/java/org/junit/internal/runners/rules/ValidationError.java
 
 class("ValidationError").
+method("ValidationError", "ValidationError", 3, 0, "rowan.hill@softwire.com").
 
 # junit4/src/main/java/org/junit/internal/runners/model/ReflectiveCallable.java
 
@@ -1561,10 +1663,12 @@ method("ReflectiveCallable", "runReflectiveCall", 1, 1, "dsaff").
 # junit4/src/main/java/org/junit/internal/runners/model/MultipleFailureException.java
 
 class("MultipleFailureException").
+method("MultipleFailureException", "MultipleFailureException", 3, 0, "dsaff").
 
 # junit4/src/main/java/org/junit/internal/runners/model/EachTestNotifier.java
 
 class("EachTestNotifier").
+method("EachTestNotifier", "EachTestNotifier", 4, 0, "dsaff").
 method("EachTestNotifier", "addFailure", 7, 2, "dsaff").
 calls("EachTestNotifier", "addFailure", "EachTestNotifier", "addMultipleFailureException").
 calls("EachTestNotifier", "addFailure", "RunNotifier", "fireTestFailure").
@@ -1586,6 +1690,7 @@ calls("EachTestNotifier", "fireTestSuiteFinished", "RunNotifier", "fireTestSuite
 # junit4/src/main/java/org/junit/experimental/max/MaxCore.java
 
 class("MaxCore").
+method("MaxCore", "MaxCore", 3, 0, "kbeck").
 method("MaxCore", "forFolder", 3, 1, "kbeck").
 calls("MaxCore", "forFolder", "MaxCore", "storedLocally").
 method("MaxCore", "storedLocally", 3, 1, "saff@dhcp-172-31-197-71.cam.corp.google.com").
@@ -1623,10 +1728,12 @@ calls("MaxCore", "findLeaves", "MaxCore", "findLeaves").
 # junit4/src/main/java/org/junit/experimental/max/CouldNotReadCoreException.java
 
 class("CouldNotReadCoreException").
+method("CouldNotReadCoreException", "CouldNotReadCoreException", 3, 0, "kbeck").
 
 # junit4/src/main/java/org/junit/experimental/max/MaxHistory.java
 
 class("MaxHistory").
+method("MaxHistory", "MaxHistory", 3, 0, "saff@redredrobot.home").
 method("MaxHistory", "forFolder", 10, 3, "saff@redredrobot.home").
 calls("MaxHistory", "forFolder", "File", "exists").
 calls("MaxHistory", "forFolder", "MaxHistory", "readHistory").
@@ -1654,6 +1761,7 @@ method("MaxHistory", "testComparator", 3, 1, "saff@redredrobot.home").
 # junit4/src/main/java/org/junit/experimental/runners/Enclosed.java
 
 class("Enclosed").
+method("Enclosed", "Enclosed", 3, 0, "dsaff").
 method("Enclosed", "filterAbstractClasses", 8, 3, "nicobn@gmail.com").
 calls("Enclosed", "filterAbstractClasses", "Modifier", "isAbstract").
 calls("Enclosed", "filterAbstractClasses", "List", "add").
@@ -1694,6 +1802,8 @@ calls("CategoryValidator", "addErrorMessage", "List", "add").
 # junit4/src/main/java/org/junit/experimental/categories/Categories.java
 
 class("Categories").
+method("Categories", "Categories", 11, 0, "saff@redredrobot.home").
+calls("Categories", "Categories", "Categories", "filter").
 method("Categories", "getIncludedCategory", 4, 1, "saff@redredrobot.local").
 calls("Categories", "getIncludedCategory", "Categories", "createSet").
 method("Categories", "isAnyIncluded", 4, 1, "tibor17@lycos.com").
@@ -1709,12 +1819,15 @@ method("Categories", "nullableClassToSet", 3, 1, "kcooney@users.noreply.github.c
 # junit4/src/main/java/org/junit/experimental/results/FailureList.java
 
 class("FailureList").
+method("FailureList", "FailureList", 3, 0, "dsaff").
 method("FailureList", "result", 10, 3, "dsaff").
 calls("FailureList", "result", "RunListener", "testFailure").
 
 # junit4/src/main/java/org/junit/experimental/results/PrintableResult.java
 
 class("PrintableResult").
+method("PrintableResult", "PrintableResult", 3, 0, "dsaff").
+method("PrintableResult", "PrintableResult", 3, 0, "dsaff").
 method("PrintableResult", "testResult", 3, 1, "dsaff").
 calls("PrintableResult", "testResult", "PrintableResult", "testResult").
 method("PrintableResult", "testResult", 3, 1, "dsaff").
@@ -1728,6 +1841,7 @@ calls("PrintableResult", "toString", "ByteArrayOutputStream", "toString").
 # junit4/src/main/java/org/junit/experimental/results/ResultMatchers.java
 
 class("ResultMatchers").
+method("ResultMatchers", "ResultMatchers", 1, 0, "charlie@yandex-team.ru").
 method("ResultMatchers", "isSuccessful", 3, 1, "dsaff").
 calls("ResultMatchers", "isSuccessful", "ResultMatchers", "failureCountIs").
 method("ResultMatchers", "failureCountIs", 3, 1, "dsaff").
@@ -1765,6 +1879,7 @@ method("PotentialAssignment", "getDescription", 1, 1, "dsaff").
 # junit4/src/main/java/org/junit/experimental/theories/ParameterSignature.java
 
 class("ParameterSignature").
+method("ParameterSignature", "ParameterSignature", 4, 0, "dsaff").
 method("ParameterSignature", "buildConvertableTypesMap", 12, 1, "pimterry@gmail.com").
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
 calls("ParameterSignature", "buildConvertableTypesMap", "ParameterSignature", "putSymmetrically").
@@ -1807,6 +1922,8 @@ calls("ParameterSignature", "getAnnotation", "Class", "cast").
 # junit4/src/main/java/org/junit/experimental/theories/Theories.java
 
 class("Theories").
+method("Theories", "Theories", 3, 0, "dsaff").
+method("Theories", "Theories", 3, 0, "dsaff").
 method("Theories", "collectInitializationErrors", 5, 1, "dsaff").
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointFields").
 calls("Theories", "collectInitializationErrors", "Theories", "validateDataPointMethods").
@@ -1838,6 +1955,7 @@ method("Theories", "methodBlock", 3, 1, "kbeck").
 # junit4/src/main/java/org/junit/experimental/theories/internal/ParameterizedAssertionError.java
 
 class("ParameterizedAssertionError").
+method("ParameterizedAssertionError", "ParameterizedAssertionError", 4, 0, "dsaff").
 method("ParameterizedAssertionError", "equals", 3, 1, "dsaff").
 method("ParameterizedAssertionError", "hashCode", 3, 1, "kcooney@google.com").
 calls("ParameterizedAssertionError", "hashCode", "ParameterizedAssertionError", "toString").
@@ -1855,6 +1973,7 @@ calls("ParameterizedAssertionError", "stringValueOf", "String", "valueOf").
 # junit4/src/main/java/org/junit/experimental/theories/internal/Assignments.java
 
 class("Assignments").
+method("Assignments", "Assignments", 5, 0, "dsaff").
 method("Assignments", "allUnassigned", 6, 1, "dsaff").
 calls("Assignments", "allUnassigned", "List", "addAll").
 method("Assignments", "isComplete", 3, 1, "dsaff").
@@ -1885,6 +2004,7 @@ method("Assignments", "getArgumentStrings", 6, 2, "dsaff").
 # junit4/src/main/java/org/junit/experimental/theories/internal/AllMembersSupplier.java
 
 class("AllMembersSupplier").
+method("AllMembersSupplier", "AllMembersSupplier", 3, 0, "dsaff").
 method("AllMembersSupplier", "getValueSources", 8, 1, "dsaff").
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addSinglePointFields").
 calls("AllMembersSupplier", "getValueSources", "AllMembersSupplier", "addMultiPointFields").
@@ -1933,12 +2053,14 @@ calls("BooleanSupplier", "getValueSources", "Arrays", "asList").
 # junit4/src/main/java/org/junit/experimental/theories/internal/EnumSupplier.java
 
 class("EnumSupplier").
+method("EnumSupplier", "EnumSupplier", 3, 0, "pimterry@gmail.com").
 method("EnumSupplier", "getValueSources", 7, 2, "pimterry@gmail.com").
 calls("EnumSupplier", "getValueSources", "List", "add").
 
 # junit4/src/main/java/org/junit/experimental/theories/internal/SpecificDataPointsSupplier.java
 
 class("SpecificDataPointsSupplier").
+method("SpecificDataPointsSupplier", "SpecificDataPointsSupplier", 3, 0, "pimterry@gmail.com").
 method("SpecificDataPointsSupplier", "getSingleDataPointFields", 11, 3, "pimterry@gmail.com").
 calls("SpecificDataPointsSupplier", "getSingleDataPointFields", "Arrays", "asList").
 calls("SpecificDataPointsSupplier", "getSingleDataPointFields", "List", "add").
@@ -1967,6 +2089,10 @@ calls("TestedOnSupplier", "getValueSources", "List", "add").
 # junit4/src/main/java/org/junit/runners/parameterized/TestWithParameters.java
 
 class("TestWithParameters").
+method("TestWithParameters", "TestWithParameters", 8, 0, "mail@stefan-birkner.de").
+calls("TestWithParameters", "TestWithParameters", "TestWithParameters", "notNull").
+calls("TestWithParameters", "TestWithParameters", "TestWithParameters", "notNull").
+calls("TestWithParameters", "TestWithParameters", "TestWithParameters", "notNull").
 method("TestWithParameters", "getName", 3, 1, "mail@stefan-birkner.de").
 method("TestWithParameters", "getTestClass", 3, 1, "mail@stefan-birkner.de").
 method("TestWithParameters", "getParameters", 3, 1, "mail@stefan-birkner.de").
@@ -1982,6 +2108,7 @@ method("BlockJUnit4ClassRunnerWithParametersFactory", "createRunnerForTestWithPa
 # junit4/src/main/java/org/junit/runners/parameterized/BlockJUnit4ClassRunnerWithParameters.java
 
 class("BlockJUnit4ClassRunnerWithParameters").
+method("BlockJUnit4ClassRunnerWithParameters", "BlockJUnit4ClassRunnerWithParameters", 5, 0, "mail@stefan-birkner.de").
 method("BlockJUnit4ClassRunnerWithParameters", "createTest", 11, 1, "mail@stefan-birkner.de").
 calls("BlockJUnit4ClassRunnerWithParameters", "createTest", "BlockJUnit4ClassRunnerWithParameters", "createTestUsingConstructorInjection").
 calls("BlockJUnit4ClassRunnerWithParameters", "createTest", "BlockJUnit4ClassRunnerWithParameters", "createTestUsingFieldInjection").
@@ -2013,6 +2140,7 @@ calls("BlockJUnit4ClassRunnerWithParameters", "fieldsAreAnnotated", "BlockJUnit4
 # junit4/src/main/java/org/junit/runners/model/TestTimedOutException.java
 
 class("TestTimedOutException").
+method("TestTimedOutException", "TestTimedOutException", 5, 0, "github@locha.se").
 method("TestTimedOutException", "getTimeout", 3, 1, "github@locha.se").
 method("TestTimedOutException", "getTimeUnit", 3, 1, "github@locha.se").
 
@@ -2038,6 +2166,9 @@ calls("RunnerBuilder", "runners", "List", "add").
 # junit4/src/main/java/org/junit/runners/model/MultipleFailureException.java
 
 class("MultipleFailureException").
+method("MultipleFailureException", "MultipleFailureException", 11, 0, "dsaff").
+calls("MultipleFailureException", "MultipleFailureException", "List", "isEmpty").
+calls("MultipleFailureException", "MultipleFailureException", "List", "add").
 method("MultipleFailureException", "getFailures", 3, 1, "dsaff").
 calls("MultipleFailureException", "getFailures", "Collections", "unmodifiableList").
 method("MultipleFailureException", "getMessage", 6, 2, "kcooney@google.com").
@@ -2056,6 +2187,8 @@ calls("MultipleFailureException", "assertEmpty", "Throwables", "rethrowAsExcepti
 # junit4/src/main/java/org/junit/runners/model/TestClass.java
 
 class("TestClass").
+method("TestClass", "TestClass", 11, 0, "dsaff").
+calls("TestClass", "TestClass", "TestClass", "scanAnnotatedMembers").
 method("TestClass", "scanAnnotatedMembers", 7, 4, "craig@motlin.com").
 calls("TestClass", "scanAnnotatedMembers", "TestClass", "addToAnnotationLists").
 calls("TestClass", "scanAnnotatedMembers", "TestClass", "addToAnnotationLists").
@@ -2107,6 +2240,7 @@ method("TestClass", "equals", 13, 4, "mail@stefan-birkner.de").
 # junit4/src/main/java/org/junit/runners/model/FrameworkMethod.java
 
 class("FrameworkMethod").
+method("FrameworkMethod", "FrameworkMethod", 6, 0, "dsaff").
 method("FrameworkMethod", "getMethod", 3, 1, "dsaff").
 method("FrameworkMethod", "invokeExplosively", 3, 1, "dsaff").
 method("FrameworkMethod", "getName", 3, 1, "dsaff").
@@ -2154,6 +2288,7 @@ calls("FrameworkMethod", "toString", "Method", "toString").
 # junit4/src/main/java/org/junit/runners/model/FrameworkField.java
 
 class("FrameworkField").
+method("FrameworkField", "FrameworkField", 6, 0, "saff@redredrobot.home").
 method("FrameworkField", "getName", 3, 1, "mail@stefan-birkner.de").
 calls("FrameworkField", "getName", "FrameworkField", "getField").
 method("FrameworkField", "getAnnotations", 3, 1, "saff@redredrobot.home").
@@ -2198,6 +2333,7 @@ method("Statement", "evaluate", 1, 1, "kbeck").
 # junit4/src/main/java/org/junit/runners/model/InvalidTestClassError.java
 
 class("InvalidTestClassError").
+method("InvalidTestClassError", "InvalidTestClassError", 4, 0, "scotto.alberto.86@gmail.com").
 method("InvalidTestClassError", "createMessage", 8, 2, "scotto.alberto.86@gmail.com").
 calls("InvalidTestClassError", "createMessage", "StringBuilder", "append").
 calls("InvalidTestClassError", "createMessage", "StringBuilder", "append").
@@ -2210,6 +2346,7 @@ method("InvalidTestClassError", "getMessage", 3, 1, "scotto.alberto.86@gmail.com
 # junit4/src/main/java/org/junit/runners/model/NoGenericTypeParametersValidator.java
 
 class("NoGenericTypeParametersValidator").
+method("NoGenericTypeParametersValidator", "NoGenericTypeParametersValidator", 3, 0, "pholser@alumni.rice.edu").
 method("NoGenericTypeParametersValidator", "validate", 4, 2, "pholser@alumni.rice.edu").
 calls("NoGenericTypeParametersValidator", "validate", "NoGenericTypeParametersValidator", "validateNoTypeParameterOnType").
 method("NoGenericTypeParametersValidator", "validateNoTypeParameterOnType", 17, 5, "pholser@alumni.rice.edu").
@@ -2231,11 +2368,15 @@ calls("NoGenericTypeParametersValidator", "validateNoTypeParameterOnGenericArray
 # junit4/src/main/java/org/junit/runners/model/InitializationError.java
 
 class("InitializationError").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
+method("InitializationError", "InitializationError", 3, 0, "dsaff").
 method("InitializationError", "getCauses", 3, 1, "dsaff").
 
 # junit4/src/main/java/org/junit/runner/notification/SynchronizedRunListener.java
 
 class("SynchronizedRunListener").
+method("SynchronizedRunListener", "SynchronizedRunListener", 4, 0, "saff@google.com").
 method("SynchronizedRunListener", "testRunStarted", 5, 1, "saff@google.com").
 calls("SynchronizedRunListener", "testRunStarted", "RunListener", "testRunStarted").
 method("SynchronizedRunListener", "testRunFinished", 5, 1, "saff@google.com").
@@ -2303,6 +2444,7 @@ calls("RunNotifier", "addFirstListener", "List", "add").
 # junit4/src/main/java/org/junit/runner/notification/Failure.java
 
 class("Failure").
+method("Failure", "Failure", 4, 0, "dsaff").
 method("Failure", "getTestHeader", 3, 1, "dsaff").
 calls("Failure", "getTestHeader", "Description", "getDisplayName").
 method("Failure", "getDescription", 3, 1, "dsaff").
@@ -2322,6 +2464,7 @@ class("StoppedByUserException").
 # junit4/src/main/java/org/junit/runner/manipulation/Sorter.java
 
 class("Sorter").
+method("Sorter", "Sorter", 3, 0, "dsaff").
 method("Sorter", "apply", 6, 2, "dsaff").
 calls("Sorter", "apply", "Sortable", "sort").
 method("Sorter", "compare", 3, 1, "dsaff").
@@ -2353,6 +2496,7 @@ class("NoTestsRemainException").
 # junit4/src/main/java/junit/extensions/TestSetup.java
 
 class("TestSetup").
+method("TestSetup", "TestSetup", 3, 0, "dsaff").
 method("TestSetup", "run", 4, 1, "dsaff").
 calls("TestSetup", "run", "TestResult", "runProtected").
 method("TestSetup", "setUp", 1, 1, "dsaff").
@@ -2364,6 +2508,10 @@ method("TestSetup", "tearDown", 1, 1, "dsaff").
 # junit4/src/main/java/junit/extensions/ActiveTestSuite.java
 
 class("ActiveTestSuite").
+method("ActiveTestSuite", "ActiveTestSuite", 1, 0, "dsaff").
+method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
+method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
+method("ActiveTestSuite", "ActiveTestSuite", 3, 0, "dsaff").
 method("ActiveTestSuite", "run", 5, 1, "dsaff").
 calls("ActiveTestSuite", "run", "ActiveTestSuite", "waitUntilFinished").
 method("ActiveTestSuite", "runTest", 4, 1, "dsaff").
@@ -2376,6 +2524,7 @@ calls("ActiveTestSuite", "runFinished", "ActiveTestSuite", "notifyAll").
 # junit4/src/main/java/junit/extensions/TestDecorator.java
 
 class("TestDecorator").
+method("TestDecorator", "TestDecorator", 3, 0, "dsaff").
 method("TestDecorator", "basicRun", 3, 1, "dsaff").
 calls("TestDecorator", "basicRun", "Test", "run").
 method("TestDecorator", "countTestCases", 3, 1, "dsaff").
@@ -2389,6 +2538,7 @@ method("TestDecorator", "getTest", 3, 1, "dsaff").
 # junit4/src/main/java/junit/extensions/RepeatedTest.java
 
 class("RepeatedTest").
+method("RepeatedTest", "RepeatedTest", 7, 0, "dsaff").
 method("RepeatedTest", "countTestCases", 3, 1, "dsaff").
 method("RepeatedTest", "run", 7, 3, "dsaff").
 calls("RepeatedTest", "run", "TestResult", "shouldStop").
@@ -2397,6 +2547,7 @@ method("RepeatedTest", "toString", 3, 1, "dsaff").
 # junit4/src/main/java/junit/runner/Version.java
 
 class("Version").
+method("Version", "Version", 1, 0, "dsaff").
 method("Version", "id", 3, 1, "dsaff").
 method("Version", "main", 3, 1, "dsaff").
 calls("Version", "main", "System.out", "println").
@@ -2480,6 +2631,17 @@ method("BaseTestRunner", "filterLine", 8, 3, "dsaff").
 # junit4/src/main/java/junit/framework/TestSuite.java
 
 class("TestSuite").
+method("TestSuite", "TestSuite", 1, 0, "dsaff").
+method("TestSuite", "TestSuite", 3, 0, "dsaff").
+calls("TestSuite", "TestSuite", "TestSuite", "addTestsFromTestCase").
+method("TestSuite", "TestSuite", 4, 0, "dsaff").
+calls("TestSuite", "TestSuite", "TestSuite", "setName").
+method("TestSuite", "TestSuite", 3, 0, "dsaff").
+calls("TestSuite", "TestSuite", "TestSuite", "setName").
+method("TestSuite", "TestSuite", 4, 0, "dsaff").
+calls("TestSuite", "TestSuite", "TestSuite", "addTest").
+method("TestSuite", "TestSuite", 4, 0, "dsaff").
+calls("TestSuite", "TestSuite", "TestSuite", "setName").
 method("TestSuite", "createTest", 24, 7, "dsaff").
 calls("TestSuite", "createTest", "TestSuite", "warning").
 calls("TestSuite", "createTest", "TestSuite", "warning").
@@ -2531,6 +2693,8 @@ method("TestSuite", "isTestMethod", 3, 1, "dsaff").
 # junit4/src/main/java/junit/framework/JUnit4TestAdapter.java
 
 class("JUnit4TestAdapter").
+method("JUnit4TestAdapter", "JUnit4TestAdapter", 3, 0, "dsaff").
+method("JUnit4TestAdapter", "JUnit4TestAdapter", 5, 0, "dsaff").
 method("JUnit4TestAdapter", "countTestCases", 3, 1, "dsaff").
 calls("JUnit4TestAdapter", "countTestCases", "Runner", "testCount").
 method("JUnit4TestAdapter", "run", 3, 1, "dsaff").
@@ -2555,6 +2719,8 @@ calls("JUnit4TestAdapter", "sort", "Sorter", "apply").
 # junit4/src/main/java/junit/framework/TestCase.java
 
 class("TestCase").
+method("TestCase", "TestCase", 3, 0, "dsaff").
+method("TestCase", "TestCase", 3, 0, "dsaff").
 method("TestCase", "countTestCases", 3, 1, "dsaff").
 method("TestCase", "createResult", 3, 1, "dsaff").
 method("TestCase", "run", 5, 1, "dsaff").
@@ -2659,6 +2825,7 @@ method("TestCase", "setName", 3, 1, "dsaff").
 # junit4/src/main/java/junit/framework/ComparisonCompactor.java
 
 class("ComparisonCompactor").
+method("ComparisonCompactor", "ComparisonCompactor", 5, 0, "dsaff").
 method("ComparisonCompactor", "compact", 10, 2, "dsaff").
 calls("ComparisonCompactor", "compact", "Assert", "format").
 calls("ComparisonCompactor", "compact", "ComparisonCompactor", "findCommonPrefix").
@@ -2678,6 +2845,7 @@ calls("ComparisonCompactor", "areStringsEqual", "String", "equals").
 # junit4/src/main/java/junit/framework/TestResult.java
 
 class("TestResult").
+method("TestResult", "TestResult", 7, 0, "dsaff").
 method("TestResult", "addError", 5, 2, "dsaff").
 calls("TestResult", "addError", "List", "add").
 calls("TestResult", "addError", "TestListener", "addError").
@@ -2718,6 +2886,7 @@ method("TestResult", "wasSuccessful", 3, 1, "dsaff").
 # junit4/src/main/java/junit/framework/ComparisonFailure.java
 
 class("ComparisonFailure").
+method("ComparisonFailure", "ComparisonFailure", 5, 0, "dsaff").
 method("ComparisonFailure", "getMessage", 3, 1, "dsaff").
 method("ComparisonFailure", "getActual", 3, 1, "dsaff").
 method("ComparisonFailure", "getExpected", 3, 1, "dsaff").
@@ -2725,6 +2894,7 @@ method("ComparisonFailure", "getExpected", 3, 1, "dsaff").
 # junit4/src/main/java/junit/framework/Assert.java
 
 class("Assert").
+method("Assert", "Assert", 1, 0, "dsaff").
 method("Assert", "assertTrue", 5, 2, "dsaff").
 calls("Assert", "assertTrue", "Assert", "fail").
 method("Assert", "assertTrue", 3, 1, "dsaff").
@@ -2802,6 +2972,7 @@ method("Assert", "format", 7, 2, "dsaff").
 # junit4/src/main/java/junit/framework/TestFailure.java
 
 class("TestFailure").
+method("TestFailure", "TestFailure", 4, 0, "dsaff").
 method("TestFailure", "failedTest", 3, 1, "dsaff").
 method("TestFailure", "thrownException", 3, 1, "dsaff").
 method("TestFailure", "toString", 3, 1, "dsaff").
@@ -2820,6 +2991,8 @@ method("TestFailure", "isFailure", 3, 1, "dsaff").
 # junit4/src/main/java/junit/framework/AssertionFailedError.java
 
 class("AssertionFailedError").
+method("AssertionFailedError", "AssertionFailedError", 1, 0, "dsaff").
+method("AssertionFailedError", "AssertionFailedError", 3, 0, "dsaff").
 method("AssertionFailedError", "defaultString", 3, 1, "mail@stefan-birkner.de").
 
 # junit4/src/main/java/junit/framework/JUnit4TestAdapterCache.java
@@ -2845,6 +3018,7 @@ calls("JUnit4TestAdapterCache", "asTestList", "List", "add").
 # junit4/src/main/java/junit/framework/JUnit4TestCaseFacade.java
 
 class("JUnit4TestCaseFacade").
+method("JUnit4TestCaseFacade", "JUnit4TestCaseFacade", 3, 0, "dsaff").
 method("JUnit4TestCaseFacade", "toString", 3, 1, "dsaff").
 calls("JUnit4TestCaseFacade", "toString", "JUnit4TestCaseFacade", "getDescription").
 method("JUnit4TestCaseFacade", "countTestCases", 3, 1, "dsaff").
@@ -2854,6 +3028,7 @@ method("JUnit4TestCaseFacade", "getDescription", 3, 1, "dsaff").
 # junit4/src/main/java/junit/textui/ResultPrinter.java
 
 class("ResultPrinter").
+method("ResultPrinter", "ResultPrinter", 3, 0, "dsaff").
 method("ResultPrinter", "print", 6, 1, "dsaff").
 calls("ResultPrinter", "print", "ResultPrinter", "printHeader").
 calls("ResultPrinter", "print", "ResultPrinter", "printErrors").
@@ -2907,6 +3082,9 @@ calls("ResultPrinter", "startTest", "ResultPrinter", "getWriter").
 # junit4/src/main/java/junit/textui/TestRunner.java
 
 class("TestRunner").
+method("TestRunner", "TestRunner", 3, 0, "dsaff").
+method("TestRunner", "TestRunner", 3, 0, "dsaff").
+method("TestRunner", "TestRunner", 3, 0, "dsaff").
 method("TestRunner", "run", 3, 1, "dsaff").
 calls("TestRunner", "run", "TestRunner", "run").
 method("TestRunner", "run", 4, 1, "dsaff").

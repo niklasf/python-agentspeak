@@ -55,6 +55,9 @@ class Visitor:
         for field in klass.fields:
             merge_declaration(field, scope)
 
+        for constructor in klass.constructors:
+            self.walk_method(klass, constructor, scope)
+
         for method in klass.methods:
             self.walk_method(klass, method, scope)
 
@@ -143,7 +146,8 @@ class Visitor:
 def loc(node):
     if isinstance(node, javalang.tree.ClassDeclaration):
         return 2 + sum(loc(method) for method in node.methods)
-    elif isinstance(node, javalang.tree.MethodDeclaration):
+    elif isinstance(node, (javalang.tree.MethodDeclaration,
+                           javalang.tree.ConstructorDeclaration)):
         if node.body:
             return 2 + sum(loc(stmt) for stmt in node.body)
         else:
