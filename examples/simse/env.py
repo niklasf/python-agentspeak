@@ -16,6 +16,11 @@ class Issue:
     def as_term(self):
         return pyson.Literal("issue", (pyson.Literal(self.type), self.klass, self.priority), ())
 
+class Patch:
+    def __init__(self):
+        self.removed = set()
+        self.added = set()
+
 class Environment(pyson.runtime.Environment):
     def __init__(self):
         super().__init__()
@@ -25,6 +30,17 @@ class Environment(pyson.runtime.Environment):
     def get_issue(self, term, intention):
         issue = self.env.issues.pop()
         if pyson.unify(term.args[0], issue.as_term(), intention.scope, intention.stack):
+            yield
+
+    @actions.add(".make_patch", 2)
+    def make_patch(self, term, intention):
+        klass = pyson.grounded(term.args[0], intention.scope)
+
+        patch = Patch()
+        patch.removed.add(klass)
+        patch.added.add(klass)
+
+        if pyson.unify(term.args[1], patch, intention.scope, intention.stack):
             yield
 
 env = Environment()
