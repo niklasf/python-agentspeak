@@ -12,6 +12,7 @@ class Issue:
         self.type = "bug" # or feature, pr
 
         #self.klass = "Main" # or None
+        self.author = None
         self.patch = None
 
         self.priority = 1
@@ -56,6 +57,7 @@ class Environment(pyson.runtime.Environment):
     @actions.add(".submit_issue", 3)
     def submit_issue(self, term, intention):
         issue = Issue()
+        issue.author = self.name
         issue.type = pyson.grounded(term.args[0], intention.scope)
         issue.patch = pyson.grounded(term.args[1], intention.scope)
         issue.priority = pyson.grounded(term.args[1], intention.scope)
@@ -65,7 +67,9 @@ class Environment(pyson.runtime.Environment):
 env = Environment()
 
 with open(os.path.join(os.path.dirname(__file__), "agent.asl")) as source:
-    agent = env.build_agent(source, actions)
+    env.build_agent(source, actions)
+with open(os.path.join(os.path.dirname(__file__), "committer.asl")) as source:
+    env.build_agent(source, actions)
 
 if __name__ == "__main__":
-    env.run_agent(agent)
+    env.run()
