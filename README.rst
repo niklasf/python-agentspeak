@@ -33,7 +33,7 @@ Run an interactive console:
 
     $ python -m pyson
 
-See :code:`examples/embedded` for an an example that interfaces with custom
+See :code:`examples/embedded` for an example that interfaces with custom
 Python code.
 
 Jason compability
