@@ -876,7 +876,7 @@ def _zip_specs(specs, agent, args, scope):
     result = []
     memo = {}
 
-    args = args.iter()
+    args = iter(args)
 
     for spec in specs:
         if spec is pyson.runtime.Environment:
