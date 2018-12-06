@@ -533,11 +533,10 @@ class Agent:
                     raise PysonError("plan failure")
         except PysonError as err:
             log = pyson.Log(LOGGER)
-            raise log.error("%s @ %s", err, instr.f,
-                            loc=instr.loc, extra_locs=instr.extra_locs)
-        except:
+            raise log.error("%s", err, loc=instr.loc, extra_locs=instr.extra_locs)
+        except Exception as err:
             log = pyson.Log(LOGGER)
-            raise log.exception("python exception @ %s", instr.f,
+            raise log.exception("agent %r raised python exception: %r", self.name, err,
                                 loc=instr.loc, extra_locs=instr.extra_locs)
 
         return True
