@@ -419,7 +419,7 @@ def _unbind_all(agent, term, intention):
 def _raise(agent, term, intention):
     raise RuntimeError
 
-@actions.add_procedure(".raise", (pyson_str, ))
+@actions.add_procedure(".raise", (None, ))
 def _raise(agent, err):
     raise RuntimeError(err)
 
