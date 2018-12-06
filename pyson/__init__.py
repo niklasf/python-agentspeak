@@ -937,24 +937,26 @@ class Actions(object):
         else:
             return _add_function(f)
 
-    def add_procedure(self, functor, arg_specs, f=None):
+    def add_agent_method(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
             arg_specs = (arg_specs, )
 
-        def _add_procedure(f):
+        def _add_agent_method(f):
             def wrapper(agent, term, intention):
-                if f(agent, *_zip_specs(arg_specs, term.args, intention.scope)):
+                result = f(agent, *_zip_specs(arg_specs, term.args, intention.scope))
+
+                if unify(term.args[-1], result, intention.scope, intention.stack):
                     yield
 
-            return self.add(functor, len(arg_specs), wrapper)
+            return self.add(functor, len(arg_specs) + 1, wrapper)
 
         # Marker for the optimizer
-        _add_procedure.is_procedure = True
+        _add_agent_method.is_function = True
 
         if f is None:
-            return _add_procedure
+            return _add_agent_method
         else:
-            return _add_procedure(f)
+            return _add_agent_method(f)
 
     def add_predicate(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
@@ -974,6 +976,63 @@ class Actions(object):
             return _add_predicate
         else:
             return _add_predicate(f)
+
+    def add_agent_predicate(self, functor, arg_specs, f=None):
+        if not isinstance(arg_specs, (tuple, list)):
+            arg_specs = (arg_specs, )
+
+        def _add_agent_predicate(f):
+            def wrapper(agent, term, intention):
+                if f(agent, *_zip_specs(arg_specs, term.args, intention.scope)):
+                    yield
+
+            return self.add(functor, len(arg_specs), wrapper)
+
+        # Marker for the optimizer
+        _add_agent_predicate.is_procedure = True
+
+        if f is None:
+            return _add_agent_predicate
+        else:
+            return _add_agent_predicate(f)
+
+    def add_procedure(self, functor, arg_specs, f=None):
+        if not isinstance(arg_specs, (tuple, list)):
+            arg_specs = (arg_specs, )
+
+        def _add_procedure(f):
+            def wrapper(agent, term, intention):
+                if f(*_zip_specs(arg_specs, term.args, intention.scope)):
+                    yield
+
+            return self.add(functor, len(arg_specs), wrapper)
+
+        # Marker for the optimizer
+        _add_procedure.is_procedure = True
+
+        if f is None:
+            return _add_procedure
+        else:
+            return _add_procedure(f)
+
+    def add_agent_procedure(self, functor, arg_specs, f=None):
+        if not isinstance(arg_specs, (tuple, list)):
+            arg_specs = (arg_specs, )
+
+        def _add_agent_procedure(f):
+            def wrapper(agent, term, intention):
+                if f(agent, *_zip_specs(arg_specs, term.args, intention.scope)):
+                    yield
+
+            return self.add(functor, len(arg_specs), wrapper)
+
+        # Marker for the optimizer
+        _add_agent_procedure.is_procedure = True
+
+        if f is None:
+            return _add_agent_procedure
+        else:
+            return _add_agent_procedure(f)
 
     def lookup(self, functor, arity):
         group = (functor, arity)

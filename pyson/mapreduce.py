@@ -30,13 +30,13 @@ class Counter:
         yield
 
 
-@actions.add_procedure("mr.update_counter", (pyson_str, numbers.Number))
+@actions.add_agent_method("mr.update_counter", (pyson_str, numbers.Number))
 def _update_counter(agent, counter, delta):
     agent.emit(counter, delta)
     return True
 
 
-@actions.add_procedure(".send", (pyson_str, pyson.Literal, None))
+@actions.add_agent_method(".send", (pyson_str, pyson.Literal, None))
 def _send(agent, recipient, ils, term):
     group = ils.literal_group()
     if group == ("tell", 0):

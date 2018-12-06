@@ -420,7 +420,7 @@ def _raise(agent, term, intention):
     raise RuntimeError
 
 @actions.add_procedure(".raise", (None, ))
-def _raise(agent, err):
+def _raise(err):
     raise RuntimeError(err)
 
 
