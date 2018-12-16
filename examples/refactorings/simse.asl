@@ -27,6 +27,7 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _, _
 
 +!move_method(Class, Method, NewClass) : method(Class, Method, Loc, Complexity) &
                                          Class \== NewClass <-
+    .inc_edge(Class, NewClass);
     -method(Class, Method, Loc, Complexity, Author);
     +method(NewClass, Method, Loc, Complexity, Author);
     while (calls(Class, Method, CalleeClass, CalleeMethod)) {
@@ -58,8 +59,9 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _, _
 +!inline_method(Class, Method) : method(Class, Method, Loc, Complexity, Author) <-
     while (calls(CallerClass, CallerMethod, Class, Method)) {
         -calls(CallerClass, CallerMethod, Class, Method);
-        -method(CallerClass, CallerMethod, CallerLoc, CallerComplexity, _);
+        -method(CallerClass, CallerMethod, CallerLoc, CallerComplexity, CallerAuthor);
         +method(CallerClass, CallerMethod, CallerLoc + Loc - 3, CallerComplexity + Complexity, Author);
+        .inc_edge(CallerClass, Class);
     }
     -method(Class, Method, Loc, Complexity, _).
 
