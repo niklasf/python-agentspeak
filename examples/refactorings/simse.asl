@@ -2,22 +2,22 @@
 {include("snapshot_GameController.asl")}
 // {include("snapshot_mapdb.asl")}
 
-calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) & C1 \== C2.
+calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _, _) & C1 \== C2.
 
 +!most_complex(Class, Method) <-
-    .findall(m(Compl, C, M), method(C, M, _, Compl), L);
+    .findall(m(Compl, C, M), method(C, M, _, Compl, _), L);
     .max(L, m(Compl, Class, Method)).
 
 +!longest(Class, Method) <-
-    .findall(m(Loc, C, M), method(C, M, Loc, _), L);
+    .findall(m(Loc, C, M), method(C, M, Loc, _, _), L);
     .max(L, m(Loc, Class, Method)).
 
 +!shortest(Class, Method) <-
-    .findall(m(Loc, C, M), method(C, M, Loc, _), L);
+    .findall(m(Loc, C, M), method(C, M, Loc, _, _), L);
     .min(L, m(Loc, Class, Method)).
 
 +!most_dependent(Class, Method) <-
-    for (method(CallerClass, CallerMethod, _, _)) {
+    for (method(CallerClass, CallerMethod, _, _, _)) {
         .count(calls_outgoing(CallerClass, CallerMethod, _, _), Count);
         +tmp_call_count(CallerClass, CallerMethod, Count);
     }
@@ -27,8 +27,8 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 
 +!move_method(Class, Method, NewClass) : method(Class, Method, Loc, Complexity) &
                                          Class \== NewClass <-
-    -method(Class, Method, Loc, Complexity);
-    +method(NewClass, Method, Loc, Complexity);
+    -method(Class, Method, Loc, Complexity, Author);
+    +method(NewClass, Method, Loc, Complexity, Author);
     while (calls(Class, Method, CalleeClass, CalleeMethod)) {
         -calls(Class, Method, CalleeClass, CalleeMethod);
         +calls(NewClass, Method, CalleeClass, CalleeMethod);
@@ -41,27 +41,27 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
 +!move_method(Class, Method, NewClass) <-
     .print("useless move method:", Class, "::", Method, "-->", NewClass).
 
-+!extract_method(Class, Method) : method(Class, Method, Loc, Complexity) &
++!extract_method(Class, Method) : method(Class, Method, Loc, Complexity, Author) &
                                   Loc > 1 & Complexity > 1 <-
     // choose a random method name
     .randint(0, 999999, Suffix);
     .concat(Method, Suffix, ExtMethod);
 
     // update loc & complexity
-    -method(Class, Method, Loc, Complexity);
-    +method(Class, Method, Loc div 2, Complexity div 2);
+    -method(Class, Method, Loc, Complexity, _);
+    +method(Class, Method, Loc div 2, Complexity div 2, Author);
 
     // create new method and call
-    +method(Class, ExtMethod, Loc - Loc div 2 + 3, Complexity - Complexity div 2);
+    +method(Class, ExtMethod, Loc - Loc div 2 + 3, Complexity - Complexity div 2, Author);
     +calls(Class, Method, Class, ExtMethod).
 
-+!inline_method(Class, Method) : method(Class, Method, Loc, Complexity) <-
++!inline_method(Class, Method) : method(Class, Method, Loc, Complexity, Author) <-
     while (calls(CallerClass, CallerMethod, Class, Method)) {
         -calls(CallerClass, CallerMethod, Class, Method);
-        -method(CallerClass, CallerMethod, CallerLoc, CallerComplexity);
-        +method(CallerClass, CallerMethod, CallerLoc + Loc - 3, CallerComplexity + Complexity);
+        -method(CallerClass, CallerMethod, CallerLoc, CallerComplexity, _);
+        +method(CallerClass, CallerMethod, CallerLoc + Loc - 3, CallerComplexity + Complexity, Author);
     }
-    -method(Class, Method, Loc, Complexity).
+    -method(Class, Method, Loc, Complexity, _).
 
 // Work    Feature  Bugfix  Reverse Eng
 // junit4     1125     256          388
@@ -89,9 +89,9 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     // !add_feature.
 
 +!stats(Day) <-
-    .sum(Loc, method(_, _, Loc, _), TotalLoc);
-    .sum(Complexity, method(_, _, _, Complexity), TotalComplexity);
-    .count(method(_, _, _, _), MethodCount);
+    .sum(Loc, method(_, _, Loc, _, _), TotalLoc);
+    .sum(Complexity, method(_, _, _, Complexity, _), TotalComplexity);
+    .count(method(_, _, _, _, _), MethodCount);
     AverageComplexity = TotalComplexity / MethodCount;
     .csv(Day, TotalLoc, AverageComplexity);
     .print("day", Day, "loc", TotalLoc, "complexity", AverageComplexity).
@@ -133,7 +133,7 @@ calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _) &
     // choose a random method name
     .randint(0, 999999, Suffix);
     .concat("NewMethod", Suffix, Method);
-    +method(Class, Method, Loc, Complexity).
+    +method(Class, Method, Loc, Complexity, "todo@example.com").
     // .print("Added method", Class, "::", Method).
 
 +!random_method(Class, Method) : method(Class, Method, _, _) <- true. // TODO
