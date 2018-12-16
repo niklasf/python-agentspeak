@@ -985,8 +985,8 @@ class Actions(object):
 
         def _add_procedure(f):
             def wrapper(agent, term, intention):
-                if f(*_zip_specs(arg_specs, agent, term.args, intention.scope)):
-                    yield
+                f(*_zip_specs(arg_specs, agent, term.args, intention.scope))
+                yield
 
             return self.add(functor, _count_specs(arg_specs), wrapper)
 
