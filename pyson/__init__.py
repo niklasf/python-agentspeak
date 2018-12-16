@@ -904,6 +904,20 @@ def _zip_specs(specs, agent, args, scope):
     return result
 
 
+def _count_specs(specs):
+    import pyson.runtime
+
+    count = 0
+    for spec in specs:
+        if spec is pyson.runtime.Environment:
+            continue
+        elif spec is pyson.runtime.Agent:
+            continue
+        else:
+            count += 1
+    return count
+
+
 class Actions(object):
     def __init__(self, parent=None):
         self.parent = parent
@@ -936,7 +950,7 @@ class Actions(object):
                 if unify(term.args[-1], result, intention.scope, intention.stack):
                     yield
 
-            return self.add(functor, len(arg_specs) + 1, wrapper)
+            return self.add(functor, _count_specs(arg_specs) + 1, wrapper)
 
         # Marker for the optimizer
         _add_function.is_function = True
@@ -955,7 +969,7 @@ class Actions(object):
                 if f(*_zip_specs(arg_specs, agent, term.args, intention.scope)):
                     yield
 
-            return self.add(functor, len(arg_specs), wrapper)
+            return self.add(functor, _count_specs(arg_specs), wrapper)
 
         # Marker for the optimizer
         _add_predicate.is_procedure = True
@@ -974,7 +988,7 @@ class Actions(object):
                 if f(*_zip_specs(arg_specs, agent, term.args, intention.scope)):
                     yield
 
-            return self.add(functor, len(arg_specs), wrapper)
+            return self.add(functor, _count_specs(arg_specs), wrapper)
 
         # Marker for the optimizer
         _add_procedure.is_procedure = True
