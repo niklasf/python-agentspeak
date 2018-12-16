@@ -1,5 +1,5 @@
-//{include("snapshot_junit4.asl")}
-{include("snapshot_GameController.asl")}
+{include("snapshot_junit4.asl")}
+//{include("snapshot_GameController.asl")}
 // {include("snapshot_mapdb.asl")}
 
 calls_outgoing(C1, M1, C2, M2) :- calls(C1, M1, C2, M2) & method(C2, M2, _, _, _) & C1 \== C2.
