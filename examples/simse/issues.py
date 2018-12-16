@@ -30,18 +30,34 @@ def main(argv):
     parser.add_argument("repo", nargs="+")
     args = parser.parse_args(sys.argv[1:])
 
+    # Collect results.
+    results = {}
+
     for repo in args.repo:
+        results[repo] = []
+
         issues = list(get_issues(repo))
-        print(repo, end=" ")
         if issues:
             date = min(issue.opened for issue in issues)
             while date <= datetime.datetime.today():
                 open_at = sum(1 for issue in issues if issue.open_at(date))
-                print(open_at, end=" ")
+                results[repo].append(open_at)
                 date += datetime.timedelta(1)
-            print()
-        else:
-            print(repo, "0")
+
+    # Print results.
+    for repo in args.repo:
+        print(repo, end="\t")
+
+    print()
+
+    for day in range(max(len(days) for days in results.values())):
+        for repo in args.repo:
+            if day < len(results[repo]):
+                print(results[repo][day], end="\t")
+            else:
+                print(end="\t")
+        print()
+
 
 if __name__ == "__main__":
     main(sys.argv)
