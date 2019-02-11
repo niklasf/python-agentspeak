@@ -1077,6 +1077,12 @@ class FindOpVisitor(object):
             for op in term.accept(self):
                 yield op
 
+    def visit_linked_list(self, ast_linked_list):
+        for op in ast_linked_list.head.accept(self):
+            yield op
+        for op in ast_linked_list.tail.accept(self):
+            yield op
+
     def visit_const(self, ast_const):
         return
         yield
