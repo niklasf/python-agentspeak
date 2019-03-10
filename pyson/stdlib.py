@@ -415,15 +415,6 @@ def _unbind_all(agent, term, intention):
     yield
 
 
-@actions.add(".raise", 0)
-def _raise(agent, term, intention):
-    raise RuntimeError
-
-@actions.add_procedure(".raise", (None, ))
-def _raise(err):
-    raise RuntimeError(err)
-
-
 @actions.add(".control_flow", 0)
 @pyson.optimizer.no_scope_effects
 def _control_flow(agent, term, intention):
