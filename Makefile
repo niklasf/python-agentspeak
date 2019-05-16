@@ -54,7 +54,7 @@ lint: ## check style with flake8
 	flake8 pyson tests --ignore=E501
 
 test: ## run tests quickly with the default Python
-	python -m pytest tests
+	py.test tests/test_*
 
 test-all: ## run tests on every Python version with tox
 	tox
