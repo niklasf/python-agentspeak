@@ -18,13 +18,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import setuptools
-import os
 import sys
 
 
 def read_description():
-    description = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
-    return description
+    with open('README.rst') as readme_file:
+        readme = readme_file.read()
+
+    with open('HISTORY.rst') as history_file:
+        history = history_file.read()
+
+    return readme + '\n\n' + history
 
 
 def dependencies():
@@ -35,6 +39,10 @@ def dependencies():
 
     return deps
 
+
+setup_requirements = ['pytest-runner', ]
+
+test_requirements = ['pytest', ]
 
 setuptools.setup(
     name="pyson",
@@ -48,6 +56,11 @@ setuptools.setup(
     url="https://github.com/niklasf/pyson",
     packages=["pyson"],
     install_requires=dependencies(),
+    setup_requires=setup_requirements,
+    test_suite='tests',
+    tests_require=test_requirements,
+    zip_safe=False,
+    include_package_data=True,
     classifiers=[
         "Development Status :: 2- Pre-Alpha",
         "Environment :: Console",

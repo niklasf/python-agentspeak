@@ -6,7 +6,7 @@ b(3, 4)[source(percept)].
 
 +!test <-
     .abolish(b(_, _)[source(foo)]);
-    .abolish(b(X, X));
+    .abolish(b(X, X)[source(_)]);
     ?b(A, B);
     A == 3;
     B == 4.

@@ -1,6 +1,23 @@
 pyson - Jason-style AgentSpeak for Python
 =========================================
 
+.. image:: https://img.shields.io/pypi/v/pyson.svg
+        :target: https://pypi.python.org/pypi/pyson
+
+.. image:: https://img.shields.io/travis/niklasf/pyson.svg
+        :target: https://travis-ci.org/niklasf/pyson
+
+.. image:: https://readthedocs.org/projects/pyson/badge/?version=latest
+        :target: https://pyson.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+A Python-based interpreter for the agent-oriented programming language JASON
+
+
+* Free software: GNU General Public License v3
+* Documentation: https://pyson.readthedocs.io.
+
+
 Setup
 -----
 
