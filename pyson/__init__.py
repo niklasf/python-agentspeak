@@ -24,7 +24,6 @@ __email__ = "niklas.fiekas@backscattering.de"
 
 __version__ = "0.0.1"
 
-
 import enum
 import collections
 import logging
@@ -33,6 +32,7 @@ import colorama
 import operator
 import hashlib
 import numbers
+import six
 
 try:
     from StringIO import StringIO  # Python 2
@@ -348,7 +348,7 @@ def is_string(term):
     """
     Checks if the given term is a string.
     """
-    return isinstance(term, str)
+    return isinstance(term, six.string_types)
 
 
 def is_list(term):

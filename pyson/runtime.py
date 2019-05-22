@@ -36,7 +36,7 @@ from pyson import UnaryOp, BinaryOp, PysonError, pyson_str
 LOGGER = pyson.get_logger(__name__)
 
 
-class BuildTermVisitor:
+class BuildTermVisitor(object):
     def __init__(self, variables):
         self.variables = variables
 
