@@ -9,7 +9,6 @@ import agentspeak.stdlib
 
 from agentspeak import pyson_str
 
-
 actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
 
@@ -62,7 +61,7 @@ class Agent(agentspeak.runtime.Agent):
         self.emitted = collections.deque()
 
     def __repr__(self):
-        return "<Agent %r>" % (self.name, )
+        return "<Agent %r>" % (self.name,)
 
     def emit(self, k, v):
         self.emitted.append((k, v))
@@ -99,7 +98,7 @@ class Environment(agentspeak.runtime.Environment):
     def mr(self):
         print("========================================================")
         rdd = collections.defaultdict(list)
-        #for result in self.process_pool.imap_unordered(process, self.rdd.items()):
+        # for result in self.process_pool.imap_unordered(process, self.rdd.items()):
         for result in map(process, self.rdd.items()):
             print("result:", result)
             for key, value in result:

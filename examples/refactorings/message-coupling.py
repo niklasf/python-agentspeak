@@ -10,7 +10,7 @@ for line in open(sys.argv[1]):
     if line.startswith("method("):
         cols = line.lstrip("method(").split(", ")
         klass, method = cols[0].strip("\""), cols[1].strip("\"")
-        node = klass # + "::" + method
+        node = klass  # + "::" + method
         print(node, "is a node")
         G.add_node(node)
     if line.startswith("calls("):

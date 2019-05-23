@@ -6,7 +6,6 @@ import agentspeak.stdlib
 
 import os
 
-
 env = agentspeak.runtime.Environment()
 
 with open(os.path.join(os.path.dirname(__file__), "receiver.asl")) as source:

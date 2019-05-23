@@ -11,7 +11,6 @@ import agentspeak.runtime
 
 from helper import Schedule, Graph, iter_choice
 
-
 # #############################################################################
 # Parameters
 # #############################################################################
@@ -41,7 +40,6 @@ CATEGORY_PROBABILITY = 0.35
 
 LAST_STAGE = 0.85
 START_TICK_LAST_STAGE = int(SIM_ROUNDS * LAST_STAGE)
-
 
 # #############################################################################
 # Actions
@@ -159,7 +157,6 @@ class Developer:
 
 
 class Creator(Developer, agentspeak.runtime.Agent):
-
     actions = agentspeak.Actions(actions)
 
     def __init__(self, env, name, beliefs=None, rules=None, plans=None):
@@ -210,6 +207,7 @@ class Creator(Developer, agentspeak.runtime.Agent):
         elif self.is_owner(bug) and p_fix <= 0.95:
             bug.closed = schedule.tick
 
+
 class Maintainer(Developer):
 
     def __init__(self, name):
@@ -256,6 +254,7 @@ class Maintainer(Developer):
         elif self.is_owner(bug) and p_fix <= 0.90:
             bug.closed = schedule.tick
 
+
 class MajorDeveloper(Developer):
 
     def __init__(self, name):
@@ -300,6 +299,7 @@ class MajorDeveloper(Developer):
             bug.closed = schedule.tick
         elif self.is_owner(bug) and p_fix <= 0.25:
             bug.closed = schedule.tick
+
 
 class MinorDeveloper(Developer):
 
@@ -406,9 +406,11 @@ def create_bug():
         else:
             bugs.incr_edge(Bug("normal", schedule.tick), module)
 
+
 @schedule.add(interval=365)
 def debug():
     print("Bugs:", sum(1 for bug in bugs.outgoing if not bug.closed))
+
 
 @schedule.add(interval=1)
 def do_some_work():

@@ -7,14 +7,16 @@ import github
 import datetime
 import os
 
+
 class Issue:
     def __init__(self, opened, closed):
         self.opened = opened
         self.closed = closed
 
     def open_at(self, date):
-        #print(self.opened, date, self.opened <= date)
+        # print(self.opened, date, self.opened <= date)
         return self.opened <= date and (self.closed is None or date <= self.closed)
+
 
 def get_issues(reponame):
     api = github.Github(os.environ["GITHUB_API_TOKEN"])

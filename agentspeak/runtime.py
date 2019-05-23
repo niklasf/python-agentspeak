@@ -32,7 +32,6 @@ import agentspeak.util
 
 from agentspeak import UnaryOp, BinaryOp, PysonError, pyson_str
 
-
 LOGGER = agentspeak.get_logger(__name__)
 
 
@@ -323,6 +322,7 @@ class Waiter:
     def poll(self, env):
         return self.until is not None and self.until < env.time()
 
+
 class Intention:
     def __init__(self):
         self.instr = None
@@ -520,7 +520,8 @@ class Agent:
             elif intention.calling_term:
                 frozen = intention.head_term.freeze(intention.scope, {})
                 calling_intention = intention_stack[-1]
-                if not agentspeak.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
+                if not agentspeak.unify(intention.calling_term, frozen, calling_intention.scope,
+                                        calling_intention.stack):
                     raise RuntimeError("back unification failed")
             return True
 
@@ -636,9 +637,9 @@ class Environment:
 
         while len(agents) < n:
             agent = agent_cls(self, self._make_name(name or source.name),
-                copy.copy(prototype_agent.beliefs),
-                copy.copy(prototype_agent.rules),
-                copy.copy(prototype_agent.plans))
+                              copy.copy(prototype_agent.beliefs),
+                              copy.copy(prototype_agent.rules),
+                              copy.copy(prototype_agent.plans))
 
             for ast_goal in ast_agent.goals:
                 term = ast_goal.atom.accept(BuildTermVisitor({}))
@@ -790,7 +791,8 @@ class BuildInstructionsVisitor:
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == agentspeak.FormulaType.achieve_later:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call_delayed, agentspeak.Trigger.addition, agentspeak.GoalType.achievement, term),
+            self.add_instr(functools.partial(call_delayed, agentspeak.Trigger.addition,
+                                             agentspeak.GoalType.achievement, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
         elif ast_formula.formula_type == agentspeak.FormulaType.term:
             query = ast_formula.term.accept(BuildQueryVisitor(self.variables, self.actions, self.log))

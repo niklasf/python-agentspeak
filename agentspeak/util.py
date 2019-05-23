@@ -20,7 +20,6 @@ from __future__ import print_function
 
 import colorama
 
-
 try:
     input = raw_input  # Python 2
 except NameError:

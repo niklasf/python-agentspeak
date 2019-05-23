@@ -39,7 +39,6 @@ try:
 except ImportError:
     from io import StringIO  # Python 3
 
-
 SourceLocation = collections.namedtuple("SourceLocation",
                                         "filename lineno startcol endcol line")
 
@@ -208,25 +207,25 @@ class Log(object):
 @enum.unique
 class Trigger(enum.Enum):
     addition = "+"
-    removal  = "-"
+    removal = "-"
 
 
 @enum.unique
 class GoalType(enum.Enum):
     achievement = "!"
-    test        = "?"
-    belief      = ""
+    test = "?"
+    belief = ""
 
 
 @enum.unique
 class FormulaType(enum.Enum):
-    term          = ""
-    test          = "?"
-    achieve       = "!"
+    term = ""
+    test = "?"
+    achieve = "!"
     achieve_later = "!!"
-    add           = "+"
-    remove        = "-"
-    replace       = "-+"
+    add = "+"
+    remove = "-"
+    replace = "-+"
 
 
 class Operator(object):
@@ -250,32 +249,33 @@ class UnaryOp(enum.Enum):
 
 @enum.unique
 class BinaryOp(enum.Enum):
-    op_pow       = Operator("**", operator.pow, numeric=True)
+    op_pow = Operator("**", operator.pow, numeric=True)
 
-    op_mul       = Operator("*", operator.mul, numeric=True)
-    op_truediv   = Operator("/", operator.truediv, numeric=True)
-    op_floordiv  = Operator("div", operator.floordiv, numeric=True)
-    op_mod       = Operator("mod", operator.mod, numeric=True)
+    op_mul = Operator("*", operator.mul, numeric=True)
+    op_truediv = Operator("/", operator.truediv, numeric=True)
+    op_floordiv = Operator("div", operator.floordiv, numeric=True)
+    op_mod = Operator("mod", operator.mod, numeric=True)
 
-    op_add       = Operator("+", operator.add, numeric=True)
-    op_sub       = Operator("-", operator.sub, numeric=True)
+    op_add = Operator("+", operator.add, numeric=True)
+    op_sub = Operator("-", operator.sub, numeric=True)
 
-    op_unify     = Operator("=", query=True)
+    op_unify = Operator("=", query=True)
     op_decompose = Operator("=..", query=True)
 
-    op_lt        = Operator("<", operator.lt, comp=True)
-    op_le        = Operator("<=", operator.le, comp=True)
-    op_ne        = Operator("\\==", operator.ne, comp=True)
-    op_eq        = Operator("==", operator.eq, comp=True)
-    op_ge        = Operator(">=", operator.ge, comp=True)
-    op_gt        = Operator(">", operator.gt, comp=True)
+    op_lt = Operator("<", operator.lt, comp=True)
+    op_le = Operator("<=", operator.le, comp=True)
+    op_ne = Operator("\\==", operator.ne, comp=True)
+    op_eq = Operator("==", operator.eq, comp=True)
+    op_ge = Operator(">=", operator.ge, comp=True)
+    op_gt = Operator(">", operator.gt, comp=True)
 
-    op_and       = Operator("&", operator.__and__, boolean=True, query=True)
-    op_or        = Operator("|", operator.__or__, boolean=True, query=True)
+    op_and = Operator("&", operator.__and__, boolean=True, query=True)
+    op_or = Operator("|", operator.__or__, boolean=True, query=True)
 
 
 KEYWORDS = ["true", "false", "not", "div", "mod", "if", "else", "while", "for",
             "include", "begin", "end"]
+
 
 def sanitize_functor(s):
     """Transliterates s into a valid functor."""
@@ -316,7 +316,7 @@ def pyson_repr(term):
     elif term is False:
         return "false"
     elif isinstance(term, str):
-        return "\"%s\"" % (term.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""), )
+        return "\"%s\"" % (term.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""),)
     elif isinstance(term, tuple):
         return "[%s]" % (", ".join(pyson_repr(t) for t in term))
     elif isinstance(term, float) and term.is_integer():
@@ -518,9 +518,11 @@ class BinaryExpr(object):
         right = evaluate(self.right, scope)
 
         if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
-            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+            raise PysonError(
+                "bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
-            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+            raise PysonError(
+                "bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.comp_op:
             left = grounded(left, scope)
             right = grounded(right, scope)
@@ -658,7 +660,8 @@ class Literal(object):
         return not self.__ne__(other)
 
     def __ne__(self, other):
-        return not is_literal(other) or self.functor != other.functor or self.args != other.args or self.annots != other.annots
+        return not is_literal(other) or self.functor != other.functor or \
+               self.args != other.args or self.annots != other.annots
 
     def __lt__(self, other):
         if is_literal(other) and self.is_atom() and other.is_atom():
@@ -927,7 +930,7 @@ class Actions(object):
     def add(self, functor, arity=None, f=None):
         def _add(f):
             if arity is None:
-                assert functor not in self.variadic_actions, "%s/* already exists" % (functor, )
+                assert functor not in self.variadic_actions, "%s/* already exists" % (functor,)
                 self.variadic_actions[functor] = f
             else:
                 assert (functor, arity) not in self.actions, "%s/%d already exists" % (functor, arity)
@@ -941,7 +944,7 @@ class Actions(object):
 
     def add_function(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_function(f):
             def wrapper(agent, term, intention):
@@ -962,7 +965,7 @@ class Actions(object):
 
     def add_predicate(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_predicate(f):
             def wrapper(agent, term, intention):
@@ -981,7 +984,7 @@ class Actions(object):
 
     def add_procedure(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_procedure(f):
             def wrapper(agent, term, intention):

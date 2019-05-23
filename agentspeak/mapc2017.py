@@ -1,5 +1,4 @@
 import asyncio
-import logging
 
 from lxml import etree
 
@@ -9,12 +8,9 @@ import agentspeak
 import agentspeak.runtime
 import agentspeak.ext_stdlib
 
-
 LOGGER = agentspeak.get_logger(__name__)
 
-
 actions = agentspeak.Actions(agentspeak.ext_stdlib.actions)
-
 
 PERCEPT_TAG = frozenset([agentspeak.Literal("source", (agentspeak.Literal("percept"),))])
 
@@ -154,7 +150,8 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
             LOGGER.error("unknown message type: %r", message.get("type"))
 
         # Delay run until all agents are in a consistent state.
-        if all(agent.simulation_step is None or agent.simulation_step == self.simulation_step for agent in self.env.agents.values()):
+        if all(agent.simulation_step is None or agent.simulation_step == self.simulation_step for agent in
+               self.env.agents.values()):
             if self.simulation_step is not None:
                 LOGGER.debug("%s was the last agent to receive step %d", self.name, self.simulation_step)
             self.env.run()
@@ -212,7 +209,6 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
         else:
             self._set_belief("connected", self.name)
 
-
     def handle_sim_start(self, simulation):
         self._set_belief("id", simulation.get("id"))
         self._set_belief("map", simulation.get("map"))
@@ -233,12 +229,11 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
 
         for item in simulation.findall("./item"):
             tools = tuple(tool.get("name") for tool in item.findall("./tool"))
-            parts = tuple(agentspeak.Literal("parts", (part.get("name"), int(part.get("amount")))) for part in item.findall("./item"))
+            parts = tuple(agentspeak.Literal("parts", (part.get("name"), int(part.get("amount")))) for part in
+                          item.findall("./item"))
 
-            item_beliefs.append(
-                agentspeak.Literal("item", (
-                    item.get("name"), int(item.get("volume")), tools, parts),
-                                   PERCEPT_TAG))
+            item_beliefs.append(agentspeak.Literal("item", (item.get("name"), int(item.get("volume")), tools, parts),
+                                                   PERCEPT_TAG))
 
         self._replace_beliefs(("item", 4), item_beliefs)
 
@@ -282,10 +277,7 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
         # Update carried items.
         carried_items = []
         for item in self_data.findall("./items"):
-            carried_items.append(
-                agentspeak.Literal("item", (
-                    item.get("name"), int(item.get("amount"))),
-                                   PERCEPT_TAG))
+            carried_items.append(agentspeak.Literal("item", (item.get("name"), int(item.get("amount"))), PERCEPT_TAG))
         self._replace_beliefs(("item", 2), carried_items)
 
         # Update entities.
@@ -310,10 +302,8 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
         # Update dumps.
         dumps = []
         for dump in req.findall("dump"):
-            dumps.append(
-                agentspeak.Literal("dump", (
-                    dump.get("name"), float(dump.get("lat")), float(dump.get("lon"))),
-                                   PERCEPT_TAG))
+            dumps.append(agentspeak.Literal("dump", (dump.get("name"), float(dump.get("lat")), float(dump.get("lon"))),
+                                            PERCEPT_TAG))
         self._replace_beliefs(("dump", 4), dumps)
 
         # Update shops.
@@ -352,19 +342,20 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
         # Update workshops.
         workshops = []
         for workshop in req.findall("workshop"):
-            workshops.append(
-                agentspeak.Literal("workshop", (
-                    workshop.get("name"), float(workshop.get("lat")), float(workshop.get("lon"))),
-                                   PERCEPT_TAG))
+            workshops.append(agentspeak.Literal("workshop", (workshop.get("name"),
+                                                             float(workshop.get("lat")),
+                                                             float(workshop.get("lon"))),
+                                                PERCEPT_TAG))
         self._replace_beliefs(("workshop", 3), workshops)
 
         # Update resource nodes.
         resource_nodes = []
         for node in req.findall("resourceNode"):
-            resource_nodes.append(
-                agentspeak.Literal("resourceNode", (
-                    node.get("name"), float(node.get("lat")), float(node.get("lon")), node.get("resource")),
-                                   PERCEPT_TAG))
+            resource_nodes.append(agentspeak.Literal("resourceNode", (node.get("name"),
+                                                                      float(node.get("lat")),
+                                                                      float(node.get("lon")),
+                                                                      node.get("resource")),
+                                                     PERCEPT_TAG))
         self._replace_beliefs(("resourceNode", 4), resource_nodes)
 
         # Update job percepts.
@@ -377,9 +368,10 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
                              for item in job.findall("required"))
 
             jobs.append(
-                agentspeak.Literal("job", (
-                    job.get("id"), job.get("storage"), int(job.get("reward")),
-                    int(job.get("start")),int(job.get("end")), required),
+                agentspeak.Literal("job", (job.get("id"), job.get("storage"),
+                                           int(job.get("reward")),
+                                           int(job.get("start")),
+                                           int(job.get("end")), required),
                                    PERCEPT_TAG))
 
         for auction in req.findall("auction"):
@@ -387,39 +379,40 @@ class Agent(agentspeak.runtime.Agent, asyncio.Protocol):
                              for item in auction.findall("required"))
 
             reward = int(auction.get("reward"))
-            auctions.append(
-                agentspeak.Literal("auction", (
-                    auction.get("id"), auction.get("storage"), reward,
-                    int(auction.get("start")),int(auction.get("end")), int(auction.get("fine")),
-                    int(auction.get("lowestBid", str(reward + 1))), int(auction.get("auctionTime")), required),
-                                   PERCEPT_TAG))
+            auctions.append(agentspeak.Literal("auction", (auction.get("id"), auction.get("storage"), reward,
+                                                           int(auction.get("start")),
+                                                           int(auction.get("end")),
+                                                           int(auction.get("fine")),
+                                                           int(auction.get("lowestBid", str(reward + 1))),
+                                                           int(auction.get("auctionTime")), required),
+                                               PERCEPT_TAG))
 
         for mission in req.findall("mission"):
             required = tuple(agentspeak.Literal("required", (item.get("name"), int(item.get("amount"))))
                              for item in mission.findall("required"))
 
-            missions.append(
-                agentspeak.Literal("mission", (
-                    mission.get("id"), mission.get("storage"), int(mission.get("reward")),
-                    int(mission.get("start")), int(mission.get("end")), int(mission.get("fine")),
-                    int(mission.get("lowestBid")), 0, required),
-                                   PERCEPT_TAG))
+            missions.append(agentspeak.Literal("mission", (mission.get("id"), mission.get("storage"),
+                                                           int(mission.get("reward")),
+                                                           int(mission.get("start")),
+                                                           int(mission.get("end")),
+                                                           int(mission.get("fine")),
+                                                           int(mission.get("lowestBid")), 0, required),
+                                               PERCEPT_TAG))
 
         for posted in req.findall("posted"):
             required = tuple(agentspeak.Literal("required", (item.get("name"), int(item.get("amount"))))
                              for item in posted.findall("required"))
 
-            posteds.append(
-                agentspeak.Literal("job", (
-                    posted.get("id"), posted.get("storage"), int(posted.get("reward")),
-                    int(posted.get("start")),int(posted.get("end")), required),
-                                   PERCEPT_TAG))
+            posteds.append(agentspeak.Literal("job", (posted.get("id"), posted.get("storage"),
+                                                      int(posted.get("reward")),
+                                                      int(posted.get("start")),
+                                                      int(posted.get("end")), required),
+                                              PERCEPT_TAG))
 
         self._replace_beliefs(("job", 5), jobs)
         self._replace_beliefs(("auction", 9), auctions)
         self._replace_beliefs(("mission", 9), missions)
         self._replace_beliefs(("posted", 5), posteds)
-
 
         # Update step.
         self._set_belief("timestamp", int(message.get("timestamp")))

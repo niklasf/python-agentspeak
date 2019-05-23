@@ -10,7 +10,6 @@ import sys
 import os.path
 import copy
 
-
 # Initialize
 
 N = int(sys.argv[1])

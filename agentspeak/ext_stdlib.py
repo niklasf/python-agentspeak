@@ -6,7 +6,6 @@ from agentspeak import pyson_str
 import agentspeak.stdlib
 import agentspeak.optimizer
 
-
 actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
 
@@ -15,21 +14,22 @@ def _raise(agent, term, intention):
     raise RuntimeError
 
 
-@actions.add_procedure(".raise", (None, ))
+@actions.add_procedure(".raise", (None,))
 def _raise(err):
     raise RuntimeError(err)
 
 
-@actions.add_function(".tail", (tuple, ))
+@actions.add_function(".tail", (tuple,))
 def _tail(l):
     return l[1:]
 
 
-actions.add_function(".floor", (float, ), math.floor)
-actions.add_function(".ceil", (float, ), math.ceil)
-actions.add_function(".round", (float, ), round)
+actions.add_function(".floor", (float,), math.floor)
+actions.add_function(".ceil", (float,), math.ceil)
+actions.add_function(".round", (float,), round)
 
-actions.add_function(".randint", (int, int, ), random.randint)
+actions.add_function(".randint", (int, int,), random.randint)
+
 
 @actions.add(".sum", 3)
 @agentspeak.optimizer.function_like
@@ -43,6 +43,7 @@ def _sum(agent, term, intention):
 
     if agentspeak.unify(total, term.args[2], intention.scope, intention.stack):
         yield
+
 
 @actions.add(".csv")
 @agentspeak.optimizer.no_scope_effects
@@ -62,9 +63,10 @@ def _csv(agent, term, intention, _files={}):
 
     yield
 
+
 try:
     import numpy
 except ImportError:
     pass
 else:
-    actions.add_function(".geometric", (float, ), numpy.random.geometric)
+    actions.add_function(".geometric", (float,), numpy.random.geometric)

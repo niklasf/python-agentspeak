@@ -8,10 +8,22 @@ import os
 import itertools
 import networkx as nx
 import networkx.algorithms.approximation as apxa
-#import matplotlib.pyplot as plt
+
+# import matplotlib.pyplot as plt
 
 
-ENDINGS = ['4th', 'forth', 'fr', 'frt', 'fth', 'f83', 'fb', 'fpm', 'e4', 'rx', 'ft', 'ada', 'adb', 'ads', 'pad', 'agda', 'as', 'awk', 'bat', 'btm', 'cmd', 'c', 'ec', 'pgc', 'cc', 'cpp', 'cxx', 'c++', 'pcc', 'cfc', 'coffee', 'cs', 'csh', 'css', 'cu', 'cuh', 'd', 'dart', 'dts', 'dtsi', 'el', 'lisp', 'lsp', 'scm', 'ss', 'rkt', 'erl', 'hrl', 'fs', 'fsx', 'vert', 'tesc', 'tese', 'geom', 'frag', 'comp', 'go', 'h', 'hh', 'hpp', 'hxx', 'hbs', 'handlebars', 'hs', 'html', 'idr', 'lidr', 'ini', 'jai', 'java', 'jl', 'js', 'jsx', 'kt', 'kts', 'lds', 'lean', 'hlean', 'less', 'lua', 'm', 'ml', 'mli', 'nb', 'wl', 'sh', 'asa', 'asp', 'asax', 'ascx', 'asmx', 'aspx', 'master', 'sitemap', 'webinfo', 'in', 'clj', 'cljs', 'cljc', 'f', 'for', 'ftn', 'f77', 'pfo', 'f03', 'f08', 'f90', 'f95', 'makefile', 'mk', 'mm', 'nim', 'php', 'pl', 'qcl', 'qml', 'cshtml', 'mustache', 'oz', 'p', 'pro', 'pas', 'hex', 'ihex', 'json', 'markdown', 'md', 'rst', 'text', 'txt', 'polly', 'proto', 'arr', 'py', 'r', 'rake', 'rb', 'rhtml', 'rs', 's', 'asm', 'sass', 'scss', 'sc', 'scala', 'sls', 'sml', 'sql', 'styl', 'swift', 'tcl', 'tex', 'sty', 'toml', 'ts', 'tsx', 'thy', 'uc', 'uci', 'upkg', 'v', 'vim', 'xml', 'yaml', 'yml', 'y', 'zsh']
+ENDINGS = ['4th', 'forth', 'fr', 'frt', 'fth', 'f83', 'fb', 'fpm', 'e4', 'rx', 'ft', 'ada', 'adb', 'ads', 'pad', 'agda',
+           'as', 'awk', 'bat', 'btm', 'cmd', 'c', 'ec', 'pgc', 'cc', 'cpp', 'cxx', 'c++', 'pcc', 'cfc', 'coffee', 'cs',
+           'csh', 'css', 'cu', 'cuh', 'd', 'dart', 'dts', 'dtsi', 'el', 'lisp', 'lsp', 'scm', 'ss', 'rkt', 'erl', 'hrl',
+           'fs', 'fsx', 'vert', 'tesc', 'tese', 'geom', 'frag', 'comp', 'go', 'h', 'hh', 'hpp', 'hxx', 'hbs',
+           'handlebars', 'hs', 'html', 'idr', 'lidr', 'ini', 'jai', 'java', 'jl', 'js', 'jsx', 'kt', 'kts', 'lds',
+           'lean', 'hlean', 'less', 'lua', 'm', 'ml', 'mli', 'nb', 'wl', 'sh', 'asa', 'asp', 'asax', 'ascx', 'asmx',
+           'aspx', 'master', 'sitemap', 'webinfo', 'in', 'clj', 'cljs', 'cljc', 'f', 'for', 'ftn', 'f77', 'pfo', 'f03',
+           'f08', 'f90', 'f95', 'makefile', 'mk', 'mm', 'nim', 'php', 'pl', 'qcl', 'qml', 'cshtml', 'mustache', 'oz',
+           'p', 'pro', 'pas', 'hex', 'ihex', 'json', 'markdown', 'md', 'rst', 'text', 'txt', 'polly', 'proto', 'arr',
+           'py', 'r', 'rake', 'rb', 'rhtml', 'rs', 's', 'asm', 'sass', 'scss', 'sc', 'scala', 'sls', 'sml', 'sql',
+           'styl', 'swift', 'tcl', 'tex', 'sty', 'toml', 'ts', 'tsx', 'thy', 'uc', 'uci', 'upkg', 'v', 'vim', 'xml',
+           'yaml', 'yml', 'y', 'zsh']
 
 
 def mine_repo(base_path):
@@ -26,7 +38,7 @@ def mine_repo(base_path):
 
             relpath = os.path.relpath(os.path.join(subdir, filename), base_path)
             for entry in repo.blame_incremental("HEAD", relpath):
-               commits[entry.commit.hexsha].add(filename)
+                commits[entry.commit.hexsha].add(filename)
 
     return commits
 
@@ -59,8 +71,8 @@ def main(fixtures):
     print("Repo", "Average clustering", "Degree assortativity", "Transitivity", sep="\t")
     print("Repo", "Average clustering", "Degree assortativity", "Transitivity", sep="\t", file=out_file)
 
-    #nx.draw(G, with_labels=True)
-    #plt.show()
+    # nx.draw(G, with_labels=True)
+    # plt.show()
 
     repos = yield_repos(fixtures)
     any(repo == "cuberite" for user, repo in repos)

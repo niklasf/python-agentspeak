@@ -19,6 +19,7 @@ actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
 actions.add_function(".sin", float, math.sin)
 
+
 @actions.add_function(".f", float)
 def f(val):
     return val * 3
@@ -95,15 +96,14 @@ for day in range(5 * 365):
 
     if plot:
         import matplotlib.pyplot as plt
+
         plt.scatter(day, len(files))
         plt.show()
         plt.pause(0.001)
 
     print(day, len(files), sep=",", file=result_file)
 
-
 result_file.close()
-
 
 # Debug
 

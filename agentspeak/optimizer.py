@@ -8,8 +8,8 @@ from __future__ import print_function
 import enum
 import sys
 import itertools
-import copy   
-import re     
+import copy
+import re
 
 import agentspeak.lexer
 import agentspeak.parser
@@ -19,29 +19,32 @@ from agentspeak import FormulaType, BinaryOp, UnaryOp
 from agentspeak.parser import (AstNode, AstLiteral, AstVariable, AstConst, AstBinaryOp, AstUnaryOp,
                                AstFormula, AstPlan, AstBody, AstList)
 
+
 def _is_str_type(s):
     try:
         return isinstance(s, unicode)
     except NameError:
         return isinstance(s, str)
 
+
 @enum.unique
 class AstType(enum.Enum):
-    LITERAL      = 1
-    LIST         = 2
-    RULE         = 3
-    GOAL         = 4
-    FORMULA      = 5
-    CONST        = 6
-    VARIABLE     = 7
-    UNARY_OP     = 8
-    BINARY_OP    = 9
-    PLAN         = 10
-    BODY         = 11
-    WHILE        = 12
-    FOR          = 13
+    LITERAL = 1
+    LIST = 2
+    RULE = 3
+    GOAL = 4
+    FORMULA = 5
+    CONST = 6
+    VARIABLE = 7
+    UNARY_OP = 8
+    BINARY_OP = 9
+    PLAN = 10
+    BODY = 11
+    WHILE = 12
+    FOR = 13
     IF_THEN_ELSE = 14
-    AGENT        = 15
+    AGENT = 15
+
 
 class CallbackVisitor(object):
     def __init__(self, callback):
@@ -50,8 +53,10 @@ class CallbackVisitor(object):
 
     def resolve_single(self, ast_node):
         return self._cb_sing(ast_node)
+
     def resolve_list(self, ast_node):
         return self._cb_map(ast_node)
+
     def resolve_maybe(self, ast_node):
         r = self._cb_map([ast_node])
         assert len(r) < 2
@@ -59,13 +64,14 @@ class CallbackVisitor(object):
             return r[0]
         else:
             return None
+
     def forward(self, ast_node):
         c = ast_node.accept(self)
         if c is None:
             return ast_node
         else:
             return c
-        
+
     def _cb_sing(self, ast_node):
         r = ast_node.accept(self)
         if r is None or r == _IAC.KEEP_CURRENT:
@@ -80,6 +86,7 @@ class CallbackVisitor(object):
             return r
         else:
             assert False
+
     def _cb_sing_chk(self, ast_node):
         r = ast_node.accept(self)
         if r is None or r == _IAC.KEEP_CURRENT:
@@ -92,6 +99,7 @@ class CallbackVisitor(object):
             return False, r
         else:
             assert False
+
     def _cb_map(self, lst):
         result = []
         for ast_node in lst:
@@ -107,11 +115,11 @@ class CallbackVisitor(object):
             else:
                 assert False
         return result
-        
+
     def visit_binary_op(self, ast_binary_op):
         code = self.callback.pre_ast_node(AstType.BINARY_OP, ast_binary_op)
         if code is not None: return code
-        ast_binary_op.left  = self._cb_sing(ast_binary_op.left)
+        ast_binary_op.left = self._cb_sing(ast_binary_op.left)
         ast_binary_op.right = self._cb_sing(ast_binary_op.right)
         return self.callback.on_ast_node(AstType.BINARY_OP, ast_binary_op)
 
@@ -222,18 +230,19 @@ class CallbackVisitor(object):
         ast_literal.annotations = self._cb_map(ast_literal.annotations)
         return self.callback.on_ast_node(AstType.LITERAL, ast_literal)
 
+
 class CallbackReverseVisitor(CallbackVisitor):
     def _cb_map(self, lst):
         lst.reverse()
         tmp = super(CallbackReverseVisitor, self)._cb_map(lst)
         tmp.reverse()
         return tmp
-    
+
     def visit_binary_op(self, ast_binary_op):
         code = self.callback.pre_ast_node(AstType.BINARY_OP, ast_binary_op)
         if code is not None: return code
         ast_binary_op.right = self._cb_sing(ast_binary_op.right)
-        ast_binary_op.left  = self._cb_sing(ast_binary_op.left)
+        ast_binary_op.left = self._cb_sing(ast_binary_op.left)
         return self.callback.on_ast_node(AstType.BINARY_OP, ast_binary_op)
 
     def visit_agent(self, ast_agent):
@@ -267,7 +276,7 @@ class CallbackReverseVisitor(CallbackVisitor):
         ast_while.body = self._cb_sing(ast_while.body)
         ast_while.condition = self._cb_sing(ast_while.condition)
         return self.callback.on_ast_node(AstType.WHILE, ast_while)
-    
+
     def visit_plan(self, ast_plan):
         code = self.callback.pre_ast_node(AstType.PLAN, ast_plan)
         if code is not None: return code
@@ -290,7 +299,8 @@ class CallbackReverseVisitor(CallbackVisitor):
         ast_literal.annotations = self._cb_map(ast_literal.annotations)
         ast_literal.terms = self._cb_map(ast_literal.terms)
         return self.callback.on_ast_node(AstType.LITERAL, ast_literal)
-        
+
+
 class DefaultCallback(object):
     @classmethod
     def apply(cls, ast_node, *a):
@@ -298,62 +308,79 @@ class DefaultCallback(object):
 
     def __init__(self):
         self.visitor_parent = None
-        
+
     def pre_ast_node(self, type, ast_obj): return
-    def on_ast_node (self, type, ast_obj): return _IAC.KEEP_CURRENT
+
+    def on_ast_node(self, type, ast_obj): return _IAC.KEEP_CURRENT
+
 
 class TypedCallback(DefaultCallback):
-    def on_ast_node (self, type, ast_obj):
+    def on_ast_node(self, type, ast_obj):
         return {
-            AstType.LITERAL      : self.on_literal,
-            AstType.LIST         : self.on_list,
-            AstType.RULE         : self.on_rule,
-            AstType.GOAL         : self.on_goal,
-            AstType.FORMULA      : self.on_formula,
-            AstType.CONST        : self.on_const,
-            AstType.VARIABLE     : self.on_variable,
-            AstType.UNARY_OP     : self.on_unary_op,
-            AstType.BINARY_OP    : self.on_binary_op,
-            AstType.PLAN         : self.on_plan,
-            AstType.BODY         : self.on_body,
-            AstType.WHILE        : self.on_while,
-            AstType.FOR          : self.on_for,
-            AstType.IF_THEN_ELSE : self.on_if_then_else,
-            AstType.AGENT        : self.on_agent
+            AstType.LITERAL: self.on_literal,
+            AstType.LIST: self.on_list,
+            AstType.RULE: self.on_rule,
+            AstType.GOAL: self.on_goal,
+            AstType.FORMULA: self.on_formula,
+            AstType.CONST: self.on_const,
+            AstType.VARIABLE: self.on_variable,
+            AstType.UNARY_OP: self.on_unary_op,
+            AstType.BINARY_OP: self.on_binary_op,
+            AstType.PLAN: self.on_plan,
+            AstType.BODY: self.on_body,
+            AstType.WHILE: self.on_while,
+            AstType.FOR: self.on_for,
+            AstType.IF_THEN_ELSE: self.on_if_then_else,
+            AstType.AGENT: self.on_agent
         }[type](ast_obj)
 
-    def on_literal     (self, ast_literal     ): pass
-    def on_list        (self, ast_list        ): pass
-    def on_rule        (self, ast_rule        ): pass
-    def on_goal        (self, ast_goal        ): pass
-    def on_formula     (self, ast_formula     ): pass
-    def on_const       (self, ast_const       ): pass
-    def on_variable    (self, ast_variable    ): pass
-    def on_unary_op    (self, ast_unary_op    ): pass
-    def on_binary_op   (self, ast_binary_op   ): pass
-    def on_plan        (self, ast_plan        ): pass
-    def on_body        (self, ast_body        ): pass
-    def on_while       (self, ast_while       ): pass
-    def on_for         (self, ast_for         ): pass
+    def on_literal(self, ast_literal): pass
+
+    def on_list(self, ast_list): pass
+
+    def on_rule(self, ast_rule): pass
+
+    def on_goal(self, ast_goal): pass
+
+    def on_formula(self, ast_formula): pass
+
+    def on_const(self, ast_const): pass
+
+    def on_variable(self, ast_variable): pass
+
+    def on_unary_op(self, ast_unary_op): pass
+
+    def on_binary_op(self, ast_binary_op): pass
+
+    def on_plan(self, ast_plan): pass
+
+    def on_body(self, ast_body): pass
+
+    def on_while(self, ast_while): pass
+
+    def on_for(self, ast_for): pass
+
     def on_if_then_else(self, ast_if_then_else): pass
-    def on_agent       (self, ast_agent       ): pass
+
+    def on_agent(self, ast_agent): pass
+
 
 class DumpingCallback(DefaultCallback):
     def __init__(self):
         self.nesting = -1
-    
+
     def pre_ast_node(self, typ, ast_obj):
         self.nesting += 1
         s = str(ast_obj).replace('\n', ' ') + ' '
         s += self.add_info(typ, ast_obj)
         maxlen = 100 - self.nesting
-        s = re.sub('  +', ' ', s, maxlen//2)
-        if len(s) > maxlen: s = s[:maxlen-4] + ' ...'
-        print('%s%-12s %s' % (' '*self.nesting, type(ast_obj).__name__, s))
-    
-    def on_ast_node (self, typ, ast_obj):
+        s = re.sub('  +', ' ', s, maxlen // 2)
+        if len(s) > maxlen: s = s[:maxlen - 4] + ' ...'
+        print('%s%-12s %s' % (' ' * self.nesting, type(ast_obj).__name__, s))
+
+    def on_ast_node(self, typ, ast_obj):
         self.nesting -= 1
-    
+
     def add_info(self, typ, ast_obj):
         s = []
         if hasattr(ast_obj, 'bound_status'):
@@ -368,40 +395,43 @@ class DumpingCallback(DefaultCallback):
             s.append('read=%s' % ast_obj.vars_read)
         if hasattr(ast_obj, 'vars_written'):
             s.append('write=%s' % ast_obj.vars_written)
-        
+
         if s:
             return '[%s]' % ', '.join(s)
         else:
             return ''
 
+
 @enum.unique
 class InferenceConst(enum.Enum):
     # What is known about a variable
-    UNPROVEN        = 1   # Nothing
-    PROVEN_UNBOUND  = 2   # The variable is not bound
-    PROVEN_BOUND    = 3   # The variable is bound
-    PROVEN_VALUE    = 4   # The variable is bound, with known value
-    
+    UNPROVEN = 1  # Nothing
+    PROVEN_UNBOUND = 2  # The variable is not bound
+    PROVEN_BOUND = 3  # The variable is bound
+    PROVEN_VALUE = 4  # The variable is bound, with known value
+
     @classmethod
     def get_str(cls, val):
         return {
-            cls.UNPROVEN       : 'unprov',
-            cls.PROVEN_UNBOUND : 'unbound',
-            cls.PROVEN_BOUND   : 'bound',
-            cls.PROVEN_VALUE   : 'bound_val'
+            cls.UNPROVEN: 'unprov',
+            cls.PROVEN_UNBOUND: 'unbound',
+            cls.PROVEN_BOUND: 'bound',
+            cls.PROVEN_VALUE: 'bound_val'
         }[val]
 
+
 _IC = InferenceConst
+
 
 @enum.unique
 class InferenceAstCmd(enum.Enum):
     KEEP_CURRENT = 1
-    DELETE_NODE  = 2
-    
+    DELETE_NODE = 2
+
     @staticmethod
     def REPLACE_NODE(n):
         return n
-    
+
     @staticmethod
     def EXPAND_LIST(l):
         if len(l) == 0:
@@ -410,16 +440,18 @@ class InferenceAstCmd(enum.Enum):
             return l[0]
         else:
             return list(l)
-    
+
+
 _IAC = InferenceAstCmd
 
 inference_unique_counter = itertools.count()
-        
+
+
 class InferenceInitCallback(TypedCallback):
     '''Initialize all values in the ast used by the optimizer. This is currently unused, but serves
        as documentation.
     '''
-    
+
     def on_variable(self, ast_variable):
         # Information on whether the variable is bound
         ast_variable.bound_status = _IC.UNPROVEN
@@ -427,7 +459,8 @@ class InferenceInitCallback(TypedCallback):
         # always a node in the AST, it may be either an AstConst or a reference to an AstVariable.
         # The latter means that the two variables hold the same value, even if it is not known
         # which. The graph of such references is a tree, the root holding the actual status.
-        ast_variable.bound_value  = None
+        ast_variable.bound_value = None
+
 
 class InferenceScopedState(object):
     def __init__(self, ast_plan):
@@ -441,7 +474,7 @@ class InferenceScopedState(object):
 
     def copy(self):
         return copy.deepcopy(self)
-    
+
     def merge(self, other):
         '''Let's call A a state implied by B iff A holds whenever B does. (For example, every
            variable that is PROVEN_BOUND in B must be either PROVEN_BOUND or UNPROVEN in A.) Two
@@ -452,26 +485,26 @@ class InferenceScopedState(object):
            component-wise, the longest ordered sequence has a length of at most k*n, where n is the
            number of components and k the number of states of a single component.
         '''
-        
+
         for i in self.status:
             if i not in other.status:
                 other.status[i] = _IC.PROVEN_UNBOUND
-        
+
         for i in other.status:
             if i not in self.status:
                 self.status[i] = _IC.PROVEN_UNBOUND
-            
+
             s1, s2 = self.status[i], other.status[i]
-            if (s1, s2) ==    (_IC.PROVEN_VALUE,   _IC.PROVEN_VALUE  ):
+            if (s1, s2) == (_IC.PROVEN_VALUE, _IC.PROVEN_VALUE):
                 if nodes_equal(self.deref(self.get_var_ast(i)), other.deref(other.get_var_ast(i))):
                     self.status[i] = _IC.PROVEN_VALUE
                 else:
                     self.status[i] = _IC.PROVEN_BOUND
-            elif (s1, s2) in ((_IC.PROVEN_VALUE,   _IC.PROVEN_BOUND  ),
-                              (_IC.PROVEN_BOUND,   _IC.PROVEN_VALUE  ),
-                              (_IC.PROVEN_BOUND,   _IC.PROVEN_BOUND  )):
+            elif (s1, s2) in ((_IC.PROVEN_VALUE, _IC.PROVEN_BOUND),
+                              (_IC.PROVEN_BOUND, _IC.PROVEN_VALUE),
+                              (_IC.PROVEN_BOUND, _IC.PROVEN_BOUND)):
                 self.status[i] = _IC.PROVEN_BOUND
-            elif (s1, s2) ==  (_IC.PROVEN_UNBOUND, _IC.PROVEN_UNBOUND):
+            elif (s1, s2) == (_IC.PROVEN_UNBOUND, _IC.PROVEN_UNBOUND):
                 self.status[i] = _IC.PROVEN_UNBOUND
             else:
                 self.status[i] = _IC.UNPROVEN
@@ -479,19 +512,19 @@ class InferenceScopedState(object):
         for i in self.status:
             if i in other.subvars:
                 self.subvars[i] = self.subvars.get(i, set()) | other.subvars.get(i, set())
-        
+
     def deref(self, ast_node):
         '''Dereference the node as far as possible and return the result. The result cannot both be
            an AstVariable and PROVEN_VALUE, by definition.
         '''
         ast_node = copy.copy(ast_node)
         while (isinstance(ast_node, AstVariable)
-                and ast_node.bound_status == _IC.PROVEN_VALUE):
+               and ast_node.bound_status == _IC.PROVEN_VALUE):
             ast_node = copy.copy(ast_node.bound_value)
             if isinstance(ast_node, AstVariable):
-                ast_node.bound_status    = self.status[ast_node.name]
-                ast_node.bound_value     = self.values.get(ast_node.name, None)
-                ast_node.contained_vars  = self.subvars.get(ast_node.name, set())
+                ast_node.bound_status = self.status[ast_node.name]
+                ast_node.bound_value = self.values.get(ast_node.name, None)
+                ast_node.contained_vars = self.subvars.get(ast_node.name, set())
         if isinstance(ast_node, AstLiteral):
             ast_node.terms = [self.deref(i) for i in ast_node.terms]
             ast_node.annotations = [self.deref(i) for i in ast_node.annotations]
@@ -509,20 +542,21 @@ class InferenceScopedState(object):
             if i not in self.subvars:
                 self.subvars[i] = set()
             self.subvars[i].add(root)
-    
+
     def get_var_ast(self, var):
         ast_node = AstVariable()
         ast_node.name = var
-        ast_node.bound_status    = self.status[var]
-        ast_node.bound_value     = self.values.get(var, None)
-        ast_node.contained_vars  = self.subvars.get(ast_node.name, set())
+        ast_node.bound_status = self.status[var]
+        ast_node.bound_value = self.values.get(var, None)
+        ast_node.contained_vars = self.subvars.get(ast_node.name, set())
         return ast_node
-    
+
+
 def nodes_equal(ast_node1, ast_node2):
     '''Checks whether the two nodes are equal. They must be dereferenced beforehand.'''
     assert isinstance(ast_node1, (AstConst, AstLiteral, AstVariable))
     assert isinstance(ast_node2, (AstConst, AstLiteral, AstVariable))
-    
+
     if type(ast_node1) != type(ast_node2):
         return False
     elif isinstance(ast_node1, AstConst):
@@ -531,27 +565,27 @@ def nodes_equal(ast_node1, ast_node2):
         return ast_node1.name == ast_node2.name
     elif isinstance(ast_node1, AstLiteral):
         return (ast_node1.functor == ast_node2.functor
-            and all(nodes_equal(i, j)
-                for i, j in zip(ast_node1.terms, ast_node2.terms))
-            and len(ast_node1.annotations) == len(ast_node2.annotations) == 0
-        )
+                and all(nodes_equal(i, j)
+                        for i, j in zip(ast_node1.terms, ast_node2.terms))
+                and len(ast_node1.annotations) == len(ast_node2.annotations) == 0
+                )
     else:
         assert False
 
 
 class InferenceEvilnessConst(object):
     # What variables can be changed by an action
-    _AFFECT_ANY       = 4   # Internal, intended for querying
-    _AFFECT_PARAM_ANY = 5   # Internal, intended for querying
-    _AFFECT_PARAM     = 6   # Internal, use AFFECT_PARAM to specify a specific parameter
-    AFFECT_PARAM_ALL  = 7   # All variables that are parameters
-    AFFECT_SCOPE      = 8   # All variables in scope
-    AFFECT_UNIVERSE   = 9   # Everything
-    
+    _AFFECT_ANY = 4  # Internal, intended for querying
+    _AFFECT_PARAM_ANY = 5  # Internal, intended for querying
+    _AFFECT_PARAM = 6  # Internal, use AFFECT_PARAM to specify a specific parameter
+    AFFECT_PARAM_ALL = 7  # All variables that are parameters
+    AFFECT_SCOPE = 8  # All variables in scope
+    AFFECT_UNIVERSE = 9  # Everything
+
     @classmethod
     def AFFECT_PARAM(cls, par):
         return (cls._AFFECT_PARAM, par, par)
-    
+
     @classmethod
     def AFFECT_PARAM_INTERVAL(cls, fr, to_and_including_the_index):
         '''The to_and_including_the_index argument specifies the end point of the interval, WHICH IS
@@ -559,15 +593,17 @@ class InferenceEvilnessConst(object):
            implement this way.
         '''
         return (cls._AFFECT_PARAM, fr, to_and_including_the_index)
-    
-    EFFECT_CHANGE        = 10  # The values of bound variables may change
-    EFFECT_DOBIND        = 12  # Unbound variables will definitely be bound
-    EFFECT_BIND          = 13  # Unbound variables may be bound
+
+    EFFECT_CHANGE = 10  # The values of bound variables may change
+    EFFECT_DOBIND = 12  # Unbound variables will definitely be bound
+    EFFECT_BIND = 13  # Unbound variables may be bound
     EFFECT_REQUIRE_BOUND = 13  # The variables are required to be bound
-    EFFECT_UNBIND        = 14  # Bound variables may be unbound
-    EFFECT_ALL           = 15  # May kill your cat
+    EFFECT_UNBIND = 14  # Bound variables may be unbound
+    EFFECT_ALL = 15  # May kill your cat
+
 
 _IEC = InferenceEvilnessConst
+
 
 def expand_affect(af, arity):
     if isinstance(af, tuple):
@@ -577,6 +613,7 @@ def expand_affect(af, arity):
     else:
         assert af != _IEC._AFFECT_PARAM
         return af, None, None
+
 
 class Evilness(object):
     def __init__(self, affect=None, effect=None, evils=[]):
@@ -606,7 +643,7 @@ class Evilness(object):
     def affect_contains(self, af1, af2, arity):
         af1, af1_fr, af1_to = expand_affect(af1, arity)
         af2, af2_fr, af2_to = expand_affect(af2, arity)
-        
+
         if af1 >= af2:
             if af1 == af2 == _IEC._AFFECT_PARAM:
                 # assume the checks in check_arity_makes_sense hold
@@ -614,28 +651,28 @@ class Evilness(object):
             else:
                 return True
         return False
-        
+
     def find(self, affect, arity):
         result = []
         for af, ef in self.evils:
             if self.affect_contains(af, affect, arity):
                 result.append(ef)
         return result
-    
+
     def find_disregard_arity(self, affect):
         return self.find(affect, 0)
 
     @classmethod
     def default_function_like(cls):
-        return cls(evils = 
-            [(_IEC.AFFECT_PARAM_INTERVAL(0, -1), _IEC.EFFECT_REQUIRE_BOUND),
-             (_IEC.AFFECT_PARAM(-1),             _IEC.EFFECT_DOBIND)       ]
-        )
-    
+        return cls(evils=
+                   [(_IEC.AFFECT_PARAM_INTERVAL(0, -1), _IEC.EFFECT_REQUIRE_BOUND),
+                    (_IEC.AFFECT_PARAM(-1), _IEC.EFFECT_DOBIND)]
+                   )
+
     @classmethod
     def default_rule_like(cls):
         return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_BIND)
-    
+
     @classmethod
     def default_no_scope_effects(cls):
         return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_BIND)
@@ -644,29 +681,46 @@ class Evilness(object):
     def default_all_bound(cls):
         return cls(_IEC.AFFECT_PARAM_ALL, _IEC.EFFECT_REQUIRE_BOUND)
 
+
 def optimize_away(f=None):
     def _(f): f.optimize_away = True; return f
-    return _ if f is None else _(f)
-def no_scope_effects(f=None):
-    def _(f): f.evilness = Evilness.default_no_scope_effects(); return f
-    return _ if f is None else _(f)
-def rule_like(f=None):
-    def _(f): f.evilness = Evilness.default_rule_like(); return f
-    return _ if f is None else _(f)
-def function_like(f=None):
-    def _(f): f.evilness = Evilness.default_function_like(); return f
-    return _ if f is None else _(f)
-def all_bound(f=None):
-    def _(f): f.evilness = Evilness.default_all_bound(); return f
+
     return _ if f is None else _(f)
 
-def side_effect(affect, effect, f = None):
+
+def no_scope_effects(f=None):
+    def _(f): f.evilness = Evilness.default_no_scope_effects(); return f
+
+    return _ if f is None else _(f)
+
+
+def rule_like(f=None):
+    def _(f): f.evilness = Evilness.default_rule_like(); return f
+
+    return _ if f is None else _(f)
+
+
+def function_like(f=None):
+    def _(f): f.evilness = Evilness.default_function_like(); return f
+
+    return _ if f is None else _(f)
+
+
+def all_bound(f=None):
+    def _(f): f.evilness = Evilness.default_all_bound(); return f
+
+    return _ if f is None else _(f)
+
+
+def side_effect(affect, effect, f=None):
     def _(f):
         if not hasattr(f, 'evilness'):
             f.evilness = Evilness()
         f.evilness.add_evil(affect, effect)
         return f
+
     return _ if f is None else _(f)
+
 
 class InferenceOptions(object):
     def __init__(self, preserve_errors=False):
@@ -676,15 +730,15 @@ class InferenceOptions(object):
         # THIS OPTION IS NOT SUPPORTED VERY WELL AND THE OPTIMIZER MAY CHANGE
         # THE BEHAVIOUR OF PROGRAMS WITH REGARDS TO ERRORS.
         self.preserve_errors = preserve_errors
-    
-            
-class InferenceCallback(DefaultCallback):        
-    def __init__(self, log, actions, options = InferenceOptions()):
+
+
+class InferenceCallback(DefaultCallback):
+    def __init__(self, log, actions, options=InferenceOptions()):
         # Logging facilities
         self.log = log
 
         self.options = options
-        
+
         # The agent. Set in init_agent.
         self.agent = None
         # Contains a mapping from names of actions to their Evilness
@@ -696,7 +750,7 @@ class InferenceCallback(DefaultCallback):
             self.register_action(name, f, arity)
         for name, f in actions.variadic_actions.items():
             self.register_action(name, f, -1)
-    
+
     def pre_ast_node(self, typ, ast_obj):
         if typ == AstType.AGENT:
             return self.init_agent(ast_obj)
@@ -715,7 +769,7 @@ class InferenceCallback(DefaultCallback):
                 self.handle_inf_mark_nosidef(ast_action)
             elif self.get_action_evilness(ast_action).find_disregard_arity(_IEC.AFFECT_UNIVERSE):
                 self.log.warning("action %s has unbounded side-effects, optimisations are disabled",
-                    ast_action.functor, loc=ast_action.loc)
+                                 ast_action.functor, loc=ast_action.loc)
                 return _IAC.KEEP_CURRENT
 
             return
@@ -727,39 +781,38 @@ class InferenceCallback(DefaultCallback):
         elif not (isinstance(ast_action.terms[0], AstConst)
                   and _is_str_type(ast_action.terms[0].value)):
             raise self.log.error("expected string as first argument to %s",
-                ast_action.functor, loc=ast_action.loc)
+                                 ast_action.functor, loc=ast_action.loc)
         else:
             self.action_table[ast_action.terms[0].value, -1] = Evilness()
-        
-        
+
     def infer_plan(self, ast_plan):
         self.state = s = InferenceScopedState(ast_plan)
-        
+
         if ast_plan.body is None: return
-        
+
         for ast_var in collect_variables(ast_plan.body):
             s.status[ast_var.name] = _IC.PROVEN_UNBOUND
-            
+
         for ast_action in collect_actions(ast_plan):
             # Do not optimize
             if self.action_evil_query(ast_action, _IEC._AFFECT_ANY, _IEC.EFFECT_ALL):
                 # This could probably be handled with more finesse
                 self.log.warning("action %s has unbounded side-effects, plan %s will not be optimized",
-                    ast_action.functor, ast_plan.signature(), loc=ast_action.loc)
+                                 ast_action.functor, ast_plan.signature(), loc=ast_action.loc)
                 return
 
             # Warnings
             if (self.action_evil_query(ast_action, _IEC._AFFECT_PARAM_ANY, _IEC.EFFECT_CHANGE)
-                and not self.action_evil_query(ast_action, _IEC.AFFECT_SCOPE, _IEC.EFFECT_CHANGE)):
+                    and not self.action_evil_query(ast_action, _IEC.AFFECT_SCOPE, _IEC.EFFECT_CHANGE)):
                 # Bound variables are resolved to their values, they are never in the parameters
                 self.log.warning("the combination of AFFECT_PARAM, EFFECT_CHANGE has no effect",
-                    loc=ast_action.loc)
+                                 loc=ast_action.loc)
             if (self.action_evil_query(ast_action, _IEC._AFFECT_PARAM_ANY, _IEC.EFFECT_UNBIND)
-                and not self.action_evil_query(ast_action, _IEC.AFFECT_SCOPE, _IEC.EFFECT_UNBIND)):
+                    and not self.action_evil_query(ast_action, _IEC.AFFECT_SCOPE, _IEC.EFFECT_UNBIND)):
                 # Bound variables are resolved to their values, they are never in the parameters
                 self.log.warning("the combination of AFFECT_PARAM, EFFECT_UNBIND has no effect",
-                    loc=ast_action.loc)
-        
+                                 loc=ast_action.loc)
+
         TermGroundingCb.apply(ast_plan, s, self)
         UselessTermEliminatorCb.apply(ast_plan, self)
 
@@ -782,7 +835,7 @@ class InferenceCallback(DefaultCallback):
 
     def handle_inf_side_effect(self, ast_literal):
         is_str = lambda x: isinstance(x, AstConst) and _is_str_type(x.value)
-        
+
         if len(ast_literal.terms) < 2:
             raise self.log.error('.inf_side_effect expects at least 2 arguments', loc=ast_literal.loc)
         elif not is_str(ast_literal.terms[0]):
@@ -794,7 +847,7 @@ class InferenceCallback(DefaultCallback):
 
         if af_str == 'AFFECT_PARAM':
             raise self.log.error('.inf_side_effect does not support AFFECT_PARAM, use AFFECT_PARAM_ALL instead',
-                loc=ast_literal.loc)
+                                 loc=ast_literal.loc)
         elif not af_str.startswith('AFFECT_') or not hasattr(_IEC, af_str):
             raise self.log.error('.inf_side_effect: invalid affect \'%s\'', af_str, loc=ast_literal.loc)
         elif not ef_str.startswith('EFFECT_') or not hasattr(_IEC, ef_str):
@@ -804,11 +857,10 @@ class InferenceCallback(DefaultCallback):
         ef = getattr(_IEC, ef_str)
 
         return Evilness(af, ef)
-        
 
     def is_optimize_away(self, name, arity):
         return ((name, arity) in self.actions_optimize_away_list
-            or  (name,    -1) in self.actions_optimize_away_list)
+                or (name, -1) in self.actions_optimize_away_list)
 
     def register_action(self, name, action, arity):
         evilness = getattr(action, 'evilness', None)
@@ -816,7 +868,7 @@ class InferenceCallback(DefaultCallback):
 
         if evilness is None and getattr(action, 'is_function', True):
             evilness = Evilness.default_function_like()
-        
+
         if evilness is None and getattr(action, 'is_procedure', True):
             evilness = Evilness.default_all_bound()
 
@@ -828,16 +880,16 @@ class InferenceCallback(DefaultCallback):
 
         if optimize_away and name not in self.actions_optimize_away_list:
             self.actions_optimize_away_list.append((name, arity))
-        
+
 
 class TermGroundingCb(DefaultCallback):
     def __init__(self, state, inf_cb):
         self.state = state
         self.log = inf_cb.log
         self.inf_cb = inf_cb
-        
+
     def pre_ast_node(self, typ, ast_node):
-        if   typ == AstType.PLAN:
+        if typ == AstType.PLAN:
             return self.pre_ast_plan(ast_node)
         elif typ == AstType.IF_THEN_ELSE:
             return self.pre_ast_if_then_else(ast_node)
@@ -845,11 +897,11 @@ class TermGroundingCb(DefaultCallback):
             return self.pre_ast_loop(ast_node)
         else:
             return
-    
+
     def on_ast_node(self, typ, ast_node):
         if typ == AstType.VARIABLE:
-            ast_node.bound_status   = self.state.status[ast_node.name]
-            ast_node.bound_value    = self.state.values.get(ast_node.name, None)
+            ast_node.bound_status = self.state.status[ast_node.name]
+            ast_node.bound_value = self.state.values.get(ast_node.name, None)
             ast_node.contained_vars = self.state.subvars.get(ast_node.name, set())
             ast_node = self.state.deref(ast_node)
             return ast_node
@@ -869,12 +921,12 @@ class TermGroundingCb(DefaultCallback):
             return _IAC.KEEP_CURRENT
         else:
             assert False
-    
+
     def pre_ast_plan(self, ast_plan):
         # Hacky, but it should do the right thing
         ast_plan.event.head = self.visitor_parent.resolve_single(ast_plan.event.head)
         self.symbolic_belief_query(ast_plan.event.head)
-        
+
         if ast_plan.context:
             loc = ast_plan.context.loc
             ast_plan.context = self.visitor_parent.resolve_single(ast_plan.context)
@@ -890,7 +942,7 @@ class TermGroundingCb(DefaultCallback):
         ast_node.condition = self.symbolic_belief_query(ast_node.condition)
 
         if isinstance(ast_node.condition, AstConst):
-            if   ast_node.condition.value is True:
+            if ast_node.condition.value is True:
                 formulas = self.visitor_parent.resolve_list(ast_node.if_body.formulas)
                 return _IAC.EXPAND_LIST(formulas)
             elif ast_node.condition.value is False:
@@ -898,19 +950,19 @@ class TermGroundingCb(DefaultCallback):
                 return _IAC.EXPAND_LIST(formulas)
             else:
                 self.log.warning('non-boolean term %s in boolean context (inferred)',
-                    ast_node.condition.value, loc=ast_node.loc)
+                                 ast_node.condition.value, loc=ast_node.loc)
         elif ast_node.condition.always_true:
             # Can't inline the if, because of implicit cut
             ast_node.else_body = None
-        
+
         # Traverse both branches separately, then merge the scopes.
         tmp_state = self.state.copy()
         ast_node.if_body = self.visitor_parent.resolve_single(ast_node.if_body)
         self.state, tmp_state = tmp_state, self.state
         if ast_node.else_body:
-            ast_node.else_body = self.visitor_parent.resolve_single(ast_node.else_body)            
+            ast_node.else_body = self.visitor_parent.resolve_single(ast_node.else_body)
         self.state.merge(tmp_state)
-        
+
         return _IAC.KEEP_CURRENT
 
     def pre_ast_loop(self, ast_node):
@@ -934,36 +986,36 @@ class TermGroundingCb(DefaultCallback):
         ast_node.condition = self.visitor_parent.resolve_single(ast_node.condition)
         ast_node.condition = self.symbolic_belief_query(ast_node.condition)
         if isinstance(ast_node.condition, AstConst):
-            if   ast_node.condition.value is True:
+            if ast_node.condition.value is True:
                 pass
             elif ast_node.condition.value is False:
                 return _IAC.DELETE_NODE
             else:
                 self.log.warning('non-boolean term %s in boolean context (inferred)',
-                    ast_node.condition.value, loc=ast_node.loc)
+                                 ast_node.condition.value, loc=ast_node.loc)
 
         # No changes to the variables persist after an iteration, so there is no need for anything
         # complicated here.
         ast_node.body = self.visitor_parent.resolve_single(ast_node.body)
         self.state = tmp_state
         return _IAC.KEEP_CURRENT
-    
+
     def on_unary_op(self, ast_node):
         if ast_node.operator.value.numeric_op:
             opr = ast_node.operand
-            
+
             if isinstance(opr, AstVariable):
                 if opr.bound_status == _IC.PROVEN_UNBOUND:
                     self.log.warning('term in unary %s is not ground (inferred)',
-                        ast_node.operator.value.lexeme, loc=ast_node.loc)
-                        
+                                     ast_node.operator.value.lexeme, loc=ast_node.loc)
+
                 if opr.bound_status != _IC.PROVEN_BOUND:
                     opr.bound_status = _IC.PROVEN_BOUND
                 self.update_var(opr)
                 return _IAC.KEEP_CURRENT
             elif isinstance(opr, AstLiteral):
                 self.log.warning('term in unary %s is literal (inferred)',
-                    ast_node.operator.value.lexeme, loc=ast_node.loc)
+                                 ast_node.operator.value.lexeme, loc=ast_node.loc)
                 return _IAC.KEEP_CURRENT
             elif isinstance(opr, AstConst):
                 # constant propagation
@@ -989,9 +1041,9 @@ class TermGroundingCb(DefaultCallback):
                 assert False
         else:
             assert False
-    
+
     def on_binary_op(self, ast_node):
-        if   ast_node.operator.value.numeric_op or ast_node.operator.value.comp_op:
+        if ast_node.operator.value.numeric_op or ast_node.operator.value.comp_op:
             return self.symbolic_binary_op(ast_node)
         elif ast_node.operator.value.boolean_op:
             # This includes the 'and' and 'or' operators, which is no harm
@@ -1002,19 +1054,19 @@ class TermGroundingCb(DefaultCallback):
             return _IAC.KEEP_CURRENT
         else:
             assert False
-            
+
     def on_formula(self, ast_node):
         if ast_node.formula_type == FormulaType.term:
             t = ast_node.term
             if isinstance(t, AstConst):
-                if   t.value is True:
+                if t.value is True:
                     return _IAC.DELETE_NODE
                 elif t.value is False:
                     # A warning is later emitted by UselessTermEliminatorCb
                     pass
                 else:
                     self.log.warning('non-boolean term %s in boolean context (inferred)',
-                        t.value, loc=ast_node.loc)
+                                     t.value, loc=ast_node.loc)
             elif isinstance(t, AstLiteral):
                 if '.' in t.functor:
                     evilness = self.inf_cb.get_action_evilness(t)
@@ -1050,7 +1102,7 @@ class TermGroundingCb(DefaultCallback):
 
             return _IAC.EXPAND_LIST(self.expand_and_into_list(ast_node))
         elif ast_node.formula_type in (FormulaType.add, FormulaType.replace, FormulaType.achieve,
-                FormulaType.achieve_later):
+                                       FormulaType.achieve_later):
             if isinstance(ast_node.term, (AstLiteral, AstVariable)):
                 self.require_term_ground(ast_node, ast_node.term)
             else:
@@ -1074,37 +1126,37 @@ class TermGroundingCb(DefaultCallback):
             node.term = i
             result.append(node)
         return result
-    
+
     def symbolic_belief_query(self, ast_node):
         ast_node.always_true = False
-        
+
         if isinstance(ast_node, (AstVariable, AstLiteral)):
             # This is also used for the head of a plan, if you change it make sure that that does
             # not break!
-            
+
             ast_node.vars_written = []
             ast_node.vars_read = []
-            
+
             if isinstance(ast_node, AstVariable):
                 self.require_term_ground(ast_node, ast_node)
                 ast_node.vars_read.append(ast_node.name)
-                
+
             for ast_var in self.collect_contained_variables(ast_node):
                 if ast_var.bound_status == _IC.PROVEN_UNBOUND:
                     ast_var.bound_status = _IC.UNPROVEN
                     self.update_var(ast_var)
                 else:
                     ast_node.vars_read.append(ast_var.name)
-                    
+
                 if ast_var.bound_status in (_IC.PROVEN_UNBOUND, _IC.UNPROVEN):
                     ast_node.vars_written.append(ast_var.name)
 
             self.state.contain_each_other(i.name for i in collect_literal_variables_all(ast_node))
-                
+
             return ast_node
         elif isinstance(ast_node, AstBinaryOp):
-            if   ast_node.operator == BinaryOp.op_and:
-                ast_node.left  = self.symbolic_belief_query(ast_node.left )
+            if ast_node.operator == BinaryOp.op_and:
+                ast_node.left = self.symbolic_belief_query(ast_node.left)
                 ast_node.right = self.symbolic_belief_query(ast_node.right)
                 ast_node.always_true = ast_node.left.always_true and ast_node.right.always_true;
                 return ast_node
@@ -1112,7 +1164,7 @@ class TermGroundingCb(DefaultCallback):
                 # Cannot do always_true optimization because that would change the tree. Terms with
                 # irrelevant side-effects are removed in UselessTermEliminatorCb
                 tmp_state = self.state.copy()
-                ast_node.left  = self.symbolic_belief_query(ast_node.left )
+                ast_node.left = self.symbolic_belief_query(ast_node.left)
                 self.state, tmp_state = tmp_state, self.state
                 ast_node.right = self.symbolic_belief_query(ast_node.right)
                 self.state.merge(tmp_state)
@@ -1142,9 +1194,9 @@ class TermGroundingCb(DefaultCallback):
         elif isinstance(ast_node, AstUnaryOp):
             if ast_node.operator == UnaryOp.op_not:
                 tmp_state = self.state.copy()
-                ast_node.operand  = self.symbolic_belief_query(ast_node.operand)
+                ast_node.operand = self.symbolic_belief_query(ast_node.operand)
                 self.state = tmp_state
-                
+
                 if ast_node.operand.always_true:
                     node = AstConst()
                     node.value = False
@@ -1188,7 +1240,7 @@ class TermGroundingCb(DefaultCallback):
         if ast_var.name == '_': return
         self.state.status[ast_var.name] = ast_var.bound_status
         self.state.values[ast_var.name] = ast_var.bound_value
-        
+
         if ast_var.bound_status == _IC.PROVEN_VALUE:
             ast_var.contained_vars = {
                 i.name for i in collect_literal_variables_all(ast_var.bound_value)
@@ -1196,9 +1248,9 @@ class TermGroundingCb(DefaultCallback):
         elif ast_var.bound_status == _IC.PROVEN_UNBOUND:
             ast_var.contained_vars = set()
         self.state.subvars[ast_var.name] = ast_var.contained_vars
-        
+
     def require_term_ground(self, ast_root, ast_node):
-        if   isinstance(ast_node, AstVariable):
+        if isinstance(ast_node, AstVariable):
             if ast_node.bound_status == _IC.PROVEN_UNBOUND:
                 self.log.warning('term not ground (inferred)', loc=ast_root.loc)
             if ast_node.bound_status in (_IC.PROVEN_UNBOUND, _IC.UNPROVEN):
@@ -1215,7 +1267,7 @@ class TermGroundingCb(DefaultCallback):
             assert False
 
     def apply_evilness(self, ast_node, ef, state):
-        if   ef == _IEC.EFFECT_CHANGE:
+        if ef == _IEC.EFFECT_CHANGE:
             if state == _IC.PROVEN_VALUE:
                 return _IC.PROVEN_BOUND
         elif ef == _IEC.EFFECT_DOBIND:
@@ -1230,7 +1282,7 @@ class TermGroundingCb(DefaultCallback):
         elif ef == _IEC.EFFECT_REQUIRE_BOUND:
             if state == _IC.PROVEN_UNBOUND:
                 self.log.warning('term not ground (inferred)', loc=ast_node.loc)
-                
+
             if state in (_IC.PROVEN_UNBOUND, _IC.UNPROVEN):
                 return _IC.PROVEN_BOUND
         elif ef == _IEC.EFFECT_ALL:
@@ -1247,8 +1299,8 @@ class TermGroundingCb(DefaultCallback):
            arguments. If a unify is useless (e.g. two equal constants are unified) it is
            removed. Return a list of equivalent unifications (may be empty).
         '''
-        
-        ast_node.left  = l = self.state.deref(ast_node.left)
+
+        ast_node.left = l = self.state.deref(ast_node.left)
         ast_node.right = r = self.state.deref(ast_node.right)
         ast_node.always_true = False
         ast_node.vars_written = []
@@ -1256,35 +1308,35 @@ class TermGroundingCb(DefaultCallback):
         result = self._symbolic_unify_helper(ast_node, l, r)
 
         for i in result:
-            if isinstance(i.left,  AstVariable): self.update_var(i.left )
+            if isinstance(i.left, AstVariable): self.update_var(i.left)
             if isinstance(i.right, AstVariable): self.update_var(i.right)
 
         return result
-        
-    def _symbolic_unify_helper(self, ast_node, l, r, level = 0):
+
+    def _symbolic_unify_helper(self, ast_node, l, r, level=0):
         assert level < 2
-        
-        def var_unify(l, r, level = 0):
+
+        def var_unify(l, r, level=0):
             '''Update the status of the variables l and r.'''
             assert level < 2
-            
+
             # TODO: variables with the same name
-            
+
             lbsrbs = l.bound_status, r.bound_status
-            if   lbsrbs in ((_IC.PROVEN_BOUND,   _IC.PROVEN_BOUND  ),
-                            (_IC.PROVEN_BOUND,   _IC.PROVEN_UNBOUND),
-                            (_IC.PROVEN_BOUND,   _IC.UNPROVEN      ),
-                            (_IC.UNPROVEN,       _IC.UNPROVEN      )):
+            if lbsrbs in ((_IC.PROVEN_BOUND, _IC.PROVEN_BOUND),
+                          (_IC.PROVEN_BOUND, _IC.PROVEN_UNBOUND),
+                          (_IC.PROVEN_BOUND, _IC.UNPROVEN),
+                          (_IC.UNPROVEN, _IC.UNPROVEN)):
                 r.bound_status = _IC.PROVEN_VALUE
                 r.bound_value = l
             elif lbsrbs in ((_IC.PROVEN_UNBOUND, _IC.PROVEN_UNBOUND),
-                            (_IC.PROVEN_UNBOUND, _IC.UNPROVEN      )):
+                            (_IC.PROVEN_UNBOUND, _IC.UNPROVEN)):
                 l.bound_status = _IC.PROVEN_VALUE
                 l.bound_value = r
             else:
                 # Commutative
-                var_unify(r, l, level+1)
-                
+                var_unify(r, l, level + 1)
+
         def list_unify(l, r):
             ops = []
             for i, j in zip(l.terms, r.terms):
@@ -1300,14 +1352,14 @@ class TermGroundingCb(DefaultCallback):
 
         def exclude_unbound(lst):
             return [i for i in lst if self.state.status[i] != _IC.PROVEN_UNBOUND]
-        
+
         def exclude_bound(lst):
             return [i for i in lst if self.state.status[i] in (_IC.PROVEN_UNBOUND, _IC.UNPROVEN)]
-        
-        if   isinstance(l, AstVariable) and isinstance(r, AstVariable):
+
+        if isinstance(l, AstVariable) and isinstance(r, AstVariable):
             ast_node.always_true = _IC.PROVEN_UNBOUND in (l.bound_status, r.bound_status)
             ast_node.vars_written = (exclude_bound(l.contained_vars | r.contained_vars)
-                + [i.name for i, j in ((r, l), (l, r)) if j.bound_status != _IC.PROVEN_UNBOUND])
+                                     + [i.name for i, j in ((r, l), (l, r)) if j.bound_status != _IC.PROVEN_UNBOUND])
             ast_node.vars_read = exclude_unbound(l.contained_vars | r.contained_vars | {r.name, l.name})
             r.contained_vars = (l.contained_vars | r.contained_vars) - {r.name}
             l.contained_vars = (l.contained_vars | r.contained_vars) - {l.name}
@@ -1317,11 +1369,11 @@ class TermGroundingCb(DefaultCallback):
             r, add_unifies = self.constify_literal(r)
             ast_node.always_true = l.bound_status == _IC.PROVEN_UNBOUND
             if l.bound_status != _IC.PROVEN_BOUND:   ast_node.vars_written.append(l.name)
-            if l.bound_status != _IC.PROVEN_UNBOUND: ast_node.vars_read   .append(l.name)
+            if l.bound_status != _IC.PROVEN_UNBOUND: ast_node.vars_read.append(l.name)
             l.bound_status = _IC.PROVEN_VALUE
             l.bound_value = r
             l.contained_vars |= set(i.name for i in collect_literal_variables_all(r)) - {l}
-            
+
             return add_unifies + [ast_node]
         elif isinstance(l, AstVariable) and isinstance(r, (AstUnaryOp, AstBinaryOp, AstList)):
             ast_node.always_true = l.bound_status == _IC.PROVEN_UNBOUND
@@ -1333,17 +1385,17 @@ class TermGroundingCb(DefaultCallback):
         elif isinstance(l, AstLiteral) and isinstance(r, AstLiteral):
             if l.functor != r.functor:
                 self.log.warning('trying to unify two different literals (inferred): %s and %s',
-                    l.functor, r.functor, loc=ast_node.loc)
+                                 l.functor, r.functor, loc=ast_node.loc)
                 return [ast_node]
             elif len(l.terms) != len(r.terms):
                 self.log.warning('trying to unify literals with a different number of arguments '
-                    '(inferred): %s and %s', len(l.terms), len(r.terms), loc=ast_node.loc)
+                                 '(inferred): %s and %s', len(l.terms), len(r.terms), loc=ast_node.loc)
                 return [ast_node]
             elif len(l.annotations) > len(r.annotations):
                 assert level == 0
                 self.log.warning('trying to unify literals where the left side has more annotations'
-                    ' than the right (inferred): left %s and right %s', len(l.annotations),
-                    len(r.annotations), loc=ast_node.loc)
+                                 ' than the right (inferred): left %s and right %s', len(l.annotations),
+                                 len(r.annotations), loc=ast_node.loc)
                 return [ast_node]
             else:
                 ops = list_unify(l, r)
@@ -1360,26 +1412,26 @@ class TermGroundingCb(DefaultCallback):
                     ast_node_sub.right.annotations = ast_node.right.annotations
                     ast_node_sub.always_true = False
                     varlst = self.collect_contained_variables(ast_node.left, ast_node.right)
-                    ast_node_sub.vars_written = exclude_bound  (varlst)
-                    ast_node_sub.vars_read    = exclude_unbound(varlst)
+                    ast_node_sub.vars_written = exclude_bound(varlst)
+                    ast_node_sub.vars_read = exclude_unbound(varlst)
                     ops.append(ast_node_sub)
                 return ops
         elif isinstance(l, AstLiteral) and isinstance(r, AstConst):
             self.log.warning('trying to unify a literal with a constant (inferred)',
-                loc=ast_node.loc)
+                             loc=ast_node.loc)
             return [ast_node]
         elif isinstance(l, AstLiteral) and isinstance(r, (AstUnaryOp, AstBinaryOp)):
             self.log.warning('trying to unify a literal with a scalar (inferred)',
-                loc=ast_node.loc)
+                             loc=ast_node.loc)
             return [ast_node]
         elif isinstance(l, AstLiteral) and isinstance(r, AstList):
             self.log.warning('trying to unify a literal with a list (inferred)',
-                loc=ast_node.loc)
+                             loc=ast_node.loc)
             return [ast_node]
         elif isinstance(l, AstConst) and isinstance(r, AstConst):
             if l.value != r.value:
                 self.log.warning('trying to unify two constants with different values (inferred): '
-                    '%s and %s', l.value, r.value, loc=ast_node.loc)
+                                 '%s and %s', l.value, r.value, loc=ast_node.loc)
                 return [ast_node]
             else:
                 ast_node.always_true = True
@@ -1388,32 +1440,32 @@ class TermGroundingCb(DefaultCallback):
             return [ast_node]
         elif isinstance(l, AstConst) and isinstance(r, AstList):
             self.log.warning('trying to unify a constant with a list (inferred)',
-                loc=ast_node.loc)
+                             loc=ast_node.loc)
             return [ast_node]
         elif isinstance(l, (AstUnaryOp, AstBinaryOp)) and isinstance(r, (AstUnaryOp, AstBinaryOp)):
             return [ast_node]
         elif isinstance(l, (AstUnaryOp, AstBinaryOp)) and isinstance(r, AstList):
             self.log.warning('trying to unify a scalar with a list (inferred)',
-                loc=ast_node.loc)
+                             loc=ast_node.loc)
             return [ast_node]
         elif isinstance(l, AstList) and isinstance(r, AstList):
             if len(l.terms) != len(r.terms):
                 self.log.warning('trying to unify lists with a different number of arguments '
-                    '(inferred): %s and %s', len(l.terms), len(r.terms), loc=ast_node.loc)
+                                 '(inferred): %s and %s', len(l.terms), len(r.terms), loc=ast_node.loc)
                 return [ast_node]
             else:
                 return list_unify(l, r)
         else:
             # Commutative (actually not, but we do not handle annotations with enough finesse to
             # notice)
-            return self._symbolic_unify_helper(ast_node, r, l, level+1)
-            
+            return self._symbolic_unify_helper(ast_node, r, l, level + 1)
+
     def constify_literal(self, ast_node):
         '''Return an AstNode, which is either an AstVariable, AstConst or AstLiteral and only has
            children of those types. Also return a list of AstNode, which contain the unification
            operations needed.
         '''
-        if   isinstance(ast_node, (AstVariable, AstConst)):
+        if isinstance(ast_node, (AstVariable, AstConst)):
             return ast_node, []
         elif isinstance(ast_node, AstLiteral):
             result = []
@@ -1425,8 +1477,8 @@ class TermGroundingCb(DefaultCallback):
         else:
             ast_var = AstVariable()
             ast_var.name = '_Inf_%d' % next(inference_unique_counter)
-            ast_var.bound_status   = _IC.PROVEN_BOUND
-            ast_var.bound_value    = None
+            ast_var.bound_status = _IC.PROVEN_BOUND
+            ast_var.bound_value = None
             ast_var.contained_vars = set()
             self.update_var(ast_var)
             ast_uni = AstBinaryOp()
@@ -1437,7 +1489,7 @@ class TermGroundingCb(DefaultCallback):
             ast_uni.vars_written = {ast_var.name}
             ast_uni.vars_read = set()
             return ast_var, [ast_uni]
-    
+
     def symbolic_binary_boolean_op(self, ast_node):
         l, r = self.state.deref(ast_node.left), self.state.deref(ast_node.right)
         ast_node.left, ast_node.right = l, r
@@ -1445,17 +1497,17 @@ class TermGroundingCb(DefaultCallback):
 
         # Doing constant propagation here is safe for both query and boolean contexts. In the latter
         # case this is all we can do.
-        
-        if   ast_node.operator == BinaryOp.op_or:
+
+        if ast_node.operator == BinaryOp.op_or:
             # Assume values can only be boolean
-            if   lb and l.value is True:
+            if lb and l.value is True:
                 return _IAC.REPLACE_NODE(l)
             elif lb and l.value is False:
                 return _IAC.REPLACE_NODE(r)
             else:
                 return _IAC.KEEP_CURRENT
         elif ast_node.operator == BinaryOp.op_and:
-            if   lb and l.value is False:
+            if lb and l.value is False:
                 return _IAC.REPLACE_NODE(l)
             elif lb and l.value is True:
                 return _IAC.REPLACE_NODE(r)
@@ -1463,26 +1515,26 @@ class TermGroundingCb(DefaultCallback):
                 return _IAC.KEEP_CURRENT
         else:
             assert False
-            
+
     def symbolic_binary_op(self, ast_node):
         l, r = self.state.deref(ast_node.left), self.state.deref(ast_node.right)
         ast_node.left, ast_node.right = l, r
-    
+
         for i, pos in zip((l, r), ('left', 'right')):
             if isinstance(i, AstVariable):
                 if i.bound_status == _IC.PROVEN_UNBOUND:
                     self.log.warning('%s term in binary %s is not ground (inferred)',
-                        pos, ast_node.operator.value.lexeme, loc=ast_node.loc)
-                        
+                                     pos, ast_node.operator.value.lexeme, loc=ast_node.loc)
+
                 if i.bound_status in (_IC.UNPROVEN, _IC.PROVEN_UNBOUND):
                     i.bound_status = _IC.PROVEN_BOUND
                 self.update_var(i)
             elif isinstance(i, AstLiteral):
                 self.log.warning('%s term in binary %s is literal (inferred)',
-                    pos, ast_node.operator.value.lexeme, loc=ast_node.loc)
-        
+                                 pos, ast_node.operator.value.lexeme, loc=ast_node.loc)
+
         expected_types = (AstVariable, AstLiteral, AstConst, AstBinaryOp, AstUnaryOp)
-        
+
         if isinstance(l, AstConst) and isinstance(r, AstConst):
             # Constant propagation
             ast_node_new = AstConst()
@@ -1492,7 +1544,8 @@ class TermGroundingCb(DefaultCallback):
             return _IAC.KEEP_CURRENT
         else:
             assert False
-        
+
+
 class UselessTermEliminatorCb(DefaultCallback):
     @classmethod
     def apply(cls, ast_plan, inf_cb):
@@ -1503,13 +1556,14 @@ class UselessTermEliminatorCb(DefaultCallback):
         self.inf_cb = inf_cb
         self.log = inf_cb.log
         self.used_vars = set()
-        
+
     def update_used(self, ast_node):
         self.used_vars.update(i.name for i in collect_variables(ast_node) if i.name != '_')
+
     def update_usedone(self, ast_var):
         if ast_var.name != '_':
             self.used_vars.add(ast_var.name)
-        
+
     def pre_ast_node(self, typ, ast_node):
         if typ == AstType.PLAN:
             return self.pre_ast_plan(ast_node)
@@ -1519,32 +1573,32 @@ class UselessTermEliminatorCb(DefaultCallback):
             return self.pre_ast_if_then_else(ast_node)
         elif typ in (AstType.WHILE, AstType.FOR):
             return self.pre_ast_loop(ast_node)
-        elif typ ==  AstType.BODY:
+        elif typ == AstType.BODY:
             return
         else:
             assert False
 
     def pre_ast_plan(self, ast_plan):
         self.update_used(ast_plan.event.head)
-        
+
         if ast_plan.body:
             ast_plan.body = self.visitor_parent.resolve_maybe(ast_plan.body)
-            
+
         if ast_plan.context:
             ast_plan.context = self.clean_belief_query(ast_plan.context, False)
-            if   ast_plan.context is True:
+            if ast_plan.context is True:
                 ast_plan.context = None
             elif ast_plan.context is False:
                 self.log.warning('plan context is always false (inferred)', loc=loc)
                 ast_plan.context = AstNode()
                 ast_plan.context.value = False
                 ast_plan.body = None
-        
+
         assert ast_plan.event.head is not None
         return _IAC.REPLACE_NODE(ast_plan)
-            
+
     def pre_ast_formula(self, ast_node):
-        if   ast_node.formula_type == FormulaType.term:
+        if ast_node.formula_type == FormulaType.term:
             if isinstance(ast_node.term, AstLiteral) and '.' in ast_node.term.functor:
                 if self.inf_cb.is_optimize_away(ast_node.term.functor, len(ast_node.term.terms)):
                     return _IAC.DELETE_NODE
@@ -1564,7 +1618,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                 else:
                     return _IAC.REPLACE_NODE(ast_node)
         elif ast_node.formula_type in (FormulaType.add, FormulaType.replace, FormulaType.achieve,
-                FormulaType.achieve_later):
+                                       FormulaType.achieve_later):
             pass
         elif ast_node.formula_type in (FormulaType.remove, FormulaType.test, FormulaType.replace):
             ast_node.term = self.clean_belief_query(ast_node.term, False)
@@ -1593,8 +1647,8 @@ class UselessTermEliminatorCb(DefaultCallback):
             formulas = self.visitor_parent.resolve_list(ast_node.else_body.formulas)
             return _IAC.EXPAND_LIST(formulas)
 
-        if ast_node.if_body   is not None and not ast_node.if_body  .formulas:
-            ast_node.if_body   = None
+        if ast_node.if_body is not None and not ast_node.if_body.formulas:
+            ast_node.if_body = None
         if ast_node.else_body is not None and not ast_node.else_body.formulas:
             ast_node.else_body = None
 
@@ -1628,11 +1682,10 @@ class UselessTermEliminatorCb(DefaultCallback):
 
         return ast_node
 
-        
     def on_ast_node(self, typ, ast_node):
         assert typ == AstType.BODY
         return _IAC.KEEP_CURRENT
-        
+
     def clean_belief_query(self, ast_node, ignore_truth):
         '''Return a belief query that has as equivalent set of solutions. If ignore_truth is specified,
            sets that differ only in whether they contain the empty solution (side-effect free
@@ -1640,7 +1693,7 @@ class UselessTermEliminatorCb(DefaultCallback):
            containing only the empty solution, False is equivalent to the empty set. With ignore_truth,
            only True is used.
         '''
-        
+
         if isinstance(ast_node, (AstVariable, AstLiteral)):
             # There is no way to be sure that the variable contains a literal
             if ignore_truth and not self.inf_cb.options.preserve_errors:
@@ -1652,23 +1705,23 @@ class UselessTermEliminatorCb(DefaultCallback):
             for ast_var in collect_literal_variables_all(ast_node):
                 if ast_var.name not in ast_node.vars_read and ast_var.name not in self.used_vars:
                     ast_var.name = '_'
-              
+
             self.used_vars.update(ast_node.vars_read)
             return ast_node
         elif isinstance(ast_node, AstBinaryOp):
-            if   ast_node.operator == BinaryOp.op_and:
+            if ast_node.operator == BinaryOp.op_and:
                 if ignore_truth:
                     # Try whether both sides are without side-effects
                     # This may be exponential
                     tmp_state = self.used_vars.copy()
                     right = self.clean_belief_query(ast_node.right, True)
-                    left  = self.clean_belief_query(ast_node.left,  True)
+                    left = self.clean_belief_query(ast_node.left, True)
                     if right is True and left is True:
                         return True
                     self.used_vars = tmp_state
 
                 ast_node.right = self.clean_belief_query(ast_node.right, False)
-                ast_node.left  = self.clean_belief_query(ast_node.left,  False)
+                ast_node.left = self.clean_belief_query(ast_node.left, False)
                 if ast_node.right is True:
                     return ast_node.left
                 elif ast_node.left is True:
@@ -1684,7 +1737,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                     tmp_state, self.used_vars = self.used_vars, tmp_state
                     ast_node.left = self.clean_belief_query(ast_node.left, True)
                     self.used_vars |= tmp_state
-                    
+
                     if ast_node.right is True:
                         return ast_node.left
                     elif ast_node.left is True:
@@ -1706,7 +1759,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                         return self.clean_belief_query(ast_node.left, False)
                     else:
                         tmp_state, self.used_vars = self.used_vars, tmp_state
-                        ast_node.left  = self.clean_belief_query(ast_node.left, False)
+                        ast_node.left = self.clean_belief_query(ast_node.left, False)
                         if ast_node.left is True:
                             # We have a fresh state, due to True meaning no side-effects
                             ast_node.right = self.clean_belief_query(ast_node.right, True)
@@ -1717,7 +1770,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                             return ast_node.right
                         else:
                             self.used_vars |= tmp_state
-                            return ast_node                
+                            return ast_node
             elif ast_node.operator == BinaryOp.op_unify:
                 # TODO: Can unify error?
                 no_side_effects = not (self.used_vars & set(ast_node.vars_written))
@@ -1726,7 +1779,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                 elif no_side_effects:
                     # TODO: Could replace unify with equality, except that equality cannot compare
                     # literals
-                    #ast_node.operator = BinaryOp.op_eq
+                    # ast_node.operator = BinaryOp.op_eq
                     self.update_used(ast_node)
                     return ast_node
                 else:
@@ -1763,24 +1816,29 @@ class UselessTermEliminatorCb(DefaultCallback):
                 return ast_node
         else:
             assert False
-        
+
 
 def collect_type(ast_node, typ):
     vars = []
+
     class Collector(DefaultCallback):
         def pre_ast_node(self, node_typ, node):
             if node_typ == typ:
                 vars.append(node)
+
     Collector.apply(ast_node)
     return vars
-            
+
+
 def collect_variables(ast_node):
     return collect_type(ast_node, AstType.VARIABLE)
+
 
 def collect_actions(ast_node):
     for i in collect_type(ast_node, AstType.LITERAL):
         if '.' in i.functor:
             yield i
+
 
 def collect_literal_variables_all(ast_node):
     if isinstance(ast_node, AstVariable):
@@ -1798,7 +1856,8 @@ def collect_literal_variables_all(ast_node):
                 yield j
     else:
         return
-            
+
+
 def collect_literal_variables(ast_node):
     if isinstance(ast_node, AstVariable):
         yield ast_node
@@ -1808,18 +1867,19 @@ def collect_literal_variables(ast_node):
                 yield j
     else:
         return
-    
+
+
 def dump_tokens(tokens):
-    assert(all(isinstance(i, agentspeak.lexer.TokenInfo) for i in tokens))
+    assert (all(isinstance(i, agentspeak.lexer.TokenInfo) for i in tokens))
 
     maxwid = max(len(i.name) for i in agentspeak.lexer.TokenType)
     for i in tokens:
         print('%*s  %s' % (maxwid, agentspeak.lexer.TokenType(i.token).name, i.lexeme))
 
+
 def dump(*a):
     v = CallbackVisitor(DumpingCallback())
     for i in a: i.accept(v)
-
 
 
 def init_optimizer_actions(actions):
@@ -1848,8 +1908,10 @@ def init_optimizer_actions(actions):
     @optimize_away
     def _inf_disable_local(agent, term, intention): yield
 
+
 _LOGGER = agentspeak.get_logger(__name__)
-    
+
+
 def build_agent_optimized(env, source, actions, agent_cls=agentspeak.runtime.Agent):
     log = agentspeak.Log(_LOGGER, 3)
     tokens = agentspeak.lexer.TokenStream(source, log)
@@ -1860,9 +1922,10 @@ def build_agent_optimized(env, source, actions, agent_cls=agentspeak.runtime.Age
     _, agent = env.build_agent_from_ast(source, ast_agent, actions)
     return agent
 
+
 def main():
     import agentspeak.stdlib
-    
+
     env = agentspeak.runtime.Environment()
     try:
         args = sys.argv[1:]
@@ -1883,6 +1946,7 @@ def main():
     except agentspeak.PysonError as error:
         LOGGER.error("%s", error)
         sys.exit(1)
-        
+
+
 if __name__ == "__main__":
     main()

@@ -5,7 +5,6 @@ import agentspeak.mapc2017
 import agentspeak.runtime
 import logging
 
-
 agentspeak.get_logger("agentspeak.mapc2017").setLevel(logging.DEBUG)
 
 
@@ -26,11 +25,11 @@ async def main():
         agent6 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA6")
 
     await agent1.connect("agentA1", "1")
-    #await agent2.connect("agentA2", "1")
-    #await agent3.connect("agentA3", "1")
-    #await agent4.connect("agentA4", "1")
-    #await agent5.connect("agentA5", "1")
-    #await agent6.connect("agentA6", "1")
+    # await agent2.connect("agentA2", "1")
+    # await agent3.connect("agentA3", "1")
+    # await agent4.connect("agentA4", "1")
+    # await agent5.connect("agentA5", "1")
+    # await agent6.connect("agentA6", "1")
 
 
 if __name__ == "__main__":

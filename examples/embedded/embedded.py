@@ -6,10 +6,10 @@ import agentspeak.stdlib
 
 import os
 
-
 actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
-@actions.add_function(".custom_action", (int, ))
+
+@actions.add_function(".custom_action", (int,))
 def custom_action(x):
     return x ** 2
 

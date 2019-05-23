@@ -24,15 +24,12 @@ import agentspeak.runtime
 import colorama
 import random
 import datetime
-import collections
 
 from agentspeak import pyson_str, Literal
 
 import agentspeak.optimizer
 
-
 LOGGER = agentspeak.get_logger(__name__)
-
 
 # TODO:
 # * Plan Library Manipulation
@@ -195,9 +192,9 @@ def _concat(agent, term, intention):
 
 actions.add_function(".random", (), random.random)
 
-actions.add_function(".min", (tuple, ), min)
-actions.add_function(".max", (tuple, ), max)
-actions.add_function(".length", (None, ), len)
+actions.add_function(".min", (tuple,), min)
+actions.add_function(".max", (tuple,), max)
+actions.add_function(".length", (None,), len)
 
 
 @actions.add_function(".nth", (int, tuple))
@@ -206,7 +203,7 @@ def _nth(index, l):
     return l[index]
 
 
-@actions.add_function(".sort", (tuple, ))
+@actions.add_function(".sort", (tuple,))
 def _sort(l):
     return tuple(sorted(l))
 
@@ -244,12 +241,12 @@ def _member(agent, term, intention):
         agentspeak.reroll(intention.scope, intention.stack, choicepoint)
 
 
-actions.add_predicate(".atom", (None, ), agentspeak.is_atom)
-actions.add_predicate(".literal", (None, ), agentspeak.is_literal)
-actions.add_predicate(".list", (None, ), agentspeak.is_list)
-actions.add_predicate(".number", (None, ), agentspeak.is_number)
-actions.add_predicate(".string", (None, ), agentspeak.is_string)
-actions.add_predicate(".structure", (None, ), agentspeak.is_structure)
+actions.add_predicate(".atom", (None,), agentspeak.is_atom)
+actions.add_predicate(".literal", (None,), agentspeak.is_literal)
+actions.add_predicate(".list", (None,), agentspeak.is_list)
+actions.add_predicate(".number", (None,), agentspeak.is_number)
+actions.add_predicate(".string", (None,), agentspeak.is_string)
+actions.add_predicate(".structure", (None,), agentspeak.is_structure)
 
 
 @actions.add(".ground", 1)
@@ -315,7 +312,6 @@ def _date(agent, term, intention):
     if (agentspeak.unify(term.args[0], date.year, intention.scope, intention.stack) and
         agentspeak.unify(term.args[1], date.month, intention.scope, intention.stack) and
         agentspeak.unify(term.args[2], date.day, intention.scope, intention.stack)):
-
         yield
 
 
@@ -330,7 +326,6 @@ def _time(agent, term, intention):
     if (agentspeak.unify(term.args[0], time.hour, intention.scope, intention.stack) and
         agentspeak.unify(term.args[1], time.minute, intention.scope, intention.stack) and
         agentspeak.unify(term.args[2], time.second, intention.scope, intention.stack)):
-
         yield
 
 

@@ -40,7 +40,8 @@ class Visitor:
             self.method_authors[ident] = self.current_author
 
         if self.final_pass:
-            print("method(\"%s\", \"%s\", %d, %d, \"%s\")." % (klass.name, method.name, loc(method), complexity(method), self.method_authors[ident]))
+            print("method(\"%s\", \"%s\", %d, %d, \"%s\")." % (
+            klass.name, method.name, loc(method), complexity(method), self.method_authors[ident]))
             return True
 
     def visit_calls(self, klass, method, qualifier, member):
@@ -114,7 +115,7 @@ class Visitor:
                 for catch in stmt.catches:
                     # Latest Java can catch multiple exception types in one
                     # statement
-                    #assert len(catch.parameter.types) == 1
+                    # assert len(catch.parameter.types) == 1
                     s = collections.ChainMap({}, scope)
                     s[catch.parameter.name] = catch.parameter.types[0]
                     self.walk_block(klass, method, catch.block, s)
@@ -220,7 +221,7 @@ def loc(node):
     elif isinstance(node, javalang.tree.Statement):
         return 0  # lone semicolon
     else:
-        raise RuntimeError("can not count loc of %s" % (node, ))
+        raise RuntimeError("can not count loc of %s" % (node,))
 
 
 def complexity(node):
