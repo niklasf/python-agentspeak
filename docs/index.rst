@@ -1,5 +1,5 @@
-Welcome to pyson - Jason-style AgentSpeak for Python's documentation!
-=====================================================================
+Welcome to Jason-style AgentSpeak for Python's documentation!
+=============================================================
 
 .. toctree::
    :maxdepth: 2

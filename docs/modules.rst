@@ -1,7 +1,7 @@
-pyson
-=====
+agentspeak
+==========
 
 .. toctree::
    :maxdepth: 4
 
-   pyson
+   agentspeak

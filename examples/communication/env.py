@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 
-import pyson
-import pyson.runtime
-import pyson.stdlib
+import agentspeak
+import agentspeak.runtime
+import agentspeak.stdlib
 
 import os
 
 
-env = pyson.runtime.Environment()
+env = agentspeak.runtime.Environment()
 
 with open(os.path.join(os.path.dirname(__file__), "receiver.asl")) as source:
-    agents = env.build_agents(source, 3, pyson.stdlib.actions)
+    agents = env.build_agents(source, 3, agentspeak.stdlib.actions)
 
 with open(os.path.join(os.path.dirname(__file__), "sender.asl")) as source:
-    agents.append(env.build_agent(source, pyson.stdlib.actions))
+    agents.append(env.build_agent(source, agentspeak.stdlib.actions))
 
 if __name__ == "__main__":
     env.run()

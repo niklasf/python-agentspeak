@@ -871,7 +871,7 @@ def freeze(term, scope, memo):
 
 
 def _zip_specs(specs, agent, args, scope):
-    import pyson.runtime
+    import agentspeak.runtime
 
     result = []
     memo = {}
@@ -879,9 +879,9 @@ def _zip_specs(specs, agent, args, scope):
     args = iter(args)
 
     for spec in specs:
-        if spec is pyson.runtime.Environment:
+        if spec is agentspeak.runtime.Environment:
             result.append(agent.env)
-        elif spec is pyson.runtime.Agent:
+        elif spec is agentspeak.runtime.Agent:
             result.append(agent)
         else:
             arg = freeze(next(args), scope, memo)
@@ -905,13 +905,13 @@ def _zip_specs(specs, agent, args, scope):
 
 
 def _count_specs(specs):
-    import pyson.runtime
+    import agentspeak.runtime
 
     count = 0
     for spec in specs:
-        if spec is pyson.runtime.Environment:
+        if spec is agentspeak.runtime.Environment:
             continue
-        elif spec is pyson.runtime.Agent:
+        elif spec is agentspeak.runtime.Agent:
             continue
         else:
             count += 1

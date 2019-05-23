@@ -1,29 +1,29 @@
 #!/usr/bin/env python
 
 import asyncio
-import pyson.mapc2017
-import pyson.runtime
+import agentspeak.mapc2017
+import agentspeak.runtime
 import logging
 
 
-pyson.get_logger("pyson.mapc2017").setLevel(logging.DEBUG)
+agentspeak.get_logger("agentspeak.mapc2017").setLevel(logging.DEBUG)
 
 
 async def main():
-    env = pyson.mapc2017.Environment()
+    env = agentspeak.mapc2017.Environment()
 
     with open("agent1.asl") as source:
-        agent1 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA1")
+        agent1 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA1")
     with open("agent1.asl") as source:
-        agent2 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA2")
+        agent2 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA2")
     with open("agent1.asl") as source:
-        agent3 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA3")
+        agent3 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA3")
     with open("agent1.asl") as source:
-        agent4 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA4")
+        agent4 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA4")
     with open("agent1.asl") as source:
-        agent5 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA5")
+        agent5 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA5")
     with open("agent1.asl") as source:
-        agent6 = env.build_agent(source, pyson.mapc2017.actions, pyson.mapc2017.Agent, "agentA6")
+        agent6 = env.build_agent(source, agentspeak.mapc2017.actions, agentspeak.mapc2017.Agent, "agentA6")
 
     await agent1.connect("agentA1", "1")
     #await agent2.connect("agentA2", "1")

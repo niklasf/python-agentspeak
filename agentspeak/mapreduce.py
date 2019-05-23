@@ -3,14 +3,14 @@ import multiprocessing
 import numbers
 import functools
 
-import pyson
-import pyson.runtime
-import pyson.stdlib
+import agentspeak
+import agentspeak.runtime
+import agentspeak.stdlib
 
-from pyson import pyson_str
+from agentspeak import pyson_str
 
 
-actions = pyson.Actions(pyson.stdlib.actions)
+actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
 
 class Counter:
@@ -30,34 +30,34 @@ class Counter:
         yield
 
 
-@actions.add_function("mr.update_counter", (pyson.runtime.Agent, pyson_str, numbers.Number))
+@actions.add_function("mr.update_counter", (agentspeak.runtime.Agent, pyson_str, numbers.Number))
 def _update_counter(agent, counter, delta):
     agent.emit(counter, delta)
     return True
 
 
-@actions.add_function(".send", (pyson.runtime.Agent, pyson_str, pyson.Literal, None))
+@actions.add_function(".send", (agentspeak.runtime.Agent, pyson_str, agentspeak.Literal, None))
 def _send(agent, recipient, ils, term):
     group = ils.literal_group()
     if group == ("tell", 0):
-        frozen = pyson.grounded(term, {}).with_annotation(pyson.Literal("source", (agent.name, )))
-        agent.emit(recipient, functools.partial(pyson.runtime.add_belief, frozen))
+        frozen = agentspeak.grounded(term, {}).with_annotation(agentspeak.Literal("source", (agent.name,)))
+        agent.emit(recipient, functools.partial(agentspeak.runtime.add_belief, frozen))
     elif group == ("achieve", 0):
-        frozen = term.with_annotation(pyson.Literal("source", (agent.name, )))
-        agent.emit(recipient, functools.partial(pyson.runtime.call,
-                                                pyson.Trigger.addition,
-                                                pyson.GoalType.achievement,
+        frozen = term.with_annotation(agentspeak.Literal("source", (agent.name,)))
+        agent.emit(recipient, functools.partial(agentspeak.runtime.call,
+                                                agentspeak.Trigger.addition,
+                                                agentspeak.GoalType.achievement,
                                                 frozen))
     else:
-        raise pyson.PysonError("unsupported illocutionary force: %s/%d" % (group[0], group[1]))
+        raise agentspeak.PysonError("unsupported illocutionary force: %s/%d" % (group[0], group[1]))
 
     return True
 
 
-class Agent(pyson.runtime.Agent):
+class Agent(agentspeak.runtime.Agent):
     def __init__(self, name):
         self.name = name
-        pyson.runtime.Agent.__init__(self)
+        agentspeak.runtime.Agent.__init__(self)
 
         self.emitted = collections.deque()
 
@@ -78,14 +78,14 @@ class Agent(pyson.runtime.Agent):
         yield self.name, self
 
     def reduce(self, partial):
-        intention = pyson.runtime.Intention()
+        intention = agentspeak.runtime.Intention()
         partial(self, intention)
 
         return
         yield
 
 
-class Environment(pyson.runtime.Environment):
+class Environment(agentspeak.runtime.Environment):
     def __init__(self):
         self.process_pool = multiprocessing.Pool()
         self.rdd = collections.defaultdict(list)

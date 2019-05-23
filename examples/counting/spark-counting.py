@@ -3,9 +3,9 @@
 from __future__ import print_function
 
 import pyspark
-import pyson
-import pyson.runtime
-import pyson.stdlib
+import agentspeak
+import agentspeak.runtime
+import agentspeak.stdlib
 import sys
 import time
 import os
@@ -17,14 +17,14 @@ print("N:", N)
 
 t1 = time.time()
 
-sc = pyspark.SparkContext("local", "pyson")
+sc = pyspark.SparkContext("local", "agentspeak")
 
 source = open(os.path.join(os.path.dirname(__file__), "counting.asl"))
 
 def init_agents():
     for i in range(N):
         print("-------->", i)
-        yield pyson.runtime.build_agent(source, pyson.stdlib.actions)
+        yield agentspeak.runtime.build_agent(source, agentspeak.stdlib.actions)
 
 agents = sc.parallelize(init_agents())
 

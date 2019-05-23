@@ -1,29 +1,29 @@
 #!/usr/bin/env python
 
-import pyson
-import pyson.stdlib
-import pyson.runtime
+import agentspeak
+import agentspeak.stdlib
+import agentspeak.runtime
 
 
 def test_concat_strings():
-    env = pyson.runtime.Environment()
-    agent = pyson.runtime.Agent(env, "agent")
-    intention = pyson.runtime.Intention()
-    X = pyson.Var()
+    env = agentspeak.runtime.Environment()
+    agent = agentspeak.runtime.Agent(env, "agent")
+    intention = agentspeak.runtime.Intention()
+    X = agentspeak.Var()
 
-    term = pyson.Literal(".concat", ("hello", " ", "world", X))
-    next(pyson.stdlib._concat(agent, term, intention))
+    term = agentspeak.Literal(".concat", ("hello", " ", "world", X))
+    next(agentspeak.stdlib._concat(agent, term, intention))
 
     assert X.grounded(intention.scope) == "hello world"
 
 
 def test_concat_lists():
-    env = pyson.runtime.Environment()
-    agent = pyson.runtime.Agent(env, "agent")
-    intention = pyson.runtime.Intention()
-    X = pyson.Var()
+    env = agentspeak.runtime.Environment()
+    agent = agentspeak.runtime.Agent(env, "agent")
+    intention = agentspeak.runtime.Intention()
+    X = agentspeak.Var()
 
-    term = pyson.Literal(".concat", ((1, 2), (3,), X))
-    next(pyson.stdlib._concat(agent, term, intention))
+    term = agentspeak.Literal(".concat", ((1, 2), (3,), X))
+    next(agentspeak.stdlib._concat(agent, term, intention))
 
     assert X.grounded(intention.scope) == (1, 2, 3)

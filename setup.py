@@ -45,7 +45,7 @@ setup_requirements = ['pytest-runner', ]
 test_requirements = ['pytest', ]
 
 setuptools.setup(
-    name="pyson",
+    name="agentspeak",
     version="0.0.1",
     author="Niklas Fiekas",
     author_email="niklas.fiekas@tu-clausthal.de",
@@ -53,8 +53,8 @@ setuptools.setup(
     long_description=read_description(),
     license="GPL3",
     keywords="jason multi agent simulation agent-speak",
-    url="https://github.com/niklasf/pyson",
-    packages=["pyson"],
+    url="https://github.com/niklasf/python-agentspeak",
+    packages=["agentspeak"],
     install_requires=dependencies(),
     setup_requires=setup_requirements,
     test_suite='tests',
@@ -75,6 +75,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Other",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",

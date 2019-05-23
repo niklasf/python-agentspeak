@@ -5,9 +5,9 @@ import collections
 import itertools
 import numpy.random
 
-import pyson
-import pyson.stdlib
-import pyson.runtime
+import agentspeak
+import agentspeak.stdlib
+import agentspeak.runtime
 
 from helper import Schedule, Graph, iter_choice
 
@@ -47,7 +47,7 @@ START_TICK_LAST_STAGE = int(SIM_ROUNDS * LAST_STAGE)
 # Actions
 # #############################################################################
 
-actions = pyson.Actions(pyson.stdlib.actions)
+actions = agentspeak.Actions(agentspeak.stdlib.actions)
 actions.add_function(".randint", (int, int), random.randint)
 
 
@@ -158,13 +158,13 @@ class Developer:
         return any(module.creator == self.name for module in bugs.outgoing[bug])
 
 
-class Creator(Developer, pyson.runtime.Agent):
+class Creator(Developer, agentspeak.runtime.Agent):
 
-    actions = pyson.Actions(actions)
+    actions = agentspeak.Actions(actions)
 
     def __init__(self, env, name, beliefs=None, rules=None, plans=None):
         Developer.__init__(self, name)
-        pyson.runtime.Agent.__init__(self, env, name, beliefs, rules, plans)
+        agentspeak.runtime.Agent.__init__(self, env, name, beliefs, rules, plans)
         self.days = 6
 
     @actions.add(".do_work")
@@ -351,7 +351,7 @@ class MinorDeveloper(Developer):
 # Initialization
 # #############################################################################
 
-env = pyson.runtime.Environment()
+env = agentspeak.runtime.Environment()
 schedule = Schedule()
 coupling = Graph()
 bugs = Graph()
@@ -414,12 +414,12 @@ def debug():
 def do_some_work():
     for developer in developers:
         if developer.active:
-            if isinstance(developer, pyson.runtime.Agent):
+            if isinstance(developer, agentspeak.runtime.Agent):
                 developer.call(
-                    pyson.Trigger.addition,
-                    pyson.GoalType.achievement,
-                    pyson.Literal("tick"),
-                    pyson.runtime.Intention())
+                    agentspeak.Trigger.addition,
+                    agentspeak.GoalType.achievement,
+                    agentspeak.Literal("tick"),
+                    agentspeak.runtime.Intention())
 
                 env.run_agent(developer)
             else:

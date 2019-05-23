@@ -2,6 +2,7 @@
 .tox
 
 pyson.egg-info/
+agentspeak.egg-info/
 
 venv*/
 

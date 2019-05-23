@@ -1,54 +1,54 @@
 #!/usr/bin/env python
 
-import pyson
+import agentspeak
 
 
 def test_unifies():
-    assert not pyson.unifies(True, 1)
+    assert not agentspeak.unifies(True, 1)
 
-    assert pyson.unifies(3, 3.0)
-    assert pyson.unifies(True, True)
-    assert pyson.unifies(5, pyson.Wildcard())
-    assert pyson.unifies((1, 2), (1, pyson.Wildcard()))
-    assert pyson.unifies(("hello", 2), ("hello", pyson.Var()))
+    assert agentspeak.unifies(3, 3.0)
+    assert agentspeak.unifies(True, True)
+    assert agentspeak.unifies(5, agentspeak.Wildcard())
+    assert agentspeak.unifies((1, 2), (1, agentspeak.Wildcard()))
+    assert agentspeak.unifies(("hello", 2), ("hello", agentspeak.Var()))
 
-    assert pyson.unifies(pyson.Var(), pyson.Literal("beep"))
-    assert pyson.unifies(pyson.Literal("boop"), pyson.Var())
+    assert agentspeak.unifies(agentspeak.Var(), agentspeak.Literal("beep"))
+    assert agentspeak.unifies(agentspeak.Literal("boop"), agentspeak.Var())
 
-    X = pyson.Var()
-    assert pyson.unifies(pyson.Literal("foo", (X, X)), pyson.Literal("foo", (1, 1)))
-    assert not pyson.unifies(pyson.Literal("bar", (X, X)), pyson.Literal("bar", (1, 2)))
+    X = agentspeak.Var()
+    assert agentspeak.unifies(agentspeak.Literal("foo", (X, X)), agentspeak.Literal("foo", (1, 1)))
+    assert not agentspeak.unifies(agentspeak.Literal("bar", (X, X)), agentspeak.Literal("bar", (1, 2)))
 
 
 def test_unifies_annotated():
-    X = pyson.Var()
-    Y = pyson.Var()
-    foo_a = pyson.Literal("foo", (), ("a",))
-    foo_ab = pyson.Literal("foo", (), ("a", "b"))
-    foo_XY = pyson.Literal("foo", (), (X, Y))
-    foo_XX = pyson.Literal("foo", (), (X, X))
+    X = agentspeak.Var()
+    Y = agentspeak.Var()
+    foo_a = agentspeak.Literal("foo", (), ("a",))
+    foo_ab = agentspeak.Literal("foo", (), ("a", "b"))
+    foo_XY = agentspeak.Literal("foo", (), (X, Y))
+    foo_XX = agentspeak.Literal("foo", (), (X, X))
 
-    assert pyson.unifies_annotated(foo_a, foo_ab)
-    assert pyson.unifies_annotated(foo_a, foo_XY)
-    assert pyson.unifies_annotated(foo_a, foo_XX)
-    assert pyson.unifies_annotated(foo_ab, foo_XY)
-    assert pyson.unifies_annotated(foo_XY, foo_ab)
-    assert pyson.unifies_annotated(foo_XX, foo_ab)
-    assert pyson.unifies_annotated(foo_XX, foo_ab)
+    assert agentspeak.unifies_annotated(foo_a, foo_ab)
+    assert agentspeak.unifies_annotated(foo_a, foo_XY)
+    assert agentspeak.unifies_annotated(foo_a, foo_XX)
+    assert agentspeak.unifies_annotated(foo_ab, foo_XY)
+    assert agentspeak.unifies_annotated(foo_XY, foo_ab)
+    assert agentspeak.unifies_annotated(foo_XX, foo_ab)
+    assert agentspeak.unifies_annotated(foo_XX, foo_ab)
 
-    assert not pyson.unifies_annotated(foo_ab, foo_XX)
+    assert not agentspeak.unifies_annotated(foo_ab, foo_XX)
 
 
 def test_parse_string():
-    assert pyson.parse_string('"hello"') == "hello"
-    assert pyson.parse_string('"line 1\nline 2"') == "line 1\nline 2"
+    assert agentspeak.parse_string('"hello"') == "hello"
+    assert agentspeak.parse_string('"line 1\nline 2"') == "line 1\nline 2"
 
 
 def test_is_number():
-    assert pyson.is_number(1)
-    assert pyson.is_number(-3.7)
-    assert pyson.is_number(2 ** 128)
+    assert agentspeak.is_number(1)
+    assert agentspeak.is_number(-3.7)
+    assert agentspeak.is_number(2 ** 128)
 
-    assert not pyson.is_number("a string")
-    assert not pyson.is_number(False)
-    assert not pyson.is_number(True)
+    assert not agentspeak.is_number("a string")
+    assert not agentspeak.is_number(False)
+    assert not agentspeak.is_number(True)
