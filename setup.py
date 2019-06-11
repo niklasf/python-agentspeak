@@ -43,6 +43,7 @@ setuptools.setup(
     author_email="niklas.fiekas@tu-clausthal.de",
     description="JASON-style AgentSpeak for Python.",
     long_description=read_description(),
+    long_description_content_type="text/x-rst",
     license="GPL3",
     keywords="jason multi agent simulation agent-speak",
     url="https://github.com/niklasf/python-agentspeak",
