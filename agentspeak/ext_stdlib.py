@@ -10,6 +10,16 @@ import agentspeak.optimizer
 actions = agentspeak.Actions(agentspeak.stdlib.actions)
 
 
+@actions.add(".raise", 0)
+def _raise(agent, term, intention):
+    raise RuntimeError
+
+
+@actions.add_procedure(".raise", (None, ))
+def _raise(err):
+    raise RuntimeError(err)
+
+
 @actions.add_function(".tail", (tuple, ))
 def _tail(l):
     return l[1:]

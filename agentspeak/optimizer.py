@@ -164,7 +164,7 @@ class CallbackVisitor(object):
         code = self.callback.pre_ast_node(AstType.PLAN, ast_plan)
         if code is not None: return code
         ast_plan.annotations = self._cb_map(ast_plan.annotations)
-        ast_plan.head = self._cb_sing(ast_plan.head)
+        ast_plan.event.head = self._cb_sing(ast_plan.event.head)
         if ast_plan.context: ast_plan.context = self._cb_sing(ast_plan.context)
         if ast_plan.body: ast_plan.body = self._cb_sing(ast_plan.body)
         return self.callback.on_ast_node(AstType.PLAN, ast_plan)
@@ -274,7 +274,7 @@ class CallbackReverseVisitor(CallbackVisitor):
         if code is not None: return code
         if ast_plan.body: ast_plan.body = self._cb_sing(ast_plan.body)
         if ast_plan.context: ast_plan.context = self._cb_sing(ast_plan.context)
-        ast_plan.head = self._cb_sing(ast_plan.head)
+        ast_plan.event.head = self._cb_sing(ast_plan.event.head)
         ast_plan.annotations = self._cb_map(ast_plan.annotations)
         return self.callback.on_ast_node(AstType.PLAN, ast_plan)
 
@@ -746,7 +746,7 @@ class InferenceCallback(DefaultCallback):
             if self.action_evil_query(ast_action, _IEC._AFFECT_ANY, _IEC.EFFECT_ALL):
                 # This could probably be handled with more finesse
                 self.log.warning("action %s has unbounded side-effects, plan %s will not be optimized",
-                    ast_action.functor, str(ast_plan.head), loc=ast_action.loc)
+                    ast_action.functor, ast_plan.signature(), loc=ast_action.loc)
                 return
 
             # Warnings
@@ -873,8 +873,8 @@ class TermGroundingCb(DefaultCallback):
     
     def pre_ast_plan(self, ast_plan):
         # Hacky, but it should do the right thing
-        ast_plan.head = self.visitor_parent.resolve_single(ast_plan.head)
-        self.symbolic_belief_query(ast_plan.head)
+        ast_plan.event.head = self.visitor_parent.resolve_single(ast_plan.event.head)
+        self.symbolic_belief_query(ast_plan.event.head)
         
         if ast_plan.context:
             loc = ast_plan.context.loc
@@ -1526,7 +1526,7 @@ class UselessTermEliminatorCb(DefaultCallback):
             assert False
 
     def pre_ast_plan(self, ast_plan):
-        self.update_used(ast_plan.head)
+        self.update_used(ast_plan.event.head)
         
         if ast_plan.body:
             ast_plan.body = self.visitor_parent.resolve_maybe(ast_plan.body)
@@ -1541,7 +1541,7 @@ class UselessTermEliminatorCb(DefaultCallback):
                 ast_plan.context.value = False
                 ast_plan.body = None
         
-        assert ast_plan.head is not None
+        assert ast_plan.event.head is not None
         return _IAC.REPLACE_NODE(ast_plan)
             
     def pre_ast_formula(self, ast_node):

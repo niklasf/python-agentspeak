@@ -242,7 +242,7 @@ class AstPlan(AstNode):
         return visitor.visit_plan(self)
 
     def signature(self):
-        return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head.signature())
+        return self.event.signature()
 
     def __str__(self):
         builder = []
@@ -271,6 +271,9 @@ class AstEvent(AstNode):
         self.trigger = None
         self.goal_type = None
         self.head = None
+
+    def signature(self):
+        return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head.signature())
 
     def accept(self, visitor):
         return visitor.visit_event(self)
