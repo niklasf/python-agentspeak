@@ -8,16 +8,17 @@ from __future__ import print_function
 import enum
 import sys
 import itertools
-import copy   
-import re     
+import copy
+import re
 
-import pyson.lexer
-import pyson.parser
-import pyson.runtime
+import agentspeak.lexer
+import agentspeak.parser
+import agentspeak.runtime
 
-from pyson import FormulaType, BinaryOp, UnaryOp
-from pyson.parser import (AstNode, AstLiteral, AstVariable, AstConst, AstBinaryOp, AstUnaryOp,
-    AstFormula, AstPlan, AstBody, AstList)
+from agentspeak import FormulaType, BinaryOp, UnaryOp
+from agentspeak.parser import (AstNode, AstLiteral, AstVariable, AstConst,
+                               AstBinaryOp, AstUnaryOp,
+                               AstFormula, AstPlan, AstBody, AstList)
 
 def _is_str_type(s):
     try:
@@ -1808,13 +1809,13 @@ def collect_literal_variables(ast_node):
                 yield j
     else:
         return
-    
-def dump_tokens(tokens):
-    assert(all(isinstance(i, pyson.lexer.TokenInfo) for i in tokens))
 
-    maxwid = max(len(i.name) for i in pyson.lexer.TokenType)
+def dump_tokens(tokens):
+    assert(all(isinstance(i, agentspeak.lexer.TokenInfo) for i in tokens))
+
+    maxwid = max(len(i.name) for i in agentspeak.lexer.TokenType)
     for i in tokens:
-        print('%*s  %s' % (maxwid, pyson.lexer.TokenType(i.token).name, i.lexeme))
+        print('%*s  %s' % (maxwid, agentspeak.lexer.TokenType(i.token).name, i.lexeme))
 
 def dump(*a):
     v = CallbackVisitor(DumpingCallback())
@@ -1848,41 +1849,41 @@ def init_optimizer_actions(actions):
     @optimize_away
     def _inf_disable_local(agent, term, intention): yield
 
-_LOGGER = pyson.get_logger(__name__)
-    
-def build_agent_optimized(env, source, actions, agent_cls=pyson.runtime.Agent):
-    log = pyson.Log(_LOGGER, 3)
-    tokens = pyson.lexer.TokenStream(source, log)
-    ast_agent = pyson.parser.parse(source.name, tokens, log)
-    ast_agent = InferenceCallback.apply(ast_agent, log, pyson.stdlib.actions)
+_LOGGER = agentspeak.get_logger(__name__)
+
+def build_agent_optimized(env, source, actions, agent_cls=agentspeak.runtime.Agent):
+    log = agentspeak.Log(_LOGGER, 3)
+    tokens = agentspeak.lexer.TokenStream(source, log)
+    ast_agent = agentspeak.parser.parse(source.name, tokens, log)
+    ast_agent = InferenceCallback.apply(ast_agent, log, agentspeak.stdlib.actions)
     log.throw()
 
     _, agent = env.build_agent_from_ast(source, ast_agent, actions)
     return agent
 
 def main():
-    import pyson.stdlib
-    
-    env = pyson.runtime.Environment()
+    import agentspeak.stdlib
+
+    env = agentspeak.runtime.Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
-                    agent = build_agent_optimized(env, source, pyson.stdlib.actions)
+                    agent = build_agent_optimized(env, source, agentspeak.stdlib.actions)
                     env.run_agent(agent)
                     break
         elif sys.stdin.isatty():
-            LOGGER.error('pyson.optimizer does not support a REPL. Please use the main pyson instead.')
+            LOGGER.error('agentspeak.optimizer does not support a REPL.')
             sys.exit(1)
         else:
-            env.run_agent(env.build_agent(sys.stdin, pyson.stdlib.actions))
-    except pyson.AggregatedError as error:
+            env.run_agent(env.build_agent(sys.stdin, agentspeak.stdlib.actions))
+    except agentspeak.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
-    except pyson.PysonError as error:
+    except agentspeak.AslError as error:
         LOGGER.error("%s", error)
         sys.exit(1)
-        
+
 if __name__ == "__main__":
     main()

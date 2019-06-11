@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# This file is part of the Pyson AgentSpeak interpreter.
-# Copyright (C) 2016 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
+# This file is part of the python-agentspeak interpreter.
+# Copyright (C) 2016-2019 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ __author__ = "Niklas Fiekas"
 
 __email__ = "niklas.fiekas@backscattering.de"
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 
 import enum
@@ -154,7 +154,7 @@ class AggregatedError(Exception):
         self.num_warnings = num_warnings
 
 
-class PysonError(Exception):
+class AslError(Exception):
     pass
 
 
@@ -292,21 +292,21 @@ def parse_string(s):
     return s[1:-1].encode("utf-8").decode("unicode_escape")
 
 
-def pyson_str(term):
+def asl_str(term):
     """Converts the term to a string (similar to Python :func:`str`)."""
     if term is True:
         return "true"
     elif term is False:
         return "false"
     elif isinstance(term, tuple):
-        return "[%s]" % (", ".join(pyson_str(t) for t in term))
+        return "[%s]" % (", ".join(asl_str(t) for t in term))
     elif isinstance(term, float) and term.is_integer():
         return str(int(term))
     else:
         return str(term)
 
 
-def pyson_repr(term):
+def asl_repr(term):
     """
     Converts the term to its string representation
     (similar to Python :func:`repr`).
@@ -318,12 +318,12 @@ def pyson_repr(term):
     elif isinstance(term, str):
         return "\"%s\"" % (term.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""), )
     elif isinstance(term, tuple):
-        return "[%s]" % (", ".join(pyson_repr(t) for t in term))
+        return "[%s]" % (", ".join(asl_repr(t) for t in term))
     elif isinstance(term, float) and term.is_integer():
         return repr(int(term))
     else:
         try:
-            return term.pyson_repr()
+            return term.asl_repr()
         except AttributeError:
             return repr(term)
 
@@ -403,7 +403,7 @@ class Var(object):
         if self in scope:
             return grounded(deref(self, scope), scope)
 
-        raise PysonError("term not ground")
+        raise AslError("term not ground")
 
     def freeze(self, scope, memo):
         if self in memo:
@@ -431,10 +431,10 @@ class Var(object):
         scope[self] = term
         stack.append(self)
 
-    def pyson_repr(self):
+    def asl_repr(self):
         return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3], id(self))
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "<Var (%s)>" % str(self)
@@ -448,7 +448,7 @@ class Wildcard(Var):
         return False
 
     def grounded(self, scope):
-        raise PysonError("wildcard is never ground")
+        raise AslError("wildcard is never ground")
 
     def freeze(self, scope, memo):
         return self
@@ -459,10 +459,10 @@ class Wildcard(Var):
     def bind(self, term, scope, stack):
         pass
 
-    def pyson_repr(self):
+    def asl_repr(self):
         return "_"
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "<Wildcard at %s>" % hex(id(self))
@@ -480,9 +480,9 @@ class UnaryExpr(object):
         operand = evaluate(self.operand, scope)
 
         if self.unary_op.boolean_op and not isinstance(operand, bool):
-            raise PysonError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise AslError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
         elif self.unary_op.numeric_op and not is_number(operand):
-            raise PysonError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise AslError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
 
         return self.unary_op.func(operand)
 
@@ -495,10 +495,10 @@ class UnaryExpr(object):
     def freeze(self, scope, memo):
         return freeze(self.evaluate(scope), scope, memo)
 
-    def pyson_repr(self):
-        return "(%s %s)" % (self.unary_op.lexeme, pyson_repr(self.operand))
+    def asl_repr(self):
+        return "(%s %s)" % (self.unary_op.lexeme, asl_repr(self.operand))
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "<UnaryExpr %s>" % str(self)
@@ -518,9 +518,9 @@ class BinaryExpr(object):
         right = evaluate(self.right, scope)
 
         if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
-            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+            raise AslError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
-            raise PysonError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+            raise AslError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
         elif self.binary_op.comp_op:
             left = grounded(left, scope)
             right = grounded(right, scope)
@@ -536,10 +536,10 @@ class BinaryExpr(object):
     def freeze(self, scope, memo):
         return freeze(self.evaluate(scope), scope, memo)
 
-    def pyson_repr(self):
-        return "(%s %s %s)" % (pyson_repr(self.left), self.binary_op.lexeme, pyson_repr(self.right))
+    def asl_repr(self):
+        return "(%s %s %s)" % (asl_repr(self.left), self.binary_op.lexeme, asl_repr(self.right))
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "<BinaryExpr %s>" % str(self)
@@ -636,20 +636,20 @@ class Literal(object):
     def __len__(self):
         return len(self.args)
 
-    def pyson_repr(self):
+    def asl_repr(self):
         builder = []
         builder.append(self.functor)
         if self.args:
             builder.append("(")
-            builder.append(", ".join(pyson_repr(arg) for arg in self.args))
+            builder.append(", ".join(asl_repr(arg) for arg in self.args))
             builder.append(")")
         if self.annots:
             builder.append("[")
-            builder.append(", ".join(pyson_repr(annot) for annot in self.annots))
+            builder.append(", ".join(asl_repr(annot) for annot in self.annots))
             builder.append("]")
         return "".join(builder)
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "Literal(%s, %r, %r)" % (self.functor, self.args, self.annots)
@@ -732,16 +732,16 @@ class LinkedList(object):
     def __len__(self):
         return 1 + len(self.tail)
 
-    def pyson_repr(self):
+    def asl_repr(self):
         builder = []
         builder.append("[")
-        builder.append(pyson_repr(self.head))
+        builder.append(asl_repr(self.head))
         builder.append("|")
-        builder.append(pyson_repr(self.tail))
+        builder.append(asl_repr(self.tail))
         builder.append("]")
         return "".join(builder)
 
-    __str__ = pyson_repr
+    __str__ = asl_repr
 
     def __repr__(self):
         return "LinkedList(%s, %s)" % (self.head, self.tail)
@@ -871,7 +871,7 @@ def freeze(term, scope, memo):
 
 
 def _zip_specs(specs, agent, args, scope):
-    import pyson.runtime
+    import agentspeak.runtime
 
     result = []
     memo = {}
@@ -879,9 +879,9 @@ def _zip_specs(specs, agent, args, scope):
     args = iter(args)
 
     for spec in specs:
-        if spec is pyson.runtime.Environment:
+        if spec is agentspeak.runtime.Environment:
             result.append(agent.env)
-        elif spec is pyson.runtime.Agent:
+        elif spec is agentspeak.runtime.Agent:
             result.append(agent)
         else:
             arg = freeze(next(args), scope, memo)
@@ -892,12 +892,12 @@ def _zip_specs(specs, agent, args, scope):
                 arg = int(arg)
             elif spec is float:
                 arg = float(arg)
-            elif spec is pyson_str:
-                arg = pyson_str(arg)
+            elif spec is asl_str:
+                arg = asl_str(arg)
             elif spec is tuple:
                 arg = tuple(arg)
             elif not isinstance(arg, spec):
-                raise PysonError("spec '%s' does not match '%s'" % (spec, type(arg)))
+                raise AslError("spec '%s' does not match '%s'" % (spec, type(arg)))
 
             result.append(arg)
 
@@ -905,13 +905,13 @@ def _zip_specs(specs, agent, args, scope):
 
 
 def _count_specs(specs):
-    import pyson.runtime
+    import agentspeak.runtime
 
     count = 0
     for spec in specs:
-        if spec is pyson.runtime.Environment:
+        if spec is agentspeak.runtime.Environment:
             continue
-        elif spec is pyson.runtime.Agent:
+        elif spec is agentspeak.runtime.Agent:
             continue
         else:
             count += 1

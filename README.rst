@@ -1,12 +1,14 @@
-pyson - Jason-style AgentSpeak for Python
-=========================================
+Jason-style AgentSpeak for Python
+=================================
+
+A Python-based interpreter for the agent-oriented programming language JASON.
 
 Setup
 -----
 
 .. code::
 
-    python setup.py develop
+    pip install agentspeak
 
 Hello world
 -----------
@@ -25,13 +27,13 @@ Run a standalone agent program:
 
 .. code::
 
-    $ python -m pyson examples/hello_world.asl
+    $ python -m agentspeak examples/hello_world.asl
 
 Run an interactive console:
 
 .. code::
 
-    $ python -m pyson
+    $ python -m agentspeak
 
 See :code:`examples/embedded` for an example that interfaces with custom
 Python code.
@@ -39,7 +41,7 @@ Python code.
 Jason compability
 -----------------
 
-pyson should be mostly equivalent to Jason_.
+python-agentspeak should be mostly equivalent to Jason_.
 
 * Plan annotations are ignored as of yet.
 * Standard library does not yet contain syntactic transformations with

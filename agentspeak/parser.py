@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# This file is part of the Pyson AgentSpeak interpreter.
-# Copyright (C) 2016 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
+# This file is part of the python-agentspeak interpreter.
+# Copyright (C) 2016-2019 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@ import sys
 import errno
 import os.path
 
-import pyson
-import pyson.lexer
-import pyson.util
+import agentspeak
+import agentspeak.lexer
+import agentspeak.util
 
-from pyson import Trigger, GoalType, FormulaType, UnaryOp, BinaryOp
+from agentspeak import Trigger, GoalType, FormulaType, UnaryOp, BinaryOp
 
 
 class AstBaseVisitor(object):
@@ -186,7 +186,7 @@ class AstConst(AstNode):
         return visitor.visit_const(self)
 
     def __str__(self):
-        return pyson.pyson_repr(self.value)
+        return agentspeak.asl_repr(self.value)
 
 
 class AstVariable(AstNode):
@@ -260,7 +260,7 @@ class AstPlan(AstNode):
 
         if self.body:
             builder.append(" <-\n")
-            builder.append(pyson.util.indent(str(self.body)))
+            builder.append(agentspeak.util.indent(str(self.body)))
 
         return "".join(builder)
 
@@ -320,7 +320,7 @@ class AstWhile(AstNode):
         builder.append(str(self.condition))
         builder.append(") {\n")
         if self.body and self.body.formulas:
-            builder.append(pyson.util.indent(str(self.body)))
+            builder.append(agentspeak.util.indent(str(self.body)))
             builder.append(";\n")
         builder.append("}")
         return "".join(builder)
@@ -341,7 +341,7 @@ class AstFor(AstNode):
         builder.append(str(self.generator))
         builder.append(") {\n")
         if self.body and self.body.formulas:
-            builder.append(pyson.util.indent(str(self.body)))
+            builder.append(agentspeak.util.indent(str(self.body)))
             builder.append(";\n")
         builder.append("}")
         return "".join(builder)
@@ -363,11 +363,11 @@ class AstIfThenElse(AstNode):
         builder.append(str(self.condition))
         builder.append(") {\n")
         if self.if_body and self.if_body.formulas:
-            builder.append(pyson.util.indent(str(self.if_body)))
+            builder.append(agentspeak.util.indent(str(self.if_body)))
             builder.append(";\n")
         if self.else_body and self.else_body.formulas:
             builder.append("} else {\n")
-            builder.append(pyson.util.indent(str(self.else_body)))
+            builder.append(agentspeak.util.indent(str(self.else_body)))
             builder.append(";\n")
         builder.append("}")
         return "".join(builder)
@@ -543,7 +543,7 @@ def parse_atom(tok, tokens, log):
         return next(tokens), const
     elif tok.token.string:
         const = AstConst()
-        const.value = pyson.parse_string(tok.lexeme)
+        const.value = agentspeak.parse_string(tok.lexeme)
         const.loc = tok.loc
         return next(tokens), const
     else:
@@ -945,7 +945,7 @@ def parse_agent(filename, tokens, log, included_files, directive=None):
                 tok = next(tokens)
                 if not tok.token.string:
                     raise log.error("expected filename to include, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[include_loc])
-                include = pyson.parse_string(tok.lexeme)
+                include = agentspeak.parse_string(tok.lexeme)
                 tok = next(tokens)
                 if tok.lexeme != ")":
                     raise log.error("expected ')' after include filename, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[include_loc])
@@ -968,7 +968,7 @@ def parse_agent(filename, tokens, log, included_files, directive=None):
                         else:
                             raise
                     else:
-                        included_tokens = pyson.lexer.TokenStream(included_file, 1)
+                        included_tokens = agentspeak.lexer.TokenStream(included_file, 1)
                         included_agent = parse(include, included_tokens, log, included_files)
                         agent.beliefs += included_agent.beliefs
                         agent.rules += included_agent.rules
@@ -1106,8 +1106,8 @@ class NumericFoldVisitor(object):
         if ast_binary_op.operator.value.numeric_op:
             left = ast_binary_op.left.accept(self)
             right = ast_binary_op.right.accept(self)
-            if (isinstance(left, AstConst) and pyson.is_number(left.value) and
-                    isinstance(right, AstConst) and pyson.is_number(right.value)):
+            if (isinstance(left, AstConst) and agentspeak.is_number(left.value) and
+                    isinstance(right, AstConst) and agentspeak.is_number(right.value)):
                 try:
                     const = AstConst()
                     const.loc = ast_binary_op.loc
@@ -1129,7 +1129,7 @@ class NumericFoldVisitor(object):
     def visit_unary_op(self, ast_unary_op):
         if ast_unary_op.operator.value.numeric_op:
             folded = ast_unary_op.operand.accept(self)
-            if isinstance(folded, AstConst) and pyson.is_number(folded.value):
+            if isinstance(folded, AstConst) and agentspeak.is_number(folded.value):
                 const = AstConst()
                 const.loc = ast_unary_op.loc
                 const.value = ast_unary_op.operator.value.func(folded.value)
@@ -1187,7 +1187,7 @@ class BooleanFoldVisitor(object):
             if isinstance(left, AstConst) and isinstance(right, AstConst):
                 const = AstConst()
                 const.loc = ast_binary_op.loc
-                if pyson.is_number(left.value) and pyson.is_number(right.value):
+                if agentspeak.is_number(left.value) and agentspeak.is_number(right.value):
                     const.value = ast_binary_op.operator.value.func(left.value, right.value)
                     return const
                 elif isinstance(left.value, bool) and isinstance(right.value, bool):
@@ -1232,7 +1232,7 @@ class BooleanFoldVisitor(object):
     def visit_const(self, ast_const):
         if isinstance(ast_const.value, str):
             self.log.error("string in boolean context", loc=ast_const.loc)
-        elif pyson.is_number(ast_const.value):
+        elif agentspeak.is_number(ast_const.value):
             self.log.error("number '%s' in boolean context", ast_const.value, loc=ast_const.loc)
 
         return ast_const
@@ -1422,9 +1422,9 @@ def parse(filename, tokens, log, included_files=frozenset(), directive=None):
 
 
 def main(source, hook):
-    log = pyson.Log(pyson.get_logger(__name__), 3)
+    log = agentspeak.Log(agentspeak.get_logger(__name__), 3)
 
-    tokens = pyson.lexer.TokenStream(source, log, 1)
+    tokens = agentspeak.lexer.TokenStream(source, log, 1)
     agent = parse(source.name, tokens, log)
 
     log.throw()
@@ -1438,16 +1438,16 @@ def repl(hook):
 
     while True:
         try:
-            log = pyson.Log(pyson.get_logger(__name__), 3)
+            log = agentspeak.Log(agentspeak.get_logger(__name__), 3)
 
             if not tokens:
-                line = pyson.util.prompt("pyson.parser >>> ")
+                line = agentspeak.util.prompt("agentspeak.parser >>> ")
             else:
-                line = pyson.util.prompt("pyson.parser ... ")
+                line = agentspeak.util.prompt("agentspeak.parser ... ")
 
             lineno += 1
 
-            tokens.extend(pyson.lexer.tokenize(pyson.StringSource("<stdin>", line), log, lineno))
+            tokens.extend(agentspeak.lexer.tokenize(agentspeak.StringSource("<stdin>", line), log, lineno))
 
             while tokens:
                 token_stream = iter(tokens)
@@ -1460,7 +1460,7 @@ def repl(hook):
                     log.throw()
                     hook(agent)
                     tokens = list(token_stream)
-        except pyson.AggregatedError as error:
+        except agentspeak.AggregatedError as error:
             print(str(error), file=sys.stderr)
             tokens = []
         except KeyboardInterrupt:
@@ -1479,6 +1479,6 @@ if __name__ == "__main__":
             repl(print)
         else:
             main(sys.stdin, print)
-    except pyson.AggregatedError as error:
+    except agentspeak.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)

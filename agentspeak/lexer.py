@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# This file is part of the Pyson AgentSpeak interpreter.
-# Copyright (C) 2016 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
+# This file is part of the python-agentspeak interpreter.
+# Copyright (C) 2016-2019 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ import enum
 import re
 import sys
 
-import pyson
-import pyson.util
+import agentspeak
+import agentspeak.util
 
-from pyson import (SourceLocation, Trigger, GoalType, FormulaType,
+from agentspeak import (SourceLocation, Trigger, GoalType, FormulaType,
                    UnaryOp, BinaryOp)
 
 
@@ -211,7 +211,7 @@ class TokenStream(object):
 
 
 def main(source, lineno=1):
-    log = pyson.Log(pyson.get_logger(__name__), 3)
+    log = agentspeak.Log(agentspeak.get_logger(__name__), 3)
 
     for tok in tokenize(source, log, lineno):
         log.info("%s", tok.lexeme, loc=tok.loc)
@@ -223,10 +223,10 @@ def repl():
     lineno = 1
     while True:
         try:
-            line = pyson.util.prompt("pyson.lexer >>> ")
-            main(pyson.StringSource("<stdin>", line), lineno)
+            line = agentspeak.util.prompt("agentspeak.lexer >>> ")
+            main(agentspeak.StringSource("<stdin>", line), lineno)
             lineno += 1
-        except pyson.AggregatedError as error:
+        except agentspeak.AggregatedError as error:
             print(str(error), file=sys.stderr)
         except KeyboardInterrupt:
             print()
@@ -244,6 +244,6 @@ if __name__ == "__main__":
             repl()
         else:
             main(sys.stdin)
-    except pyson.AggregatedError as error:
+    except agentspeak.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)

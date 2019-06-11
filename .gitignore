@@ -1,7 +1,10 @@
+venv*/
+*.swp
 *.py[cod]
 *~
 .tox
 
-pyson.egg-info/
-
-venv*/
+dist/
+build/
+agentspeak.egg-info/
+docs/_build/

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# This file is part of the Pyson AgentSpeak interpreter.
-# Copyright (C) 2016 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
+# This file is part of the python-agentspeak interpreter.
+# Copyright (C) 2016-2019 Niklas Fiekas <niklas.fiekas@tu-clausthal.de>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,15 +25,15 @@ import functools
 import os.path
 import time
 
-import pyson
-import pyson.parser
-import pyson.lexer
-import pyson.util
+import agentspeak
+import agentspeak.parser
+import agentspeak.lexer
+import agentspeak.util
 
-from pyson import UnaryOp, BinaryOp, PysonError, pyson_str
+from agentspeak import UnaryOp, BinaryOp, AslError, asl_str
 
 
-LOGGER = pyson.get_logger(__name__)
+LOGGER = agentspeak.get_logger(__name__)
 
 
 class BuildTermVisitor:
@@ -41,7 +41,7 @@ class BuildTermVisitor:
         self.variables = variables
 
     def visit_literal(self, ast_literal):
-        return pyson.Literal(ast_literal.functor,
+        return agentspeak.Literal(ast_literal.functor,
             (t.accept(self) for t in ast_literal.terms),
             (t.accept(self) for t in ast_literal.annotations))
 
@@ -52,17 +52,17 @@ class BuildTermVisitor:
         return tuple(t.accept(self) for t in ast_list.terms)
 
     def visit_linked_list(self, ast_linked_list):
-        return pyson.LinkedList(
+        return agentspeak.LinkedList(
             ast_linked_list.head.accept(self),
             ast_linked_list.tail.accept(self))
 
     def visit_unary_op(self, ast_unary_op):
-        return pyson.UnaryExpr(
+        return agentspeak.UnaryExpr(
             ast_unary_op.operator.value,
             ast_unary_op.operand.accept(self))
 
     def visit_binary_op(self, ast_binary_op):
-        return pyson.BinaryExpr(
+        return agentspeak.BinaryExpr(
             ast_binary_op.operator.value,
             ast_binary_op.left.accept(self),
             ast_binary_op.right.accept(self))
@@ -72,9 +72,9 @@ class BuildTermVisitor:
             return self.variables[ast_variable.name]
         except KeyError:
             if ast_variable.name == "_":
-                var = pyson.Wildcard()
+                var = agentspeak.Wildcard()
             else:
-                var = pyson.Var()
+                var = agentspeak.Var()
 
             self.variables[ast_variable.name] = var
             return var
@@ -85,10 +85,10 @@ class BuildReplacePatternVisitor(BuildTermVisitor):
         BuildTermVisitor.__init__(self, {})
 
     def visit_unary_op(self, ast_unary_op):
-        return pyson.Wildcard()
+        return agentspeak.Wildcard()
 
     def visit_binary_op(self, ast_binary_op):
-        return pyson.Wildcard()
+        return agentspeak.Wildcard()
 
 
 class BuildQueryVisitor:
@@ -154,7 +154,7 @@ class BuildEventVisitor(BuildTermVisitor):
         self.log = log
 
     def visit_event(self, ast_event):
-        ast_event = ast_event.accept(pyson.parser.ConstFoldVisitor(self.log))
+        ast_event = ast_event.accept(agentspeak.parser.ConstFoldVisitor(self.log))
         return Event(ast_event.trigger, ast_event.goal_type, ast_event.head.accept(self))
 
     def visit_unary_op(self, op):
@@ -191,7 +191,7 @@ class TermQuery:
 
     def execute(self, agent, intention):
         # Boolean constants.
-        term = pyson.evaluate(self.term, intention.scope)
+        term = agentspeak.evaluate(self.term, intention.scope)
         if term is True:
             yield
             return
@@ -201,11 +201,11 @@ class TermQuery:
         try:
             group = term.literal_group()
         except AttributeError:
-            raise PysonError("expected boolean or literal in query context, got: '%s'" % term)
+            raise agentspeakError("expected boolean or literal in query context, got: '%s'" % term)
 
         # Query on the belief base.
         for belief in agent.beliefs[group]:
-            for _ in pyson.unify_annotated(term, belief, intention.scope, intention.stack):
+            for _ in agentspeak.unify_annotated(term, belief, intention.scope, intention.stack):
                 yield
 
         choicepoint = object()
@@ -216,11 +216,11 @@ class TermQuery:
 
             intention.stack.append(choicepoint)
 
-            if pyson.unify(term, rule.head, intention.scope, intention.stack):
+            if agentspeak.unify(term, rule.head, intention.scope, intention.stack):
                 for _ in rule.query.execute(agent, intention):
                     yield
 
-            pyson.reroll(intention.scope, intention.stack, choicepoint)
+            agentspeak.reroll(intention.scope, intention.stack, choicepoint)
 
     def __str__(self):
         return str(self.term)
@@ -266,7 +266,7 @@ class NotQuery:
 
         success = any(True for _ in self.query.execute(agent, intention))
 
-        pyson.reroll(intention.scope, intention.stack, choicepoint)
+        agentspeak.reroll(intention.scope, intention.stack, choicepoint)
 
         if not success:
             yield
@@ -278,7 +278,7 @@ class UnifyQuery:
         self.right = right
 
     def execute(self, agent, intention):
-        return pyson.unify_annotated(self.left, self.right, intention.scope, intention.stack)
+        return agentspeak.unify_annotated(self.left, self.right, intention.scope, intention.stack)
 
     def __str__(self):
         return "(%s = %s)" % (self.left, self.right)
@@ -353,7 +353,7 @@ class Agent:
         LOGGER.info("Belief base")
         for beliefs in self.beliefs.values():
             for belief in beliefs:
-                print(pyson.pyson_repr(belief))
+                print(agentspeak.asl_repr(belief))
 
         LOGGER.info("Rules")
         for rules in self.rules.values():
@@ -378,8 +378,8 @@ class Agent:
 
     def call(self, trigger, goal_type, term, calling_intention, delayed=False):
         # Modify beliefs.
-        if goal_type == pyson.GoalType.belief:
-            if trigger == pyson.Trigger.addition:
+        if goal_type == agentspeak.GoalType.belief:
+            if trigger == agentspeak.Trigger.addition:
                 self.add_belief(term, calling_intention.scope)
             else:
                 found = self.remove_belief(term, calling_intention)
@@ -387,10 +387,10 @@ class Agent:
                     return True
 
         # Freeze with caller scope.
-        frozen = pyson.freeze(term, calling_intention.scope, {})
+        frozen = agentspeak.freeze(term, calling_intention.scope, {})
 
-        if not isinstance(frozen, pyson.Literal):
-            raise PysonError("expected literal")
+        if not isinstance(frozen, agentspeak.Literal):
+            raise AslError("expected literal")
 
         # Wake up waiting intentions.
         for intention_stack in self.intentions:
@@ -405,7 +405,7 @@ class Agent:
             if event.trigger != trigger or event.goal_type != goal_type:
                 continue
 
-            if pyson.unifies_annotated(event.head, frozen):
+            if agentspeak.unifies_annotated(event.head, frozen):
                 intention.waiter = None
 
         applicable_plans = self.plans[(trigger, goal_type, frozen.functor, len(frozen.args))]
@@ -414,7 +414,7 @@ class Agent:
 
         # Find matching plan.
         for plan in applicable_plans:
-            for _ in pyson.unify_annotated(plan.head, frozen, intention.scope, intention.stack):
+            for _ in agentspeak.unify_annotated(plan.head, frozen, intention.scope, intention.stack):
                 for _ in plan.context.execute(self, intention):
                     intention.head_term = frozen
                     intention.instr = plan.body
@@ -431,10 +431,10 @@ class Agent:
                     self.intentions.append(new_intention_stack)
                     return True
 
-        if goal_type == pyson.GoalType.achievement:
-            raise PysonError("no applicable plan for %s%s%s/%d" % (
+        if goal_type == agentspeak.GoalType.achievement:
+            raise AslError("no applicable plan for %s%s%s/%d" % (
                 trigger.value, goal_type.value, frozen.functor, len(frozen.args)))
-        elif goal_type == pyson.GoalType.test:
+        elif goal_type == agentspeak.GoalType.test:
             return self.test_belief(term, calling_intention)
 
         return True
@@ -443,15 +443,15 @@ class Agent:
         term = term.grounded(scope)
 
         if term.functor is None:
-            raise PysonError("expected belief literal")
+            raise AslError("expected belief literal")
 
         self.beliefs[(term.functor, len(term.args))].add(term)
 
     def test_belief(self, term, intention):
-        term = pyson.evaluate(term, intention.scope)
+        term = agentspeak.evaluate(term, intention.scope)
 
-        if not isinstance(term, pyson.Literal):
-            raise PysonError("expected belief literal, got: '%s'" % term)
+        if not isinstance(term, agentspeak.Literal):
+            raise AslError("expected belief literal, got: '%s'" % term)
 
         query = TermQuery(term)
 
@@ -462,12 +462,12 @@ class Agent:
             return False
 
     def remove_belief(self, term, intention):
-        term = pyson.evaluate(term, intention.scope)
+        term = agentspeak.evaluate(term, intention.scope)
 
         try:
             group = term.literal_group()
         except AttributeError:
-            raise PysonError("expected belief literal, got: '%s'" % term)
+            raise AslError("expected belief literal, got: '%s'" % term)
 
         choicepoint = object()
 
@@ -476,11 +476,11 @@ class Agent:
         for belief in relevant_beliefs:
             intention.stack.append(choicepoint)
 
-            if pyson.unify(term, belief, intention.scope, intention.stack):
+            if agentspeak.unify(term, belief, intention.scope, intention.stack):
                 relevant_beliefs.remove(belief)
                 return True
 
-            pyson.reroll(intention.scope, intention.stack, choicepoint)
+            agentspeak.reroll(intention.scope, intention.stack, choicepoint)
 
         return False
 
@@ -520,7 +520,7 @@ class Agent:
             elif intention.calling_term:
                 frozen = intention.head_term.freeze(intention.scope, {})
                 calling_intention = intention_stack[-1]
-                if not pyson.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
+                if not agentspeak.unify(intention.calling_term, frozen, calling_intention.scope, calling_intention.stack):
                     raise RuntimeError("back unification failed")
             return True
 
@@ -530,12 +530,12 @@ class Agent:
             else:
                 intention.instr = instr.failure
                 if not intention.instr:
-                    raise PysonError("plan failure")
-        except PysonError as err:
-            log = pyson.Log(LOGGER)
+                    raise AslError("plan failure")
+        except AslError as err:
+            log = agentspeak.Log(LOGGER)
             raise log.error("%s", err, loc=instr.loc, extra_locs=instr.extra_locs)
         except Exception as err:
-            log = pyson.Log(LOGGER)
+            log = agentspeak.Log(LOGGER)
             raise log.exception("agent %r raised python exception: %r", self.name, err,
                                 loc=instr.loc, extra_locs=instr.extra_locs)
 
@@ -551,7 +551,7 @@ class Environment:
         self.agents = {}
 
     def _make_name(self, path):
-        base_name = pyson.sanitize_functor(os.path.splitext(os.path.basename(path))[0])
+        base_name = agentspeak.sanitize_functor(os.path.splitext(os.path.basename(path))[0])
         if not base_name:
             base_name = "agent"
         name = base_name
@@ -564,7 +564,7 @@ class Environment:
     def build_agent_from_ast(self, source, ast_agent, actions, agent_cls=Agent, name=None):
         # This function is also called by the optimizer.
 
-        log = pyson.Log(LOGGER, 3)
+        log = agentspeak.Log(LOGGER, 3)
         agent = agent_cls(self, self._make_name(name or source.name))
 
         # Add rules to agent prototype.
@@ -596,13 +596,13 @@ class Environment:
         # Add beliefs to agent prototype.
         for ast_belief in ast_agent.beliefs:
             belief = ast_belief.accept(BuildTermVisitor({}))
-            agent.call(pyson.Trigger.addition, pyson.GoalType.belief,
+            agent.call(agentspeak.Trigger.addition, agentspeak.GoalType.belief,
                        belief, Intention(), delayed=True)
 
         # Call initial goals on agent prototype.
         for ast_goal in ast_agent.goals:
             term = ast_goal.atom.accept(BuildTermVisitor({}))
-            agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
+            agent.call(agentspeak.Trigger.addition, agentspeak.GoalType.achievement,
                        term, Intention(), delayed=True)
 
         # Report errors.
@@ -613,9 +613,9 @@ class Environment:
 
     def _build_agent(self, source, actions, agent_cls=Agent, name=None):
         # Parse source.
-        log = pyson.Log(LOGGER, 3)
-        tokens = pyson.lexer.TokenStream(source, log)
-        ast_agent = pyson.parser.parse(source.name, tokens, log)
+        log = agentspeak.Log(LOGGER, 3)
+        tokens = agentspeak.lexer.TokenStream(source, log)
+        ast_agent = agentspeak.parser.parse(source.name, tokens, log)
         log.throw()
 
         return self.build_agent_from_ast(source, ast_agent, actions, agent_cls, name)
@@ -642,7 +642,7 @@ class Environment:
 
             for ast_goal in ast_agent.goals:
                 term = ast_goal.atom.accept(BuildTermVisitor({}))
-                agent.call(pyson.Trigger.addition, pyson.GoalType.achievement,
+                agent.call(agentspeak.Trigger.addition, agentspeak.GoalType.achievement,
                            term, Intention(), delayed=True)
 
             agents.append(agent)
@@ -689,15 +689,15 @@ def noop(agent, intention):
 
 
 def add_belief(term, agent, intention):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.belief, term, intention)
+    return agent.call(agentspeak.Trigger.addition, agentspeak.GoalType.belief, term, intention)
 
 
 def remove_belief(term, agent, intention):
-    return agent.call(pyson.Trigger.removal, pyson.GoalType.belief, term, intention)
+    return agent.call(agentspeak.Trigger.removal, agentspeak.GoalType.belief, term, intention)
 
 
 def test_belief(term, agent, intention):
-    return agent.call(pyson.Trigger.addition, pyson.GoalType.test, term, intention)
+    return agent.call(agentspeak.Trigger.addition, agentspeak.GoalType.test, term, intention)
 
 
 def call(trigger, goal_type, term, agent, intention):
@@ -735,7 +735,7 @@ def push_choicepoint(agent, intention):
 
 def pop_choicepoint(agent, intention):
     choicepoint = intention.choicepoint_stack.pop()
-    pyson.reroll(intention.scope, intention.stack, choicepoint)
+    agentspeak.reroll(intention.scope, intention.stack, choicepoint)
     return True
 
 
@@ -766,33 +766,33 @@ class BuildInstructionsVisitor:
         return self.tail
 
     def visit_formula(self, ast_formula):
-        if ast_formula.formula_type == pyson.FormulaType.add:
+        if ast_formula.formula_type == agentspeak.FormulaType.add:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
             self.add_instr(functools.partial(add_belief, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
-        elif ast_formula.formula_type == pyson.FormulaType.remove:
+        elif ast_formula.formula_type == agentspeak.FormulaType.remove:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
             self.add_instr(functools.partial(remove_belief, term))
-        elif ast_formula.formula_type == pyson.FormulaType.test:
+        elif ast_formula.formula_type == agentspeak.FormulaType.test:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
             self.add_instr(functools.partial(test_belief, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
-        elif ast_formula.formula_type == pyson.FormulaType.replace:
+        elif ast_formula.formula_type == agentspeak.FormulaType.replace:
             removal_term = ast_formula.term.accept(BuildReplacePatternVisitor())
             self.add_instr(functools.partial(remove_belief, removal_term))
 
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
             self.add_instr(functools.partial(add_belief, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
-        elif ast_formula.formula_type == pyson.FormulaType.achieve:
+        elif ast_formula.formula_type == agentspeak.FormulaType.achieve:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call, pyson.Trigger.addition, pyson.GoalType.achievement, term),
+            self.add_instr(functools.partial(call, agentspeak.Trigger.addition, agentspeak.GoalType.achievement, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
-        elif ast_formula.formula_type == pyson.FormulaType.achieve_later:
+        elif ast_formula.formula_type == agentspeak.FormulaType.achieve_later:
             term = ast_formula.term.accept(BuildTermVisitor(self.variables))
-            self.add_instr(functools.partial(call_delayed, pyson.Trigger.addition, pyson.GoalType.achievement, term),
+            self.add_instr(functools.partial(call_delayed, agentspeak.Trigger.addition, agentspeak.GoalType.achievement, term),
                            loc=ast_formula.loc, extra_locs=[ast_formula.term.loc])
-        elif ast_formula.formula_type == pyson.FormulaType.term:
+        elif ast_formula.formula_type == agentspeak.FormulaType.term:
             query = ast_formula.term.accept(BuildQueryVisitor(self.variables, self.actions, self.log))
             self.add_instr(functools.partial(push_query, query))
             self.add_instr(next_or_fail, loc=ast_formula.term.loc)
@@ -869,7 +869,7 @@ def dump_variables(variables, scope):
 
     for name, variable in sorted(variables.items()):
         if variable in scope:
-            print("%s = %s" % (name, pyson_str(pyson.deref(variable, scope))))
+            print("%s = %s" % (name, asl_str(agentspeak.deref(variable, scope))))
         else:
             not_in_scope.append("%s = %s" % (name, variable))
 
@@ -887,26 +887,26 @@ def repl(agent, env, actions):
 
     while True:
         try:
-            log = pyson.Log(LOGGER, 3)
+            log = agentspeak.Log(LOGGER, 3)
 
             try:
                 if not tokens:
-                    line = pyson.util.prompt("%s >>> " % agent.name)
+                    line = agentspeak.util.prompt("%s >>> " % agent.name)
                 else:
-                    line = pyson.util.prompt("%s ... " % agent.name)
+                    line = agentspeak.util.prompt("%s ... " % agent.name)
             except KeyboardInterrupt:
                 print()
                 sys.exit(0)
 
             lineno += 1
 
-            tokens.extend(pyson.lexer.tokenize(pyson.StringSource("<stdin>", line), log, lineno))
+            tokens.extend(agentspeak.lexer.tokenize(agentspeak.StringSource("<stdin>", line), log, lineno))
 
             while tokens:
                 token_stream = iter(tokens)
                 try:
                     tok = next(token_stream)
-                    tok, body = pyson.parser.parse_plan_body(tok, token_stream, log)
+                    tok, body = agentspeak.parser.parse_plan_body(tok, token_stream, log)
                 except StopIteration:
                     log.throw()
                     break
@@ -920,36 +920,36 @@ def repl(agent, env, actions):
                     agent.intentions.append(collections.deque([intention]))
                     env.run_agent(agent)
                     dump_variables(variables, intention.scope)
-        except pyson.AggregatedError as error:
+        except agentspeak.AggregatedError as error:
             print(str(error), file=sys.stderr)
             tokens = []
-        except pyson.PysonError as error:
+        except agentspeak.AslError as error:
             LOGGER.error("%s", error)
             tokens = []
 
 
 def main(post_repl=True):
-    import pyson.ext_stdlib
+    import agentspeak.ext_stdlib
     env = Environment()
     try:
         args = sys.argv[1:]
         if args:
             for arg in args:
                 with open(arg) as source:
-                    agent = env.build_agent(source, pyson.ext_stdlib.actions)
+                    agent = env.build_agent(source, agentspeak.ext_stdlib.actions)
                     env.run_agent(agent)
                     if post_repl:
-                        repl(agent, env, pyson.ext_stdlib.actions)
+                        repl(agent, env, agentspeak.ext_stdlib.actions)
                     break
         elif sys.stdin.isatty():
             agent = Agent(env, "stdin")
-            repl(agent, env, pyson.ext_stdlib.actions)
+            repl(agent, env, agentspeak.ext_stdlib.actions)
         else:
-            env.run_agent(env.build_agent(sys.stdin, pyson.ext_stdlib.actions))
-    except pyson.AggregatedError as error:
+            env.run_agent(env.build_agent(sys.stdin, agentspeak.ext_stdlib.actions))
+    except agentspeak.AggregatedError as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)
-    except pyson.PysonError as error:
+    except agentspeak.AslError as error:
         LOGGER.error("%s", error)
         sys.exit(1)
 

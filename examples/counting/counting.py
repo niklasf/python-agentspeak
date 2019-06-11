@@ -2,9 +2,9 @@
 
 from __future__ import print_function
 
-import pyson
-import pyson.runtime
-import pyson.stdlib
+import agentspeak
+import agentspeak.runtime
+import agentspeak.stdlib
 import time
 import sys
 import os.path
@@ -18,10 +18,10 @@ print(N, end=" ")
 
 t1 = time.time()
 
-env = pyson.runtime.Environment()
+env = agentspeak.runtime.Environment()
 
 with open(os.path.join(os.path.dirname(__file__), "counting.asl")) as source:
-    agents = env.build_agents(source, N, pyson.stdlib.actions)
+    agents = env.build_agents(source, N, agentspeak.stdlib.actions)
 
 t2 = time.time()
 print(t2 - t1, end=" ")
