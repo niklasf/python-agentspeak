@@ -201,7 +201,7 @@ class TermQuery:
         try:
             group = term.literal_group()
         except AttributeError:
-            raise agentspeakError("expected boolean or literal in query context, got: '%s'" % term)
+            raise AslError("expected boolean or literal in query context, got: '%s'" % term)
 
         # Query on the belief base.
         for belief in agent.beliefs[group]:
