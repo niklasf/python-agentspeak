@@ -16,20 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-from __future__ import division
+from __future__ import print_function, division
+
+import datetime
+import random
+
+import colorama
 
 import agentspeak
-import agentspeak.runtime
-import colorama
-import random
-import datetime
-import collections
-
-from agentspeak import asl_str, Literal
-
 import agentspeak.optimizer
-
+import agentspeak.runtime
+from agentspeak import asl_str, Literal
 
 LOGGER = agentspeak.get_logger(__name__)
 
@@ -121,15 +118,35 @@ def _send(agent, term, intention):
     elif ilf.functor == "achieve":
         goal_type = agentspeak.GoalType.achievement
         trigger = agentspeak.Trigger.addition
+    elif ilf.functor == "unachieve":
+        goal_type = agentspeak.GoalType.achievement
+        trigger = agentspeak.Trigger.removal
+    elif ilf.functor == "tellHow":
+        goal_type = agentspeak.GoalType.tellHow
+        trigger = agentspeak.Trigger.addition
+    elif ilf.functor == "untellHow":
+        goal_type = agentspeak.GoalType.tellHow
+        trigger = agentspeak.Trigger.removal
+    elif ilf.functor == "askHow":
+        goal_type = agentspeak.GoalType.askHow
+        trigger = agentspeak.Trigger.addition
     else:
         raise agentspeak.AslError("unknown illocutionary force: %s" % ilf)
 
-    # TODO: unachieve, askOne, askAll, tellHow, untellHow, askHow
-
+    # TODO: askOne, askAll
     # Prepare message.
     message = agentspeak.freeze(term.args[2], intention.scope, {})
-    tagged_message = message.with_annotation(
-        agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))
+
+    if ilf.functor in ["tellHow", "askHow", "untellHow"]:
+        # The body of tellHow and askHow is a string that contains a plan
+        # It is not a Literal then we don't add the source annotation
+        if ilf.functor == "askHow":
+            # If the functor is askHow we add to the term an annotation with the name of the sender agent
+            term = term.with_annotation(f"@askHow_sender[name({agent.name})]")
+        tagged_message = term
+    else:
+        tagged_message = message.with_annotation(
+            agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))
 
     # Broadcast.
     for receiver in receiving_agents:

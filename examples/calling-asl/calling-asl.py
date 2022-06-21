@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
+import os
+
 import agentspeak
 import agentspeak.runtime
 import agentspeak.stdlib
-
-import os
-
 
 actions = agentspeak.Actions(agentspeak.stdlib.actions)
 

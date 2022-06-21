@@ -2,13 +2,15 @@
 
 from __future__ import print_function
 
+import os
+import sys
+import time
+
 import pyspark
+
 import agentspeak
 import agentspeak.runtime
 import agentspeak.stdlib
-import sys
-import time
-import os
 
 # Initialize
 
@@ -21,20 +23,24 @@ sc = pyspark.SparkContext("local", "agentspeak")
 
 source = open(os.path.join(os.path.dirname(__file__), "counting.asl"))
 
+
 def init_agents():
     for i in range(N):
         print("-------->", i)
         yield agentspeak.runtime.build_agent(source, agentspeak.stdlib.actions)
 
+
 agents = sc.parallelize(init_agents())
 
 t2 = time.time()
+
 
 def run_step(agent):
     if agent.step():
         return [agent]
     else:
         return []
+
 
 steps = 0
 
