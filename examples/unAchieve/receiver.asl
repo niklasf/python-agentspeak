@@ -1,17 +1,17 @@
-+!hello(N) <-
++!plan1(N) <-
   .wait(800);
-  .print("Hello", N);
-  !hello(N)
+  .print("Plan1", N);
+  !plan1(N)
 .
 
-+!greet(N) <-
++!plan2(N) <-
   .wait(800);
-  .print("Hello", N);
-  !greet(N)
+  .print("Plan2", N);
+  !plan2(N)
 .
 
-+!greet(N, M) <-
++!plan3(N, M) <-
     .wait(800);
-    .print("Hello", N, "-", M);
-    !greet(N, M)
+    .print("Plan3", N, "-", M);
+    !plan3(N, M)
 .

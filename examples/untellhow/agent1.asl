@@ -4,7 +4,7 @@
 
 +!start
     <-
-        .wait(1000);
+        .wait(3000);
         .print("Delete plan");
-        .send(agent2,untellHow,"@custom_tag");
+        .send(agent2, untellHow, "@plan_tag");
         .print("Plan Deleted").

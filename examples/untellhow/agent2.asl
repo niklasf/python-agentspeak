@@ -1,17 +1,15 @@
 me(100).
 
-!hello.
+!plan1.
 
 
-@custom_tag[value(45)]
-+!hello : me(100) <-
-    .print("This is plan2");
-    .wait(2000);
-    !hello.
+@plan_tag[value(45)]
++!plan1 : me(100) <-
+    .print("This is plan1 with me(100)");
+    .wait(800);
+    !plan1.
 
-@custom_tag
-+!hello <-
-    .print("This is the plan");
-    .wait(2000);
-    !hello.
++!plan1 <-
+    .print("This is plan1 without me(100)");
+    .print("Ending example").
 
