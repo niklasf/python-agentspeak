@@ -8,7 +8,6 @@ me(100).
         .print("Ask Plan");
         .send(agent2, askHow, "+!hello");
         .print("Plan added");
-
         !hello;
         -me(100);
         !hello
