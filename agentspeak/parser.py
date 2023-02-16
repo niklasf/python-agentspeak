@@ -907,7 +907,6 @@ def parse_plan(tok, tokens, log):
         
         tok, annotation = parse_literal(tok, tokens, log)
         plan.annotations.append(annotation)
-        plan.dict_annotations = {annotation.functor: { annotation.annotations[i].functor: [str(annotation.annotations[i].terms[j]) for j in range(len(annotation.annotations[i].terms))] for i in range(len(annotation.annotations))}}
 
     tok, event = parse_event(tok, tokens, log)
     plan.event = event

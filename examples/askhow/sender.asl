@@ -8,5 +8,5 @@ conocer(manolo).
       .send(receiver, askHow, "+!hello");
       .print("Plan added...");
       .wait(1000);
-      !hello
+      !hello(filomena)
    .

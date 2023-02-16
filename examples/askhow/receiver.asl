@@ -1,3 +1,3 @@
 @etiqueta2[hola(1)]
-+!hello : not conocer(luis) | not conocer(manolo)<-
-  .print("Este es el plan").
++!hello(N) : not conocer(ernesto) & conocer(manolo) <-
+  .print("Este es el plan de", N).

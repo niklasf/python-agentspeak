@@ -725,20 +725,29 @@ def plan_to_str(plan):
     start = 0
     
     if "_X_" in head:
-        for i in range(len(plan.args)):
+        if plan.args[0] != None:
             first_open, first_close = head.find("(",start), head.find(")", start)
-            if  "(" in str(plan.args[i]):
-                head = head[:first_open+1] + str(plan.args[i]).split("(")[1].split(")")[0] + head[first_close:]
+            if  "(" in str(plan.args[0]):
+                head = head[:first_open+1] + str(plan.args[0]).split("(")[1].split(")")[0] + head[first_close:]
             else:
-                head = head[:first_open+1] + str(plan.args[i]) + head[first_close:]
+                head = head[:first_open+1] + str(plan.args[0]) + head[first_close:]
             start = head.find(")", start) +1 
+            
+        if plan.args[1] != None:
+            first_open, first_close = head.find("(",start), head.find(")", start)
+            if  "(" in str(plan.args[1]):
+                head = head[:first_open+1] + str(plan.args[1]).split("(")[1].split(")")[0] + head[first_close:]
+            else:
+                head = head[:first_open+1] + str(plan.args[1]) + head[first_close:]
+            start = head.find(")", start) +1 
+
     if plan.annotation:
         label = str(plan.annotation[0])
     else:
         label = ""
         return  f"{plan.trigger.value}{plan.goal_type.value}{head} : {context} <- {body}."
 
-    return f"@{label} {plan.trigger.value}{plan.goal_type.value}{plan.head} : {context} <- {body}."
+    return f"@{label} {plan.trigger.value}{plan.goal_type.value}{head} : {context} <- {body}."
 
 
 class Environment:
