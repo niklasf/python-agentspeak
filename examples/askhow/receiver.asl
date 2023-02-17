@@ -1,3 +1,3 @@
-@etiqueta2[hola(1)]
-+!hello(N) : not conocer(ernesto) & conocer(manolo) <-
-  .print("Este es el plan de", N).
+@plan_tag2[hello(1)]
++!plan1(N) : not meet(john) & meet(george) <-
+  .print("This plan is from", N).

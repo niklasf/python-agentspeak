@@ -1,12 +1,12 @@
 !start.
 
-conocer(manolo).
+meet(george).
 
-+!start : true
++!start
    <- 
-      .print("Preguntar Plan");
-      .send(receiver, askHow, "+!hello");
+      .print("Ask Plan");
+      .send(receiver, askHow, "+!plan1");
       .print("Plan added...");
       .wait(1000);
-      !hello(filomena)
+      !plan1(scarlett)
    .

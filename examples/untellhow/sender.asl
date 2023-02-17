@@ -4,5 +4,5 @@
 +!start
    <- 
       .wait(5000);
-      .print("Making receiver forget the plan");
+      .print("Make the receiver forget about the plan");
       .send(receiver, untellHow, "@custom_tag").
