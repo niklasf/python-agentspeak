@@ -134,19 +134,15 @@ def _send(agent, term, intention):
         raise agentspeak.AslError("unknown illocutionary force: %s" % ilf)
 
     # TODO: askOne, askAll
-    # Prepare message.
-    message = agentspeak.freeze(term.args[2], intention.scope, {})
-
+    # Prepare message. The message is either a plain text or a structured message.
     if ilf.functor in ["tellHow", "askHow", "untellHow"]:
-        # The body of tellHow and askHow is a string that contains a plan
-        # It is not a Literal then we don't add the source annotation
-        if ilf.functor == "askHow":
-            # If the functor is askHow we add to the term an annotation with the name of the sender agent
-            term = term.with_annotation(f"@askHow_sender[name({agent.name})]")
-        tagged_message = term
+        message = agentspeak.Literal("plain_text", (term.args[2], ), frozenset())
     else:
-        tagged_message = message.with_annotation(
-            agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))
+        message = agentspeak.freeze(term.args[2], intention.scope, {})
+
+    
+    tagged_message = message.with_annotation(
+        agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))
 
     # Broadcast.
     for receiver in receiving_agents:

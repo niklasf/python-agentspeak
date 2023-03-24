@@ -469,7 +469,7 @@ class Agent:
 
     def _unachieve(self, term):
         """
-            UntellHow is a performative that allows the agent to remove and stop an achievement to another agent.
+            Unachieve is a performative that allows the agent to remove and stop an achievement to another agent.
         """
         if not agentspeak.is_literal(term):
                 raise AslError("expected literal term")
@@ -489,7 +489,7 @@ class Agent:
         """
             tellHow is a performative that allows the agent to add a plan to another agent.
         """
-        str_plan = term.args[2]
+        str_plan = term.args[0]
 
         tokens = []
         # extend tokens with the tokens of the string plan
@@ -534,8 +534,8 @@ class Agent:
 
         self.add_plan(plan)
 
-    def _call_ask_how(self, receiver, term, intention):
-        receiver.call(agentspeak.Trigger.addition, agentspeak.GoalType.tellHow, term, intention)
+    def _call_ask_how(self, receiver, message, intention):
+        receiver.call(agentspeak.Trigger.addition, agentspeak.GoalType.tellHow, message, intention)
 
     def _ask_how(self, term):
         """
@@ -543,17 +543,21 @@ class Agent:
             We look in the plan.list of the slave agent for the plan that master wants,
             if we find it: master agent use tellHow to tell the plan to slave agent
         """
+        sender_name = None
+
         # Receive the agent that ask for the plan
         for annotation in list(term.annots):
-            if isinstance(annotation, str):
-                if "askHow_sender" in annotation:
-                    sender_name = annotation.split("(")[1].split(")")[0]
-        # Find the plans       
+            if(annotation.functor == "source"):
+                sender_name = annotation.args[0].functor
+
+        if sender_name is None:
+            raise AslError("expected source annotation")
+
         plans_wanted = collections.defaultdict(lambda: [])
         plans = self.plans.values()
         for plan in plans:
             for differents in plan:
-                if differents.head.functor in term.args[2]:
+                if differents.head.functor in term.args[0]:
                     plans_wanted[(differents.trigger, differents.goal_type, differents.head.functor, len(differents.head.args))].append(differents)
 
         # If the agent has any plan that match with the plan wanted, then the agent will send the plan to the agent that asked                       
@@ -572,9 +576,9 @@ class Agent:
             for plan in plans_wanted.values():
                 for differents in plan:
                     strplan = plan_to_str(differents)
-                term.args = (sender_name, "tellHow", strplan)
+                    message = agentspeak.Literal("plain_text", (strplan,), frozenset())
                 for receiver in receiving_agents:
-                    self._call_ask_how(receiver, term, intention)
+                    self._call_ask_how(receiver, message, intention)
         else:
             log = agentspeak.Log(LOGGER)
             raise log.warning(f"The agent not know the plan {term.args[2]}")
@@ -583,7 +587,7 @@ class Agent:
         """
             UntellHow is a performative that allows the agent to remove a plan to another agent.
         """
-        label = term.args[2]
+        label = term.args[0]
 
         plans_to_delete = []
         plans = self.plans.values()
