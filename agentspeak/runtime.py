@@ -24,6 +24,7 @@ import functools
 import os.path
 import sys
 import time
+import re
 
 import agentspeak
 import agentspeak.lexer
@@ -525,12 +526,8 @@ class Agent:
 
         # Converts the Astplan to Plan
         plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.dicts_annotations)
-
-        if ast_plan.args[0] is not None:
-            plan.args[0] = ast_plan.args[0]
-
-        if ast_plan.args[1] is not None:
-            plan.args[1] = ast_plan.args[1]
+        
+        plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
 
         self.add_plan(plan)
 
@@ -589,15 +586,17 @@ class Agent:
         """
         label = term.args[0]
 
-        plans_to_delete = []
+        
         plans = self.plans.values()
         for plan in plans:
+            plans_to_delete = []
             for plan_instance in plan:
                 if len(plan_instance.annotation) > 0:
                     if ("@" + str(plan_instance.annotation[0].functor)).startswith(label):
                         plans_to_delete.append(plan_instance)
-        for plan_instance in plans_to_delete:
-            plan.remove(plan_instance)
+                        
+            for plan_instance in plans_to_delete:
+                plan.remove(plan_instance)
 
 
     def add_belief(self, term, scope):
@@ -725,25 +724,12 @@ def plan_to_str(plan):
         context = plan.context
     
     body = plan.str_body
-    head = str(plan.head)
-    start = 0
     
-    if "_X_" in head:
-        if plan.args[0] != None:
-            first_open, first_close = head.find("(",start), head.find(")", start)
-            if  "(" in str(plan.args[0]):
-                head = head[:first_open+1] + str(plan.args[0]).split("(")[1].split(")")[0] + head[first_close:]
-            else:
-                head = head[:first_open+1] + str(plan.args[0]) + head[first_close:]
-            start = head.find(")", start) +1 
-            
-        if plan.args[1] != None:
-            first_open, first_close = head.find("(",start), head.find(")", start)
-            if  "(" in str(plan.args[1]):
-                head = head[:first_open+1] + str(plan.args[1]).split("(")[1].split(")")[0] + head[first_close:]
-            else:
-                head = head[:first_open+1] + str(plan.args[1]) + head[first_close:]
-            start = head.find(")", start) +1 
+    if len(plan.head.args):
+        pattern = r"_X_[0-9a-fA-F]{3}_[0-9a-fA-F]{11}"        
+        head = re.sub(pattern, lambda m: plan.args.pop(0), str(plan.head))
+    else:
+        head = str(plan.head)
 
     if plan.annotation:
         label = str(plan.annotation[0])
@@ -802,11 +788,7 @@ class Environment:
             
             plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.annotations)
 
-            if ast_plan.args[0] is not None:
-                plan.args[0] = ast_plan.args[0]
-
-            if ast_plan.args[1] is not None:
-                plan.args[1] = ast_plan.args[1]
+            plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
 
 
 
