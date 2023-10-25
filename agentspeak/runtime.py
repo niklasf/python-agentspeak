@@ -18,19 +18,20 @@
 
 from __future__ import print_function
 
-import sys
 import collections
 import copy
 import functools
 import os.path
+import sys
 import time
+import re
 
 import agentspeak
-import agentspeak.parser
 import agentspeak.lexer
+import agentspeak.parser
 import agentspeak.util
-
 from agentspeak import UnaryOp, BinaryOp, AslError, asl_str
+
 
 
 LOGGER = agentspeak.get_logger(__name__)
@@ -102,6 +103,7 @@ class BuildQueryVisitor:
         try:
             arity = len(ast_literal.terms)
             action_impl = self.actions.lookup(ast_literal.functor, arity)
+
             return ActionQuery(term, action_impl)
         except KeyError:
             if "." in ast_literal.functor:
@@ -271,6 +273,9 @@ class NotQuery:
         if not success:
             yield
 
+    def __str__(self):
+        return "not " + str(self.query.term)
+
 
 class UnifyQuery:
     def __init__(self, left, right):
@@ -294,12 +299,15 @@ class Rule:
 
 
 class Plan:
-    def __init__(self, trigger, goal_type, head, context, body):
+    def __init__(self, trigger, goal_type, head, context, body, str_body, annotation):
         self.trigger = trigger
         self.goal_type = goal_type
         self.head = head
         self.context = context
         self.body = body
+        self.str_body = str_body
+        self.annotation = annotation
+        self.args = [None,None]
 
     def name(self):
         return "%s%s%s" % (self.trigger.value, self.goal_type.value, self.head)
@@ -408,13 +416,50 @@ class Agent:
             if agentspeak.unifies_annotated(event.head, frozen):
                 intention.waiter = None
 
-        applicable_plans = self.plans[(trigger, goal_type, frozen.functor, len(frozen.args))]
-        choicepoint = object()
-        intention = Intention()
+        # If the goal is an achievement and the trigger is a removal, then the agent will delete the goal from his list of
+        # intentions
+        if (
+            goal_type == agentspeak.GoalType.achievement
+            and trigger == agentspeak.Trigger.removal
+        ):
+            self._unachieve(term)
+            return True
 
+        # If the goal is an tellHow and the trigger is an addition, then the agent will add the goal received as string to his
+        # list of plans
+        if (
+            goal_type == agentspeak.GoalType.tellHow
+            and trigger == agentspeak.Trigger.addition
+        ):
+            self._tell_how(term)
+            return True
+
+        # If the goal is an askHow and the trigger is an addition, then the agent will find the plan in his list of plans and
+        # send it to the agent that asked
+        if (
+            goal_type == agentspeak.GoalType.askHow
+            and trigger == agentspeak.Trigger.addition
+        ):
+            return self._ask_how(term)
+
+        # If the goal is an unTellHow and the trigger is a removal, then the agent will delete the goal from his list of plans
+        if (
+            goal_type == agentspeak.GoalType.tellHow
+            and trigger == agentspeak.Trigger.removal
+        ):
+            self._untell_how(term)
+            return True
+
+        # If the goal is an achievement and the trigger is an addition, then the agent will add the goal to his list of intentions
+        applicable_plans = self.plans[
+            (trigger, goal_type, frozen.functor, len(frozen.args))
+        ]
+        intention = Intention()
         # Find matching plan.
         for plan in applicable_plans:
-            for _ in agentspeak.unify_annotated(plan.head, frozen, intention.scope, intention.stack):
+            for _ in agentspeak.unify_annotated(
+                plan.head, frozen, intention.scope, intention.stack
+            ):
                 for _ in plan.context.execute(self, intention):
                     intention.head_term = frozen
                     intention.instr = plan.body
@@ -430,14 +475,145 @@ class Agent:
                     new_intention_stack.append(intention)
                     self.intentions.append(new_intention_stack)
                     return True
-
         if goal_type == agentspeak.GoalType.achievement:
-            raise AslError("no applicable plan for %s%s%s/%d" % (
-                trigger.value, goal_type.value, frozen.functor, len(frozen.args)))
+            raise AslError(
+                "no applicable plan for %s%s%s/%d"
+                % (trigger.value, goal_type.value, frozen.functor, len(frozen.args))
+            )
         elif goal_type == agentspeak.GoalType.test:
             return self.test_belief(term, calling_intention)
-
         return True
+
+    def _unachieve(self, term):
+        """
+            Unachieve is a performative that allows the agent to remove and stop an achievement to another agent.
+        """
+        if not agentspeak.is_literal(term):
+                raise AslError("expected literal term")
+
+        # Remove a intention passed by the parameters.
+        for intention_stack in self.intentions:
+            if not intention_stack:
+                continue
+
+            intention = intention_stack[-1]
+
+            if intention.head_term.functor == term.functor:
+                if agentspeak.unifies(term.args, intention.head_term.args):
+                    intention_stack.remove(intention)
+
+    def _tell_how(self, term):
+        """
+            tellHow is a performative that allows the agent to add a plan to another agent.
+        """
+        str_plan = term.args[0]
+
+        tokens = []
+        # extend tokens with the tokens of the string plan
+        tokens.extend(agentspeak.lexer.tokenize(agentspeak.StringSource("<stdin>", str_plan), agentspeak.Log(LOGGER), 1))
+
+        # Prepare the conversion from tokens to AstPlan
+        first_token = tokens[0]
+        log = agentspeak.Log(LOGGER)
+        tokens.pop(0)
+        tokens = iter(tokens)
+
+        # Converts the list of tokens to an Astplan
+        if first_token.lexeme in ["@", "+", "-"]:
+            tok, ast_plan = agentspeak.parser.parse_plan(first_token, tokens, log)
+            if tok.lexeme != ".":
+                raise log.error("", tok, "expected end of plan")
+
+        # Prepare the conversion of Astplan to Plan
+        variables = {}
+        actions = agentspeak.stdlib.actions
+
+        head = ast_plan.event.head.accept(BuildTermVisitor(variables))
+
+        if ast_plan.context:
+            context = ast_plan.context.accept(BuildQueryVisitor(variables, actions, log))
+        else:
+            context = TrueQuery()
+
+        body = Instruction(noop)
+        body.f = noop
+        if ast_plan.body:
+            ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
+
+        # Converts the Astplan to Plan
+        plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.dicts_annotations)
+        
+        plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
+
+        self.add_plan(plan)
+
+    def _call_ask_how(self, receiver, message, intention):
+        receiver.call(agentspeak.Trigger.addition, agentspeak.GoalType.tellHow, message, intention)
+
+    def _ask_how(self, term):
+        """
+            AskHow is a performative that allows the agent to ask for a plan to another agent.
+            We look in the plan.list of the slave agent for the plan that master wants,
+            if we find it: master agent use tellHow to tell the plan to slave agent
+        """
+        sender_name = None
+
+        # Receive the agent that ask for the plan
+        for annotation in list(term.annots):
+            if(annotation.functor == "source"):
+                sender_name = annotation.args[0].functor
+
+        if sender_name is None:
+            raise AslError("expected source annotation")
+
+        plans_wanted = collections.defaultdict(lambda: [])
+        plans = self.plans.values()
+        for plan in plans:
+            for differents in plan:
+                if differents.head.functor in term.args[0]:
+                    plans_wanted[(differents.trigger, differents.goal_type, differents.head.functor, len(differents.head.args))].append(differents)
+
+        # If the agent has any plan that match with the plan wanted, then the agent will send the plan to the agent that asked                       
+        if plans_wanted:
+            intention = agentspeak.runtime.Intention()
+            receivers = agentspeak.grounded(sender_name, intention)
+            if not agentspeak.is_list(receivers):
+                receivers = [receivers]
+            receiving_agents = []
+            for receiver in receivers:
+                if agentspeak.is_atom(receiver):
+                    receiving_agents.append(self.env.agents[receiver.functor])
+                else:
+                    receiving_agents.append(self.env.agents[receiver])
+
+            for plan in plans_wanted.values():
+                for differents in plan:
+                    strplan = plan_to_str(differents)
+                    message = agentspeak.Literal("plain_text", (strplan,), frozenset())
+                for receiver in receiving_agents:
+                    self._call_ask_how(receiver, message, intention)
+        else:
+            log = agentspeak.Log(LOGGER)
+            raise log.warning(f"The agent not know the plan {term.args[2]}")
+
+    def _untell_how(self, term):
+        """
+            UntellHow is a performative that allows the agent to remove a plan to another agent.
+        """
+        label = term.args[0]
+
+        
+        plans = self.plans.values()
+        for plan in plans:
+            plans_to_delete = []
+            for plan_instance in plan:
+                if len(plan_instance.annotation) > 0:
+                    if ("@" + str(plan_instance.annotation[0].functor)).startswith(label):
+                        plans_to_delete.append(plan_instance)
+                        
+            for plan_instance in plans_to_delete:
+                plan.remove(plan_instance)
+
 
     def add_belief(self, term, scope):
         term = term.grounded(scope)
@@ -498,6 +674,10 @@ class Agent:
             self.intentions.popleft()
 
         for intention_stack in self.intentions:
+            # Check if the intention has no length
+            if not intention_stack:
+                continue
+
             intention = intention_stack[-1]
 
             # Suspended / waiting.
@@ -509,6 +689,10 @@ class Agent:
 
             break
         else:
+            return False
+
+        # Ignore if the intentiosn stack is empty
+        if not intention_stack:
             return False
 
         instr = intention.instr
@@ -544,6 +728,32 @@ class Agent:
     def run(self):
         while self.step():
             pass
+
+
+def plan_to_str(plan):
+    """
+    This function recieves a plan and return the plan as string
+    """
+    if isinstance(plan.context, type(TrueQuery())):
+        context = "true"
+    else:
+        context = plan.context
+    
+    body = plan.str_body
+    
+    if len(plan.head.args):
+        pattern = r"_X_[0-9a-fA-F]{3}_[0-9a-fA-F]{11}"        
+        head = re.sub(pattern, lambda m: plan.args.pop(0), str(plan.head))
+    else:
+        head = str(plan.head)
+
+    if plan.annotation:
+        label = str(plan.annotation[0])
+    else:
+        label = ""
+        return  f"{plan.trigger.value}{plan.goal_type.value}{head} : {context} <- {body}."
+
+    return f"@{label} {plan.trigger.value}{plan.goal_type.value}{head} : {context} <- {body}."
 
 
 class Environment:
@@ -590,7 +800,14 @@ class Environment:
             if ast_plan.body:
                 ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
 
-            plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body)
+            str_body = str(ast_plan.body)
+            
+            plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.annotations)
+
+            plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
+
+
+
             agent.add_plan(plan)
 
         # Add beliefs to agent prototype.

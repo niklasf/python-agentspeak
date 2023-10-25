@@ -94,7 +94,7 @@ class AstLiteral(AstNode):
         self.terms = []
         self.annotations = []
 
-    def accept(self, visitor):
+    def accept(self, visitor):      
         return visitor.visit_literal(self)
 
     def signature(self):
@@ -234,9 +234,11 @@ class AstPlan(AstNode):
     def __init__(self):
         super(AstPlan, self).__init__()
         self.annotations = []
+        self.dicts_annotations = None 
         self.event = None
         self.context = None
         self.body = None
+        self.args = [None,None]
 
     def accept(self, visitor):
         return visitor.visit_plan(self)
@@ -423,6 +425,7 @@ class AstAgent(AstNode):
 
 
 def parse_literal(tok, tokens, log):
+
     if not tok.token.functor:
         raise log.error("expected functor, got '%s'", tok.lexeme, loc=tok.loc)
 
@@ -437,7 +440,6 @@ def parse_literal(tok, tokens, log):
             tok = next(tokens)
             tok, term = parse_term(tok, tokens, log)
             literal.terms.append(term)
-
             if tok.lexeme == ")":
                 tok = next(tokens)
                 break
@@ -900,15 +902,24 @@ def parse_event(tok, tokens, log):
 
 def parse_plan(tok, tokens, log):
     plan = AstPlan()
-
     while tok.lexeme == "@":
         tok = next(tokens)
+        
         tok, annotation = parse_literal(tok, tokens, log)
         plan.annotations.append(annotation)
 
     tok, event = parse_event(tok, tokens, log)
     plan.event = event
     plan.loc = event.loc
+
+    # If we find a () in the event this indicate that the trigger plan have arguments, we save them in plan.args[0]
+    if "(" in str(event):
+        plan.args[0] = str(event).split("(")[1].split(")")[0]
+
+    # If we find a [] in the event this indicate that the trigger plan have annotations, we save them in plan.args[1]
+    if "[" in str(event):
+        plan.args[1] = str(event).split("[")[1].split("]")[0]
+
 
     if tok.lexeme == ":":
         tok = next(tokens)
@@ -917,9 +928,9 @@ def parse_plan(tok, tokens, log):
     if tok.lexeme == "<-":
         body_loc = tok.loc
         tok = next(tokens)
-
         tok, plan.body = parse_plan_body(tok, tokens, log)
         plan.body.loc = body_loc
+        
 
     return tok, plan
 
@@ -1001,6 +1012,8 @@ def parse_agent(filename, tokens, log, included_files, directive=None):
                     return validate(agent, log)
             else:
                 raise log.error("expected 'include', or 'begin' or 'end' after '{', got '%s'", tok.lexeme, loc=tok.loc)
+        
+
         elif tok.token.functor:
             if last_plan is not None:
                 log.warning("assertion after plan. should this have been part of '%s'?", last_plan.signature(), loc=tok.loc)
@@ -1023,6 +1036,7 @@ def parse_agent(filename, tokens, log, included_files, directive=None):
             agent.goals.append(ast_node)
         elif tok.lexeme in ["@", "+", "-"]:
             tok, last_plan = parse_plan(tok, tokens, log)
+  
             if tok.lexeme != ".":
                 log.info("missing '.' after this plan", loc=last_plan.loc)
                 raise log.error("expected '.' after plan, got '%s'", tok.lexeme, loc=tok.loc, extra_locs=[last_plan.loc])
@@ -1409,6 +1423,7 @@ def validate(ast_agent, log):
             log.error("plan head is supposed to be unifiable, but contains non-const expression", loc=op.loc, extra_locs=[plan.loc])
 
         for annotation in plan.annotations:
+            # Warning annotations ignored
             log.warning("plan annotations are ignored as of yet", loc=annotation.loc, extra_locs=[plan.loc])
 
         if plan.event.goal_type != GoalType.belief and plan.event.trigger == Trigger.removal:
@@ -1426,7 +1441,6 @@ def parse(filename, tokens, log, included_files=frozenset(), directive=None):
 
 def main(source, hook):
     log = agentspeak.Log(agentspeak.get_logger(__name__), 3)
-
     tokens = agentspeak.lexer.TokenStream(source, log, 1)
     agent = parse(source.name, tokens, log)
 

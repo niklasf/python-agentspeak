@@ -16,20 +16,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
-from __future__ import division
+from __future__ import print_function, division
+
+import datetime
+import random
+
+import colorama
 
 import agentspeak
-import agentspeak.runtime
-import colorama
-import random
-import datetime
-import collections
-
-from agentspeak import asl_str, Literal
-
 import agentspeak.optimizer
-
+import agentspeak.runtime
+from agentspeak import asl_str, Literal
 
 LOGGER = agentspeak.get_logger(__name__)
 
@@ -121,13 +118,29 @@ def _send(agent, term, intention):
     elif ilf.functor == "achieve":
         goal_type = agentspeak.GoalType.achievement
         trigger = agentspeak.Trigger.addition
+    elif ilf.functor == "unachieve":
+        goal_type = agentspeak.GoalType.achievement
+        trigger = agentspeak.Trigger.removal
+    elif ilf.functor == "tellHow":
+        goal_type = agentspeak.GoalType.tellHow
+        trigger = agentspeak.Trigger.addition
+    elif ilf.functor == "untellHow":
+        goal_type = agentspeak.GoalType.tellHow
+        trigger = agentspeak.Trigger.removal
+    elif ilf.functor == "askHow":
+        goal_type = agentspeak.GoalType.askHow
+        trigger = agentspeak.Trigger.addition
     else:
         raise agentspeak.AslError("unknown illocutionary force: %s" % ilf)
 
-    # TODO: unachieve, askOne, askAll, tellHow, untellHow, askHow
+    # TODO: askOne, askAll
+    # Prepare message. The message is either a plain text or a structured message.
+    if ilf.functor in ["tellHow", "askHow", "untellHow"]:
+        message = agentspeak.Literal("plain_text", (term.args[2], ), frozenset())
+    else:
+        message = agentspeak.freeze(term.args[2], intention.scope, {})
 
-    # Prepare message.
-    message = agentspeak.freeze(term.args[2], intention.scope, {})
+    
     tagged_message = message.with_annotation(
         agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))
 

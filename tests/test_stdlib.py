@@ -3,8 +3,8 @@
 import unittest
 
 import agentspeak
-import agentspeak.stdlib
 import agentspeak.runtime
+import agentspeak.stdlib
 
 
 class StdlibTest(unittest.TestCase):

@@ -1,10 +1,11 @@
+import collections
+import fnmatch
+import sys
+
+import git
+import glob2
 import javalang
 import javalang.tree
-import collections
-import glob2
-import sys
-import git
-import fnmatch
 
 
 def merge_declaration(decl, scope):

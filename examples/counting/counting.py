@@ -2,14 +2,12 @@
 
 from __future__ import print_function
 
-import agentspeak
+import os.path
+import sys
+import time
+
 import agentspeak.runtime
 import agentspeak.stdlib
-import time
-import sys
-import os.path
-import copy
-
 
 # Initialize
 

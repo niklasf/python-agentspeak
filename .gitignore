@@ -8,3 +8,4 @@ dist/
 build/
 agentspeak.egg-info/
 docs/_build/
+.vscode/launch.json

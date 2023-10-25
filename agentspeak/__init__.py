@@ -216,6 +216,8 @@ class GoalType(enum.Enum):
     achievement = "!"
     test        = "?"
     belief      = ""
+    tellHow     = "+^"
+    askHow      = "+?"
 
 
 @enum.unique

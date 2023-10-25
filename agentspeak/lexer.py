@@ -67,7 +67,7 @@ class TokenType(enum.Enum):
                 space comment
                 paren_open paren_close
                 bracket_open bracket_close
-                brace_open brace_close
+                brace_open brace_close 
                 functor numeric variable string
                 lit_true lit_false
                 tok_if tok_else tok_while tok_for
