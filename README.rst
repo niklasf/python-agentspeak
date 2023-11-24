@@ -1,7 +1,33 @@
 Jason-style AgentSpeak for Python
 =================================
+.. image:: https://img.shields.io/pypi/v/agentspeak.svg
+    :target: https://pypi.python.org/pypi/agentspeak
+
+.. image:: https://img.shields.io/pypi/pyversions/agentspeak.svg
+    :target: https://pypi.python.org/pypi/agentspeak
+
+.. image:: https://img.shields.io/pypi/l/agentspeak
+    :target: https://opensource.org/licenses/gpl-3-0
+    :alt: GPL 3 License
+
+.. image:: https://pepy.tech/badge/agentspeak
+    :target: https://pepy.tech/project/agentspeak
+    :alt: Downloads
+
+.. image:: https://img.shields.io/pypi/format/agentspeak.svg
+    :target: https://pypi.python.org/pypi/agentspeak
+
+
 
 A Python-based interpreter for the agent-oriented programming language JASON.
+
+`python-agentspeak` is a Python-based interpreter for the agent-oriented programming language JASON. This library makes it easy to create and manage intelligent agents, offering syntax and functionalities similar to JASON in a Python environment.
+
+Key Features
+------------
+* Jason-style AgentSpeak interpretation
+* Easy integration with existing Python code
+* Support for complex agent constructions
 
 Setup
 -----
@@ -10,8 +36,13 @@ Setup
 
     pip install agentspeak
 
-Hello world
------------
+Requirements
+------------
+* Python 3.6 or higher
+* Additional dependencies are automatically installed
+
+Usage example
+-------------
 
 .. code::
 
@@ -50,5 +81,6 @@ python-agentspeak should be mostly equivalent to Jason_.
   actions.
 * Jason 2.0 fork join operators not yet supported.
 * Literals are only comparable if they have the same signature.
+
 
 .. _Jason: http://jason.sourceforge.net/
