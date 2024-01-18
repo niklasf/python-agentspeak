@@ -742,7 +742,7 @@ def plan_to_str(plan):
     body = plan.str_body
     
     if len(plan.head.args):
-        pattern = r"_X_[0-9a-fA-F]{3}_[0-9a-fA-F]{11}"        
+        pattern = r"_X_[0-9a-fA-F]{3}_[0-9a-fA-F]+"
         head = re.sub(pattern, lambda m: plan.args.pop(0), str(plan.head))
     else:
         head = str(plan.head)
