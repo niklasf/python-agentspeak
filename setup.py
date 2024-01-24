@@ -38,7 +38,7 @@ def dependencies():
 
 setuptools.setup(
     name="agentspeak",
-    version="0.2.0",
+    version="0.2.1",
     author="Niklas Fiekas",
     author_email="niklas.fiekas@tu-clausthal.de",
     description="JASON-style AgentSpeak for Python.",
