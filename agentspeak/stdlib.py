@@ -139,7 +139,6 @@ def _send(agent, term, intention):
         message = agentspeak.Literal("plain_text", (term.args[2], ), frozenset())
     else:
         message = agentspeak.freeze(term.args[2], intention.scope, {})
-
     
     tagged_message = message.with_annotation(
         agentspeak.Literal("source", (agentspeak.Literal(agent.name), )))

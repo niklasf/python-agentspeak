@@ -564,7 +564,6 @@ class Literal(object):
 
         if isinstance(right, Var):
             return right.unify(self, scope, stack)
-
         try:
             if self.functor != right.functor:
                 return False
@@ -573,12 +572,11 @@ class Literal(object):
                 return False
         except AttributeError:
             return False
-
+        
         return all(unify(l, r, scope, stack) for l, r in zip(self.args, right.args))
 
     def unify_annotated(self, right, scope, stack):
         right = evaluate(right, scope)
-
         if isinstance(right, Var):
             choicepoint = object()
             if right.unify(self, scope, stack):
@@ -596,7 +594,6 @@ class Literal(object):
                 for right_annot in right.annots:
                     if right_annot in closed_right_annots:
                         continue
-
                     for _ in unify_annotated(left_annot, right_annot, scope, stack):
                         found_right = True
                         closed_right_annots.add(right_annot)
@@ -837,9 +834,7 @@ def unify_annotated(left, right, scope, stack):
         reroll(scope, stack, choicepoint)
 
 
-def unifies_annotated(left, right):
-    scope = {}
-    stack = collections.deque()
+def unifies_annotated(left, right, scope = {}, stack = collections.deque()):
     for _ in unify_annotated(left, right, scope, stack):
         return True
     return False
