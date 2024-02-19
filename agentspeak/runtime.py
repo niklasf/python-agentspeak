@@ -608,8 +608,8 @@ class Agent:
         for plan in plans:
             plans_to_delete = []
             for plan_instance in plan:
-                if len(plan_instance.annotation) > 0:
-                    if ("@" + str(plan_instance.annotation[0].functor)).startswith(label):
+                if plan_instance.annotation:
+                    if ("@" + str(plan_instance.annotation.functor)) == label:
                         plans_to_delete.append(plan_instance)
                         
             for plan_instance in plans_to_delete:

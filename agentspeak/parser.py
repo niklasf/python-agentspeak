@@ -904,7 +904,6 @@ def parse_plan(tok, tokens, log):
     plan = AstPlan()
     if tok.lexeme == "@":
         tok = next(tokens)
-        print('HOLAAAA')
         tok, annotation = parse_literal(tok, tokens, log)
         plan.annotation = annotation
         plan.annotation_terms = annotation.annotations
