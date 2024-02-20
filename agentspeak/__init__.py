@@ -917,7 +917,7 @@ def unifies_annotated(left, right, scope=None, stack=None):
     if scope is None:
         scope = {}
     if stack is None:
-        collections.deque()
+        stack = collections.deque()
     for _ in unify_annotated(left, right, scope, stack):
         return True
     return False
