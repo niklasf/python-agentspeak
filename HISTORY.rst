@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.2 (2024-03-21)
+------------------
+
+* Fixed annotations to be literals.
+* Minor bug fixing.
+
 0.2.1 (2024-01-24)
 ------------------
 
