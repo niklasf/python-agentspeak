@@ -541,7 +541,8 @@ class Agent:
             ast_plan.body.accept(BuildInstructionsVisitor(variables, actions, body, log))
 
         # Converts the Astplan to Plan
-        plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.dicts_annotations)
+            
+        plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.annotation)
         
         plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
 
@@ -607,8 +608,8 @@ class Agent:
         for plan in plans:
             plans_to_delete = []
             for plan_instance in plan:
-                if len(plan_instance.annotation) > 0:
-                    if ("@" + str(plan_instance.annotation[0].functor)).startswith(label):
+                if plan_instance.annotation:
+                    if ("@" + str(plan_instance.annotation.functor)) == label:
                         plans_to_delete.append(plan_instance)
                         
             for plan_instance in plans_to_delete:
@@ -648,14 +649,11 @@ class Agent:
         choicepoint = object()
 
         relevant_beliefs = self.beliefs[group]
-
         for belief in relevant_beliefs:
             intention.stack.append(choicepoint)
-
-            if agentspeak.unify(term, belief, intention.scope, intention.stack):
+            if agentspeak.unifies_annotated(term, belief, intention.scope, intention.stack):
                 relevant_beliefs.remove(belief)
                 return True
-
             agentspeak.reroll(intention.scope, intention.stack, choicepoint)
 
         return False
@@ -740,7 +738,7 @@ def plan_to_str(plan):
         context = plan.context
     
     body = plan.str_body
-    
+
     if len(plan.head.args):
         pattern = r"_X_[0-9a-fA-F]{3}_[0-9a-fA-F]+"
         head = re.sub(pattern, lambda m: plan.args.pop(0), str(plan.head))
@@ -748,7 +746,7 @@ def plan_to_str(plan):
         head = str(plan.head)
 
     if plan.annotation:
-        label = str(plan.annotation[0])
+        label = str(plan.annotation)
     else:
         label = ""
         return  f"{plan.trigger.value}{plan.goal_type.value}{head} : {context} <- {body}."
@@ -802,7 +800,7 @@ class Environment:
 
             str_body = str(ast_plan.body)
             
-            plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.annotations)
+            plan = Plan(ast_plan.event.trigger, ast_plan.event.goal_type, head, context, body, ast_plan.body, ast_plan.annotation)
 
             plan.args = [str(i) for i in ast_plan.event.head.terms] + [str(j) for i in ast_plan.event.head.annotations for j in i.terms]
 

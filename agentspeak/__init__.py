@@ -40,8 +40,9 @@ except ImportError:
     from io import StringIO  # Python 3
 
 
-SourceLocation = collections.namedtuple("SourceLocation",
-                                        "filename lineno startcol endcol line")
+SourceLocation = collections.namedtuple(
+    "SourceLocation", "filename lineno startcol endcol line"
+)
 
 
 class StringSource(object):
@@ -111,10 +112,16 @@ class LogFormatter(logging.Formatter):
 
             # Extra locations underlined with ~~~.
             for extra_loc in record.__dict__.get("extra_locs", ()):
-                if not extra_loc or extra_loc.filename != loc.filename or extra_loc.lineno != loc.lineno:
+                if (
+                    not extra_loc
+                    or extra_loc.filename != loc.filename
+                    or extra_loc.lineno != loc.lineno
+                ):
                     continue
 
-                for col in range(extra_loc.startcol, max(extra_loc.endcol, extra_loc.startcol + 1)):
+                for col in range(
+                    extra_loc.startcol, max(extra_loc.endcol, extra_loc.startcol + 1)
+                ):
                     if col < len(under_line):
                         under_line[col] = "~"
 
@@ -146,9 +153,15 @@ def get_logger(name, _singleton={}):
 
 class AggregatedError(Exception):
     def __init__(self, num_errors, num_warnings):
-        super(AggregatedError, self).__init__("%d %s and %d %s" % (
-            num_errors, "errors" if num_errors != 1 else "error",
-            num_warnings, "warnings" if num_warnings != 1 else "warning"))
+        super(AggregatedError, self).__init__(
+            "%d %s and %d %s"
+            % (
+                num_errors,
+                "errors" if num_errors != 1 else "error",
+                num_warnings,
+                "warnings" if num_warnings != 1 else "warning",
+            )
+        )
 
         self.num_errors = num_errors
         self.num_warnings = num_warnings
@@ -208,32 +221,33 @@ class Log(object):
 @enum.unique
 class Trigger(enum.Enum):
     addition = "+"
-    removal  = "-"
+    removal = "-"
 
 
 @enum.unique
 class GoalType(enum.Enum):
     achievement = "!"
-    test        = "?"
-    belief      = ""
-    tellHow     = "+^"
-    askHow      = "+?"
+    test = "?"
+    belief = ""
+    tellHow = "+^"
+    askHow = "+?"
 
 
 @enum.unique
 class FormulaType(enum.Enum):
-    term          = ""
-    test          = "?"
-    achieve       = "!"
+    term = ""
+    test = "?"
+    achieve = "!"
     achieve_later = "!!"
-    add           = "+"
-    remove        = "-"
-    replace       = "-+"
+    add = "+"
+    remove = "-"
+    replace = "-+"
 
 
 class Operator(object):
-    def __init__(self, lexeme, func=None,
-                 numeric=False, comp=False, boolean=False, query=False):
+    def __init__(
+        self, lexeme, func=None, numeric=False, comp=False, boolean=False, query=False
+    ):
         self.lexeme = lexeme
         self.func = func
 
@@ -252,32 +266,45 @@ class UnaryOp(enum.Enum):
 
 @enum.unique
 class BinaryOp(enum.Enum):
-    op_pow       = Operator("**", operator.pow, numeric=True)
+    op_pow = Operator("**", operator.pow, numeric=True)
 
-    op_mul       = Operator("*", operator.mul, numeric=True)
-    op_truediv   = Operator("/", operator.truediv, numeric=True)
-    op_floordiv  = Operator("div", operator.floordiv, numeric=True)
-    op_mod       = Operator("mod", operator.mod, numeric=True)
+    op_mul = Operator("*", operator.mul, numeric=True)
+    op_truediv = Operator("/", operator.truediv, numeric=True)
+    op_floordiv = Operator("div", operator.floordiv, numeric=True)
+    op_mod = Operator("mod", operator.mod, numeric=True)
 
-    op_add       = Operator("+", operator.add, numeric=True)
-    op_sub       = Operator("-", operator.sub, numeric=True)
+    op_add = Operator("+", operator.add, numeric=True)
+    op_sub = Operator("-", operator.sub, numeric=True)
 
-    op_unify     = Operator("=", query=True)
+    op_unify = Operator("=", query=True)
     op_decompose = Operator("=..", query=True)
 
-    op_lt        = Operator("<", operator.lt, comp=True)
-    op_le        = Operator("<=", operator.le, comp=True)
-    op_ne        = Operator("\\==", operator.ne, comp=True)
-    op_eq        = Operator("==", operator.eq, comp=True)
-    op_ge        = Operator(">=", operator.ge, comp=True)
-    op_gt        = Operator(">", operator.gt, comp=True)
+    op_lt = Operator("<", operator.lt, comp=True)
+    op_le = Operator("<=", operator.le, comp=True)
+    op_ne = Operator("\\==", operator.ne, comp=True)
+    op_eq = Operator("==", operator.eq, comp=True)
+    op_ge = Operator(">=", operator.ge, comp=True)
+    op_gt = Operator(">", operator.gt, comp=True)
 
-    op_and       = Operator("&", operator.__and__, boolean=True, query=True)
-    op_or        = Operator("|", operator.__or__, boolean=True, query=True)
+    op_and = Operator("&", operator.__and__, boolean=True, query=True)
+    op_or = Operator("|", operator.__or__, boolean=True, query=True)
 
 
-KEYWORDS = ["true", "false", "not", "div", "mod", "if", "else", "while", "for",
-            "include", "begin", "end"]
+KEYWORDS = [
+    "true",
+    "false",
+    "not",
+    "div",
+    "mod",
+    "if",
+    "else",
+    "while",
+    "for",
+    "include",
+    "begin",
+    "end",
+]
+
 
 def sanitize_functor(s):
     """Transliterates s into a valid functor."""
@@ -290,7 +317,7 @@ def sanitize_functor(s):
 
 def parse_string(s):
     """Parses a double quoted string."""
-    assert s.startswith("\"") and s.endswith("\"")
+    assert s.startswith('"') and s.endswith('"')
     return s[1:-1].encode("utf-8").decode("unicode_escape")
 
 
@@ -318,7 +345,9 @@ def asl_repr(term):
     elif term is False:
         return "false"
     elif isinstance(term, str):
-        return "\"%s\"" % (term.encode("unicode_escape").decode("utf-8").replace("\"", "\\\""), )
+        return '"%s"' % (
+            term.encode("unicode_escape").decode("utf-8").replace('"', '\\"'),
+        )
     elif isinstance(term, tuple):
         return "[%s]" % (", ".join(asl_repr(t) for t in term))
     elif isinstance(term, float) and term.is_integer():
@@ -434,7 +463,10 @@ class Var(object):
         stack.append(self)
 
     def asl_repr(self):
-        return "_X_%s_%x" % (hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3], id(self))
+        return "_X_%s_%x" % (
+            hashlib.md5(str(id(self)).encode("utf-8")).hexdigest()[0:3],
+            id(self),
+        )
 
     __str__ = asl_repr
 
@@ -482,9 +514,15 @@ class UnaryExpr(object):
         operand = evaluate(self.operand, scope)
 
         if self.unary_op.boolean_op and not isinstance(operand, bool):
-            raise AslError("bad operand type for unary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise AslError(
+                "bad operand type for unary %s: %r"
+                % (self.unary_op.lexeme, type(operand))
+            )
         elif self.unary_op.numeric_op and not is_number(operand):
-            raise AslError("bad operand type for binary %s: %r" % (self.unary_op.lexeme, type(operand)))
+            raise AslError(
+                "bad operand type for binary %s: %r"
+                % (self.unary_op.lexeme, type(operand))
+            )
 
         return self.unary_op.func(operand)
 
@@ -519,10 +557,20 @@ class BinaryExpr(object):
         left = evaluate(self.left, scope)
         right = evaluate(self.right, scope)
 
-        if self.binary_op.boolean_op and (not isinstance(left, bool) or not isinstance(right, bool)):
-            raise AslError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
-        elif self.binary_op.numeric_op and (not is_number(left) or not is_number(right)):
-            raise AslError("bad operand types for binary op: %r %s %r" % (type(left), self.binary_op.lexeme, type(right)))
+        if self.binary_op.boolean_op and (
+            not isinstance(left, bool) or not isinstance(right, bool)
+        ):
+            raise AslError(
+                "bad operand types for binary op: %r %s %r"
+                % (type(left), self.binary_op.lexeme, type(right))
+            )
+        elif self.binary_op.numeric_op and (
+            not is_number(left) or not is_number(right)
+        ):
+            raise AslError(
+                "bad operand types for binary op: %r %s %r"
+                % (type(left), self.binary_op.lexeme, type(right))
+            )
         elif self.binary_op.comp_op:
             left = grounded(left, scope)
             right = grounded(right, scope)
@@ -539,7 +587,11 @@ class BinaryExpr(object):
         return freeze(self.evaluate(scope), scope, memo)
 
     def asl_repr(self):
-        return "(%s %s %s)" % (asl_repr(self.left), self.binary_op.lexeme, asl_repr(self.right))
+        return "(%s %s %s)" % (
+            asl_repr(self.left),
+            self.binary_op.lexeme,
+            asl_repr(self.right),
+        )
 
     __str__ = asl_repr
 
@@ -564,7 +616,6 @@ class Literal(object):
 
         if isinstance(right, Var):
             return right.unify(self, scope, stack)
-
         try:
             if self.functor != right.functor:
                 return False
@@ -578,7 +629,6 @@ class Literal(object):
 
     def unify_annotated(self, right, scope, stack):
         right = evaluate(right, scope)
-
         if isinstance(right, Var):
             choicepoint = object()
             if right.unify(self, scope, stack):
@@ -596,7 +646,6 @@ class Literal(object):
                 for right_annot in right.annots:
                     if right_annot in closed_right_annots:
                         continue
-
                     for _ in unify_annotated(left_annot, right_annot, scope, stack):
                         found_right = True
                         closed_right_annots.add(right_annot)
@@ -615,20 +664,23 @@ class Literal(object):
         return not self.args and not self.annots
 
     def is_ground(self, scope):
-        return (all(is_ground(arg, scope) for arg in self.args) and
-                all(is_ground(annot, scope) for annot in self.annots))
+        return all(is_ground(arg, scope) for arg in self.args) and all(
+            is_ground(annot, scope) for annot in self.annots
+        )
 
     def grounded(self, scope):
         return Literal(
             self.functor,
             (grounded(arg, scope) for arg in self.args),
-            (grounded(annot, scope) for annot in self.annots))
+            (grounded(annot, scope) for annot in self.annots),
+        )
 
     def freeze(self, scope, memo):
         return Literal(
             self.functor,
             (freeze(arg, scope, memo) for arg in self.args),
-            (freeze(annot, scope, memo) for annot in self.annots))
+            (freeze(annot, scope, memo) for annot in self.annots),
+        )
 
     def __bool__(self):
         return True
@@ -660,33 +712,54 @@ class Literal(object):
         return not self.__ne__(other)
 
     def __ne__(self, other):
-        return not is_literal(other) or self.functor != other.functor or self.args != other.args or self.annots != other.annots
+        return (
+            not is_literal(other)
+            or self.functor != other.functor
+            or self.args != other.args
+            or self.annots != other.annots
+        )
 
     def __lt__(self, other):
         if is_literal(other) and self.is_atom() and other.is_atom():
             return self.functor < other.functor
-        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+        if (
+            not is_literal(other)
+            or self.functor != other.functor
+            or len(self.args) != len(other.args)
+        ):
             return NotImplemented
         return self.args < other.args
 
     def __le__(self, other):
         if is_literal(other) and self.is_atom() and other.is_atom():
             return self.functor <= other.functor
-        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+        if (
+            not is_literal(other)
+            or self.functor != other.functor
+            or len(self.args) != len(other.args)
+        ):
             return NotImplemented
         return self.args <= other.args
 
     def __gt__(self, other):
         if is_literal(other) and self.is_atom() and other.is_atom():
             return self.functor > other.functor
-        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+        if (
+            not is_literal(other)
+            or self.functor != other.functor
+            or len(self.args) != len(other.args)
+        ):
             return NotImplemented
         return self.args > other.args
 
     def __ge__(self, other):
         if is_literal(other) and self.is_atom() and other.is_atom():
             return self.functor >= other.functor
-        if not is_literal(other) or self.functor != other.functor or len(self.args) != len(other.args):
+        if (
+            not is_literal(other)
+            or self.functor != other.functor
+            or len(self.args) != len(other.args)
+        ):
             return NotImplemented
         return self.args >= other.args
 
@@ -705,13 +778,16 @@ class LinkedList(object):
         if isinstance(right, Var):
             return right.unify(self, scope, stack)
         elif isinstance(right, tuple):
-            return (len(right) >= 1 and
-                    unify(self.head, right[0], scope, stack) and
-                    unify(self.tail, right[1:], scope, stack))
+            return (
+                len(right) >= 1
+                and unify(self.head, right[0], scope, stack)
+                and unify(self.tail, right[1:], scope, stack)
+            )
         else:
             try:
-                return (unify(self.head, right.head, scope, stack) and
-                        unify(self.tail, right.tail, scope, stack))
+                return unify(self.head, right.head, scope, stack) and unify(
+                    self.tail, right.tail, scope, stack
+                )
             except AttributeError:
                 return False
 
@@ -723,8 +799,8 @@ class LinkedList(object):
 
     def freeze(self, scope, memo):
         return LinkedList(
-            freeze(self.head, scope, memo),
-            freeze(self.tail, scope, memo))
+            freeze(self.head, scope, memo), freeze(self.tail, scope, memo)
+        )
 
     def __bool__(self):
         return True
@@ -837,9 +913,11 @@ def unify_annotated(left, right, scope, stack):
         reroll(scope, stack, choicepoint)
 
 
-def unifies_annotated(left, right):
-    scope = {}
-    stack = collections.deque()
+def unifies_annotated(left, right, scope=None, stack=None):
+    if scope is None:
+        scope = {}
+    if stack is None:
+        stack = collections.deque()
     for _ in unify_annotated(left, right, scope, stack):
         return True
     return False
@@ -929,10 +1007,15 @@ class Actions(object):
     def add(self, functor, arity=None, f=None):
         def _add(f):
             if arity is None:
-                assert functor not in self.variadic_actions, "%s/* already exists" % (functor, )
+                assert functor not in self.variadic_actions, "%s/* already exists" % (
+                    functor,
+                )
                 self.variadic_actions[functor] = f
             else:
-                assert (functor, arity) not in self.actions, "%s/%d already exists" % (functor, arity)
+                assert (functor, arity) not in self.actions, "%s/%d already exists" % (
+                    functor,
+                    arity,
+                )
                 self.actions[(functor, arity)] = f
             return f
 
@@ -943,7 +1026,7 @@ class Actions(object):
 
     def add_function(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_function(f):
             def wrapper(agent, term, intention):
@@ -964,7 +1047,7 @@ class Actions(object):
 
     def add_predicate(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_predicate(f):
             def wrapper(agent, term, intention):
@@ -983,7 +1066,7 @@ class Actions(object):
 
     def add_procedure(self, functor, arg_specs, f=None):
         if not isinstance(arg_specs, (tuple, list)):
-            arg_specs = (arg_specs, )
+            arg_specs = (arg_specs,)
 
         def _add_procedure(f):
             def wrapper(agent, term, intention):
